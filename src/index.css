@@ -89,11 +89,21 @@ img {
 
 .intro-page {
   align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: 100svh;
+  padding: 3rem max(1.2rem, calc((100vw - 1120px) / 2));
+}
+
+/* The lines frame the logo + copy together. */
+.intro-frame {
+  align-items: center;
+  border: 1px solid rgba(155, 100, 58, 0.34);
   display: grid;
   gap: 1.8rem;
   grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1fr);
-  min-height: 100svh;
-  padding: 3rem max(1.2rem, calc((100vw - 1120px) / 2));
+  padding: clamp(1.6rem, 3.2vw, 2.8rem) clamp(1.8rem, 3.5vw, 3rem);
+  width: 100%;
 }
 
 .barn-watercolor {
@@ -104,8 +114,6 @@ img {
 }
 
 .intro-copy {
-  border-block: 1px solid rgba(155, 100, 58, 0.34);
-  padding: clamp(1.4rem, 3vw, 2.4rem) 0;
   text-align: center;
 }
 
@@ -335,8 +343,14 @@ h1 {
 
 @media (max-width: 900px) {
   .intro-page {
-    grid-template-columns: 1fr;
     min-height: auto;
+  }
+
+  /* Stack the logo over the copy; keep only the top and bottom lines. */
+  .intro-frame {
+    border-inline: 0;
+    grid-template-columns: 1fr;
+    padding-inline: 0;
   }
 
   .intro-copy {
