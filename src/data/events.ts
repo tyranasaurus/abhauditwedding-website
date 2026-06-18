@@ -62,7 +62,7 @@ export const events: WardrobeEvent[] = [
     label: 'SANGEET RECEPTION',
     datetime: 'Sunday, September 6, 2026 · 5:00 PM',
     title: 'Naach the Night Away',
-    vibe: 'Glitz and Glamour',
+    vibe: 'Glitz and Glam',
     vibeAccentIndexes: [1, 2],
     image: '/art/reception.webp',
     imageAlt: 'Four guests dressed for the Sangeet reception',
