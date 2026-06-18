@@ -1,22 +1,28 @@
-import { useEffect, useState } from 'react'
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 
-// A gentle down-chevron hinting that the page scrolls. It fades out the moment
-// the guest starts scrolling, so it never lingers or gets in the way.
+// A gentle down-chevron hinting that the page scrolls. The opacity is linked to
+// scroll position, so it fades out smoothly the moment the guest scrolls and
+// never lingers. The slow bob draws a soft glance without being intrusive.
 export function ScrollCue() {
-  const [hidden, setHidden] = useState(false)
-
-  useEffect(() => {
-    const onScroll = () => setHidden(window.scrollY > 24)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  const reduceMotion = useReducedMotion()
+  const { scrollY } = useScroll()
+  const opacity = useTransform(scrollY, [0, 80], [0.65, 0])
+  const pointerEvents = useTransform(opacity, (value) =>
+    value < 0.05 ? 'none' : 'auto',
+  )
 
   return (
-    <button
+    <motion.button
       type="button"
-      className={hidden ? 'scroll-cue is-hidden' : 'scroll-cue'}
+      className="scroll-cue"
       aria-label="Scroll to the wardrobe events"
+      style={{ x: '-50%', opacity, pointerEvents }}
+      animate={reduceMotion ? undefined : { y: [0, 7, 0] }}
+      transition={
+        reduceMotion
+          ? undefined
+          : { duration: 2.4, repeat: Infinity, ease: 'easeInOut' }
+      }
       onClick={() =>
         document
           .querySelector('.event-gallery')
@@ -36,6 +42,6 @@ export function ScrollCue() {
       >
         <path d="M5 9l7 7 7-7" />
       </svg>
-    </button>
+    </motion.button>
   )
 }

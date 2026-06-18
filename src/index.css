@@ -340,6 +340,7 @@ h1 {
   margin: 0;
 }
 
+/* Position/appearance only; motion/react drives the bob, fade, and centering. */
 .scroll-cue {
   position: fixed;
   bottom: 1.5rem;
@@ -355,35 +356,6 @@ h1 {
   background: none;
   color: var(--copper);
   cursor: pointer;
-  opacity: 0.65;
-  transform: translateX(-50%);
-  transition: opacity 0.6s ease;
-  animation: scroll-cue-bob 2.4s ease-in-out infinite;
-}
-
-.scroll-cue:hover {
-  opacity: 1;
-}
-
-.scroll-cue.is-hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-@keyframes scroll-cue-bob {
-  0%,
-  100% {
-    transform: translate(-50%, 0);
-  }
-  50% {
-    transform: translate(-50%, 0.45rem);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .scroll-cue {
-    animation: none;
-  }
 }
 
 @media (max-width: 900px) {
