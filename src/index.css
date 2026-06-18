@@ -244,7 +244,7 @@ h1 {
 }
 
 .event-stage {
-  margin: -1.6rem auto -0.4rem;
+  margin: -0.8rem auto -0.4rem;
   max-width: min(44rem, 100%);
   position: relative;
   width: 100%;
@@ -256,11 +256,6 @@ h1 {
   width: 100%;
   height: auto;
   z-index: 1;
-}
-
-.event-panel.forest-gala .event-stage,
-.event-panel.carnival-garden .event-stage {
-  margin-top: -0.8rem;
 }
 
 .event-panel.forest-gala .event-heading h2 > span:nth-child(4),
