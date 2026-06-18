@@ -268,12 +268,6 @@ h1 {
   margin-left: 0.12em;
 }
 
-.event-panel.sunset-ceremony .attire-vibe {
-  margin-top: -3rem;
-  position: relative;
-  z-index: 2;
-}
-
 .attire-vibe {
   color: var(--accent);
   font-size: clamp(4rem, 9vw, 7.1rem);
