@@ -359,11 +359,7 @@ h1 {
 }
 
 @media (max-width: 900px) {
-  .intro-page {
-    min-height: auto;
-  }
-
-  /* Stack the logo over the copy; the lines are already top/bottom only. */
+  /* Stack the logo over the copy. */
   .intro-frame {
     grid-template-columns: 1fr;
   }
