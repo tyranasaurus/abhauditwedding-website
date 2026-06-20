@@ -1,6 +1,8 @@
 export interface WardrobeEvent {
   /** Section accent palette, set per className in index.css. */
   className: 'sunset-ceremony' | 'carnival-garden' | 'forest-gala'
+  /** Anchor id, so the map page can deep-link to /wardrobe#<anchor>. */
+  anchor: string
   label: string
   datetime: string
   title: string
@@ -29,6 +31,7 @@ export const intro = {
 export const events: WardrobeEvent[] = [
   {
     className: 'sunset-ceremony',
+    anchor: 'sunset-shaadi',
     label: 'CEREMONY',
     datetime: 'Saturday, September 5, 2026 · 4:00 PM',
     title: 'Sunset Shaadi',
@@ -44,6 +47,7 @@ export const events: WardrobeEvent[] = [
   },
   {
     className: 'carnival-garden',
+    anchor: 'carnegie-to-carnation',
     label: 'BARAAT & CARNIVAL',
     datetime: 'Sunday, September 6, 2026 · 10:00 AM',
     title: 'From Carnegie to Carnation',
@@ -59,6 +63,7 @@ export const events: WardrobeEvent[] = [
   },
   {
     className: 'forest-gala',
+    anchor: 'naach-the-night-away',
     label: 'SANGEET RECEPTION',
     datetime: 'Sunday, September 6, 2026 · 5:00 PM',
     title: 'Naach the Night Away',
