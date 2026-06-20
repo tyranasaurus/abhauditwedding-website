@@ -1,12 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "https://withjoy.com/abhauditwedding",
-      "permanent": false
-    }
-  ],
   "rewrites": [
     { "source": "/wardrobe", "destination": "/index.html" },
     { "source": "/map", "destination": "/index.html" }
