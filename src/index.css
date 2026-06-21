@@ -1268,32 +1268,6 @@ a.poi:focus-visible .poi-pin {
   width: min(16rem, 70%);
 }
 
-/* Welcome ----------------------------------------------------------- */
-.home-welcome {
-  text-align: center;
-}
-
-.home-welcome-inner {
-  margin: 0 auto;
-  max-width: 44rem;
-}
-
-.home-welcome-text {
-  color: var(--muted-ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.25rem, 2.6vw, 1.8rem);
-  line-height: 1.5;
-  margin: 0;
-}
-
-.home-signature {
-  color: var(--forest);
-  font-family: var(--font-script), cursive;
-  font-size: clamp(2.8rem, 6vw, 4rem);
-  line-height: 1;
-  margin: 1.4rem 0 0;
-}
-
 /* Schedule ---------------------------------------------------------- */
 .schedule-list {
   list-style: none;

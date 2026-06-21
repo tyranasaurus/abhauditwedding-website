@@ -7,8 +7,6 @@ export const hero = {
   date: 'September 5–6, 2026',
   venue: 'Carnation Farms · Carnation, Washington',
   rsvpUrl: 'https://withjoy.com/abhauditwedding/rsvp',
-  welcome:
-    'We are getting married in the woods of the Pacific Northwest, and we would be overjoyed to have you there. Two days of sun, color, music, and dancing await. Here is everything you need to celebrate with us.',
 } as const
 
 // The big weekend at a glance. Each links into the wardrobe guide where the

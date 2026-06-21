@@ -112,7 +112,7 @@ function Hero() {
             src="/art/map/sprig-corner.webp"
             alt=""
             className="hero-sprig hero-sprig--br"
-            initial={{ opacity: 0, rotate: 180, scale: 0.96 }}
+            initial={{ opacity: 0, rotate: 172, scale: 0.9 }}
             animate={{ opacity: 0.85, rotate: 180, scale: 1 }}
             transition={{ duration: 1.2, ease: 'easeOut' }}
           />
@@ -202,17 +202,6 @@ function Hero() {
         </motion.div>
       </div>
     </header>
-  )
-}
-
-function Welcome() {
-  return (
-    <section className="home-welcome" aria-label="Welcome">
-      <Reveal className="home-welcome-inner">
-        <p className="home-welcome-text">{hero.welcome}</p>
-        <p className="home-signature">Abha &amp; Udit</p>
-      </Reveal>
-    </section>
   )
 }
 
@@ -512,7 +501,6 @@ export function HomePage() {
       <TopNav />
       <Hero />
       <main className="home-main">
-        <Welcome />
         <Schedule />
         <Explore />
         <Travel />
