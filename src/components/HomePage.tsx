@@ -112,7 +112,7 @@ function Hero() {
             src="/art/map/sprig-corner.webp"
             alt=""
             className="hero-sprig hero-sprig--br"
-            initial={{ opacity: 0, rotate: 8, scale: 0.9 }}
+            initial={{ opacity: 0, rotate: 180, scale: 0.96 }}
             animate={{ opacity: 0.85, rotate: 180, scale: 1 }}
             transition={{ duration: 1.2, ease: 'easeOut' }}
           />
@@ -133,14 +133,16 @@ function Hero() {
             animate={reduce ? {} : { rotate: 360 }}
             transition={{ duration: 90, repeat: Infinity, ease: 'linear' }}
           />
-          <img
-            src="/art/couple.webp"
-            alt="Watercolor painting of Abha and Udit in a forest clearing"
-            className="hero-portrait"
-            width={2048}
-            height={2048}
-            fetchPriority="high"
-          />
+          <span className="hero-portrait-clip">
+            <img
+              src="/art/couple.webp"
+              alt="Watercolor painting of Abha and Udit in a forest clearing"
+              className="hero-portrait"
+              width={2048}
+              height={2048}
+              fetchPriority="high"
+            />
+          </span>
         </motion.div>
 
         <motion.div className="hero-copy" style={{ y: copyY }}>
