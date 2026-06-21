@@ -335,7 +335,7 @@ function Travel() {
 }
 
 function Stay() {
-  const { hotel, more } = stay
+  const { hotel } = stay
   return (
     <section className="home-stay" id="stay" aria-label="Where to stay">
       <SectionTitle kicker="Rest Your Head" title="Where to Stay" />
@@ -362,11 +362,6 @@ function Stay() {
             See availability
           </a>
         </div>
-      </Reveal>
-      <Reveal className="stay-more" delay={0.1}>
-        <a href={more.href} target="_blank" rel="noopener noreferrer">
-          {more.label} →
-        </a>
       </Reveal>
     </section>
   )

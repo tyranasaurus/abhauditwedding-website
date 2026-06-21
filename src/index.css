@@ -1517,8 +1517,7 @@ a.poi:focus-visible .poi-pin {
   margin: 0 0 0.8rem;
 }
 
-.travel-link,
-.stay-more a {
+.travel-link {
   font-family: var(--font-display), Georgia, serif;
 }
 
@@ -1692,22 +1691,6 @@ a.poi:focus-visible .poi-pin {
   font-size: 0.92rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
-}
-
-.stay-more {
-  text-align: center;
-  margin-top: 1.4rem;
-}
-
-.stay-more a {
-  color: var(--rust);
-  font-weight: 700;
-  font-size: 1.05rem;
-  text-decoration: none;
-}
-
-.stay-more a:hover {
-  text-decoration: underline;
 }
 
 /* Q & A ------------------------------------------------------------- */

@@ -183,10 +183,6 @@ export const stay = {
     bookUrl:
       'https://www.hilton.com/en/book/reservation/rooms/?ctyhocn=LKEGIGI&arrivalDate=2026-09-04&departureDate=2026-09-06&groupCode=99K&room1NumAdults=1',
   },
-  more: {
-    label: 'Browse more vacation rentals',
-    href: 'https://www.vrbo.com/search?adults=2&destination=Carnation%20Farms&latLong=47.6754153%2C-121.95186849999999&sort=RECOMMENDED',
-  },
 } as const
 
 // Q & A -----------------------------------------------------------------
