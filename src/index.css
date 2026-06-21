@@ -1089,7 +1089,7 @@ a.poi:focus-visible .poi-pin {
   min-height: 100svh;
   display: grid;
   place-items: center;
-  padding: 6.5rem max(1.2rem, calc((100vw - var(--max)) / 2)) 3.5rem;
+  padding: 7.5rem max(1.2rem, calc((100vw - var(--max)) / 2)) 5.5rem;
   text-align: center;
   overflow: hidden;
 }
@@ -1104,6 +1104,19 @@ a.poi:focus-visible .poi-pin {
   pointer-events: none;
 }
 
+/* Soft fade so the hero melts into the page instead of ending on a hard line. */
+.hero::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 9rem;
+  z-index: -1;
+  background: linear-gradient(180deg, transparent, var(--paper) 78%);
+  pointer-events: none;
+}
+
 .hero-sprig {
   position: absolute;
   z-index: -1;
@@ -1112,9 +1125,10 @@ a.poi:focus-visible .poi-pin {
   pointer-events: none;
 }
 
+/* Sit clear of the (translucent) nav so the leaves don't tuck under it. */
 .hero-sprig--tl {
-  top: 3.5rem;
-  left: -2.5rem;
+  top: 7rem;
+  left: -3rem;
 }
 
 .hero-sprig--br {
@@ -1145,15 +1159,25 @@ a.poi:focus-visible .poi-pin {
   border: 1.5px dashed rgba(155, 100, 58, 0.5);
 }
 
-.hero-portrait {
+.hero-portrait-clip {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  object-fit: cover;
+  overflow: hidden;
   box-shadow:
     0 0 0 0.5rem #fffdf7,
     0 0 0 0.58rem var(--paper-shadow),
     0 1.4rem 2.8rem rgba(31, 26, 17, 0.26);
+}
+
+.hero-portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Crop in tight to a waist-up framing of the couple. The origin sits above
+     centre so the zoom keeps their faces and drops the legs, not the heads. */
+  transform: scale(1.9);
+  transform-origin: 50% 40%;
 }
 
 .hero-eyebrow {
@@ -1163,7 +1187,7 @@ a.poi:focus-visible .poi-pin {
   font-weight: 600;
   letter-spacing: 0.26em;
   text-transform: uppercase;
-  margin: 0 0 0.3rem;
+  margin: 0 0 1rem;
 }
 
 .hero-names {
@@ -1238,7 +1262,7 @@ a.poi:focus-visible .poi-pin {
   font-family: var(--font-script), cursive;
   font-size: clamp(3.2rem, 8vw, 5.6rem);
   line-height: 0.95;
-  margin: 0.3rem 0 0;
+  margin: 0.7rem 0 0;
 }
 
 .home-ornament {
@@ -1454,7 +1478,7 @@ a.poi:focus-visible .poi-pin {
   font-family: var(--font-script), cursive;
   font-size: clamp(2.2rem, 4.5vw, 3rem);
   line-height: 1;
-  margin: 0.3rem 0 0.6rem;
+  margin: 0.6rem 0 0.6rem;
 }
 
 .explore-blurb {
@@ -1647,7 +1671,7 @@ a.poi:focus-visible .poi-pin {
   font-family: var(--font-script), cursive;
   font-size: clamp(2.4rem, 5vw, 3.4rem);
   line-height: 0.95;
-  margin: 0.2rem 0 0;
+  margin: 0.5rem 0 0;
 }
 
 .stay-area {

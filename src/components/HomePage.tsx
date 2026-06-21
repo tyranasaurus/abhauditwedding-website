@@ -133,14 +133,16 @@ function Hero() {
             animate={reduce ? {} : { rotate: 360 }}
             transition={{ duration: 90, repeat: Infinity, ease: 'linear' }}
           />
-          <img
-            src="/art/couple.webp"
-            alt="Watercolor painting of Abha and Udit in a forest clearing"
-            className="hero-portrait"
-            width={2048}
-            height={2048}
-            fetchPriority="high"
-          />
+          <span className="hero-portrait-clip">
+            <img
+              src="/art/couple.webp"
+              alt="Watercolor painting of Abha and Udit in a forest clearing"
+              className="hero-portrait"
+              width={2048}
+              height={2048}
+              fetchPriority="high"
+            />
+          </span>
         </motion.div>
 
         <motion.div className="hero-copy" style={{ y: copyY }}>
