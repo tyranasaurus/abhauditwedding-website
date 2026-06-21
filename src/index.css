@@ -1105,10 +1105,7 @@ a.poi:focus-visible .poi-pin {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(120% 80% at 50% -10%, rgba(44, 104, 60, 0.16), transparent 60%),
-    /* Pulled inward so the copper glow fades to transparent before the hero's
-       bottom edge — no hard clip, no color seam against the content below. */
-    radial-gradient(70% 45% at 80% 82%, rgba(155, 100, 58, 0.12), transparent 60%);
+    radial-gradient(120% 80% at 50% -10%, rgba(44, 104, 60, 0.16), transparent 60%);
   pointer-events: none;
 }
 
