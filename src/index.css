@@ -1019,6 +1019,12 @@ a.poi:focus-visible .poi-pin {
   transform: translateY(-2px);
 }
 
+/* In-page anchors (#schedule, #travel, #faq …) land below the fixed nav so
+   the section title is never tucked under it. Nav is ~4rem; add a little gap. */
+.home section[id] {
+  scroll-margin-top: 5rem;
+}
+
 /* Top navigation ---------------------------------------------------- */
 .home-nav {
   position: fixed;
@@ -1089,7 +1095,7 @@ a.poi:focus-visible .poi-pin {
   min-height: 100svh;
   display: grid;
   place-items: center;
-  padding: 7.5rem max(1.2rem, calc((100vw - var(--max)) / 2)) 5.5rem;
+  padding: 6.5rem max(1.2rem, calc((100vw - var(--max)) / 2)) 3.5rem;
   text-align: center;
   overflow: hidden;
 }
@@ -1104,19 +1110,6 @@ a.poi:focus-visible .poi-pin {
   pointer-events: none;
 }
 
-/* Soft fade so the hero melts into the page instead of ending on a hard line. */
-.hero::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 9rem;
-  z-index: -1;
-  background: linear-gradient(180deg, transparent, var(--paper) 78%);
-  pointer-events: none;
-}
-
 .hero-sprig {
   position: absolute;
   z-index: -1;
@@ -1125,10 +1118,9 @@ a.poi:focus-visible .poi-pin {
   pointer-events: none;
 }
 
-/* Sit clear of the (translucent) nav so the leaves don't tuck under it. */
 .hero-sprig--tl {
-  top: 7rem;
-  left: -3rem;
+  top: 3.5rem;
+  left: -2.5rem;
 }
 
 .hero-sprig--br {
@@ -1159,25 +1151,15 @@ a.poi:focus-visible .poi-pin {
   border: 1.5px dashed rgba(155, 100, 58, 0.5);
 }
 
-.hero-portrait-clip {
+.hero-portrait {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  overflow: hidden;
+  object-fit: cover;
   box-shadow:
     0 0 0 0.5rem #fffdf7,
     0 0 0 0.58rem var(--paper-shadow),
     0 1.4rem 2.8rem rgba(31, 26, 17, 0.26);
-}
-
-.hero-portrait {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  /* Crop in tight to a waist-up framing of the couple. The origin sits above
-     centre so the zoom keeps their faces and drops the legs, not the heads. */
-  transform: scale(1.9);
-  transform-origin: 50% 40%;
 }
 
 .hero-eyebrow {
@@ -1187,7 +1169,7 @@ a.poi:focus-visible .poi-pin {
   font-weight: 600;
   letter-spacing: 0.26em;
   text-transform: uppercase;
-  margin: 0 0 1rem;
+  margin: 0 0 0.3rem;
 }
 
 .hero-names {
