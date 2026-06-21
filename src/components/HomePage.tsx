@@ -14,6 +14,7 @@ import {
   stay,
   faqs,
   venue,
+  mapsSearch,
 } from '@/data/home'
 
 const WEDDING_DATE = new Date('2026-09-05T16:00:00-07:00')
@@ -306,7 +307,14 @@ function Travel() {
           <ul>
             {travel.seattleSpots.map((s) => (
               <li key={s.name}>
-                <span className="travel-spot-name">{s.name}</span>
+                <a
+                  className="travel-spot-name"
+                  href={mapsSearch(s.query)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {s.name}
+                </a>
                 {s.note ? <span className="travel-spot-note">{s.note}</span> : null}
               </li>
             ))}
@@ -317,7 +325,14 @@ function Travel() {
           <ul>
             {travel.eastsideBites.map((s) => (
               <li key={s.name}>
-                <span className="travel-spot-name">{s.name}</span>
+                <a
+                  className="travel-spot-name"
+                  href={mapsSearch(s.query)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {s.name}
+                </a>
                 {s.note ? <span className="travel-spot-note">{s.note}</span> : null}
               </li>
             ))}

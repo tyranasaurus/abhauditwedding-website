@@ -1524,8 +1524,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .travel-link,
-.stay-more a,
-.travel-spot-name {
+.stay-more a {
   font-family: var(--font-display), Georgia, serif;
 }
 
@@ -1587,9 +1586,26 @@ a.poi:focus-visible .poi-pin {
 }
 
 .travel-spot-name {
+  align-self: flex-start;
   color: var(--ink);
+  font-family: var(--font-display), Georgia, serif;
   font-weight: 700;
   font-size: 1.1rem;
+  text-decoration: none;
+  background-image: linear-gradient(var(--rust), var(--rust));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0 1.5px;
+  transition:
+    color 0.18s ease,
+    background-size 0.22s ease;
+}
+
+.travel-spot-name:hover,
+.travel-spot-name:focus-visible {
+  color: var(--rust);
+  background-size: 100% 1.5px;
+  outline: none;
 }
 
 .travel-spot-note {
@@ -1862,7 +1878,28 @@ a.poi:focus-visible .poi-pin {
     margin-top: 0;
   }
 
-  .hero-sprig {
-    opacity: 0.5 !important;
+  /* Stack the date and venue cleanly; the inline dot would dangle at the end
+     of the date line once the venue wraps below it. */
+  .hero-meta {
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-top: 0.8rem;
+  }
+
+  .hero-dot {
+    display: none;
+  }
+
+  /* Keep the top-left sprig as a soft corner accent; the bottom-right one
+     clipped against the right viewport edge as a hard vertical line. */
+  .hero-sprig--tl {
+    width: 7rem;
+    top: 4.5rem;
+    left: -2.5rem;
+    opacity: 0.55 !important;
+  }
+
+  .hero-sprig--br {
+    display: none;
   }
 }

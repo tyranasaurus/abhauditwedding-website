@@ -111,31 +111,63 @@ export const travel = {
     },
   ],
   seattleSpots: [
-    { name: "Pike Place Market", note: '' },
-    { name: 'Kerry Park', note: 'The classic skyline view.' },
-    { name: 'The Museum of Flight', note: '' },
-    { name: 'Bainbridge Island Ferry', note: 'Ride across the Puget Sound.' },
-    { name: 'Seattle Underground Tour', note: '' },
-    { name: 'Kirkland Waterfront', note: '' },
+    { name: 'Pike Place Market', note: '', query: 'Pike Place Market, Seattle, WA' },
+    { name: 'Kerry Park', note: 'The classic skyline view.', query: 'Kerry Park, Seattle, WA' },
+    { name: 'The Museum of Flight', note: '', query: 'The Museum of Flight, Seattle, WA' },
+    {
+      name: 'Bainbridge Island Ferry',
+      note: 'Ride across the Puget Sound.',
+      query: 'Seattle Bainbridge Island Ferry Terminal Colman Dock',
+    },
+    {
+      name: 'Seattle Underground Tour',
+      note: '',
+      query: "Bill Speidel's Underground Tour, Seattle, WA",
+    },
+    {
+      name: 'Kirkland Waterfront',
+      note: '',
+      query: 'Marina Park Kirkland Waterfront, Kirkland, WA',
+    },
   ],
   eastsideBites: [
-    { name: "Victor's Celtic Coffee & Roasters", note: '' },
+    {
+      name: "Victor's Celtic Coffee & Roasters",
+      note: '',
+      query: "Victor's Celtic Coffee & Roasters, Redmond, WA",
+    },
     {
       name: 'Can Am',
       note: 'The BEST Indian pizza — Udit would vacuum-pack slices to bring back to Abha @ CMU.',
+      query: 'Can Am Pizza, Redmond, WA',
     },
-    { name: 'CHICHA San Chen', note: "Abha's favorite boba." },
-    { name: 'Japonessa', note: 'We love their signature vegetarian sushi.' },
+    {
+      name: 'CHICHA San Chen',
+      note: "Abha's favorite boba.",
+      query: 'CHICHA San Chen, Bellevue, WA',
+    },
+    {
+      name: 'Japonessa',
+      note: 'We love their signature vegetarian sushi.',
+      query: 'Japonessa Sushi Cocina, Bellevue, WA',
+    },
     {
       name: 'Village Square Cafe',
       note: 'The go-to spot for group brunch — everyone loves the pancakes!',
+      query: 'Village Square Cafe, Redmond, WA',
     },
     {
       name: 'Qamaria Yemeni Coffee Co.',
       note: 'Desi-owned — Udit recommends the saffron tres leches.',
+      query: 'Qamaria Yemeni Coffee Co., Redmond, WA',
     },
   ],
 } as const
+
+/** Google Maps search link for a travel spot, used to make each name tappable. */
+export function mapsSearch(query: string) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`
+}
 
 // Where to stay ---------------------------------------------------------
 export const stay = {
