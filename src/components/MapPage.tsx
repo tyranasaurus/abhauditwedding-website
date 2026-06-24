@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
+import { SiteNav } from '@/components/SiteNav'
 import { mapIntro, pois, venue, type MapPoi } from '@/data/map'
 
 function PoiMarker({ poi }: { poi: MapPoi }) {
@@ -59,7 +60,9 @@ export function MapPage() {
   }, [])
 
   return (
-    <main className="map-page">
+    <>
+      <SiteNav />
+      <main className="map-page">
       <header className="map-header">
         <p className="map-kicker">{mapIntro.kicker}</p>
         <h1 className="map-title">{mapIntro.title}</h1>
@@ -159,6 +162,7 @@ export function MapPage() {
           ))}
         </div>
       </div>
-    </main>
+      </main>
+    </>
   )
 }
