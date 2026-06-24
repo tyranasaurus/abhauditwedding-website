@@ -16,6 +16,9 @@ import {
   venue,
   mapsSearch,
 } from '@/data/home'
+import { SiteNav } from '@/components/SiteNav'
+import { PasswordGate } from '@/components/PasswordGate'
+import { useUnlocked } from '@/lib/unlock'
 
 const WEDDING_DATE = new Date('2026-09-05T16:00:00-07:00')
 
@@ -444,45 +447,9 @@ function Footer() {
   )
 }
 
-function TopNav() {
-  const [solid, setSolid] = useState(false)
-  useEffect(() => {
-    const onScroll = () => setSolid(window.scrollY > 80)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-  return (
-    <motion.nav
-      className={`home-nav ${solid ? 'is-solid' : ''}`}
-      initial={{ y: -24, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, delay: 0.2 }}
-      aria-label="Primary"
-    >
-      <a className="home-nav-brand" href="#top">
-        A&nbsp;&amp;&nbsp;U
-      </a>
-      <div className="home-nav-links">
-        <a href="#schedule">Schedule</a>
-        <a href="/wardrobe">Wardrobe</a>
-        <a href="/map">Map</a>
-        <a href="#travel">Travel</a>
-        <a href="#faq">Q&amp;A</a>
-        <a
-          className="home-nav-rsvp"
-          href={hero.rsvpUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          RSVP
-        </a>
-      </div>
-    </motion.nav>
-  )
-}
-
 export function HomePage() {
+  const unlocked = useUnlocked()
+
   useEffect(() => {
     const prev = document.title
     document.title = 'Abha & Udit · September 5–6, 2026'
@@ -493,16 +460,22 @@ export function HomePage() {
 
   return (
     <div className="home" id="top">
-      <TopNav />
+      <SiteNav />
       <Hero />
-      <main className="home-main">
-        <Schedule />
-        <Explore />
-        <Travel />
-        <Stay />
-        <Faq />
-      </main>
-      <Footer />
+      {unlocked ? (
+        <>
+          <main className="home-main">
+            <Schedule />
+            <Explore />
+            <Travel />
+            <Stay />
+            <Faq />
+          </main>
+          <Footer />
+        </>
+      ) : (
+        <PasswordGate />
+      )}
     </div>
   )
 }

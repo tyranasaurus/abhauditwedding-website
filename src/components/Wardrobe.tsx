@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { SiteNav } from '@/components/SiteNav'
 import { Intro } from '@/components/Intro'
 import { EventPanel } from '@/components/EventPanel'
 import { ScrollCue } from '@/components/ScrollCue'
@@ -22,6 +23,7 @@ export function Wardrobe() {
 
   return (
     <>
+      <SiteNav />
       <main className="wardrobe-site">
         <Intro />
         <section className="event-gallery" aria-label="Wardrobe events">
