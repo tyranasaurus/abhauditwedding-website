@@ -35,7 +35,7 @@ function Reveal({
   className?: string
   delay?: number
   y?: number
-  as?: 'div' | 'section' | 'li' | 'article' | 'header'
+  as?: 'div' | 'section' | 'li' | 'article' | 'header' | 'figure'
 }) {
   const reduce = useReducedMotion()
   const Tag = motion[as]
@@ -139,11 +139,11 @@ function Hero() {
           />
           <span className="hero-portrait-clip">
             <img
-              src="/art/couple-photo.webp"
+              src="/art/couple.webp"
               alt="Abha and Udit embracing in the forest at Carnation Farms"
               className="hero-portrait"
-              width={1400}
-              height={2100}
+              width={2048}
+              height={2048}
               fetchPriority="high"
             />
           </span>
@@ -216,6 +216,11 @@ function Hero() {
 function Schedule() {
   return (
     <section className="home-schedule" id="schedule" aria-label="Schedule">
+      <SectionPhoto
+        src="/art/couple-schedule.webp"
+        alt="Abha and Udit among the ferns and string lights at Carnation Farms"
+        position="50% 45%"
+      />
       <SectionTitle kicker="The Weekend" title="Schedule" />
       <ol className="schedule-list">
         {schedule.map((stop, i) => (
@@ -245,22 +250,28 @@ function Schedule() {
   )
 }
 
-// A full-bleed photo interlude — the same forest portrait the live site leads
-// with, here giving the scroll a breath between the schedule and the planning
-// details.
-function CoupleBand() {
+// A full-bleed photo of the two of them. The live site leads each page with a
+// hero photo; we echo that by opening the matching sections with the same
+// shots. `position` tunes object-position so the couple stays centered as the
+// band crops to its fixed height.
+function SectionPhoto({
+  src,
+  alt,
+  position,
+}: {
+  src: string
+  alt: string
+  position?: string
+}) {
   return (
-    <Reveal as="section" className="home-band" aria-hidden="true">
-      <div className="home-band-frame">
-        <img
-          src="/art/couple-band.webp"
-          alt=""
-          className="home-band-img"
-          width={2000}
-          height={1365}
-          loading="lazy"
-        />
-      </div>
+    <Reveal as="figure" className="section-photo">
+      <img
+        src={src}
+        alt={alt}
+        className="section-photo-img"
+        style={position ? { objectPosition: position } : undefined}
+        loading="lazy"
+      />
     </Reveal>
   )
 }
@@ -298,6 +309,11 @@ function Explore() {
 function Travel() {
   return (
     <section className="home-travel" id="travel" aria-label="Travel">
+      <SectionPhoto
+        src="/art/couple-travel.webp"
+        alt="Abha and Udit on the ferry across Puget Sound"
+        position="50% 48%"
+      />
       <SectionTitle kicker="Getting Here" title="Travel" />
       <Reveal className="travel-intro">
         <p>{travel.intro}</p>
@@ -454,6 +470,11 @@ function FaqItem({
 function Faq() {
   return (
     <section className="home-faq" id="faq" aria-label="Questions and answers">
+      <SectionPhoto
+        src="/art/couple-faq.webp"
+        alt="Abha and Udit under a flowering garden trellis"
+        position="50% 35%"
+      />
       <SectionTitle kicker="Good to Know" title="Q & A" />
       <ul className="faq-list">
         {faqs.map((f, i) => (
@@ -513,12 +534,16 @@ export function HomePage() {
         <>
           <main className="home-main">
             <Schedule />
-            <CoupleBand />
             <Explore />
             <Travel />
             <Stay />
             <Faq />
           </main>
+          <SectionPhoto
+            src="/art/couple-band.webp"
+            alt="Abha and Udit embracing in the forest at Carnation Farms"
+            position="50% 38%"
+          />
           <Footer />
         </>
       ) : (
