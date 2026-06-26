@@ -30,6 +30,9 @@
   --palette-sunset: #d86a22;
   /* Height of the fixed SiteNav, used to clear content on inner pages. */
   --nav-h: 4.25rem;
+  /* Content column width. Lives on :root (not just .home) so the shared SiteNav
+     gutters resolve on every page, including /wardrobe which has no .home wrapper. */
+  --max: 1080px;
 }
 
 * {
@@ -970,7 +973,6 @@ a.poi:focus-visible .poi-pin {
 /* ================================================================== */
 
 .home {
-  --max: 1080px;
   overflow: clip;
 }
 
@@ -1189,11 +1191,11 @@ a.poi:focus-visible .poi-pin {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Zoom into a head-to-waist framing (matching the reference crop): faces
-     near the top, the hand-on-chest in view, origin above centre so the legs
-     drop out of frame rather than the heads. */
-  transform: scale(1.9);
-  transform-origin: 50% 33%;
+  /* couple.webp is pre-cropped to a square head-to-waist framing, so the circle
+     just needs object-fit: cover — the tiny scale nudges the corners out so the
+     dashed ring never reveals a straight edge. */
+  transform: scale(1.04);
+  transform-origin: 50% 42%;
 }
 
 .hero-eyebrow {
@@ -1404,7 +1406,10 @@ a.poi:focus-visible .poi-pin {
 /* Explore cards ----------------------------------------------------- */
 .explore-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Single Wardrobe card for now (Venue Map is parked): one centered column at
+     roughly the old two-up card width rather than a lone card in the left slot. */
+  grid-template-columns: min(27rem, 100%);
+  justify-content: center;
   gap: clamp(1.2rem, 3vw, 2rem);
   max-width: 56rem;
   margin: 0 auto;

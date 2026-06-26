@@ -53,7 +53,6 @@ export function SiteNav() {
         <div className="home-nav-links">
           <a href="/#schedule">Schedule</a>
           <a href="/wardrobe">Wardrobe</a>
-          <a href="/map">Map</a>
           <a href="/#travel">Travel</a>
           <a href="/#faq">Q&amp;A</a>
           <a

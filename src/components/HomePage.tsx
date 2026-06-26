@@ -139,7 +139,7 @@ function Hero() {
           <span className="hero-portrait-clip">
             <img
               src="/art/couple.webp"
-              alt="Watercolor painting of Abha and Udit in a forest clearing"
+              alt="Abha and Udit embracing in the forest at Carnation Farms"
               className="hero-portrait"
               width={2048}
               height={2048}
@@ -242,8 +242,8 @@ function Schedule() {
 
 function Explore() {
   return (
-    <section className="home-explore" id="explore" aria-label="Explore">
-      <SectionTitle kicker="Plan Your Visit" title="Explore" />
+    <section className="home-explore" id="explore" aria-label="Wardrobe">
+      <SectionTitle kicker="Plan Your Visit" title="Wardrobe" />
       <div className="explore-grid">
         {exploreCards.map((card, i) => (
           <Reveal as="article" key={card.href} delay={i * 0.1}>
@@ -347,7 +347,6 @@ function Stay() {
       </Reveal>
       <Reveal className="stay-card" delay={0.05}>
         <div className="stay-card-main">
-          <p className="stay-rooms">{hotel.rooms}</p>
           <h3 className="stay-hotel">{hotel.name}</h3>
           <p className="stay-area">{hotel.area}</p>
           <p className="stay-address">{hotel.address}</p>
@@ -437,7 +436,6 @@ function Footer() {
         </a>
         <nav className="footer-nav" aria-label="Site">
           <a href="/wardrobe">Wardrobe Guide</a>
-          <a href="/map">Venue Map</a>
           <a href={hero.rsvpUrl} target="_blank" rel="noopener noreferrer">
             RSVP
           </a>

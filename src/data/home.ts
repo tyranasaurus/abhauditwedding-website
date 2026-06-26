@@ -74,16 +74,7 @@ export const exploreCards: ExploreCard[] = [
     imageAlt: 'Watercolor of guests dressed for the ceremony',
     cue: 'Open the guide',
   },
-  {
-    href: '/map',
-    kicker: 'Where to Go',
-    title: 'Venue Map',
-    blurb:
-      'A hand-painted map of Carnation Farms. Find each celebration, guest parking, and the drive into the riverside meadow.',
-    image: '/art/map/aerial.webp',
-    imageAlt: 'Watercolor aerial map of the wedding grounds',
-    cue: 'Explore the grounds',
-  },
+  // The Venue Map card is parked while /map is unlinked (see App.tsx / MapPage.tsx).
 ]
 
 // Travel ----------------------------------------------------------------
@@ -175,7 +166,6 @@ export const stay = {
     name: 'Hilton Garden Inn',
     area: 'Downtown Redmond',
     address: 'Hilton Garden Inn Redmond Seattle, Redmond Way, Redmond, WA',
-    rooms: '50 rooms reserved',
     rate: '$180 / night',
     bookBy: 'Book by August 14, 2026',
     cutoffNote:
