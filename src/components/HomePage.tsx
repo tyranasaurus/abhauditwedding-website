@@ -539,11 +539,6 @@ export function HomePage() {
             <Stay />
             <Faq />
           </main>
-          <SectionPhoto
-            src="/art/couple-band.webp"
-            alt="Abha and Udit embracing in the forest at Carnation Farms"
-            position="50% 38%"
-          />
           <Footer />
         </>
       ) : (

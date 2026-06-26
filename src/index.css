@@ -1277,12 +1277,6 @@ a.poi:focus-visible .poi-pin {
     0 1.6rem 3rem rgba(31, 26, 17, 0.2);
 }
 
-/* The closing photo sits between the main content and the footer, so it needs
-   its own breathing room above and below. */
-.home > .section-photo {
-  margin: clamp(3rem, 7vw, 5.5rem) auto clamp(3rem, 6vw, 4.5rem);
-}
-
 .section-photo::after {
   content: '';
   position: absolute;
