@@ -179,6 +179,8 @@ export const stay = {
 export interface Faq {
   q: string
   a: string
+  /** Optional call-to-action link rendered beneath the answer. */
+  link?: { label: string; href: string }
 }
 
 export const faqs: Faq[] = [
@@ -196,7 +198,8 @@ export const faqs: Faq[] = [
   },
   {
     q: 'I am coming from out of town. Where should I stay?',
-    a: 'We recommend waiting for the hotel block for competitive pricing, but you are more than welcome to choose lodging that best suits you.',
+    a: `We've reserved a block of rooms at the ${stay.hotel.name} in ${stay.hotel.area} at a special group rate. Reserve yours before the ${stay.hotel.bookBy.replace('Book by ', '')} cutoff:`,
+    link: { label: 'Reserve your room', href: stay.hotel.bookUrl },
   },
   {
     q: 'Is the wedding indoors or outdoors?',
