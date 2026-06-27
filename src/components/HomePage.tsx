@@ -461,8 +461,9 @@ function FaqItem({
               <a
                 className="faq-link"
                 href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
+                {...(/^https?:/.test(link.href)
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
               >
                 {link.label} →
               </a>

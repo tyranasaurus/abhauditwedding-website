@@ -218,7 +218,8 @@ export const faqs: Faq[] = [
   },
   {
     q: 'What should I wear?',
-    a: 'We put together a full wardrobe guide with ideas for every event — open the Wardrobe Guide for ethnic and Western inspiration.',
+    a: 'We do not want you to go out and buy a bunch of clothing, but we put together a wardrobe guide to get an idea of what we expect most people to be wearing to each event.',
+    link: { label: 'Open the Wardrobe Guide', href: '/wardrobe' },
   },
   {
     q: 'What airport should I fly into?',
