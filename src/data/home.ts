@@ -18,8 +18,11 @@ export interface ScheduleStop {
   time: string
   title: string
   /** Wardrobe guide anchor for this event's dress code. */
-  href: string
-  accent: 'sunset' | 'carnival' | 'forest'
+  href?: string
+  /** A standalone RSVP link for this event only (opens in a new tab). When set,
+   *  the card links here and shows an RSVP cue instead of the wardrobe link. */
+  rsvpUrl?: string
+  accent: 'sunset' | 'carnival' | 'forest' | 'slate'
 }
 
 export const schedule: ScheduleStop[] = [
@@ -49,6 +52,16 @@ export const schedule: ScheduleStop[] = [
     title: 'Naach the Night Away',
     href: '/wardrobe#naach-the-night-away',
     accent: 'forest',
+  },
+  {
+    day: 'Wednesday',
+    date: 'September 9, 2026',
+    kind: 'Season Opener Watch Party',
+    time: '5:00 PM',
+    title: 'Seahawks Season Opener',
+    rsvpUrl:
+      'https://docs.google.com/forms/d/e/1FAIpQLScxUkCDBMpNt1xRp4Qe1BiSN5k7LaoW-4j6-K7MjtFxvmhWCg/viewform',
+    accent: 'slate',
   },
 ]
 

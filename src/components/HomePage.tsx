@@ -222,7 +222,13 @@ function Schedule() {
             key={stop.title}
             delay={i * 0.08}
           >
-            <a className="schedule-link" href={stop.href}>
+            <a
+              className="schedule-link"
+              href={stop.rsvpUrl ?? stop.href}
+              {...(stop.rsvpUrl
+                ? { target: '_blank', rel: 'noopener noreferrer' }
+                : {})}
+            >
               <span className="schedule-when">
                 <span className="schedule-day">{stop.day}</span>
                 <span className="schedule-date">{stop.date}</span>
@@ -232,7 +238,9 @@ function Schedule() {
               <span className="schedule-what">
                 <span className="schedule-kind">{stop.kind}</span>
                 <span className="schedule-title">{stop.title}</span>
-                <span className="schedule-cue">What to wear →</span>
+                <span className="schedule-cue">
+                  {stop.rsvpUrl ? 'RSVP' : 'What to wear'} →
+                </span>
               </span>
             </a>
           </Reveal>
