@@ -150,14 +150,6 @@ function Hero() {
         </motion.div>
 
         <motion.div className="hero-copy" style={{ y: copyY }}>
-          <motion.p
-            className="hero-eyebrow"
-            initial={reduce ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.15 }}
-          >
-            Together with their families
-          </motion.p>
           <motion.h1
             className="hero-names"
             initial={reduce ? false : { opacity: 0, y: 16 }}
@@ -524,8 +516,8 @@ export function HomePage() {
     // Keep the date out of the tab title until the page is unlocked, matching
     // the gated date/location in the hero.
     document.title = unlocked
-      ? 'Abha and Udit’s wedding · September 5–6, 2026'
-      : 'Abha and Udit’s wedding'
+      ? 'Abha & Udit Wedding · September 5–6, 2026'
+      : 'Abha & Udit Wedding'
     return () => {
       document.title = prev
     }
