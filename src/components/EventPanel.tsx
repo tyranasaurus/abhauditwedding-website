@@ -26,19 +26,31 @@ export function EventPanel({ event }: { event: WardrobeEvent }) {
         {renderWords(event.vibe, event.vibeAccentIndexes)}
       </p>
 
-      <div className="attire-grid">
-        <div>
-          <h3>Ethnic</h3>
-          <p>{event.ethnic}</p>
+      {event.ethnic && event.western && (
+        <div className="attire-grid">
+          <div>
+            <h3>Ethnic</h3>
+            <p>{event.ethnic}</p>
+          </div>
+          <div>
+            <h3>Western</h3>
+            <p>{event.western}</p>
+          </div>
         </div>
-        <div>
-          <h3>Western</h3>
-          <p>{event.western}</p>
-        </div>
-      </div>
+      )}
 
       <footer className="event-footer">
         <p className="event-notes">{event.note}</p>
+        {event.rsvpUrl && (
+          <a
+            className="btn event-rsvp"
+            href={event.rsvpUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            RSVP
+          </a>
+        )}
       </footer>
     </article>
   )

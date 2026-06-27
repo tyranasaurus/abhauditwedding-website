@@ -1,6 +1,6 @@
 export interface WardrobeEvent {
   /** Section accent palette, set per className in index.css. */
-  className: 'sunset-ceremony' | 'carnival-garden' | 'forest-gala'
+  className: 'sunset-ceremony' | 'carnival-garden' | 'forest-gala' | 'seahawks-opener'
   /** Anchor id, so the map page can deep-link to /wardrobe#<anchor>. */
   anchor: string
   label: string
@@ -13,8 +13,11 @@ export interface WardrobeEvent {
   imageAlt: string
   imageWidth: number
   imageHeight: number
-  ethnic: string
-  western: string
+  /** Attire guidance, omitted for reminder-only events (e.g. the watch party). */
+  ethnic?: string
+  western?: string
+  /** When set, the panel shows an RSVP button linking here (its own form). */
+  rsvpUrl?: string
   note: string
 }
 
@@ -76,5 +79,21 @@ export const events: WardrobeEvent[] = [
     ethnic: 'Formal Evening Ethnics or Indo-Westerns',
     western: 'Creative Cocktail Attire',
     note: 'Dinner, dosti, and dance!',
+  },
+  {
+    className: 'seahawks-opener',
+    anchor: 'seahawks-season-opener',
+    label: 'SEASON OPENER WATCH PARTY',
+    datetime: 'Wednesday, September 9, 2026 · 5:00 PM',
+    title: 'Seahawks Season Opener',
+    vibe: 'Twelfth Man Spirit',
+    vibeAccentIndexes: [1, 2],
+    image: '/art/seahawks.webp',
+    imageAlt: 'Four guests in Seahawks gear at a game-day watch party',
+    imageWidth: 1100,
+    imageHeight: 1111,
+    rsvpUrl:
+      'https://docs.google.com/forms/d/e/1FAIpQLScxUkCDBMpNt1xRp4Qe1BiSN5k7LaoW-4j6-K7MjtFxvmhWCg/viewform',
+    note: 'Quite the summer for rings in Seattle. Join us to celebrate Abha, Udit, and the Seahawks as they all run it back for more. Go Hawks!',
   },
 ]

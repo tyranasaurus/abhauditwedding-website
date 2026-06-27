@@ -5,3 +5,6 @@ dist-ssr
 .vercel
 .DS_Store
 *.tsbuildinfo
+
+# Source art (large originals); committed output lives in public/art/*.webp
+art-src/

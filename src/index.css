@@ -215,6 +215,13 @@ h1 {
   --accent-3: #d0601e;
 }
 
+/* Seahawks colors softened to sit inside the watercolor palette. */
+.event-panel.seahawks-opener {
+  --accent: #33486e;
+  --accent-2: #6f9c3c;
+  --accent-3: #5b6f78;
+}
+
 .event-heading {
   text-align: center;
 }
@@ -343,6 +350,22 @@ h1 {
   font-style: italic;
   line-height: 1.45;
   margin: 0;
+}
+
+/* RSVP button on panels that carry their own form (the watch party). */
+.event-rsvp {
+  background: var(--accent);
+  color: #fbf4e6;
+  margin-top: 1.4rem;
+  box-shadow: 0 0.5rem 1.1rem color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.event-rsvp:hover,
+.event-rsvp:focus-visible {
+  background: color-mix(in srgb, var(--accent) 82%, #000);
+  box-shadow: 0 0.7rem 1.5rem color-mix(in srgb, var(--accent) 38%, transparent);
+  outline: none;
+  transform: translateY(-2px);
 }
 
 /* Position/appearance only; motion/react drives the bob, fade, and centering. */
