@@ -192,6 +192,11 @@ export const faqs: Faq[] = [
     a: 'Please RSVP by June 30th to allow us to finalize our arrangements.',
   },
   {
+    q: 'What should I wear?',
+    a: 'We created a wardrobe guide for inspiration. But more than anything, we care that you feel comfortable, stay safe, and are there with us on time. Your presence to enjoy with us matters far more than any specific outfit.',
+    link: { label: 'Open the Wardrobe Guide', href: '/wardrobe' },
+  },
+  {
     q: 'Can I bring a date?',
     a: 'Due to the intimate nature of our celebration, we ask that you only RSVP for the number of seats reserved for your party.',
   },
@@ -207,11 +212,6 @@ export const faqs: Faq[] = [
   {
     q: 'Is the wedding indoors or outdoors?',
     a: 'Our Wedding Ceremony and Carnival are outdoors, but our Reception will be inside.',
-  },
-  {
-    q: 'What should I wear?',
-    a: "Think inspiration, not a shopping list. We care most that you're comfortable, safe, and there on time — your presence matters far more than any specific outfit.",
-    link: { label: 'Open the Wardrobe Guide', href: '/wardrobe' },
   },
   {
     q: 'Where should I park?',
