@@ -403,9 +403,9 @@ function Travel() {
             href={stay.hotel.bookUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="travel-link"
+            className="btn btn-primary stay-book-btn"
           >
-            See availability →
+            Book here
           </a>
         </Reveal>
       </div>

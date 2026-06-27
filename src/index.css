@@ -1755,6 +1755,15 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   margin-bottom: 0.45rem;
 }
 
+/* Prominent green "Book here" CTA filling the hotel card. */
+.stay-book-btn {
+  display: flex;
+  width: 100%;
+  margin-top: 0.4rem;
+  padding: 0.9rem 1.7rem;
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+}
+
 .travel-link {
   font-family: var(--font-display), Georgia, serif;
 }

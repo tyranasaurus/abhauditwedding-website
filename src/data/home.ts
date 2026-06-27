@@ -210,20 +210,12 @@ export const faqs: Faq[] = [
   },
   {
     q: 'What should I wear?',
-    a: 'We do not want you to go out and buy a bunch of clothing, but we put together a wardrobe guide to get an idea of what we expect most people to be wearing to each event.',
+    a: "Think inspiration, not a shopping list. We care most that you're comfortable, safe, and there on time — your presence matters far more than any specific outfit.",
     link: { label: 'Open the Wardrobe Guide', href: '/wardrobe' },
-  },
-  {
-    q: 'What airport should I fly into?',
-    a: 'We recommend Seattle–Tacoma International Airport (SEA), booked early since the wedding is on Labor Day weekend. We are still finalizing transportation options to the venue — stay tuned!',
   },
   {
     q: 'Where should I park?',
     a: 'There is plenty of parking at the garage at Carnation Farms. A shuttle will take you straight from the garage to the event.',
-  },
-  {
-    q: 'Can I take photos during the wedding?',
-    a: 'To let our professional team capture the best views, we ask that you enjoy the Ceremony without phones or cameras. Snap away during the festivities that follow — just be mindful of our photographers, videographers, and their equipment.',
   },
   {
     q: 'Are the locations wheelchair accessible?',
