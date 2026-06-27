@@ -389,6 +389,25 @@ function Travel() {
             </a>
           </Reveal>
         ))}
+        <Reveal
+          as="article"
+          className="travel-note"
+          delay={travel.notes.length * 0.08}
+        >
+          <h3>{stay.hotel.name}</h3>
+          <p className="travel-note-meta">
+            {stay.hotel.area} · {stay.hotel.rate}
+          </p>
+          <p>{stay.hotel.cutoffNote}</p>
+          <a
+            href={stay.hotel.bookUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="travel-link"
+          >
+            See availability →
+          </a>
+        </Reveal>
       </div>
 
       <div className="travel-lists">
@@ -427,37 +446,6 @@ function Travel() {
               </li>
             ))}
           </ul>
-        </Reveal>
-      </div>
-      <div className="stay-block" id="stay">
-        <SectionPhoto
-          src="/art/couple-beach.webp"
-          alt="Abha and Udit walking along the shore at the water's edge"
-          position="50% 50%"
-        />
-        <h3 className="stay-subtitle">Where to Stay</h3>
-        <Reveal className="stay-intro">
-          <p>{stay.intro}</p>
-        </Reveal>
-        <Reveal className="stay-card" delay={0.05}>
-          <div className="stay-card-main">
-            <h3 className="stay-hotel">{stay.hotel.name}</h3>
-            <p className="stay-area">{stay.hotel.area}</p>
-            <p className="stay-address">{stay.hotel.address}</p>
-            <p className="stay-cutoff">{stay.hotel.cutoffNote}</p>
-          </div>
-          <div className="stay-card-aside">
-            <span className="stay-rate">{stay.hotel.rate}</span>
-            <span className="stay-bookby">{stay.hotel.bookBy}</span>
-            <a
-              className="btn btn-primary"
-              href={stay.hotel.bookUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              See availability
-            </a>
-          </div>
         </Reveal>
       </div>
     </section>
@@ -525,6 +513,11 @@ function FaqItem({
 function Faq() {
   return (
     <section className="home-faq" id="faq" aria-label="Questions and answers">
+      <SectionPhoto
+        src="/art/couple-beach.webp"
+        alt="Abha and Udit walking along the shore at the water's edge"
+        position="50% 50%"
+      />
       <SectionTitle kicker="Good to Know" title="Q & A" />
       <ul className="faq-list">
         {faqs.map((f, i) => (

@@ -1701,21 +1701,6 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 }
 
 /* Travel ------------------------------------------------------------ */
-/* "Where to Stay" folded in as a block at the end of the Travel section. */
-.stay-block {
-  margin-top: clamp(3rem, 8vw, 6rem);
-}
-
-/* A subheading (not a full section title) so the hotel reads as part of Travel. */
-.stay-subtitle {
-  color: var(--forest);
-  font-family: var(--font-script), cursive;
-  font-size: clamp(1.9rem, 3.6vw, 2.6rem);
-  line-height: 1;
-  text-align: center;
-  margin: clamp(1.5rem, 4vw, 2.5rem) 0 clamp(1rem, 2.5vw, 1.6rem);
-}
-
 .travel-intro,
 .stay-intro {
   text-align: center;
@@ -1734,10 +1719,10 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 
 .travel-notes {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-  gap: clamp(1.2rem, 3vw, 1.8rem);
-  max-width: 36rem;
-  margin: 0 auto clamp(1.8rem, 4vw, 2.6rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.2rem, 3vw, 2rem);
+  max-width: 54rem;
+  margin: 0 auto clamp(1.2rem, 3vw, 2rem);
 }
 
 .travel-note {
@@ -1761,6 +1746,13 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   font-size: clamp(1rem, 1.6vw, 1.12rem);
   line-height: 1.5;
   margin: 0 0 0.8rem;
+}
+
+/* Hotel card meta line (area · rate) inside the Travel cards grid. */
+.travel-note .travel-note-meta {
+  color: var(--copper);
+  font-weight: 700;
+  margin-bottom: 0.45rem;
 }
 
 .travel-link {
@@ -1854,89 +1846,6 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   font-style: italic;
   line-height: 1.4;
   margin-top: 0.2rem;
-}
-
-/* Where to stay ----------------------------------------------------- */
-.stay-card {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: clamp(1.2rem, 3vw, 2.4rem);
-  align-items: center;
-  max-width: 50rem;
-  margin: 0 auto;
-  background: rgba(255, 252, 245, 0.6);
-  border: 1px solid rgba(155, 100, 58, 0.24);
-  border-radius: 1.1rem;
-  padding: clamp(1.4rem, 3vw, 2.2rem);
-  box-shadow: 0 0.7rem 1.6rem rgba(47, 42, 33, 0.1);
-}
-
-.stay-rooms {
-  color: var(--copper);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  margin: 0;
-}
-
-.stay-hotel {
-  color: var(--forest);
-  font-family: var(--font-script), cursive;
-  font-size: clamp(2.4rem, 5vw, 3.4rem);
-  line-height: 0.95;
-  margin: 0.5rem 0 0;
-}
-
-.stay-area {
-  color: var(--rust);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  margin: 0.1rem 0 0.7rem;
-}
-
-.stay-address {
-  color: var(--muted-ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 1rem;
-  margin: 0 0 0.7rem;
-}
-
-.stay-cutoff {
-  color: var(--muted-ink);
-  font-family: var(--font-body), Georgia, serif;
-  font-size: 0.88rem;
-  font-style: italic;
-  line-height: 1.45;
-  margin: 0;
-}
-
-.stay-card-aside {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.45rem;
-  text-align: center;
-  border-left: 1px solid rgba(155, 100, 58, 0.22);
-  padding-left: clamp(1.2rem, 3vw, 2.4rem);
-}
-
-.stay-rate {
-  color: var(--forest);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.6rem, 3vw, 2.1rem);
-  font-weight: 700;
-}
-
-.stay-bookby {
-  color: var(--copper-light);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.92rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
 }
 
 /* Q & A ------------------------------------------------------------- */
@@ -2087,17 +1996,6 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
     grid-template-columns: 1fr;
   }
 
-  .stay-card {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .stay-card-aside {
-    border-left: 0;
-    border-top: 1px solid rgba(155, 100, 58, 0.22);
-    padding-left: 0;
-    padding-top: 1.2rem;
-  }
 }
 
 @media (max-width: 560px) {
