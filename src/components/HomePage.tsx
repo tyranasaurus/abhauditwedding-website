@@ -295,7 +295,7 @@ function Explore() {
               <div className="explore-body">
                 <p className="explore-kicker">{card.kicker}</p>
                 <h3 className="explore-title">{card.title}</h3>
-                <p className="explore-blurb">{card.blurb}</p>
+                {card.blurb ? <p className="explore-blurb">{card.blurb}</p> : null}
                 <span className="explore-cue">{card.cue} →</span>
               </div>
             </motion.a>
