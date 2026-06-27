@@ -435,7 +435,7 @@ function Travel() {
           alt="Abha and Udit walking along the shore at the water's edge"
           position="50% 50%"
         />
-        <SectionTitle kicker="Rest Your Head" title="Where to Stay" />
+        <h3 className="stay-subtitle">Where to Stay</h3>
         <Reveal className="stay-intro">
           <p>{stay.intro}</p>
         </Reveal>

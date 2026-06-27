@@ -1706,6 +1706,16 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   margin-top: clamp(3rem, 8vw, 6rem);
 }
 
+/* A subheading (not a full section title) so the hotel reads as part of Travel. */
+.stay-subtitle {
+  color: var(--forest);
+  font-family: var(--font-script), cursive;
+  font-size: clamp(1.9rem, 3.6vw, 2.6rem);
+  line-height: 1;
+  text-align: center;
+  margin: clamp(1.5rem, 4vw, 2.5rem) 0 clamp(1rem, 2.5vw, 1.6rem);
+}
+
 .travel-intro,
 .stay-intro {
   text-align: center;
