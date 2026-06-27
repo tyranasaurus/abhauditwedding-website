@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import { SiteNav } from '@/components/SiteNav'
 import { Intro } from '@/components/Intro'
 import { EventPanel } from '@/components/EventPanel'
@@ -28,7 +28,16 @@ export function Wardrobe() {
         <Intro />
         <section className="event-gallery" aria-label="Wardrobe events">
           {events.map((event) => (
-            <EventPanel event={event} key={event.title} />
+            <Fragment key={event.title}>
+              {event.bonus && (
+                <div className="bonus-break">
+                  <div className="home-ornament" aria-hidden="true" />
+                  <p className="bonus-break-eyebrow">{event.bonus.eyebrow}</p>
+                  <p className="bonus-break-lead">{event.bonus.lead}</p>
+                </div>
+              )}
+              <EventPanel event={event} />
+            </Fragment>
           ))}
         </section>
       </main>

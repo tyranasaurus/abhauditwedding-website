@@ -5,11 +5,11 @@ export function Intro() {
     <section className="intro-page" aria-labelledby="wardrobe-title">
       <div className="intro-frame">
         <img
-          src="/art/barn.webp"
+          src="/art/barn-wedding-logo.webp"
           alt=""
           className="barn-watercolor"
-          width={1400}
-          height={1400}
+          width={1200}
+          height={1101}
           fetchPriority="high"
         />
 

@@ -18,6 +18,10 @@ export interface WardrobeEvent {
   western?: string
   /** When set, the panel shows an RSVP button linking here (its own form). */
   rsvpUrl?: string
+  /** Present on optional/bonus events: renders a framed divider before the
+   *  panel and de-emphasizes the panel itself, so it reads as an extra rather
+   *  than a peer of the main events. */
+  bonus?: { eyebrow: string; lead: string }
   note: string
 }
 
@@ -45,7 +49,7 @@ export const events: WardrobeEvent[] = [
     imageWidth: 958,
     imageHeight: 1038,
     ethnic: 'Classic Ethnics',
-    western: 'Summer Cocktail Attire',
+    western: 'Summer Cocktail',
     note: 'Dinner will be at dusk, so light layers could help ward off the evening chill.',
   },
   {
@@ -54,14 +58,14 @@ export const events: WardrobeEvent[] = [
     label: 'BARAAT & CARNIVAL',
     datetime: 'Sunday, September 6, 2026 · 10:00 AM',
     title: 'From Carnegie to Carnation',
-    vibe: 'Colorful Summer Garden',
+    vibe: 'Colors in Bloom',
     vibeAccentIndexes: [1, 2],
     image: '/art/carnival.webp',
     imageAlt: 'Four guests dressed for the Baraat and Carnival',
     imageWidth: 1074,
     imageHeight: 1144,
-    ethnic: 'Indian Wedding Casual',
-    western: 'Summer Dressy Casual',
+    ethnic: 'Wedding Casual',
+    western: 'Garden Casual',
     note: 'Dress for the sun and lawn games. Abha is skipping the heels, and you can too!',
   },
   {
@@ -77,7 +81,7 @@ export const events: WardrobeEvent[] = [
     imageWidth: 1053,
     imageHeight: 1102,
     ethnic: 'Formal Evening Ethnics or Indo-Westerns',
-    western: 'Creative Cocktail Attire',
+    western: 'Creative Cocktail',
     note: 'Dinner, dosti, and dance!',
   },
   {
@@ -94,6 +98,10 @@ export const events: WardrobeEvent[] = [
     imageHeight: 1111,
     rsvpUrl:
       'https://docs.google.com/forms/d/e/1FAIpQLScxUkCDBMpNt1xRp4Qe1BiSN5k7LaoW-4j6-K7MjtFxvmhWCg/viewform',
+    bonus: {
+      eyebrow: 'OPTIONAL AFTERPARTY',
+      lead: "If you're still in town a few days later…",
+    },
     note: 'Quite the summer for rings in Seattle. Join us to celebrate Abha, Udit, and the Seahawks as they all run it back for more. Go Hawks!',
   },
 ]

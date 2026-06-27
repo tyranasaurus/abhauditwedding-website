@@ -111,7 +111,8 @@ img {
 }
 
 .barn-watercolor {
-  filter: drop-shadow(0 1.25rem 1.5rem rgba(47, 42, 33, 0.16));
+  /* No drop-shadow: the logo has built-in transparency meant to read like
+     watercolor on the paper, and a shadow traces every soft edge and wash. */
   margin-inline: auto;
   width: min(35rem, 100%);
   height: auto;
@@ -170,7 +171,7 @@ h1 {
 
 .event-gallery {
   display: grid;
-  gap: 0;
+  gap: clamp(2.5rem, 7vw, 6rem);
   padding: 0 max(0.85rem, calc((100vw - 1080px) / 2)) 4rem;
 }
 
@@ -187,14 +188,20 @@ h1 {
 }
 
 .event-panel::before {
-  background: linear-gradient(90deg, transparent, rgba(155, 100, 58, 0.45), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(155, 100, 58, 0.9) 25%,
+    rgba(155, 100, 58, 0.9) 75%,
+    transparent
+  );
   content: '';
-  height: 1px;
+  height: 2px;
   left: 50%;
   position: absolute;
   top: 0;
   transform: translateX(-50%);
-  width: min(58rem, 84%);
+  width: min(64rem, 90%);
 }
 
 .event-panel.forest-gala {
@@ -220,6 +227,68 @@ h1 {
   --accent: #33486e;
   --accent-2: #6f9c3c;
   --accent-3: #5b6f78;
+}
+
+/* Framed break before a bonus/optional event, setting it apart from the
+   three main events. */
+.bonus-break {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: 0.7rem;
+  max-width: 38rem;
+  margin: 0 auto;
+  padding: clamp(1.5rem, 5vw, 4rem) 1.5rem clamp(0.5rem, 2vw, 1.5rem);
+}
+
+.bonus-break .home-ornament {
+  margin: 0 0 0.35rem;
+}
+
+.bonus-break-eyebrow {
+  color: var(--copper);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(0.9rem, 1.7vw, 1.15rem);
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  margin: 0;
+}
+
+.bonus-break-lead {
+  color: var(--copper-light);
+  font-family: var(--font-body), Georgia, serif;
+  font-size: clamp(1.2rem, 2.6vw, 1.8rem);
+  font-style: italic;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* The bonus panel itself reads lighter and shorter than its peers. */
+.event-panel.is-bonus {
+  min-height: auto;
+  gap: 0.8rem;
+  padding-top: clamp(0.5rem, 1.5vw, 1.2rem);
+  padding-bottom: clamp(3rem, 8vw, 6rem);
+}
+
+.event-panel.is-bonus::before {
+  content: none;
+}
+
+.event-panel.is-bonus .event-heading h2 {
+  font-size: clamp(2.6rem, 5.8vw, 4.4rem);
+}
+
+.event-panel.is-bonus .attire-vibe {
+  font-size: clamp(2.2rem, 4.8vw, 3.6rem);
+}
+
+.event-panel.is-bonus .event-stage {
+  max-width: min(28rem, 100%);
+}
+
+.event-panel.is-bonus .stage-cutout {
+  opacity: 0.88;
 }
 
 .event-heading {

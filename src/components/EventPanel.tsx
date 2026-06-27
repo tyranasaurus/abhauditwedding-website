@@ -3,7 +3,10 @@ import { renderWords } from '@/lib/render-words'
 
 export function EventPanel({ event }: { event: WardrobeEvent }) {
   return (
-    <article className={`event-panel ${event.className}`} id={event.anchor}>
+    <article
+      className={`event-panel ${event.className}${event.bonus ? ' is-bonus' : ''}`}
+      id={event.anchor}
+    >
       <header className="event-heading">
         <h2>{renderWords(event.title)}</h2>
         <p className="event-label">{event.label}</p>
