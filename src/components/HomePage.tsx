@@ -238,9 +238,11 @@ function Schedule() {
               <span className="schedule-what">
                 <span className="schedule-kind">{stop.kind}</span>
                 <span className="schedule-title">{stop.title}</span>
-                <span className="schedule-cue">
-                  {stop.rsvpUrl ? 'RSVP' : 'What to wear'} →
-                </span>
+                {stop.rsvpUrl ? (
+                  <span className="schedule-rsvp">RSVP to attend →</span>
+                ) : (
+                  <span className="schedule-cue">What to wear →</span>
+                )}
               </span>
             </a>
           </Reveal>
