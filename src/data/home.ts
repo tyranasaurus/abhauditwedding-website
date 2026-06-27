@@ -126,7 +126,7 @@ export const travel = {
   eastsideBites: [
     {
       name: "Victor's Celtic Coffee & Roasters",
-      note: '',
+      note: 'Our favorite spot to unplug.',
       query: "Victor's Celtic Coffee & Roasters, Redmond, WA",
     },
     {
