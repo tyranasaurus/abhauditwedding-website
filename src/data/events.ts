@@ -83,7 +83,7 @@ export const events: WardrobeEvent[] = [
   {
     className: 'seahawks-opener',
     anchor: 'seahawks-season-opener',
-    label: 'SEASON OPENER WATCH PARTY',
+    label: 'FOOTBALL WATCH PARTY',
     datetime: 'Wednesday, September 9, 2026 · 5:00 PM',
     title: 'Seahawks Season Opener',
     vibe: 'Twelfth Man Spirit',
