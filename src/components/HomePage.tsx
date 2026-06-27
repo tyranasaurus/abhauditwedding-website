@@ -524,8 +524,8 @@ export function HomePage() {
     // Keep the date out of the tab title until the page is unlocked, matching
     // the gated date/location in the hero.
     document.title = unlocked
-      ? 'Abha & Udit · September 5–6, 2026'
-      : 'Abha & Udit'
+      ? 'Abha and Udit’s wedding · September 5–6, 2026'
+      : 'Abha and Udit’s wedding'
     return () => {
       document.title = prev
     }
