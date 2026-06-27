@@ -59,6 +59,7 @@ export const schedule: ScheduleStop[] = [
     kind: 'Season Opener Watch Party',
     time: '5:00 PM',
     title: 'Seahawks Season Opener',
+    href: '/wardrobe#seahawks-season-opener',
     rsvpUrl:
       'https://docs.google.com/forms/d/e/1FAIpQLScxUkCDBMpNt1xRp4Qe1BiSN5k7LaoW-4j6-K7MjtFxvmhWCg/viewform',
     accent: 'slate',
@@ -91,22 +92,14 @@ export const exploreCards: ExploreCard[] = [
 // Travel ----------------------------------------------------------------
 export const travel = {
   intro:
-    'The wedding lands on Labor Day weekend, so book your travel early.',
+    "The wedding lands on Labor Day weekend in the Seattle area — here's how to get around, plus where to stay.",
   notes: [
     {
       title: 'Getting In',
-      body: 'We recommend booking flights to Seattle–Tacoma International Airport (SEA) early, since the wedding falls on Labor Day weekend and fares climb fast.',
+      body: 'We recommend flying into Seattle–Tacoma International Airport (SEA), the main hub for the area.',
       link: {
         label: 'Seattle–Tacoma International Airport',
         href: 'https://www.google.com/maps/search/?api=1&query=Seattle%E2%80%93Tacoma+International+Airport',
-      },
-    },
-    {
-      title: 'Getting to Redmond',
-      body: "No rental car? Take the Link Light Rail from SeaTac to the Downtown Redmond stop — the hotel is a 3–4 minute walk away. Redmond also runs RedLink, a free, on-demand, all-electric ride service for getting around town and to and from the light rail.",
-      link: {
-        label: 'Details on RedLink',
-        href: 'https://www.redmond.gov/2423/RedLink',
       },
     },
   ],
@@ -171,8 +164,7 @@ export function mapsSearch(query: string) {
 
 // Where to stay ---------------------------------------------------------
 export const stay = {
-  intro:
-    "Here is the hotel block. We'd love for everyone to stay close, so grab your spot before rooms fill up!",
+  intro: "Here is the hotel block — we'd love for everyone to stay close.",
   hotel: {
     name: 'Hilton Garden Inn',
     area: 'Downtown Redmond',

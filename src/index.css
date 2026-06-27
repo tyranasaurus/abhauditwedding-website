@@ -1560,6 +1560,53 @@ a.poi:focus-visible .poi-pin {
   transform: translateY(-2px);
 }
 
+/* Events with two actions (RSVP + what to wear): the card is static and each
+   cue is its own link instead of the whole card being one link. */
+.schedule-link--static {
+  cursor: default;
+}
+
+.schedule-link--static:hover,
+.schedule-link--static:focus-within {
+  transform: none;
+  box-shadow: none;
+  background: rgba(255, 252, 245, 0.55);
+  border-color: rgba(155, 100, 58, 0.22);
+}
+
+.schedule-cues {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.schedule-cues .schedule-cue,
+.schedule-cues .schedule-rsvp {
+  margin-top: 0;
+}
+
+a.schedule-cue-link {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a.schedule-cue.schedule-cue-link:hover,
+a.schedule-cue.schedule-cue-link:focus-visible {
+  opacity: 1;
+  text-decoration: underline;
+  outline: none;
+}
+
+a.schedule-rsvp.schedule-cue-link:hover,
+a.schedule-rsvp.schedule-cue-link:focus-visible {
+  background: var(--accent-deep);
+  box-shadow: 0 0.65rem 1.3rem rgba(47, 42, 33, 0.26);
+  transform: translateY(-2px);
+  outline: none;
+}
+
 /* Explore cards ----------------------------------------------------- */
 .explore-grid {
   display: grid;
@@ -1654,6 +1701,11 @@ a.poi:focus-visible .poi-pin {
 }
 
 /* Travel ------------------------------------------------------------ */
+/* "Where to Stay" folded in as a block at the end of the Travel section. */
+.stay-block {
+  margin-top: clamp(3rem, 8vw, 6rem);
+}
+
 .travel-intro,
 .stay-intro {
   text-align: center;
@@ -1672,9 +1724,9 @@ a.poi:focus-visible .poi-pin {
 
 .travel-notes {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
   gap: clamp(1.2rem, 3vw, 1.8rem);
-  max-width: 54rem;
+  max-width: 36rem;
   margin: 0 auto clamp(1.8rem, 4vw, 2.6rem);
 }
 

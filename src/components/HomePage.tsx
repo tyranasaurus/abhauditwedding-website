@@ -215,20 +215,38 @@ function Schedule() {
       />
       <SectionTitle kicker="The Weekend" title="Schedule" />
       <ol className="schedule-list">
-        {schedule.map((stop, i) => (
-          <Reveal
-            as="li"
-            className={`schedule-stop accent-${stop.accent}`}
-            key={stop.title}
-            delay={i * 0.08}
-          >
-            <a
-              className="schedule-link"
-              href={stop.rsvpUrl ?? stop.href}
-              {...(stop.rsvpUrl
-                ? { target: '_blank', rel: 'noopener noreferrer' }
-                : {})}
-            >
+        {schedule.map((stop, i) => {
+          // Events can carry up to two actions: RSVP (its own form) and the
+          // wardrobe "what to wear" link. With one action the whole card is the
+          // link; with two, the card is static and each cue is its own link.
+          type Cue = {
+            key: string
+            label: string
+            href: string
+            cls: string
+            external: boolean
+          }
+          const cues: Cue[] = []
+          if (stop.rsvpUrl)
+            cues.push({
+              key: 'rsvp',
+              label: 'RSVP to attend',
+              href: stop.rsvpUrl,
+              cls: 'schedule-rsvp',
+              external: true,
+            })
+          if (stop.href)
+            cues.push({
+              key: 'wear',
+              label: 'What to wear',
+              href: stop.href,
+              cls: 'schedule-cue',
+              external: false,
+            })
+          // One action -> the whole card is the link; two -> static card, each cue links.
+          const lead = cues.length === 1 ? cues[0] : null
+          const body = (
+            <>
               <span className="schedule-when">
                 <span className="schedule-day">{stop.day}</span>
                 <span className="schedule-date">{stop.date}</span>
@@ -238,15 +256,50 @@ function Schedule() {
               <span className="schedule-what">
                 <span className="schedule-kind">{stop.kind}</span>
                 <span className="schedule-title">{stop.title}</span>
-                {stop.rsvpUrl ? (
-                  <span className="schedule-rsvp">RSVP to attend →</span>
+                {lead ? (
+                  <span className={lead.cls}>{lead.label} →</span>
                 ) : (
-                  <span className="schedule-cue">What to wear →</span>
+                  <span className="schedule-cues">
+                    {cues.map((c) => (
+                      <a
+                        key={c.key}
+                        className={`${c.cls} schedule-cue-link`}
+                        href={c.href}
+                        {...(c.external
+                          ? { target: '_blank', rel: 'noopener noreferrer' }
+                          : {})}
+                      >
+                        {c.label} →
+                      </a>
+                    ))}
+                  </span>
                 )}
               </span>
-            </a>
-          </Reveal>
-        ))}
+            </>
+          )
+          return (
+            <Reveal
+              as="li"
+              className={`schedule-stop accent-${stop.accent}`}
+              key={stop.title}
+              delay={i * 0.08}
+            >
+              {lead ? (
+                <a
+                  className="schedule-link"
+                  href={lead.href}
+                  {...(lead.external
+                    ? { target: '_blank', rel: 'noopener noreferrer' }
+                    : {})}
+                >
+                  {body}
+                </a>
+              ) : (
+                <div className="schedule-link schedule-link--static">{body}</div>
+              )}
+            </Reveal>
+          )
+        })}
       </ol>
     </section>
   )
@@ -376,43 +429,37 @@ function Travel() {
           </ul>
         </Reveal>
       </div>
-    </section>
-  )
-}
-
-function Stay() {
-  const { hotel } = stay
-  return (
-    <section className="home-stay" id="stay" aria-label="Where to stay">
-      <SectionPhoto
-        src="/art/couple-beach.webp"
-        alt="Abha and Udit walking along the shore at the water's edge"
-        position="50% 50%"
-      />
-      <SectionTitle kicker="Rest Your Head" title="Where to Stay" />
-      <Reveal className="stay-intro">
-        <p>{stay.intro}</p>
-      </Reveal>
-      <Reveal className="stay-card" delay={0.05}>
-        <div className="stay-card-main">
-          <h3 className="stay-hotel">{hotel.name}</h3>
-          <p className="stay-area">{hotel.area}</p>
-          <p className="stay-address">{hotel.address}</p>
-          <p className="stay-cutoff">{hotel.cutoffNote}</p>
-        </div>
-        <div className="stay-card-aside">
-          <span className="stay-rate">{hotel.rate}</span>
-          <span className="stay-bookby">{hotel.bookBy}</span>
-          <a
-            className="btn btn-primary"
-            href={hotel.bookUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            See availability
-          </a>
-        </div>
-      </Reveal>
+      <div className="stay-block" id="stay">
+        <SectionPhoto
+          src="/art/couple-beach.webp"
+          alt="Abha and Udit walking along the shore at the water's edge"
+          position="50% 50%"
+        />
+        <SectionTitle kicker="Rest Your Head" title="Where to Stay" />
+        <Reveal className="stay-intro">
+          <p>{stay.intro}</p>
+        </Reveal>
+        <Reveal className="stay-card" delay={0.05}>
+          <div className="stay-card-main">
+            <h3 className="stay-hotel">{stay.hotel.name}</h3>
+            <p className="stay-area">{stay.hotel.area}</p>
+            <p className="stay-address">{stay.hotel.address}</p>
+            <p className="stay-cutoff">{stay.hotel.cutoffNote}</p>
+          </div>
+          <div className="stay-card-aside">
+            <span className="stay-rate">{stay.hotel.rate}</span>
+            <span className="stay-bookby">{stay.hotel.bookBy}</span>
+            <a
+              className="btn btn-primary"
+              href={stay.hotel.bookUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              See availability
+            </a>
+          </div>
+        </Reveal>
+      </div>
     </section>
   )
 }
@@ -478,11 +525,6 @@ function FaqItem({
 function Faq() {
   return (
     <section className="home-faq" id="faq" aria-label="Questions and answers">
-      <SectionPhoto
-        src="/art/couple-faq.webp"
-        alt="Abha and Udit under a flowering garden trellis"
-        position="50% 35%"
-      />
       <SectionTitle kicker="Good to Know" title="Q & A" />
       <ul className="faq-list">
         {faqs.map((f, i) => (
@@ -544,7 +586,6 @@ export function HomePage() {
             <Schedule />
             <Explore />
             <Travel />
-            <Stay />
             <Faq />
           </main>
           <Footer />
