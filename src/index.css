@@ -284,11 +284,11 @@ h1 {
 }
 
 .event-panel.is-bonus .event-stage {
-  max-width: min(28rem, 100%);
+  max-width: min(40rem, 100%);
 }
 
 .event-panel.is-bonus .stage-cutout {
-  opacity: 0.88;
+  opacity: 0.92;
 }
 
 .event-heading {

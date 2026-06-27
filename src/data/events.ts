@@ -94,8 +94,8 @@ export const events: WardrobeEvent[] = [
     vibeAccentIndexes: [1, 2],
     image: '/art/seahawks.webp',
     imageAlt: 'Four guests in Seahawks gear at a game-day watch party',
-    imageWidth: 1100,
-    imageHeight: 1111,
+    imageWidth: 1300,
+    imageHeight: 1257,
     rsvpUrl:
       'https://docs.google.com/forms/d/e/1FAIpQLScxUkCDBMpNt1xRp4Qe1BiSN5k7LaoW-4j6-K7MjtFxvmhWCg/viewform',
     bonus: {
