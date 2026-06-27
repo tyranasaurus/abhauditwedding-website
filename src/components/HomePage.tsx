@@ -477,11 +477,6 @@ function FaqItem({
 function Faq() {
   return (
     <section className="home-faq" id="faq" aria-label="Questions and answers">
-      <SectionPhoto
-        src="/art/couple-faq.webp"
-        alt="Abha and Udit under a flowering garden trellis"
-        position="50% 35%"
-      />
       <SectionTitle kicker="Good to Know" title="Q & A" />
       <ul className="faq-list">
         {faqs.map((f, i) => (
