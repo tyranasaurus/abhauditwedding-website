@@ -57,7 +57,7 @@ export interface ExploreCard {
   href: string
   kicker: string
   title: string
-  blurb: string
+  blurb?: string
   image: string
   imageAlt: string
   cue: string
@@ -68,8 +68,6 @@ export const exploreCards: ExploreCard[] = [
     href: '/wardrobe',
     kicker: 'What to Wear',
     title: 'Wardrobe Guide',
-    blurb:
-      'Inspiration for every event, from the Sunset Shaadi to the Sangeet. Ethnic and Western ideas, plus notes on the sun, grass, and dancing.',
     image: '/art/shaadi.webp',
     imageAlt: 'Watercolor of guests dressed for the ceremony',
     cue: 'Open the guide',
@@ -80,7 +78,7 @@ export const exploreCards: ExploreCard[] = [
 // Travel ----------------------------------------------------------------
 export const travel = {
   intro:
-    'The wedding lands on Labor Day weekend, so book early and give yourself room to wander the Pacific Northwest.',
+    'The wedding lands on Labor Day weekend, so book your travel early.',
   notes: [
     {
       title: 'Getting In',
@@ -169,7 +167,7 @@ export const stay = {
     rate: '$180 / night',
     bookBy: 'Book by August 14, 2026',
     cutoffNote:
-      "The group cutoff is 8/14/26 — the booking link stops working after that date, so reserve before then.",
+      "The group cutoff is 8/14/26 — the booking link stops working after that date, so please reserve before then.",
     bookUrl:
       'https://www.hilton.com/en/book/reservation/rooms/?ctyhocn=LKEGIGI&arrivalDate=2026-09-04&departureDate=2026-09-06&groupCode=99K&room1NumAdults=1',
   },
@@ -203,7 +201,7 @@ export const faqs: Faq[] = [
   },
   {
     q: 'Is the wedding indoors or outdoors?',
-    a: 'Our Wedding Ceremony is outdoors, but our Reception will be inside.',
+    a: 'Our Wedding Ceremony and Carnival are outdoors, but our Reception will be inside.',
   },
   {
     q: 'What should I wear?',
