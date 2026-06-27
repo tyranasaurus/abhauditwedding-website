@@ -382,6 +382,11 @@ function Stay() {
   const { hotel } = stay
   return (
     <section className="home-stay" id="stay" aria-label="Where to stay">
+      <SectionPhoto
+        src="/art/couple-beach.webp"
+        alt="Abha and Udit walking along the shore at the water's edge"
+        position="50% 50%"
+      />
       <SectionTitle kicker="Rest Your Head" title="Where to Stay" />
       <Reveal className="stay-intro">
         <p>{stay.intro}</p>
@@ -471,9 +476,9 @@ function Faq() {
   return (
     <section className="home-faq" id="faq" aria-label="Questions and answers">
       <SectionPhoto
-        src="/art/couple-beach.webp"
-        alt="Abha and Udit walking along the shore at the water's edge"
-        position="50% 50%"
+        src="/art/couple-faq.webp"
+        alt="Abha and Udit under a flowering garden trellis"
+        position="50% 35%"
       />
       <SectionTitle kicker="Good to Know" title="Q & A" />
       <ul className="faq-list">
