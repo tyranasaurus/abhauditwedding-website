@@ -35,7 +35,7 @@ function Reveal({
   className?: string
   delay?: number
   y?: number
-  as?: 'div' | 'section' | 'li' | 'article' | 'header'
+  as?: 'div' | 'section' | 'li' | 'article' | 'header' | 'figure'
 }) {
   const reduce = useReducedMotion()
   const Tag = motion[as]
@@ -89,6 +89,7 @@ function Countdown() {
 
 function Hero() {
   const reduce = useReducedMotion()
+  const unlocked = useUnlocked()
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -165,18 +166,22 @@ function Hero() {
           >
             {hero.names}
           </motion.h1>
-          <motion.div
-            className="hero-meta"
-            initial={reduce ? false : { opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.45 }}
-          >
-            <span className="hero-date">{hero.date}</span>
-            <span className="hero-dot" aria-hidden="true">
-              ·
-            </span>
-            <span className="hero-venue">{hero.venue}</span>
-          </motion.div>
+          {/* The date and location are guest-only: they appear once the password
+              unlocks the page, alongside the rest of the details. */}
+          {unlocked && (
+            <motion.div
+              className="hero-meta"
+              initial={reduce ? false : { opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.45 }}
+            >
+              <span className="hero-date">{hero.date}</span>
+              <span className="hero-dot" aria-hidden="true">
+                ·
+              </span>
+              <span className="hero-venue">{hero.venue}</span>
+            </motion.div>
+          )}
           <motion.div
             className="hero-actions"
             initial={reduce ? false : { opacity: 0, y: 14 }}
@@ -211,6 +216,11 @@ function Hero() {
 function Schedule() {
   return (
     <section className="home-schedule" id="schedule" aria-label="Schedule">
+      <SectionPhoto
+        src="/art/couple-schedule.webp"
+        alt="Abha and Udit among the ferns and string lights at Carnation Farms"
+        position="50% 45%"
+      />
       <SectionTitle kicker="The Weekend" title="Schedule" />
       <ol className="schedule-list">
         {schedule.map((stop, i) => (
@@ -237,6 +247,32 @@ function Schedule() {
         ))}
       </ol>
     </section>
+  )
+}
+
+// A full-bleed photo of the two of them. The live site leads each page with a
+// hero photo; we echo that by opening the matching sections with the same
+// shots. `position` tunes object-position so the couple stays centered as the
+// band crops to its fixed height.
+function SectionPhoto({
+  src,
+  alt,
+  position,
+}: {
+  src: string
+  alt: string
+  position?: string
+}) {
+  return (
+    <Reveal as="figure" className="section-photo">
+      <img
+        src={src}
+        alt={alt}
+        className="section-photo-img"
+        style={position ? { objectPosition: position } : undefined}
+        loading="lazy"
+      />
+    </Reveal>
   )
 }
 
@@ -273,6 +309,11 @@ function Explore() {
 function Travel() {
   return (
     <section className="home-travel" id="travel" aria-label="Travel">
+      <SectionPhoto
+        src="/art/couple-travel.webp"
+        alt="Abha and Udit on the ferry across Puget Sound"
+        position="50% 48%"
+      />
       <SectionTitle kicker="Getting Here" title="Travel" />
       <Reveal className="travel-intro">
         <p>{travel.intro}</p>
@@ -369,7 +410,17 @@ function Stay() {
   )
 }
 
-function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
+function FaqItem({
+  q,
+  a,
+  link,
+  index,
+}: {
+  q: string
+  a: string
+  link?: { label: string; href: string }
+  index: number
+}) {
   const [open, setOpen] = useState(false)
   return (
     <Reveal as="li" className="faq-item" delay={(index % 2) * 0.06}>
@@ -399,6 +450,16 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
             transition={{ duration: 0.28, ease: [0.22, 0.61, 0.36, 1] }}
           >
             <p>{a}</p>
+            {link && (
+              <a
+                className="faq-link"
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {link.label} →
+              </a>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
@@ -409,10 +470,15 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
 function Faq() {
   return (
     <section className="home-faq" id="faq" aria-label="Questions and answers">
+      <SectionPhoto
+        src="/art/couple-beach.webp"
+        alt="Abha and Udit walking along the shore at the water's edge"
+        position="50% 50%"
+      />
       <SectionTitle kicker="Good to Know" title="Q & A" />
       <ul className="faq-list">
         {faqs.map((f, i) => (
-          <FaqItem key={f.q} q={f.q} a={f.a} index={i} />
+          <FaqItem key={f.q} q={f.q} a={f.a} link={f.link} index={i} />
         ))}
       </ul>
     </section>
@@ -450,11 +516,15 @@ export function HomePage() {
 
   useEffect(() => {
     const prev = document.title
-    document.title = 'Abha & Udit · September 5–6, 2026'
+    // Keep the date out of the tab title until the page is unlocked, matching
+    // the gated date/location in the hero.
+    document.title = unlocked
+      ? 'Abha & Udit · September 5–6, 2026'
+      : 'Abha & Udit'
     return () => {
       document.title = prev
     }
-  }, [])
+  }, [unlocked])
 
   return (
     <div className="home" id="top">

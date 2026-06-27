@@ -1262,6 +1262,40 @@ a.poi:focus-visible .poi-pin {
   padding: clamp(3rem, 7vw, 6rem) max(1.2rem, calc((100vw - var(--max)) / 2));
 }
 
+/* Couple photos, matted like a printed photo to suit the watercolor-card
+   styling. The live site opens each page with a hero photo; we echo that at the
+   top of the matching sections — here centered in the column with a paper mat,
+   ring, and soft drop shadow rather than running edge to edge. */
+.section-photo {
+  position: relative;
+  width: min(100% - 2.4rem, 54rem);
+  margin: 0 auto clamp(2.2rem, 5vw, 3.5rem);
+  border-radius: 0.85rem;
+  box-shadow:
+    0 0 0 0.5rem #fffdf7,
+    0 0 0 0.6rem var(--paper-shadow),
+    0 1.6rem 3rem rgba(31, 26, 17, 0.2);
+}
+
+.section-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  /* Soft vignette so the photo settles into the warm paper. */
+  box-shadow: inset 0 0 4.5rem rgba(31, 26, 17, 0.18);
+}
+
+.section-photo-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: 50% 40%;
+  border-radius: 0.85rem;
+}
+
 .home-section-head {
   text-align: center;
   margin-bottom: clamp(1.8rem, 4vw, 3rem);
@@ -1773,6 +1807,27 @@ a.poi:focus-visible .poi-pin {
   line-height: 1.55;
   margin: 0;
   padding: 0 clamp(1.1rem, 2.5vw, 1.5rem) clamp(1.1rem, 2.4vw, 1.4rem);
+}
+
+/* When an answer carries a call-to-action (e.g. the hotel reservation link),
+   it sits beneath the copy and only adds the bottom padding the <p> drops. */
+.faq-a p:has(+ .faq-link) {
+  padding-bottom: 0.6rem;
+}
+
+.faq-link {
+  display: inline-block;
+  margin: 0 clamp(1.1rem, 2.5vw, 1.5rem) clamp(1.1rem, 2.4vw, 1.4rem);
+  color: var(--rust);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(1rem, 1.7vw, 1.18rem);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.faq-link:hover {
+  color: var(--copper-light);
+  text-decoration: underline;
 }
 
 /* Footer ------------------------------------------------------------ */
