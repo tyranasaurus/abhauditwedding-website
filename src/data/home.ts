@@ -96,7 +96,7 @@ export const travel = {
   notes: [
     {
       title: 'Getting In',
-      body: 'We recommend flying into Seattle–Tacoma International Airport (SEA), the main hub for the area.',
+      body: 'Fly into Seattle–Tacoma International Airport (SEA), the main hub for the area. While you can take public transport all the way to Downtown Redmond and the hotel, getting from there to Carnation is very hard without a car. We recommend a rental car, or carpooling with another group that has one.',
       link: {
         label: 'Seattle–Tacoma International Airport',
         href: 'https://www.google.com/maps/search/?api=1&query=Seattle%E2%80%93Tacoma+International+Airport',
