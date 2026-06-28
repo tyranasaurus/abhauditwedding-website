@@ -379,14 +379,6 @@ function Travel() {
           <Reveal as="article" className="travel-note" key={note.title} delay={i * 0.08}>
             <h3>{note.title}</h3>
             <p>{note.body}</p>
-            <a
-              href={note.link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="travel-link"
-            >
-              {note.link.label} →
-            </a>
           </Reveal>
         ))}
         <Reveal
