@@ -166,12 +166,20 @@ export const stay = {
     area: 'Downtown Redmond',
     address: 'Hilton Garden Inn Redmond Seattle, Redmond Way, Redmond, WA',
     rate: '$180 / night',
+    parking: 'Free parking',
     bookBy: 'Book by August 14, 2026',
     cutoffNote:
       "The group cutoff is 8/14/26 — the booking link stops working after that date, so please reserve before then.",
     bookUrl:
       'https://www.hilton.com/en/book/reservation/rooms/?ctyhocn=LKEGIGI&arrivalDate=2026-09-04&departureDate=2026-09-06&groupCode=99K&room1NumAdults=1',
   },
+} as const
+
+// Registry --------------------------------------------------------------
+export const registry = {
+  blurb:
+    'Your presence at our celebration is the greatest gift of all. For those who have asked, we have put together a registry.',
+  url: 'https://withjoy.com/abhauditwedding/registry',
 } as const
 
 // Q & A -----------------------------------------------------------------
@@ -206,8 +214,17 @@ export const faqs: Faq[] = [
     link: { label: 'Reserve your room', href: stay.hotel.bookUrl },
   },
   {
+    q: 'Can we join the baraat?',
+    a: 'Please do! Abha and Udit are both leading the baraat, and we would love all of our friends and family to join us in the procession and open up the carnival together.',
+  },
+  {
     q: 'Is the wedding indoors or outdoors?',
     a: 'Our Wedding Ceremony and Carnival are outdoors, but our Reception will be inside.',
+  },
+  {
+    q: 'Do you have a registry?',
+    a: 'We do. Your presence means the most to us, but if you would like to give a gift, you can find our registry here:',
+    link: { label: 'View our registry', href: registry.url },
   },
   {
     q: 'Where should I park?',

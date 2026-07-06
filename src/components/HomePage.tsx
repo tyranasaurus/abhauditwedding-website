@@ -12,6 +12,7 @@ import {
   exploreCards,
   travel,
   stay,
+  registry,
   faqs,
   venue,
   mapsSearch,
@@ -388,7 +389,7 @@ function Travel() {
         >
           <h3>{stay.hotel.name}</h3>
           <p className="travel-note-meta">
-            {stay.hotel.area} · {stay.hotel.rate}
+            {stay.hotel.area} · {stay.hotel.rate} · {stay.hotel.parking}
           </p>
           <p>{stay.hotel.cutoffNote}</p>
           <a
@@ -440,6 +441,25 @@ function Travel() {
           </ul>
         </Reveal>
       </div>
+    </section>
+  )
+}
+
+function Registry() {
+  return (
+    <section className="home-registry" id="registry" aria-label="Registry">
+      <SectionTitle kicker="With Love" title="Registry" />
+      <Reveal className="registry-inner">
+        <p className="registry-blurb">{registry.blurb}</p>
+        <a
+          className="btn btn-primary registry-btn"
+          href={registry.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View our registry
+        </a>
+      </Reveal>
     </section>
   )
 }
@@ -537,6 +557,7 @@ function Footer() {
         </a>
         <nav className="footer-nav" aria-label="Site">
           <a href="/wardrobe">Wardrobe Guide</a>
+          <a href="/#registry">Registry</a>
           <a href={hero.rsvpUrl} target="_blank" rel="noopener noreferrer">
             RSVP
           </a>
@@ -571,6 +592,7 @@ export function HomePage() {
             <Schedule />
             <Explore />
             <Travel />
+            <Registry />
             <Faq />
           </main>
           <Footer />
