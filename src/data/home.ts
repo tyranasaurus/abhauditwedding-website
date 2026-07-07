@@ -96,7 +96,7 @@ export const travel = {
   notes: [
     {
       title: 'Getting In',
-      body: 'Fly into Seattle–Tacoma International Airport (SEA), or Paine Field (PAE) in Everett for a smaller alternative. While you can take public transport all the way to Downtown Redmond and the hotel, getting from there to Carnation is very hard without a car. We recommend a rental car, or carpooling with another group that has one.',
+      body: 'Fly into Seattle–Tacoma International Airport (SEA), or Paine Field (PAE) in Everett for a smaller alternative. From SEA you can take public transport all the way to Downtown Redmond and the hotel; from PAE those transit connections are limited, so plan on a car. Either way, getting from Redmond to Carnation is very hard without a car, so we recommend a rental car, or carpooling with another group that has one.',
     },
   ],
   seattleSpots: [
