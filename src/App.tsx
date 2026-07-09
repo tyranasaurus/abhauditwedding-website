@@ -1,41 +1,27 @@
 import { useEffect } from 'react'
-import { Intro } from '@/components/Intro'
-import { EventPanel } from '@/components/EventPanel'
-import { ScrollCue } from '@/components/ScrollCue'
-import { MapPage } from '@/components/MapPage'
-import { events } from '@/data/events'
+import { Wardrobe } from '@/components/Wardrobe'
+import { HomePage } from '@/components/HomePage'
+import { useUnlocked } from '@/lib/unlock'
 
 export default function App() {
-  // On a full-page load to /wardrobe#<anchor> (e.g. from the map), the browser
-  // tries to scroll before React has mounted the panel, so the jump is lost.
-  // Re-run it once the view is mounted, and again after webfonts settle since
-  // the script titles change panel heights.
+  const unlocked = useUnlocked()
+
+  // One static HTML file is served on / and /wardrobe (see vercel.json); pick
+  // the view from the path. Full-page navigation handles transitions. (The /map
+  // page is built but currently unlinked — see MapPage.tsx.)
+  const path = window.location.pathname.replace(/\/+$/, '')
+
+  // /wardrobe is entirely guest-only detail, so while locked we send those
+  // visitors back to the homepage where the password gate lives. (The
+  // ?password= share link is already consumed before render in main.tsx.)
   useEffect(() => {
-    const id = window.location.hash.slice(1)
-    if (!id) return
-    const jump = () => document.getElementById(decodeURIComponent(id))
-        ?.scrollIntoView({ behavior: 'auto', block: 'start' })
-    requestAnimationFrame(jump)
-    document.fonts?.ready.then(jump)
-  }, [])
+    if (!unlocked && path === '/wardrobe') {
+      window.history.replaceState({}, '', '/')
+    }
+  }, [unlocked, path])
 
-  // One static HTML file is served on both /wardrobe and /map (see vercel.json);
-  // pick the view from the path. Full-page navigation handles transitions.
-  if (window.location.pathname.replace(/\/+$/, '') === '/map') {
-    return <MapPage />
-  }
+  if (!unlocked) return <HomePage />
 
-  return (
-    <>
-      <main className="wardrobe-site">
-        <Intro />
-        <section className="event-gallery" aria-label="Wardrobe events">
-          {events.map((event) => (
-            <EventPanel event={event} key={event.title} />
-          ))}
-        </section>
-      </main>
-      <ScrollCue />
-    </>
-  )
+  if (path === '/wardrobe') return <Wardrobe />
+  return <HomePage />
 }
