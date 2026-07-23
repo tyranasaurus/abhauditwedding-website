@@ -96,7 +96,7 @@ export const travel = {
   notes: [
     {
       title: 'Getting In',
-      body: 'Fly into Seattle–Tacoma International Airport (SEA), or Paine Field (PAE) in Everett for a smaller alternative. From SEA you can take public transport all the way to Downtown Redmond and the hotel; from PAE those transit connections are limited, so plan on a car. Either way, getting from Redmond to Carnation is very hard without a car, so we recommend a rental car, or carpooling with another group that has one.',
+      body: 'Fly into Seattle–Tacoma International Airport (SEA), or Paine Field (PAE) in Everett for a smaller alternative. From SEA you can take public transport all the way to Downtown Redmond and the hotel. From PAE, transit connections are limited so plan on a car. Either way, getting from Redmond to Carnation is difficult without a car, so we recommend a rental car, or carpooling with another group that has one.',
     },
   ],
   seattleSpots: [
@@ -126,9 +126,9 @@ export const travel = {
       query: "Victor's Celtic Coffee & Roasters, Redmond, WA",
     },
     {
-      name: 'Can Am',
+      name: 'Can Am Bellevue',
       note: 'The BEST Indian pizza — Udit would vacuum-pack slices to bring back to Abha @ CMU.',
-      query: 'Can Am Pizza, Redmond, WA',
+      query: 'Can Am Pizza, Bellevue, WA',
     },
     {
       name: 'CHICHA San Chen',
@@ -177,8 +177,6 @@ export const stay = {
 
 // Registry --------------------------------------------------------------
 export const registry = {
-  blurb:
-    'Your presence at our celebration is the greatest gift of all. For those who have asked, we have put together a registry.',
   url: 'https://withjoy.com/abhauditwedding/registry',
 } as const
 
@@ -228,7 +226,7 @@ export const faqs: Faq[] = [
   },
   {
     q: 'Where should I park?',
-    a: 'There is plenty of parking at the garage at Carnation Farms. A shuttle will take you straight from the garage to the event.',
+    a: `There is plenty of parking at the garage at Carnation Farms. A shuttle will take you straight from the garage to the event. The ${stay.hotel.name} also offers free parking for hotel guests.`,
   },
   {
     q: 'Are the locations wheelchair accessible?',

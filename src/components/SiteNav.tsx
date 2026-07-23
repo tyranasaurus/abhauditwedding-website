@@ -54,7 +54,6 @@ export function SiteNav() {
           <a href="/#schedule">Schedule</a>
           <a href="/wardrobe">Wardrobe</a>
           <a href="/#travel">Travel</a>
-          <a href="/#registry">Registry</a>
           <a href="/#faq">Q&amp;A</a>
           <a
             className="home-nav-rsvp"

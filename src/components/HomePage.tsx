@@ -12,7 +12,6 @@ import {
   exploreCards,
   travel,
   stay,
-  registry,
   faqs,
   venue,
   mapsSearch,
@@ -445,25 +444,6 @@ function Travel() {
   )
 }
 
-function Registry() {
-  return (
-    <section className="home-registry" id="registry" aria-label="Registry">
-      <SectionTitle kicker="With Love" title="Registry" />
-      <Reveal className="registry-inner">
-        <p className="registry-blurb">{registry.blurb}</p>
-        <a
-          className="btn btn-primary registry-btn"
-          href={registry.url}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          View our registry
-        </a>
-      </Reveal>
-    </section>
-  )
-}
-
 function FaqItem({
   q,
   a,
@@ -557,7 +537,6 @@ function Footer() {
         </a>
         <nav className="footer-nav" aria-label="Site">
           <a href="/wardrobe">Wardrobe Guide</a>
-          <a href="/#registry">Registry</a>
           <a href={hero.rsvpUrl} target="_blank" rel="noopener noreferrer">
             RSVP
           </a>
@@ -592,7 +571,6 @@ export function HomePage() {
             <Schedule />
             <Explore />
             <Travel />
-            <Registry />
             <Faq />
           </main>
           <Footer />
