@@ -388,7 +388,7 @@ function Travel() {
         >
           <h3>{stay.hotel.name}</h3>
           <p className="travel-note-meta">
-            {stay.hotel.area} · {stay.hotel.rate}
+            {stay.hotel.area} · {stay.hotel.rate} · {stay.hotel.parking}
           </p>
           <p>{stay.hotel.cutoffNote}</p>
           <a
