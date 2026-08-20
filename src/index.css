@@ -2156,3 +2156,58 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 .gate-error.is-shown {
   opacity: 1;
 }
+
+/* ---------------------------------------------------------------------------
+   Placeholder page (/seating-chart) — a single centred screen under the nav.
+--------------------------------------------------------------------------- */
+.soon-page {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100svh;
+  padding: calc(var(--nav-h) + 2rem) max(1.2rem, calc((100vw - var(--max)) / 2))
+    3rem;
+  text-align: center;
+}
+
+.soon-kicker {
+  color: var(--copper);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.soon-title {
+  color: var(--forest);
+  font-family: var(--font-script), cursive;
+  font-size: clamp(3.4rem, 7vw, 5.2rem);
+  font-weight: 400;
+  line-height: 0.96;
+  margin: 0.45rem 0 0;
+}
+
+.soon-ornament {
+  background: linear-gradient(90deg, transparent, var(--copper), transparent);
+  height: 1px;
+  margin: 1.1rem auto 1.4rem;
+  width: min(15rem, 100%);
+}
+
+.soon-back {
+  color: var(--copper-light);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.soon-back:hover,
+.soon-back:focus-visible {
+  color: var(--forest);
+}
