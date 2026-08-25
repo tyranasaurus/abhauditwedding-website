@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
-import { hero } from '@/data/home'
 
 /** Scroll distance before the transparent bar fades to solid. */
 const SOLID_AT = 80
@@ -15,7 +14,7 @@ const MENU_AT = 820
  * transparently over the content. Section links point at `/#anchor` so they work
  * from any page: same-path on the homepage just scrolls, elsewhere it navigates
  * home first. Narrow screens have no room for the links, so they fold into a
- * menu; RSVP stays in the bar at every width.
+ * menu behind the bar's button.
  */
 export function SiteNav() {
   const [solid, setSolid] = useState(true)
@@ -92,14 +91,6 @@ export function SiteNav() {
       </div>
 
       <div className="home-nav-actions">
-        <a
-          className="home-nav-rsvp"
-          href={hero.rsvpUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          RSVP
-        </a>
         <button
           type="button"
           className={`home-nav-toggle ${menuOpen ? 'is-open' : ''}`}

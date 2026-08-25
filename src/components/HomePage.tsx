@@ -173,15 +173,7 @@ function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.6 }}
           >
-            <a
-              className="btn btn-primary"
-              href={hero.rsvpUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              RSVP
-            </a>
-            <a className="btn btn-ghost" href="#schedule">
+            <a className="btn btn-primary" href="#schedule">
               See the weekend
             </a>
           </motion.div>
@@ -530,9 +522,6 @@ function Footer() {
         </a>
         <nav className="footer-nav" aria-label="Site">
           <a href="/wardrobe">Wardrobe Guide</a>
-          <a href={hero.rsvpUrl} target="_blank" rel="noopener noreferrer">
-            RSVP
-          </a>
         </nav>
       </Reveal>
     </footer>

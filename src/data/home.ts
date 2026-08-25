@@ -6,7 +6,6 @@ export const hero = {
   names: 'Abha & Udit',
   date: 'September 5–6, 2026',
   venue: 'Carnation Farms · Carnation, Washington',
-  rsvpUrl: 'https://withjoy.com/abhauditwedding/rsvp',
 } as const
 
 // The big weekend at a glance. Each links into the wardrobe guide where the
@@ -189,10 +188,6 @@ export interface Faq {
 }
 
 export const faqs: Faq[] = [
-  {
-    q: 'When is the RSVP deadline?',
-    a: 'Please RSVP by June 30th to allow us to finalize our arrangements.',
-  },
   {
     q: 'What should I wear?',
     a: 'We created a wardrobe guide for inspiration. But more than anything, we care that you feel comfortable, stay safe, and are there with us on time. Your presence to enjoy with us matters far more than any specific outfit.',

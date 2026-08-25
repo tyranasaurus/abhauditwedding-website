@@ -1159,10 +1159,12 @@ a.poi:focus-visible .poi-pin {
   display: flex;
   align-items: center;
   gap: clamp(0.9rem, 1.8vw, 1.8rem);
+  /* The bar is brand | links | menu-button, and the button is desktop-hidden,
+     so pull the links to the right rather than leaving them mid-bar. */
+  margin-left: auto;
 }
 
-.home-nav-links a,
-.home-nav-rsvp {
+.home-nav-links a {
   color: var(--muted-ink);
   font-family: var(--font-display), Georgia, serif;
   font-size: 1.02rem;
@@ -1174,20 +1176,6 @@ a.poi:focus-visible .poi-pin {
 
 .home-nav-links a:hover {
   color: var(--forest);
-}
-
-.home-nav-rsvp {
-  border: 1px solid var(--copper);
-  border-radius: 999px;
-  padding: 0.32rem 0.95rem;
-  color: var(--rust) !important;
-}
-
-.home-nav-rsvp:hover,
-.home-nav-rsvp:focus-visible {
-  background: #fffdf7;
-  border-color: var(--rust);
-  outline: none;
 }
 
 .home-nav-actions {
