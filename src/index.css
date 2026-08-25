@@ -1161,7 +1161,8 @@ a.poi:focus-visible .poi-pin {
   gap: clamp(0.9rem, 1.8vw, 1.8rem);
 }
 
-.home-nav-links a {
+.home-nav-links a,
+.home-nav-rsvp {
   color: var(--muted-ink);
   font-family: var(--font-display), Georgia, serif;
   font-size: 1.02rem;
@@ -1182,8 +1183,86 @@ a.poi:focus-visible .poi-pin {
   color: var(--rust) !important;
 }
 
-.home-nav-rsvp:hover {
+.home-nav-rsvp:hover,
+.home-nav-rsvp:focus-visible {
   background: #fffdf7;
+  border-color: var(--rust);
+  outline: none;
+}
+
+.home-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+/* Menu button: hidden on wide screens, where the links sit inline. */
+.home-nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--rust);
+  cursor: pointer;
+}
+
+.home-nav-toggle:hover,
+.home-nav-toggle:focus-visible {
+  border-color: var(--copper);
+  background: #fffdf7;
+  outline: none;
+}
+
+.home-nav-toggle-bars {
+  display: block;
+  position: relative;
+  width: 1.25rem;
+  height: 0.85rem;
+}
+
+.home-nav-toggle-bars span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 1px;
+  transition:
+    transform 0.22s ease,
+    opacity 0.16s ease;
+}
+
+.home-nav-toggle-bars span:nth-child(1) {
+  top: 0;
+}
+.home-nav-toggle-bars span:nth-child(2) {
+  top: 50%;
+  transform: translateY(-50%);
+}
+.home-nav-toggle-bars span:nth-child(3) {
+  bottom: 0;
+}
+
+.home-nav-toggle.is-open .home-nav-toggle-bars span:nth-child(1) {
+  transform: translateY(0.42rem) rotate(45deg);
+}
+.home-nav-toggle.is-open .home-nav-toggle-bars span:nth-child(2) {
+  opacity: 0;
+}
+.home-nav-toggle.is-open .home-nav-toggle-bars span:nth-child(3) {
+  transform: translateY(-0.42rem) rotate(-45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-nav-toggle-bars span,
+  .home-nav-links {
+    transition: none;
+  }
 }
 
 /* The fixed nav floats over the homepage hero, but the wardrobe and map pages
@@ -1995,8 +2074,57 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 
 /* Responsive -------------------------------------------------------- */
 @media (max-width: 820px) {
-  .home-nav-links a:not(.home-nav-rsvp) {
-    display: none;
+  .home-nav-toggle {
+    display: inline-flex;
+  }
+
+  /* No room for the links inline: drop them below the bar as a panel. */
+  .home-nav-links {
+    position: absolute;
+    top: calc(100% - 0.2rem);
+    left: max(1.1rem, calc((100vw - var(--max)) / 2));
+    right: max(1.1rem, calc((100vw - var(--max)) / 2));
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0.35rem;
+    background: rgba(255, 252, 245, 0.98);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(155, 100, 58, 0.24);
+    border-radius: 1rem;
+    box-shadow: 0 0.8rem 2rem rgba(47, 42, 33, 0.16);
+    opacity: 0;
+    /* visibility, not just opacity: a transparent panel would still be
+       tab-focusable and read out by screen readers while "closed". */
+    visibility: hidden;
+    transform: translateY(-0.4rem);
+    pointer-events: none;
+    transition:
+      opacity 0.18s ease,
+      transform 0.18s ease,
+      visibility 0.18s ease;
+  }
+
+  .home-nav-links.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .home-nav-links a {
+    padding: 0.85rem 0.9rem;
+    border-radius: 0.7rem;
+  }
+
+  .home-nav-links a + a {
+    border-top: 1px solid rgba(155, 100, 58, 0.16);
+  }
+
+  .home-nav-links a:hover,
+  .home-nav-links a:focus-visible {
+    background: rgba(246, 238, 223, 0.9);
+    outline: none;
   }
 
   .explore-grid,
