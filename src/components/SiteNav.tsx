@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
 import { hero } from '@/data/home'
-import { useUnlocked } from '@/lib/unlock'
 
 /** Scroll distance before the transparent bar fades to solid. */
 const SOLID_AT = 80
@@ -16,7 +15,6 @@ const SOLID_AT = 80
  */
 export function SiteNav() {
   const [solid, setSolid] = useState(true)
-  const unlocked = useUnlocked()
   useEffect(() => {
     const update = () => {
       const scrollable =
@@ -47,24 +45,20 @@ export function SiteNav() {
       <a className="home-nav-brand" href="/#top">
         A&nbsp;&amp;&nbsp;U
       </a>
-      {/* While locked the only thing past the splash is the gate, so the section
-          and inner-page links would all dead-end there — hide until unlocked. */}
-      {unlocked ? (
-        <div className="home-nav-links">
-          <a href="/#schedule">Schedule</a>
-          <a href="/wardrobe">Wardrobe</a>
-          <a href="/#travel">Travel</a>
-          <a href="/#faq">Q&amp;A</a>
-          <a
-            className="home-nav-rsvp"
-            href={hero.rsvpUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            RSVP
-          </a>
-        </div>
-      ) : null}
+      <div className="home-nav-links">
+        <a href="/#schedule">Schedule</a>
+        <a href="/wardrobe">Wardrobe</a>
+        <a href="/#travel">Travel</a>
+        <a href="/#faq">Q&amp;A</a>
+        <a
+          className="home-nav-rsvp"
+          href={hero.rsvpUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          RSVP
+        </a>
+      </div>
     </motion.nav>
   )
 }

@@ -17,8 +17,6 @@ import {
   mapsSearch,
 } from '@/data/home'
 import { SiteNav } from '@/components/SiteNav'
-import { PasswordGate } from '@/components/PasswordGate'
-import { useUnlocked } from '@/lib/unlock'
 
 const WEDDING_DATE = new Date('2026-09-05T16:00:00-07:00')
 
@@ -89,7 +87,6 @@ function Countdown() {
 
 function Hero() {
   const reduce = useReducedMotion()
-  const unlocked = useUnlocked()
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -158,22 +155,18 @@ function Hero() {
           >
             {hero.names}
           </motion.h1>
-          {/* The date and location are guest-only: they appear once the password
-              unlocks the page, alongside the rest of the details. */}
-          {unlocked && (
-            <motion.div
-              className="hero-meta"
-              initial={reduce ? false : { opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.45 }}
-            >
-              <span className="hero-date">{hero.date}</span>
-              <span className="hero-dot" aria-hidden="true">
-                ·
-              </span>
-              <span className="hero-venue">{hero.venue}</span>
-            </motion.div>
-          )}
+          <motion.div
+            className="hero-meta"
+            initial={reduce ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.45 }}
+          >
+            <span className="hero-date">{hero.date}</span>
+            <span className="hero-dot" aria-hidden="true">
+              ·
+            </span>
+            <span className="hero-venue">{hero.venue}</span>
+          </motion.div>
           <motion.div
             className="hero-actions"
             initial={reduce ? false : { opacity: 0, y: 14 }}
@@ -547,37 +540,25 @@ function Footer() {
 }
 
 export function HomePage() {
-  const unlocked = useUnlocked()
-
   useEffect(() => {
     const prev = document.title
-    // Keep the date out of the tab title until the page is unlocked, matching
-    // the gated date/location in the hero.
-    document.title = unlocked
-      ? 'Abha & Udit Wedding · September 5–6, 2026'
-      : 'Abha & Udit Wedding'
+    document.title = 'Abha & Udit Wedding · September 5–6, 2026'
     return () => {
       document.title = prev
     }
-  }, [unlocked])
+  }, [])
 
   return (
     <div className="home" id="top">
       <SiteNav />
       <Hero />
-      {unlocked ? (
-        <>
-          <main className="home-main">
-            <Schedule />
-            <Explore />
-            <Travel />
-            <Faq />
-          </main>
-          <Footer />
-        </>
-      ) : (
-        <PasswordGate />
-      )}
+      <main className="home-main">
+        <Schedule />
+        <Explore />
+        <Travel />
+        <Faq />
+      </main>
+      <Footer />
     </div>
   )
 }
