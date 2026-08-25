@@ -5,23 +5,43 @@
 // where the full painting turns to mush but the red roof still reads.
 import sharp from 'sharp'
 import { writeFile } from 'node:fs/promises'
+import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 
-const SOURCE = 'art-src/barn_wedding_logo.png'
+// art-src/ holds the large originals and is gitignored, so a fresh clone only
+// has the committed webp. Prefer the original when it is on disk — the 512px
+// icon and the share card are visibly better from it — and fall back so the
+// script still runs for anyone who just cloned.
+const ORIGINAL = 'art-src/barn_wedding_logo.png'
+const COMMITTED = 'public/art/barn-wedding-logo.webp'
+const SOURCE = existsSync(ORIGINAL) ? ORIGINAL : COMMITTED
 const PUBLIC = 'public'
 
 /** Paper cream, matching --paper and the theme-color meta. iOS ignores alpha
  *  on home-screen icons, so everything is flattened onto this. */
 const PAPER = '#f6eedf'
 
-/** The barn, centred on its door. Source art is 2048x1879. */
-const BARN = { left: 790, top: 380, width: 1180, height: 1180 }
+/** The barn, centred on its door, in fractions of the source so the same crop
+ *  lands correctly whether the original (2048x1879) or the committed webp
+ *  (1200x1101) is used. */
+const BARN = { left: 790 / 2048, top: 380 / 1879, size: 1180 / 2048 }
 
-const barn = () => sharp(SOURCE).extract(BARN).flatten({ background: PAPER })
+async function barn() {
+  const { width, height } = await sharp(SOURCE).metadata()
+  const size = Math.round(BARN.size * width)
+  return sharp(SOURCE)
+    .extract({
+      left: Math.round(BARN.left * width),
+      top: Math.round(BARN.top * height),
+      width: size,
+      height: size,
+    })
+    .flatten({ background: PAPER })
+}
 
 /** A square PNG of the barn at `size`. */
 async function square(size) {
-  return barn().resize(size, size).png({ compressionLevel: 9 }).toBuffer()
+  return (await barn()).resize(size, size).png({ compressionLevel: 9 }).toBuffer()
 }
 
 /**
@@ -92,4 +112,5 @@ await write(
 
 await write('og-image.png', await shareCard())
 
+console.log(`Source: ${SOURCE}`)
 console.log('Wrote:\n  ' + written.join('\n  '))
