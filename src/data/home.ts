@@ -194,10 +194,6 @@ export const faqs: Faq[] = [
     link: { label: 'Open the Wardrobe Guide', href: '/wardrobe' },
   },
   {
-    q: 'Can I bring a date?',
-    a: 'Due to the intimate nature of our celebration, we ask that you only RSVP for the number of seats reserved for your party.',
-  },
-  {
     q: 'What will the weather be like?',
     a: 'During the day, Seattle should be beautiful and sunny, averaging around 75–80°F, but it can get chilly at night.',
   },

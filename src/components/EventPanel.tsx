@@ -51,7 +51,7 @@ export function EventPanel({ event }: { event: WardrobeEvent }) {
             target="_blank"
             rel="noopener noreferrer"
           >
-            RSVP
+            Count me in
           </a>
         )}
       </footer>

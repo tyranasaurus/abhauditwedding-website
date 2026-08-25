@@ -215,7 +215,7 @@ function Schedule() {
           if (stop.rsvpUrl)
             cues.push({
               key: 'rsvp',
-              label: 'RSVP to attend',
+              label: 'Count me in',
               href: stop.rsvpUrl,
               cls: 'schedule-rsvp',
               external: true,
