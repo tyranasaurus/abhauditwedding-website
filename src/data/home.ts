@@ -44,7 +44,7 @@ export const schedule: ScheduleStop[] = [
     day: 'Sunday',
     date: 'September 6, 2026',
     kind: 'Sangeet Reception',
-    time: '4:45 PM',
+    time: '4:30 PM',
     title: 'Naach the Night Away',
     href: '/schedule#naach-the-night-away',
     accent: 'forest',

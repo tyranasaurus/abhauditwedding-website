@@ -75,7 +75,7 @@ export const events: WeddingEvent[] = [
     trimBottom: '7.75%',
     timeline: [
       { time: '10:00 AM', label: "Abha and Udit's Baraat" },
-      { time: '11:30 AM', label: 'Carnival Booths Open' },
+      { time: '11:00 AM', label: 'Carnival Booths Open' },
       { time: '12:00 PM', label: 'Bride vs Groom Games' },
       { time: '2:00 PM', label: 'Carnival Finale' },
     ],
@@ -94,7 +94,7 @@ export const events: WeddingEvent[] = [
     trimTop: '18.6%',
     trimBottom: '21.4%',
     timeline: [
-      { time: '4:45 PM', label: 'Appetizers Served' },
+      { time: '4:30 PM', label: 'Appetizers Served' },
       { time: '5:00 PM', label: 'Sangeet First Half' },
       { time: '6:00 PM', label: 'Dinner and Photos' },
       { time: '6:30 PM', label: 'Sangeet Second Half' },
@@ -107,7 +107,7 @@ export const events: WeddingEvent[] = [
     anchor: 'seahawks-season-opener',
     title: 'Seahawks Season Opener',
     date: 'Wednesday, September 9 · 5:00 PM',
-    vibe: 'Twelfth Man Spirit',
+    vibe: '12th Man Spirit',
     image: '/art/seahawks.webp',
     imageAlt: 'Four guests in Seahawks gear at a game-day watch party',
     imageWidth: 1300,
