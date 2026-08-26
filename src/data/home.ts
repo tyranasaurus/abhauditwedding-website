@@ -113,7 +113,7 @@ export const faqs: Faq[] = [
   {
     q: 'What should I wear?',
     a: 'Every event has its own look, and each one is on the schedule alongside the times. But more than anything, we care that you feel comfortable, stay safe, and are there with us on time. Your presence to enjoy with us matters far more than any specific outfit.',
-    link: { label: 'Open the Schedule', href: '#schedule' },
+    link: { label: 'See the schedule', href: '#schedule' },
   },
   {
     q: 'I am coming from out of town. Where should I stay?',

@@ -1036,7 +1036,7 @@ a.poi:focus-visible .poi-pin {
   position: absolute;
   inset: -1.1rem;
   border: 1px solid var(--arch-line);
-  border-radius: 50% 50% 0.8rem 0.8rem / 40% 40% 0.8rem 0.8rem;
+  border-radius: 50% 50% 1.3rem 1.3rem / 40% 40% 1.3rem 1.3rem;
   pointer-events: none;
 }
 
@@ -1125,12 +1125,12 @@ a.poi:focus-visible .poi-pin {
    plain centred prose under a letterspaced label, the way each event's date
    line sits above its own note. */
 .travel-note h3 {
-  color: var(--copper-light);
+  color: var(--copper);
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.05rem, 1.5vw, 1.2rem);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  margin: 0 0 0.7rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  margin: 0 0 0.85rem;
   text-align: center;
   text-transform: uppercase;
 }
