@@ -654,7 +654,7 @@ a.poi:focus-visible .poi-pin {
    flattened to a segmental one at this size. 50% horizontally puts the
    springing points at the corners, so the top is one continuous dome. */
 .btn {
-  border-radius: 50% 50% 0.4rem 0.4rem / 44% 44% 0.4rem 0.4rem;
+  border-radius: 50% 50% 0.4rem 0.4rem / 52% 52% 0.4rem 0.4rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -666,7 +666,7 @@ a.poi:focus-visible .poi-pin {
   letter-spacing: 0.09em;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 1.15rem 1.9rem 0.95rem;
+  padding: 1.3rem 1.9rem 1rem;
   transition:
     transform 0.18s ease,
     box-shadow 0.18s ease,
@@ -1542,7 +1542,7 @@ a.poi:focus-visible .poi-pin {
 
 .registry-cta {
   background: var(--forest);
-  border-radius: 50% 50% 0.4rem 0.4rem / 44% 44% 0.4rem 0.4rem;
+  border-radius: 50% 50% 0.4rem 0.4rem / 52% 52% 0.4rem 0.4rem;
   box-shadow: 0 0.35rem 0.9rem rgba(23, 61, 41, 0.18);
   color: var(--paper);
   display: inline-block;
@@ -1737,9 +1737,13 @@ a.poi:focus-visible .poi-pin {
   font-variant-numeric: tabular-nums;
 }
 
+/* Line art at the cap height of the date it sits in, inked in the same copper
+   as the rest of the line. */
 .sched-sky {
-  font-size: 0.9em;
-  letter-spacing: 0;
+  display: inline-block;
+  height: 1.28em;
+  vertical-align: -0.3em;
+  width: 1.28em;
 }
 
 

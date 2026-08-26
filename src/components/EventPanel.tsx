@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react'
 import type { WeddingEvent } from '@/data/events'
 import type { WindowForecast } from '@/lib/use-forecast'
 import { renderWords } from '@/lib/render-words'
+import { SkyGlyph } from '@/components/SkyGlyph'
 
 export function EventPanel({
   event,
@@ -32,20 +33,14 @@ export function EventPanel({
           {forecast && (
             <span
               className="sched-wx"
-              aria-label={`Forecast during the event: ${forecast.description}, low ${
+              aria-label={`Forecast during the event: ${forecast.sky}, low ${
                 forecast.low
               }, high ${forecast.high} degrees Fahrenheit${
                 forecast.showRain ? `, ${forecast.rain} percent chance of rain` : ''
               }`}
             >
               {' · '}
-              {forecast.glyph && (
-                <>
-                  <span className="sched-sky" aria-hidden="true">
-                    {forecast.glyph}
-                  </span>{' '}
-                </>
-              )}
+              <SkyGlyph kind={forecast.sky} />{' '}
               {forecast.low}°<span className="sched-range-sep"> / </span>
               {forecast.high}°
               {forecast.showRain && (

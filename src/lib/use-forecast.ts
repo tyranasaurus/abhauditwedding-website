@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 
+import type { SkyKind } from '@/components/SkyGlyph'
+
 /** The hours an outdoor event actually runs, in local time. */
 export interface ForecastWindow {
   /** Identifies the result; we use the event's anchor. */
@@ -15,8 +17,8 @@ export interface WindowForecast {
   /** Coolest and warmest it gets during the event, in °F. */
   low: number
   high: number
-  glyph: string
-  description: string
+  /** Which sky to draw; also reads out as the forecast's description. */
+  sky: SkyKind
   /** Highest chance of precipitation across the window, 0–100. */
   rain: number
   /** Whether that chance is worth putting on the page. */
@@ -36,48 +38,45 @@ const RAIN_THRESHOLD = 25
 
 // WMO weather codes. Sky conditions and precipitation are kept apart so a low
 // chance of rain can be shown as the cloud cover it really is.
-const OVERCAST: [number[], string, string] = [[3], '☁️', 'overcast']
-const SKY: [number[], string, string][] = [
-  [[0], '☀️', 'clear'],
-  [[1], '🌤️', 'mainly clear'],
-  [[2], '⛅', 'partly cloudy'],
-  OVERCAST,
-  [[45, 48], '🌫️', 'fog'],
+const OVERCAST: SkyKind = 'overcast'
+const SKY: [number[], SkyKind][] = [
+  [[0], 'clear'],
+  [[1], 'mainly clear'],
+  [[2], 'partly cloudy'],
+  [[3], OVERCAST],
+  [[45, 48], 'fog'],
 ]
-const WET: [number[], string, string][] = [
-  [[51, 53, 55, 80, 81, 82], '🌦️', 'showers'],
-  [[56, 57, 61, 63, 65, 66, 67], '🌧️', 'rain'],
-  [[71, 73, 75, 77, 85, 86], '❄️', 'snow'],
-  [[95, 96, 99], '⛈️', 'thunderstorms'],
+const WET: [number[], SkyKind][] = [
+  [[51, 53, 55, 80, 81, 82], 'showers'],
+  [[56, 57, 61, 63, 65, 66, 67], 'rain'],
+  [[71, 73, 75, 77, 85, 86], 'snow'],
+  [[95, 96, 99], 'thunderstorms'],
 ]
-
-const lookup = (table: typeof SKY, code: number) =>
-  table.find(([codes]) => codes.includes(code))
 
 /** The condition that best describes a window, given how likely rain actually is. */
-function summarise(codes: number[], rain: number): [string, string] {
+function summarise(codes: number[], rain: number): SkyKind {
   if (rain >= RAIN_THRESHOLD) {
     // Lead with the most serious wet condition present.
-    for (const entry of [...WET].reverse()) {
-      if (codes.some((code) => entry[0].includes(code))) return [entry[1], entry[2]]
+    for (const [wet, kind] of [...WET].reverse()) {
+      if (codes.some((code) => wet.includes(code))) return kind
     }
   }
   // Otherwise describe the sky. Wet codes still imply cloud, so anything we
   // can't place as a sky condition falls back to overcast rather than vanishing.
-  const tally = new Map<string, number>()
+  const tally = new Map<SkyKind, number>()
   for (const code of codes) {
-    const sky = lookup(SKY, code)
-    const label = sky ? sky[2] : 'overcast'
-    tally.set(label, (tally.get(label) ?? 0) + 1)
+    const found = SKY.find(([sky]) => sky.includes(code))
+    const kind = found ? found[1] : OVERCAST
+    tally.set(kind, (tally.get(kind) ?? 0) + 1)
   }
   let best = OVERCAST
   let seen = -1
-  for (const [label, count] of tally) {
+  for (const [kind, count] of tally) {
     if (count <= seen) continue
-    best = SKY.find(([, , name]) => name === label) ?? OVERCAST
+    best = kind
     seen = count
   }
-  return [best[1], best[2]]
+  return best
 }
 
 interface HourlyBlock {
@@ -143,12 +142,10 @@ export function useForecast(windows: ForecastWindow[]): Map<string, WindowForeca
           }
 
           if (!temps.length) continue
-          const [glyph, description] = summarise(codes, rain)
           next.set(window.key, {
             low: Math.round(Math.min(...temps)),
             high: Math.round(Math.max(...temps)),
-            glyph,
-            description,
+            sky: summarise(codes, rain),
             rain: Math.round(rain),
             showRain: rain >= RAIN_THRESHOLD,
           })
