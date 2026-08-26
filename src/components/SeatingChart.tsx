@@ -1,18 +1,31 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { SiteNav } from '@/components/SiteNav'
 import { guests, seatingIntro, tables } from '@/data/seating'
 
+/** Fold accents and punctuation so "Renee" finds "Renée" and "Dsouza" finds
+ *  "D'Souza" — guests type their own name from memory, not from the list. */
+function normalize(text: string): string {
+  return text
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, '')
+    .trim()
+}
+
 /**
  * Interactive seating chart for the Sangeet Reception at the Hippodrome. Guests
- * find their name in the list; hovering (or tapping, which pins) lights up
- * their table on the watercolor floor plan. Hovering a table works in reverse
- * and highlights everyone seated there.
+ * search for their name; hovering (or tapping, which pins) lights up their
+ * table on the watercolor floor plan. Hovering a table works in reverse and
+ * highlights everyone seated there.
  */
 export function SeatingChart() {
   // Hover is transient; a click/tap pins the table so touch users keep the
   // highlight while they scroll between the list and the plan.
   const [hovered, setHovered] = useState<number | null>(null)
   const [pinned, setPinned] = useState<number | null>(null)
+  const [query, setQuery] = useState('')
+  const inputRef = useRef<HTMLInputElement>(null)
   const active = hovered ?? pinned
 
   useEffect(() => {
@@ -27,12 +40,35 @@ export function SeatingChart() {
     () => [...guests].sort((a, b) => a.name.localeCompare(b.name)),
     [],
   )
-  const activeGuests = active
-    ? sortedGuests.filter((guest) => guest.table === active)
-    : []
+
+  const needle = normalize(query)
+  const matches = useMemo(
+    () =>
+      needle
+        ? sortedGuests.filter((guest) => normalize(guest.name).includes(needle))
+        : sortedGuests,
+    [needle, sortedGuests],
+  )
+
+  // When a search narrows to a single table, light it up without waiting for a
+  // tap — that is the whole point of searching your own name.
+  const firstMatch = matches[0]
+  const soleMatchTable =
+    needle && firstMatch && matches.every((g) => g.table === firstMatch.table)
+      ? firstMatch.table
+      : null
+  const lit = active ?? soleMatchTable
+
+  const activeGuests = lit ? sortedGuests.filter((guest) => guest.table === lit) : []
 
   const togglePin = (table: number) =>
     setPinned((current) => (current === table ? null : table))
+
+  const clearSearch = () => {
+    setQuery('')
+    setPinned(null)
+    inputRef.current?.focus()
+  }
 
   return (
     <>
@@ -47,28 +83,73 @@ export function SeatingChart() {
 
         <div className="seating-layout">
           <section className="seating-guests" aria-label="Guest list">
-            <ul className="guest-list">
-              {sortedGuests.map((guest) => (
-                <li key={guest.name}>
+            <div className="guest-search">
+              <label className="guest-search-label" htmlFor="guest-search">
+                Search for your name
+              </label>
+              <div className="guest-search-field">
+                <input
+                  id="guest-search"
+                  ref={inputRef}
+                  type="search"
+                  className="guest-search-input"
+                  placeholder="Start typing…"
+                  autoComplete="off"
+                  autoCapitalize="off"
+                  spellCheck={false}
+                  value={query}
+                  onChange={(e) => {
+                    setQuery(e.target.value)
+                    setPinned(null)
+                  }}
+                />
+                {query ? (
                   <button
                     type="button"
-                    className={`guest-name${active === guest.table ? ' is-lit' : ''}${
-                      pinned === guest.table ? ' is-pinned' : ''
-                    }`}
-                    onMouseEnter={() => setHovered(guest.table)}
-                    onMouseLeave={() => setHovered(null)}
-                    onFocus={() => setHovered(guest.table)}
-                    onBlur={() => setHovered(null)}
-                    onClick={() => togglePin(guest.table)}
+                    className="guest-search-clear"
+                    onClick={clearSearch}
+                    aria-label="Clear search"
                   >
-                    <span className="guest-name-text">{guest.name}</span>
-                    <span className="guest-table-tag" aria-label={`Table ${guest.table}`}>
-                      {guest.table}
-                    </span>
+                    ×
                   </button>
-                </li>
-              ))}
-            </ul>
+                ) : null}
+              </div>
+              <p className="guest-search-count" role="status">
+                {needle
+                  ? matches.length === 0
+                    ? "No match — try a first name, or ask us and we'll find you."
+                    : `${matches.length} ${matches.length === 1 ? 'name' : 'names'}`
+                  : `${sortedGuests.length} guests`}
+              </p>
+            </div>
+
+            {matches.length > 0 ? (
+              <ul className="guest-list">
+                {matches.map((guest) => (
+                  <li key={`${guest.name}-${guest.table}`}>
+                    <button
+                      type="button"
+                      className={`guest-name${lit === guest.table ? ' is-lit' : ''}${
+                        pinned === guest.table ? ' is-pinned' : ''
+                      }`}
+                      onMouseEnter={() => setHovered(guest.table)}
+                      onMouseLeave={() => setHovered(null)}
+                      onFocus={() => setHovered(guest.table)}
+                      onBlur={() => setHovered(null)}
+                      onClick={() => togglePin(guest.table)}
+                    >
+                      <span className="guest-name-text">{guest.name}</span>
+                      <span
+                        className="guest-table-tag"
+                        aria-label={`Table ${guest.table}`}
+                      >
+                        {guest.table}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
           </section>
 
           <section className="seating-map" aria-label="Reception floor plan">
@@ -85,7 +166,7 @@ export function SeatingChart() {
                 <button
                   key={table.number}
                   type="button"
-                  className={`table-spot${active === table.number ? ' is-active' : ''}`}
+                  className={`table-spot${lit === table.number ? ' is-active' : ''}`}
                   style={{
                     left: `${table.x}%`,
                     top: `${table.y}%`,
@@ -105,13 +186,13 @@ export function SeatingChart() {
               ))}
             </div>
             <p className="seating-status" role="status">
-              {active ? (
+              {lit ? (
                 <>
-                  <strong>Table {active}</strong> ·{' '}
+                  <strong>Table {lit}</strong> ·{' '}
                   {activeGuests.map((guest) => guest.name).join(', ')}
                 </>
               ) : (
-                'Hover or tap a name to spot the table.'
+                'Search or tap a name to spot the table.'
               )}
             </p>
           </section>
