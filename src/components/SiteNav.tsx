@@ -7,6 +7,9 @@ const SOLID_AT = 80
 /** Width below which the section links collapse behind the menu button. */
 const MENU_AT = 820
 
+/** The homepage sections the nav links to, in the order they appear. */
+const SECTIONS = ['schedule', 'travel', 'faq'] as const
+
 /**
  * Shared top navigation. On pages tall enough to scroll it is transparent at the
  * top and fades to a solid cream bar once scrolled; on single-screen pages (the
@@ -19,6 +22,34 @@ const MENU_AT = 820
 export function SiteNav() {
   const [solid, setSolid] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [here, setHere] = useState<string | null>(null)
+
+  // The whole site is one long page now, so the nav is also a position
+  // indicator: mark whichever section currently owns the top of the viewport.
+  // Anything above the nav counts, so the marker moves as a section scrolls
+  // past rather than only when its top edge is on screen.
+  useEffect(() => {
+    const targets = SECTIONS.map((id) => document.getElementById(id)).filter(
+      (el): el is HTMLElement => el !== null,
+    )
+    if (!targets.length) return
+
+    const update = () => {
+      const line = window.innerHeight * 0.35
+      let current: string | null = null
+      for (const el of targets) {
+        if (el.getBoundingClientRect().top <= line) current = el.id
+      }
+      setHere(current)
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [])
 
   useEffect(() => {
     const update = () => {
@@ -76,13 +107,21 @@ export function SiteNav() {
         className={`home-nav-links ${menuOpen ? 'is-open' : ''}`}
         id="home-nav-links"
       >
-        <a href="/#schedule" onClick={close}>
+        <a
+          href="/#schedule"
+          onClick={close}
+          aria-current={here === 'schedule' ? 'true' : undefined}
+        >
           Schedule
         </a>
-        <a href="/#travel" onClick={close}>
+        <a
+          href="/#travel"
+          onClick={close}
+          aria-current={here === 'travel' ? 'true' : undefined}
+        >
           Travel
         </a>
-        <a href="/#faq" onClick={close}>
+        <a href="/#faq" onClick={close} aria-current={here === 'faq' ? 'true' : undefined}>
           Q&amp;A
         </a>
         <a href="/registry" onClick={close}>

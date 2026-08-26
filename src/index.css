@@ -749,6 +749,26 @@ a.poi:focus-visible .poi-pin {
   color: var(--forest);
 }
 
+/* The whole site is one page, so the nav doubles as a position marker: the
+   section you are currently in keeps a small arch under its name. */
+.home-nav-links a[aria-current] {
+  color: var(--forest);
+  position: relative;
+}
+
+.home-nav-links a[aria-current]::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  width: 0.95rem;
+  height: 0.5rem;
+  margin-left: -0.475rem;
+  border: 1px solid var(--copper);
+  border-bottom: 0;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+
 .home-nav-actions {
   display: flex;
   align-items: center;
