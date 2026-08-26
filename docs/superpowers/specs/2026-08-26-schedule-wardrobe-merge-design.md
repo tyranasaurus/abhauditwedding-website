@@ -270,7 +270,84 @@ out-of-town guests have no reason to know it.
 already used, and `--rule` moved to `:root` so every rule on the site is the
 same weight.
 
+## The arch, corrected (pass 2b)
+
+A design review measured the five arches and found them to be five shapes, not
+one motif. Normalising each dome to **rise ÷ half-width** (1.000 = a true
+semicircle):
+
+| element | before | after |
+|---|---|---|
+| hero portrait + its outer line | 1.000 | 1.000 |
+| ornament bead | 1.099 | 1.000 |
+| section photo | 0.500 | 0.550 |
+| venue doorway | 0.408 | 0.550 |
+| button | **0.279** | 0.550 |
+
+The cause: the vertical radius was a **percentage of each element's own
+height**, and the five boxes have aspect ratios from 0.27 to 3.7 — so even one
+shared percentage would have produced different arches. Every rise is now
+derived from the element's **width**, and takes one of two deliberate values:
+1.000 where the shape is an opening (the portrait, the beads), and
+`--arch-rise` (0.55) where it is a wide field holding content. The button was
+the flattest because at 62.7px tall there was no room for a dome; it is taller
+now.
+
+Both buttons became **outlined** doorways. A filled 240×102 block of forest was
+the heaviest element on a watercolour page — heavier than the portrait — and the
+venue link had already arrived at an outlined doorway on its own. Hover fills
+it. The hero portrait also lost its drop shadow, for the reason the section
+photos never had one.
+
+## Contrast and focus (pass 2b)
+
+**Seventeen failures to zero**, at 1440 / 768 / 390 / 320, measured with the
+opacity chain and the real background under each element.
+
+- **`opacity` was being used for de-emphasis**, which is dilution, not
+  emphasis: the am/pm on every timeline row measured **2.00:1** on the
+  carnival's pink, and rendered at **11.04px** on a phone — the only break of
+  the project's 14px floor. It is now a neutral ink at full strength with a
+  `max(0.875rem, 0.6em)` floor.
+- **`--copper-light` (#ba5919) failed 4.5:1 on every ground it was used on**
+  and is gone. Running text moved to `--rust`, the footer band to
+  `--burnt-copper`.
+- **Timeline labels went to 700.** This spec previously claimed 21.6px
+  semibold counts as large text; it does not — WCAG's large-text line is 24px,
+  or 18.66px **bold**. 700 is what actually puts the labels over it, which is
+  the bar the shaadi's sunflower was always pitched against. On phones the
+  times and labels step up so they stay above it there too.
+- **One focus indicator.** Fifteen controls had none: eight rules paired
+  `:hover` with `:focus-visible` and set `outline: none`, so focus inherited
+  hover styling (1.82:1 change contrast on the primary CTA) and everything else
+  fell back to Chrome's blue default on warm cream. `--focus-ring` is a
+  box-shadow rather than an outline, so it follows `border-radius` and arches
+  with the doorways.
+
+## Rhythm (pass 2b)
+
+The seam between two events was drawn more strongly than the seam between two
+whole sections. The event rule now stops short of the column, the section gap
+outweighs the divider, and the forecast credit is pulled inside the carnival's
+own trailing space — as a sibling it opened the largest gap in the section. The
+order is monotonic: **credit 107 < peer 112 < divider 143 < section 144/200**.
+
+Carattere is centred on advance width, not ink, so "Abha & Udit" sat 15.6px
+left of the date line beneath it and "Travel" 8.3px right of its ornament. A
+`padding-left`/`padding-right` in em corrects each; all three titles now centre
+to within 0.2px. This only works where the element is full-width — the hero's
+h1 was shrink-to-fit inside `.hero-copy`, so its own padding grew the parent
+and the correction cancelled itself out.
+
 ## Deliberately not done
 
+- **The event palettes were left alone.** Timeline times run 3.55:1 (carnival)
+  to 9.40:1 (sangeet) against the paper — a 2.6× spread across four things that
+  are meant to be peers, and the carnival visibly recedes. Every one of them
+  clears the large-text bar they are used at, and the colours were chosen and
+  reviewed by the couple from their own artwork, so evening them out is their
+  call, not a defect to fix.
+- Travel's two columns are equal-height containers whose content ends ~143px
+  apart, leaving a ragged bottom left. It is content-driven.
 - `/map` remains built and unrouted.
 - The seating chart is still a placeholder, blocked on full guest names.
