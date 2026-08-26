@@ -79,7 +79,7 @@ export const events: WeddingEvent[] = [
       { time: '12:00 PM', label: 'Bride vs Groom Games' },
       { time: '2:00 PM', label: 'Carnival Finale' },
     ],
-    note: 'This is a festive fair-style event. It is everyone’s chance to enjoy fun food, activities, light games and hang out in the sun. FYI, Abha is skipping heels, and you can too!',
+    note: 'Abha and Udit are excited for everyone to join the Baraat leading into the Carnival, our festive fair event. There will be plenty of fun food and activities, lawn games, and chances to click photos around the beautiful venue. FYI, Abha is skipping heels, and you can too!',
   },
   {
     className: 'forest-gala',
