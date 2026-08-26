@@ -4,7 +4,9 @@ A static wedding site built with Vite + React 19 + TypeScript. Styling is hand
 written CSS in `src/index.css` (Tailwind 4 is imported only for `@theme` design
 tokens and the base reset, not for utility classes in markup). One built bundle
 is served on three paths via `vercel.json` rewrites: `/` (homepage), `/wardrobe`
-(attire guide), and `/map` (venue map); `App.tsx` picks the view from the path.
+(attire guide), and `/seating-chart`; `App.tsx` picks the view from the path.
+`MapPage.tsx` (venue map) is built but deliberately unrouted — there is no
+`/map` rewrite, so that URL 404s until one is added.
 
 ## Typography
 
@@ -22,3 +24,18 @@ classes, raw `font-size` declarations, inline styles, and `px` values alike. For
 - `npm run build` — production build (also the Vercel build command)
 - `npm run dev` — local dev server
 - `npm run typecheck` — `tsc -b`
+- `npm run icons` — regenerate the favicons and the share card from
+  `art-src/barn_wedding_logo.png`. Run it only when the artwork or the crop
+  changes; the outputs are committed under `public/`.
+
+## Art
+
+Large originals live in `art-src/`, which is gitignored. Committed output is a
+webp in `public/art/`. Add art the same way: convert, commit the webp, keep the
+original in `art-src/`.
+
+## Deploying
+
+Vercel builds from `main`, so a push to `main` is a deploy to
+<https://abhaudit.wedding>. Work on a branch and merge when it is ready to be
+seen by guests.

@@ -1357,17 +1357,6 @@ a.poi:focus-visible .poi-pin {
   transform-origin: 50% 42%;
 }
 
-.hero-eyebrow {
-  color: var(--copper);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(0.875rem, 1.4vw, 1.05rem);
-  font-weight: 600;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  /* The script names ride high in their line box; give the eyebrow real
-     clearance so the two lines don't crowd each other. */
-  margin: 0 0 1.1rem;
-}
 
 .hero-names {
   color: var(--forest);
@@ -1769,20 +1758,8 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 
 /* Travel ------------------------------------------------------------ */
 .travel-intro,
-.stay-intro {
-  text-align: center;
-  margin: 0 auto clamp(1.8rem, 4vw, 2.6rem);
-  max-width: 42rem;
-}
 
 .travel-intro p,
-.stay-intro p {
-  color: var(--muted-ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
-  line-height: 1.5;
-  margin: 0;
-}
 
 .travel-notes {
   display: grid;
@@ -1821,31 +1798,6 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   color: var(--copper);
   font-weight: 700;
   margin-bottom: 0.45rem;
-}
-
-/* Prominent green "Book here" CTA filling the hotel card. */
-.stay-book-btn {
-  display: flex;
-  width: 100%;
-  margin-top: 0.4rem;
-  padding: 0.9rem 1.7rem;
-  font-size: clamp(1rem, 1.5vw, 1.15rem);
-}
-
-.travel-link {
-  font-family: var(--font-display), Georgia, serif;
-}
-
-.travel-link {
-  color: var(--rust);
-  font-weight: 700;
-  font-size: 1rem;
-  text-decoration: none;
-}
-
-.travel-link:hover {
-  color: var(--copper-light);
-  text-decoration: underline;
 }
 
 .travel-lists {
