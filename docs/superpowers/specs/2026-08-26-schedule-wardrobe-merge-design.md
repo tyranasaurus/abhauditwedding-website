@@ -78,6 +78,29 @@ or dates outside the window — resolves to an empty map, and the date renders
 bare with no stray separator. Attribution sits under the last event and only
 appears when the fetch succeeded (the data is CC BY 4.0).
 
+## Colour
+
+Each event carries two colours in `events.ts`, sampled from its own artwork:
+
+| event | lead | second |
+|---|---|---|
+| Sunset Shaadi | `#d0601e` sunset orange | `#ac7815` dark goldenrod, from the sky |
+| Carnival | `#d94b6d` pink | `#9344a7` purple |
+| Sangeet | `#28433a` deep forest | `#9b643a` copper (the site's `--copper`) |
+| Seahawks | `#33486e` navy | `#5c8330` action green |
+
+The lead takes the event name and the times; the second takes the timeline dots,
+the spine, and the last word of the dress-code caption — restoring the per-word
+colouring the wardrobe page always had. Timeline labels stay `--ink` at weight
+600, and the note paragraph stays the global `--copper-light`, so nothing that
+carries real reading load depends on an event colour.
+
+The raw watercolour tones are too pale to use directly: sampled straight from the
+art they sit at 1.2–2.2:1 on cream. Each was darkened along its own hue until it
+cleared its threshold. Sunflower yellow is the constraint — at 4.5:1 it turns
+olive, so the goldenrod is pitched at 3.34:1 and used only at display size, where
+3:1 is the bar.
+
 ## Artwork
 
 The three main watercolours were replaced with the background-removed masks from

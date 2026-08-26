@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react'
 import type { WeddingEvent } from '@/data/events'
 import type { WindowForecast } from '@/lib/use-forecast'
+import { renderWords } from '@/lib/render-words'
 
 export function EventPanel({
   event,
@@ -14,6 +15,8 @@ export function EventPanel({
   const style = {
     '--tp': event.trimTop,
     '--bp': event.trimBottom,
+    '--accent': event.accents[0],
+    '--accent-2': event.accents[1],
     ...(event.artWidth ? { '--art': event.artWidth } : {}),
   } as CSSProperties
 
@@ -75,7 +78,9 @@ export function EventPanel({
             loading="lazy"
             decoding="async"
           />
-          <figcaption className="sched-vibe">{event.vibe}</figcaption>
+          <figcaption className="sched-vibe">
+            {renderWords(event.vibe, event.vibeAccents)}
+          </figcaption>
         </figure>
       </div>
 
