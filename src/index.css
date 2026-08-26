@@ -2437,7 +2437,7 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 
 .sched-head {
   text-align: center;
-  margin-bottom: clamp(1.5rem, 3vw, 2.2rem);
+  margin-bottom: clamp(2.2rem, 4vw, 3.2rem);
 }
 
 .sched-head h2 {
@@ -2452,7 +2452,7 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 .sched-date {
   color: var(--copper-light);
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.05rem, 1.7vw, 1.35rem);
+  font-size: clamp(1.05rem, 1.5vw, 1.2rem);
   font-weight: 700;
   letter-spacing: 0.08em;
   margin: 0.5rem 0 0;
@@ -2503,7 +2503,7 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   /* A fixed first track is shared by every row. max-content is not: each li is
      its own grid container, so it sized to that row's own string and the labels
      ragged by 11px wherever the hours were not all the same width. */
-  grid-template-columns: 3.9em max-content;
+  grid-template-columns: 4.3em max-content;
   gap: 0.95rem;
   align-items: baseline;
   padding: 1.4rem 0 1.4rem 1.5rem;
@@ -2527,7 +2527,7 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 .sched-times time {
   color: var(--accent);
   font-family: var(--font-display), Georgia, serif;
-  font-size: 1.45rem;
+  font-size: 1.6rem;
   /* Cormorant defaults to old-style figures, so digit heights vary by glyph and
      the times neither align nor sit level with their bullets. */
   font-variant-numeric: lining-nums tabular-nums;
@@ -2565,14 +2565,12 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   width: 100%;
 }
 
-/* Each webp carries a transparent band top and bottom; --tp/--bp pull the box
-   in to the real edges so the caption lands on the painting. Set per event in
-   events.ts — percentage margins resolve against width, not height. */
+/* The webps are trimmed to their painted extent, so the layout box is the
+   visible edge and the caption's own margin is the only thing setting the
+   overlap — one constant for every event, no per-asset compensation. */
 .sched-art img {
   filter: saturate(1.03);
   height: auto;
-  margin-bottom: calc(-1 * var(--bp, 0%));
-  margin-top: calc(-1 * var(--tp, 0%));
   opacity: 0.96;
   width: 100%;
 }
@@ -2597,11 +2595,12 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 .sched-note {
   color: var(--copper-light);
   font-family: var(--font-body), Georgia, serif;
-  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  font-size: clamp(0.95rem, 1.35vw, 1.06rem);
   font-style: italic;
   line-height: 1.6;
-  margin: clamp(1.2rem, 2.5vw, 1.7rem) auto 0;
-  max-width: 38rem;
+  margin: clamp(0.85rem, 1.5vw, 1.2rem) auto 0;
+  max-width: 34rem;
+  text-wrap: pretty;
   text-align: center;
 }
 

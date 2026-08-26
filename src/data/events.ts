@@ -32,13 +32,6 @@ export interface WeddingEvent {
   imageAlt: string
   imageWidth: number
   imageHeight: number
-  /** Each webp carries a transparent band above and below the painting. These pull
-   *  the image box in to the real edges so the caption lands on the artwork rather
-   *  than below empty space. Percentage margins resolve against WIDTH, so each value
-   *  is the measured alpha padding scaled by the image's height/width ratio, then
-   *  nudged by eye. A negative value pushes the caption down instead. */
-  trimTop: string
-  trimBottom: string
   /** Width of the artwork column; the watch party runs wider. */
   artWidth?: string
   timeline?: TimelineEntry[]
@@ -59,15 +52,14 @@ export const events: WeddingEvent[] = [
     date: 'Saturday, September 5',
     forecastWindow: { date: '2026-09-05', from: 15, to: 22 },
     vibe: 'Traditional Elegance',
-    // Sunset orange off the figures; the sky's sunflower, pitched to stay legible.
-    accents: { primary: '#d0601e', secondary: '#a07903' },
-    vibeColors: ['#d0601e', '#a07903'],
+    // The sunset's vermilion against the sky's sunflower. The brighter orange
+    // sat within 1 L* of the gold, so the two roles did no work against each other.
+    accents: { primary: '#a6350c', secondary: '#a07903' },
+    vibeColors: ['#a6350c', '#a07903'],
     image: '/art/shaadi.webp',
     imageAlt: 'Four guests dressed for the Sunset Shaadi ceremony',
-    imageWidth: 800,
-    imageHeight: 1200,
-    trimTop: '16.35%',
-    trimBottom: '25.5%',
+    imageWidth: 792,
+    imageHeight: 838,
     timeline: [
       { time: '3:30 PM', label: 'Refreshments' },
       { time: '4:00 PM', label: 'Ceremony' },
@@ -89,10 +81,8 @@ export const events: WeddingEvent[] = [
     vibeColors: ['#3685ad', '#d94b6d', '#755798'],
     image: '/art/carnival.webp',
     imageAlt: 'Four guests dressed for the Baraat and Carnival',
-    imageWidth: 800,
-    imageHeight: 960,
-    trimTop: '4%',
-    trimBottom: '4.81%',
+    imageWidth: 793,
+    imageHeight: 862,
     timeline: [
       { time: '10:00 AM', label: "Abha and Udit's Baraat" },
       { time: '11:00 AM', label: 'Carnival Booths Open' },
@@ -111,10 +101,8 @@ export const events: WeddingEvent[] = [
     vibeColors: ['#28433a', '#9e521a', '#28433a'],
     image: '/art/reception.webp',
     imageAlt: 'Four guests dressed for the Sangeet reception',
-    imageWidth: 800,
-    imageHeight: 1132,
-    trimTop: '18.6%',
-    trimBottom: '21.4%',
+    imageWidth: 784,
+    imageHeight: 813,
     timeline: [
       { time: '4:30 PM', label: 'Appetizers Served' },
       { time: '5:00 PM', label: 'Sangeet First Half' },
@@ -134,10 +122,8 @@ export const events: WeddingEvent[] = [
     vibeColors: ['#33486e', '#33486e', '#4f7029'],
     image: '/art/seahawks.webp',
     imageAlt: 'Four guests in Seahawks gear at a game-day watch party',
-    imageWidth: 800,
-    imageHeight: 774,
-    trimTop: '0.8%',
-    trimBottom: '-3.47%',
+    imageWidth: 799,
+    imageHeight: 762,
     artWidth: '420px',
     divider: true,
     venue: {

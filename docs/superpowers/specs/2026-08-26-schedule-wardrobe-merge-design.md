@@ -88,7 +88,7 @@ Two roles per event, and the mapping is the same for every event:
 
 | event | primary | secondary |
 |---|---|---|
-| Sunset Shaadi | `#d0601e` sunset orange | `#a07903` sunflower, from the sky |
+| Sunset Shaadi | `#a6350c` sunset vermilion | `#a07903` sunflower, from the sky |
 | Carnival | `#d94b6d` pink | `#755798` purple |
 | Sangeet | `#28433a` deep forest | `#9e521a` copper |
 | Seahawks | `#33486e` navy | `#4f7029` action green |
@@ -132,25 +132,39 @@ The caption sits 20% larger than it began and overlaps the artwork by 8 / 8 / 14
 the 20% bump was paired with rescaling `-0.62em` to `-0.517em` to hold the
 alignment, then nudged to `-0.465em` to sit a little lower on the painting.
 
-## Artwork## Artwork## Artwork
+## Artwork
 
 The three main watercolours were replaced with the background-removed masks from
 the archived prototype repo (`Clean artwork alpha masks`, 2026-08-25), which had
 never shipped. The old ones carried a hard arch edge with a white rim. Sources
 live in `art-src/`; the committed webps are smaller than the files they replace.
 
-Each webp keeps a transparent band above and below the painting — measured on
-page at 19.3% below the shaadi, 15.1% below the reception, 9% below the
-carnival. `trimTop`/`trimBottom` pull the image box in to the real edges so the
-caption lands on the artwork. Percentage margins resolve against **width**, so
-each value is the alpha padding scaled by the image's height/width ratio, then
-nudged by eye. They are calibrated to give an 11 / 11 / 17 / 6 px overlap.
+**Every webp is trimmed to its painted extent**, so the layout box is the visible
+edge. That deleted eight per-asset magic numbers — each image used to carry
+`trimTop`/`trimBottom` percentages that negative-margined the box in to
+compensate for a transparent band, and those percentages resolve against *width*
+while the padding they corrected lived in *height*, so across four aspect ratios
+they could never all be right. The caption's own `-0.465em` is now the only thing
+setting the overlap, and it measures an identical 22.3px on all four.
 
-Because they are width-relative, **changing `artWidth` changes the overlap** —
-widening the watch party from 320px to 420px moved its caption 6px and the
-constant had to be corrected. Trimming the source art at conversion time would
-let these constants go away entirely; worth doing when there is less time
-pressure.
+Trimming also made the assets consistent with each other: the aspect ratios were
+1.50 / 1.20 / 1.42 / 0.97 and are now 1.06 / 1.09 / 1.04 / 0.95, because the
+padding was what made them differ.
+
+When re-encoding, work from the shipped webp, not the source PNG. The Seahawks
+source is an uncropped 2048x2048 square; re-deriving from it silently discards
+the crop.
+
+## Type scale
+
+65.7 (event name) / 48 (caption) / 25.6 (time) / 21.6 (label) / 19.2 (date) /
+17 (note), at a 1440 viewport. Steps of roughly 1.2. Two pairs used to collide —
+times against labels at 7% apart, and the date landing exactly on the label —
+so neither read as a step in a scale.
+
+Vertical rhythm per event: 8px name-to-date, 51px date-to-body, 19px
+body-to-note. The last two used to be within 5px of each other, which made the
+note read as a third peer block rather than a coda closing the event.
 
 ## Verified
 

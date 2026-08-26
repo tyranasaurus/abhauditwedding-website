@@ -10,11 +10,8 @@ export function EventPanel({
   event: WeddingEvent
   forecast?: WindowForecast
 }) {
-  // --tp/--bp trim the transparent band baked into each webp; --art widens the
-  // artwork column on the watch party. See the notes on WeddingEvent.
+  // --art widens the artwork column on the watch party.
   const style = {
-    '--tp': event.trimTop,
-    '--bp': event.trimBottom,
     '--accent': event.accents.primary,
     '--accent-sec': event.accents.secondary,
     '--accent-mark': event.accents.marks ?? event.accents.secondary,
