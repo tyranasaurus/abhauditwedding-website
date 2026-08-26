@@ -2503,10 +2503,10 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   /* A fixed first track is shared by every row. max-content is not: each li is
      its own grid container, so it sized to that row's own string and the labels
      ragged by 11px wherever the hours were not all the same width. */
-  grid-template-columns: 4.3em max-content;
+  grid-template-columns: 4.15em max-content;
   gap: 0.95rem;
   align-items: baseline;
-  padding: 1.4rem 0 1.4rem 1.5rem;
+  padding: 1.4rem 0 1.4rem 0.75rem;
   position: relative;
 }
 
@@ -2579,10 +2579,10 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   color: var(--accent);
   word-spacing: 0.16em;
   font-family: var(--font-script), cursive;
-  font-size: clamp(2.28rem, 4.08vw, 3rem);
+  font-size: calc(var(--art, 340px) * 0.125);
   font-weight: 400;
   line-height: 0.84;
-  margin: -0.465em 0 0;
+  margin: calc(-0.465em + var(--cap-drop, 0em)) 0 0;
   position: relative;
   text-wrap: balance;
   /* It overlaps the artwork, so a little paper glow keeps it legible. */
@@ -2629,9 +2629,15 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   }
 
   /* Artwork first, so you can see which event you have landed on. */
+  .sched-cols {
+    /* Keep --art a plain length: it feeds a font-size calc, and a percentage
+       there would resolve against the parent's font size, not its width. */
+    --art: 300px;
+  }
+
   .sched-art {
     order: -1;
-    width: min(300px, 100%);
+    width: min(var(--art), 100%);
   }
 
   .sched-times {
@@ -2647,6 +2653,10 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
    Udit's Baraat") pushes past a 320px viewport. Below this width the label is
    allowed to wrap instead. */
 @media (max-width: 430px) {
+  .sched-cols {
+    --art: 260px;
+  }
+
   .sched-times {
     max-width: 22rem;
     width: 100%;

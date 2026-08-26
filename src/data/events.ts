@@ -34,6 +34,11 @@ export interface WeddingEvent {
   imageHeight: number
   /** Width of the artwork column; the watch party runs wider. */
   artWidth?: string
+  /** Extra room between the caption and the painting, in em. The paintings leave
+   *  different amounts of ground beneath their figures — 3.2% of image height on
+   *  the sangeet against 0.8-1.4% on the others — so a single overlap crowds the
+   *  shoes on three of them. Sangeet is the baseline and takes none. */
+  captionDrop?: string
   timeline?: TimelineEntry[]
   /** What the event is and what to wear to it, in one voice. */
   note: string
@@ -56,6 +61,7 @@ export const events: WeddingEvent[] = [
     // sat within 1 L* of the gold, so the two roles did no work against each other.
     accents: { primary: '#a6350c', secondary: '#a07903' },
     vibeColors: ['#a6350c', '#a07903'],
+    captionDrop: '0.30em',
     image: '/art/shaadi.webp',
     imageAlt: 'Four guests dressed for the Sunset Shaadi ceremony',
     imageWidth: 792,
@@ -79,6 +85,7 @@ export const events: WeddingEvent[] = [
     // than doubling the purple.
     accents: { primary: '#d94b6d', secondary: '#755798', marks: '#3685ad' },
     vibeColors: ['#3685ad', '#d94b6d', '#755798'],
+    captionDrop: '0.26em',
     image: '/art/carnival.webp',
     imageAlt: 'Four guests dressed for the Baraat and Carnival',
     imageWidth: 793,
@@ -120,6 +127,7 @@ export const events: WeddingEvent[] = [
     vibe: '12th Man Spirit',
     accents: { primary: '#33486e', secondary: '#4f7029' },
     vibeColors: ['#33486e', '#33486e', '#4f7029'],
+    captionDrop: '0.32em',
     image: '/art/seahawks.webp',
     imageAlt: 'Four guests in Seahawks gear at a game-day watch party',
     imageWidth: 799,

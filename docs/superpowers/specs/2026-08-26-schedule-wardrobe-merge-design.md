@@ -127,10 +127,23 @@ this lines the meridiems up and tucks each time against its own label.
 
 ## Caption placement
 
-The caption sits 20% larger than it began and overlaps the artwork by 8 / 8 / 14 /
-3 px. That overlap is an `em` margin, so it moves whenever the font size does —
-the 20% bump was paired with rescaling `-0.62em` to `-0.517em` to hold the
-alignment, then nudged to `-0.465em` to sit a little lower on the painting.
+The caption is sized **from the artwork, not the viewport**:
+`calc(var(--art) * 0.125)`. It was `clamp(2.28rem, 4.08vw, 3rem)` while the
+artwork is a fixed width, so it drifted between 10.7% and 14.1% of the image
+depending on the window — largest, against an image that never grew, exactly at
+full screen. It is now a constant 12.5% everywhere: 42.5 / 37.5 / 32.5px as
+`--art` steps 340 / 300 / 260.
+
+`--art` must stay a plain length because it feeds a `font-size` calc, where a
+percentage resolves against the parent's font size rather than its width.
+`min(300px, 100%)` there produced a 2px caption.
+
+Overlap is one constant, `-0.465em`, plus an optional per-event `captionDrop`.
+That second value is not a fudge: the paintings leave different amounts of ground
+beneath their figures — 4.9% of image height on the sangeet against 1.4–2.8% on
+the others — so a single overlap crowds the shoes on three of them. The sangeet
+is the baseline at zero; the rest are pitched so all four captions sit within
+~2px of their own subject's feet.
 
 ## Artwork
 

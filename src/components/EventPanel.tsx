@@ -16,6 +16,7 @@ export function EventPanel({
     '--accent-sec': event.accents.secondary,
     '--accent-mark': event.accents.marks ?? event.accents.secondary,
     ...(event.artWidth ? { '--art': event.artWidth } : {}),
+    ...(event.captionDrop ? { '--cap-drop': event.captionDrop } : {}),
   } as CSSProperties
 
   return (
