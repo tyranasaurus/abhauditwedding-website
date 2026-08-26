@@ -1405,6 +1405,12 @@ a.poi:focus-visible .poi-pin {
     outline: none;
   }
 
+  /* Stacked rows, so the arch under the current section would land on the rule
+     between two of them. Colour alone marks it here. */
+  .home-nav-links a[aria-current]::after {
+    display: none;
+  }
+
   .travel-notes,
   .travel-lists {
     grid-template-columns: 1fr;
