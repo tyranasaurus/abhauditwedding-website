@@ -29,8 +29,7 @@ export interface WeddingEvent {
   /** Width of the artwork column; the watch party runs wider. */
   artWidth?: string
   timeline?: TimelineEntry[]
-  /** Optional paragraph describing the event, above the italic wardrobe note. */
-  lead?: string
+  /** What the event is and what to wear to it, in one voice. */
   note: string
   /** Optional venue link rendered as a button (the watch party). */
   venue?: { label: string; url: string }
@@ -80,8 +79,7 @@ export const events: WeddingEvent[] = [
       { time: '12:00 PM', label: 'Bride vs Groom Games' },
       { time: '2:00 PM', label: 'Carnival Finale' },
     ],
-    lead: 'Carnival is a mela (festive fair) style event that Abha and Udit are so excited to put on. It’s a chance to grab food, do activities, play games and hang out in the beautiful venue.',
-    note: 'Dress for the sun and lawn games. Abha is skipping the heels, and you can too!',
+    note: 'This is a festive fair-style event. It is everyone’s chance to enjoy fun food, activities, light games and hang out in the sun. FYI, Abha is skipping heels, and you can too!',
   },
   {
     className: 'forest-gala',

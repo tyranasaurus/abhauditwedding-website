@@ -2584,27 +2584,11 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   color: var(--copper-light);
   font-family: var(--font-body), Georgia, serif;
   font-size: clamp(1rem, 1.5vw, 1.15rem);
-  line-height: 1.5;
+  font-style: italic;
+  line-height: 1.6;
   margin: clamp(1.2rem, 2.5vw, 1.7rem) auto 0;
   max-width: 38rem;
   text-align: center;
-}
-
-.sched-note p {
-  margin: 0;
-}
-
-.sched-lead {
-  color: var(--muted-ink);
-  line-height: 1.7;
-}
-
-.sched-lead + .sched-tip {
-  margin-top: 0.7em;
-}
-
-.sched-tip {
-  font-style: italic;
 }
 
 .sched-venue {

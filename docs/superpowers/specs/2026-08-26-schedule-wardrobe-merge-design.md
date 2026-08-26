@@ -27,7 +27,7 @@ events), per-event standalone routes (anchors are enough), and keeping
 ## What changed
 
 - `src/data/events.ts` — rebuilt around `WeddingEvent`. Gains `timeline`,
-  `date` (no time; start times live in the timeline), `forecastDate`, `lead`,
+  `date` (no time; start times live in the timeline), `forecastWindow`,
   `venue`, `divider`, `artWidth`, `trimTop`/`trimBottom`. Drops `ethnic`,
   `western`, `label`, `rsvpUrl`, `vibeAccentIndexes`, `bonus`, and the `intro`
   block.
@@ -111,7 +111,10 @@ a fix — the timeline's `max-content` label column could not shrink, so below
 ## Deliberately not done
 
 - The homepage redesign (a single long scroll: landing → schedule → travel →
-  Q&A) is the next piece of work.
+  Q&A) is the next piece of work. **`/schedule` then becomes a redirect to the
+  homepage anchor** — deliberately not done yet, because redirecting before the
+  homepage carries this content would send guests from the full page to a bare
+  list with no artwork or dress codes.
 - The homepage "Wardrobe Guide" explore card still says "Wardrobe Guide" and
   points at `/wardrobe`. It resolves via the alias, but the naming should be
   settled in the homepage pass.

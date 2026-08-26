@@ -79,10 +79,7 @@ export function EventPanel({
         </figure>
       </div>
 
-      <div className="sched-note">
-        {event.lead && <p className="sched-lead">{event.lead}</p>}
-        <p className="sched-tip">{event.note}</p>
-      </div>
+      <p className="sched-note">{event.note}</p>
 
       {event.venue && (
         <p className="sched-venue">
