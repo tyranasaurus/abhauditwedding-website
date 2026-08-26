@@ -11,7 +11,7 @@ export const seatingIntro = {
   kicker: 'Sangeet Reception · The Hippodrome',
   title: 'Find your seat',
   blurb:
-    'Find your name below, then hover or tap it to light up your table on the floor plan.',
+    'Search for your name, then tap it to light up your table on the floor plan.',
 } as const
 
 // Positions are measured against the watercolor floor plan
@@ -45,31 +45,33 @@ export interface Guest {
   table: number
 }
 
-// Placeholder guest list until the real assignments land — every name below is
-// invented. Eight seats per table, twenty tables.
+// Seating as provided by Abha & Udit. Each entry below is one table; the key
+// is the number painted on the floor plan.
 const tableGuests: Record<number, string[]> = {
-  1: ['Aarav Mehta', 'Anika Mehta', 'Devika Rao', 'Kiran Rao', 'Rohan Bhatt', 'Sanya Bhatt', 'Vikram Iyer', 'Nisha Iyer'],
-  2: ['Emily Carter', 'James Carter', 'Olivia Brooks', 'Daniel Brooks', 'Grace Whitman', 'Henry Whitman', 'Chloe Bennett', 'Lucas Bennett'],
-  3: ['Priya Nair', 'Arjun Nair', 'Meera Pillai', 'Ashwin Pillai', 'Divya Menon', 'Karthik Menon', 'Lakshmi Varma', 'Suresh Varma'],
-  4: ['Sophie Lang', 'Marcus Lang', 'Isabella Reyes', 'Diego Reyes', 'Hannah Cole', 'Ethan Cole', 'Ava Sinclair', 'Noah Sinclair'],
-  5: ['Rhea Kapoor', 'Kabir Kapoor', 'Tara Malhotra', 'Dev Malhotra', 'Ishaan Chopra', 'Zara Chopra', 'Aditi Bhalla', 'Nikhil Bhalla'],
-  6: ['Maya Krishnan', 'Vivek Krishnan', 'Ananya Reddy', 'Harsha Reddy', 'Sneha Kulkarni', 'Rahul Kulkarni', 'Pooja Deshpande', 'Amit Deshpande'],
-  7: ['Lily Hayes', 'Owen Hayes', 'Ruby Dawson', 'Felix Dawson', 'Nora Ellis', 'Miles Ellis', 'Clara Foster', 'Jude Foster'],
-  8: ['Simran Gill', 'Manav Gill', 'Jasleen Sandhu', 'Angad Sandhu', 'Kavya Anand', 'Rohit Anand', 'Ritu Saxena', 'Varun Saxena'],
-  9: ['Alice Monroe', 'Peter Monroe', 'Diana Wells', 'Frank Wells', 'Elena Vargas', 'Mateo Vargas', 'Sara Holt', 'Leo Holt'],
-  10: ['Neha Joshi', 'Sameer Joshi', 'Ira Trivedi', 'Yash Trivedi', 'Shreya Dixit', 'Kunal Dixit', 'Payal Vyas', 'Dhruv Vyas'],
-  11: ['Margot Fields', 'Theo Fields', 'June Parker', 'Wesley Parker', 'Iris Coleman', 'Silas Coleman', 'Faye Sutton', 'Reid Sutton'],
-  12: ['Aisha Khan', 'Imran Khan', 'Fatima Sheikh', 'Zaid Sheikh', 'Sana Qureshi', 'Omar Qureshi', 'Hira Baig', 'Asad Baig'],
-  13: ['Nina Petrov', 'Alexei Petrov', 'Lena Novak', 'Tomas Novak', 'Mira Kovacs', 'Andrei Kovacs', 'Sofia Ivanov', 'Dmitri Ivanov'],
-  14: ["Anjali Menezes", "Ryan Menezes", "Tanya D'Souza", "Kevin D'Souza", 'Michelle Pinto', 'Alan Pinto', 'Natasha Fernandes', 'Craig Fernandes'],
-  15: ['Harper Quinn', 'Declan Quinn', 'Willow Marsh', 'Callum Marsh', 'Ivy Thornton', 'Rhys Thornton', 'Esme Caldwell', 'Finn Caldwell'],
-  16: ['Radhika Sethi', 'Mohit Sethi', 'Bhavna Arora', 'Sahil Arora', 'Kritika Bajaj', 'Tarun Bajaj', 'Shalini Khanna', 'Gaurav Khanna'],
-  17: ['Zoe Winters', 'Adam Winters', 'Talia Frost', 'Micah Frost', 'Delia Hart', 'Simon Hart', 'Wren Ashford', 'Cole Ashford'],
-  18: ['Deepa Raman', 'Suraj Raman', 'Vidya Srinivas', 'Mohan Srinivas', 'Gita Raghavan', 'Anil Raghavan', 'Uma Chandran', 'Prakash Chandran'],
-  19: ['Camille Dubois', 'Julien Dubois', 'Amelie Laurent', 'Marc Laurent', 'Elise Moreau', 'Hugo Moreau', 'Celine Girard', 'Luc Girard'],
-  20: ['Kiara Oberoi', 'Aryan Oberoi', 'Ridhima Puri', 'Vihaan Puri', 'Myra Tandon', 'Reyansh Tandon', 'Avni Chadha', 'Shaan Chadha'],
+  1: ['Shirish', 'Kirthika', 'Ira', 'Piyush', 'Reena', 'Alok', 'Nikita', 'Meenakshi', 'Sumeet'],
+  2: ['Priya', 'Pooja', 'Anushka', 'Deeksha', 'Sachita', 'Nirvika', 'Shrey', 'Manya', 'Nitya'],
+  3: ['Parita', 'Ajay', 'Anjali', 'Yash', 'Ami', 'Hardik', 'Siya', 'Deyan', 'Satish', 'Manda'],
+  4: ['Roli', 'Nemi', 'Tinki', 'Snehahish', 'Shaila', 'Nani', 'Nana'],
+  5: ['Mona Rekhi', 'Naresh Rekhi', 'Sandeep Bhoot', 'Madhura Bhoot', 'Rhidaya Bhoot', 'Munmaya Mishra', 'Bidu Mishra'],
+  6: ['Anju Pansari', 'Martin Mordaunt', 'Nikita Mordaunt', 'Gopi Pansari', 'Asha Pansari'],
+  7: ['Hemant Agrawal', 'Madhulata Agrawal', 'Shiv Singhania', 'Babita Singhania', 'Pushpa Sihania', 'Arvind Ranasaria', 'Shivanand Ranasaria', 'Gayatri Ranasaria'],
+  8: ['Chaitanya Agrawal', 'Harsh Agrawal', 'Kahini Sapra', 'Meghavi', 'Vaibhav Agarwal', 'Arpit Ranasaria', 'Ronak Agarwal'],
+  9: ['Madhavi Pakalapati', 'Rama Pakalapati', 'Hima Krothapalli', 'Kalyan Krothapalli', 'Rashmi Nagpal', 'Rajest Nagpal', 'Smita Chappidi', 'Venkat Kakanuru', 'Parul Dalia', 'Apporva Dalia'],
+  10: ['Geetha Sivaprasad', 'Krishnan Gowri', 'Vasanthi Gowri', 'Shanthi Sravanakumar', 'SravanaKumar Karnati', 'Sanjeev Qazi', 'Reema Qazi'],
+  11: ['Rukmani Gopalan', 'Sriram Govindrajan', 'Viijayanti Murali', 'Murali Gopalan', 'Sarada Bharadwaj', 'Shankar Bharadwaj', 'Neha Jain', 'Dhiresh Rawal', 'Manju Sarda', 'Pankaj Sarda'],
+  12: ['Jignesh Kacharia', 'Vandana Mehta', 'Krishna Meduri', 'Neelakshi Meduri', 'Parag Kacharia', 'Deepa Gangar', 'Vikas Khanna mom', 'Vikas Khanna dad', 'Vikas Khanna', 'Shivani Khanna'],
+  13: ['Naveen Sachdeva', 'Seema Kukreja', 'Rajeev Wahi', 'Deepika Wahi', 'Advait Wahi', 'Gopi Sethu'],
+  14: ['Ben Landis', 'Cameron Selby', 'Dominique Selby', 'Haley Dalzell', 'Zach Dawson', 'Valentina Kozina', 'Brad Powell', 'Vasu Agrawal', 'Vivek Sridhar'],
+  15: ['Tejas Pakalapati', 'Joshika Pakalapati', 'Monisha Krothapalli', 'Akash Krothapalli', 'Adi Dalia', 'Neha Dalia', 'Shreyas Kakanuru', 'Vihaan Rawal', 'Kria Rawal', 'Lea Im'],
+  16: ['Annam Khan', 'Hannah Wiseman', 'Cindy Deng', 'Deepak Pallerla', 'Jade Traiger', 'Jeremy Ong', 'Sarah Lu', 'Medha Potluri', 'Vidhart Bhatia'],
+  17: ['Suyash', 'Anjali', 'Tej Seth', 'Abhi Sivaprasad', 'Suvansh', 'Nikita', 'Rishav Dutta', 'Cheyenne Kim'],
+  18: ['Sabreen Mohammed', 'Shravya', 'Sophia', 'Daniel Mar', 'Ori', 'Anoosh', 'Sukrit', 'Max Slater', 'Joanna Yao'],
+  19: ['Akshat Khanna', 'Akshita Khanna', 'Alicia Kacharia', 'Natasha Kacharia', 'Rohin Meduri', 'Sathvik Kakanuru', 'Valentina Ortega', 'Spursh Kacharia', 'Reeteka Kudallur', 'Saransh Kacharia'],
+  20: ['Tejas Bharadwaj', 'Sneha Bharadwaj', 'Chrish Thakalath', 'Ananya Murali', 'Abhi Soni', 'Adit Murali', 'Shreyas Murali', 'Dhanya Bharadwaj', 'Anish Bharadwaj', 'Gokul Gowri'],
 }
 
+// Flattened for the list and the search box. Names are not unique — two
+// different guests share a first name — so the table is part of each key.
 export const guests: Guest[] = Object.entries(tableGuests).flatMap(
   ([table, names]) => names.map((name) => ({ name, table: Number(table) })),
 )

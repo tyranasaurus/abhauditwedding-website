@@ -2575,6 +2575,87 @@ a.poi:focus-visible .poi-pin {
   margin-top: clamp(1.8rem, 3.5vw, 2.8rem);
 }
 
+/* Search — the primary way in: 170 names is too many to scan. */
+.guest-search {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.1rem;
+}
+
+.guest-search-label {
+  color: var(--muted-ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.guest-search-field {
+  position: relative;
+}
+
+.guest-search-input {
+  background: rgba(255, 252, 245, 0.75);
+  border: 1px solid var(--copper);
+  border-radius: 999px;
+  color: var(--ink);
+  font-family: var(--font-body), Georgia, serif;
+  font-size: 1rem;
+  padding: 0.7rem 2.6rem 0.7rem 1.1rem;
+  width: 100%;
+}
+
+.guest-search-input::placeholder {
+  color: rgba(104, 90, 69, 0.7);
+}
+
+.guest-search-input:focus-visible {
+  border-color: var(--forest);
+  box-shadow: 0 0 0 3px rgba(44, 104, 60, 0.18);
+  outline: none;
+}
+
+/* Safari draws its own clear affordance on type=search; ours is styled. */
+.guest-search-input::-webkit-search-decoration,
+.guest-search-input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.guest-search-clear {
+  align-items: center;
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  color: var(--rust);
+  cursor: pointer;
+  display: flex;
+  font-size: 1.4rem;
+  height: 2rem;
+  justify-content: center;
+  line-height: 1;
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2rem;
+}
+
+.guest-search-clear:hover,
+.guest-search-clear:focus-visible {
+  background: rgba(155, 100, 58, 0.14);
+  outline: none;
+}
+
+.guest-search-count {
+  color: var(--muted-ink);
+  font-family: var(--font-body), Georgia, serif;
+  font-size: 0.875rem;
+  font-style: italic;
+  margin: 0;
+}
+
 .guest-list {
   column-gap: 2rem;
   columns: 11.5rem;
@@ -2622,7 +2703,8 @@ a.poi:focus-visible .poi-pin {
 
 /* Every guest at the active table lights up, not just the hovered name. */
 .guest-name.is-lit {
-  background: rgba(44, 104, 60, 0.1);
+  background: rgba(44, 104, 60, 0.12);
+  border-bottom-color: var(--copper);
   color: var(--deep-forest);
 }
 
@@ -2682,19 +2764,30 @@ a.poi:focus-visible .poi-pin {
   width: 100%;
 }
 
+/* Each spot sits over a painted tabletop and dresses it in a forest-green
+   cloth: translucent, so the watercolor grain still reads through, and lit
+   from the upper left so the round tables keep their painted volume. */
 .table-spot {
   align-items: center;
   aspect-ratio: 1;
-  background: none;
+  background:
+    radial-gradient(
+      circle at 38% 32%,
+      rgba(44, 104, 60, 0.82),
+      rgba(23, 61, 41, 0.94) 72%
+    );
   border: 0;
   border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(155, 100, 58, 0.45);
   cursor: pointer;
   display: flex;
   justify-content: center;
   padding: 0;
   position: absolute;
   transform: translate(-50%, -50%);
-  transition: box-shadow 0.18s ease;
+  transition:
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
 }
 
 .table-num {
@@ -2710,7 +2803,10 @@ a.poi:focus-visible .poi-pin {
 }
 
 .table-spot:hover {
-  box-shadow: 0 0 0 2px rgba(186, 89, 25, 0.55);
+  box-shadow:
+    inset 0 0 0 1px rgba(155, 100, 58, 0.45),
+    0 0 0 2px var(--copper);
+  filter: brightness(1.08);
 }
 
 .table-spot:focus-visible {
@@ -2720,9 +2816,11 @@ a.poi:focus-visible .poi-pin {
 
 .table-spot.is-active {
   box-shadow:
+    inset 0 0 0 1px rgba(246, 238, 223, 0.5),
     0 0 0 3px var(--copper-light),
-    0 0 0 9px rgba(186, 89, 25, 0.2),
-    0 0 26px 8px rgba(186, 89, 25, 0.35);
+    0 0 0 9px rgba(186, 89, 25, 0.22),
+    0 0 26px 8px rgba(186, 89, 25, 0.38);
+  filter: brightness(1.12);
 }
 
 @media (max-width: 880px) {
