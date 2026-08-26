@@ -88,6 +88,9 @@ export function SiteNav() {
         <a href="/#faq" onClick={close}>
           Q&amp;A
         </a>
+        <a href="/registry" onClick={close}>
+          Registry
+        </a>
       </div>
 
       <div className="home-nav-actions">
