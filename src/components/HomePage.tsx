@@ -345,12 +345,14 @@ function FaqItem({
   index: number
 }) {
   const [open, setOpen] = useState(false)
+  const panelId = `faq-answer-${index}`
   return (
     <Reveal as="li" className="faq-item" delay={(index % 2) * 0.06}>
       <button
         type="button"
         className="faq-q"
         aria-expanded={open}
+        aria-controls={panelId}
         onClick={() => setOpen((v) => !v)}
       >
         <span>{q}</span>
@@ -367,6 +369,7 @@ function FaqItem({
         {open && (
           <motion.div
             className="faq-a"
+            id={panelId}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}

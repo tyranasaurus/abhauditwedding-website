@@ -22,16 +22,30 @@
   --linen-highlight-line: rgba(255, 250, 237, 0.34);
   --ink: #2f2a21;
   --base-text: #8f6430;
-  --copper-light: #ba5919;
   --muted-ink: #685a45;
   --soft-green: #d2d9cd;
   /* One hairline weight for every rule on the site: between events, between
      Q&A rows, under each travel spot. */
   --rule: rgba(155, 100, 58, 0.26);
   /* The arch. The picture sits on a paper mat, traced further out by a single
-     forest line — the shape the whole page is built from. */
+     forest line — the shape the whole page is built from.
+
+     One number governs every dome: the rise as a fraction of the half-width,
+     so 1 is a true semicircle. Two values are in use and both are deliberate —
+     the hero portrait and the little ornament beads are full round arches at 1,
+     and everything that has to hold content across a wide box takes the
+     segmental --arch-rise. Note that a border-radius percentage resolves
+     against *height* on the vertical axis, so a shared percentage across boxes
+     of different proportions produces different arches: below, the rise is
+     always derived from the element's own width. */
+  --arch-rise: 0.55;
   --arch-mat: #fffdf7;
   --arch-line: rgba(44, 104, 60, 0.62);
+  /* One focus indicator for the whole site. A box-shadow rather than an
+     outline, because it follows border-radius and so arches with the doorways. */
+  --focus-ring:
+    0 0 0 2px var(--paper),
+    0 0 0 4px var(--forest);
   --palette-forest: #2c683c;
   --palette-carnival: #d94e78;
   --palette-sunset: #d86a22;
@@ -86,6 +100,18 @@ body {
 img {
   display: block;
   max-width: 100%;
+}
+
+/* Every focusable thing gets the same ring. The transparent outline is what
+   Windows high-contrast mode paints, since it discards box-shadow. Rules below
+   that pair :hover with :focus-visible must not set `outline: none` — hover
+   styling is not a focus indicator. */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 3px;
+  box-shadow: var(--focus-ring);
 }
 
 /* ------------------------------------------------------------------ */
@@ -204,7 +230,6 @@ a.legend-link:focus-visible {
   background: #fffdf7;
   border-color: var(--accent);
   box-shadow: 0 0.45rem 1.1rem rgba(47, 42, 33, 0.1);
-  outline: none;
   transform: translateX(3px);
 }
 
@@ -276,7 +301,7 @@ a.legend-link:hover .legend-cue {
 
 .map-back {
   align-self: start;
-  color: var(--copper-light);
+  color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-size: 0.95rem;
   font-weight: 600;
@@ -312,7 +337,6 @@ a.legend-link:hover .legend-cue {
   background: #fffdf7;
   border-color: var(--copper);
   box-shadow: 0 0.45rem 1.1rem rgba(47, 42, 33, 0.1);
-  outline: none;
   transform: translateX(3px);
 }
 
@@ -338,7 +362,7 @@ a.legend-link:hover .legend-cue {
 }
 
 .map-venue-cue {
-  color: var(--copper-light);
+  color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-size: 0.875rem;
   font-weight: 600;
@@ -495,7 +519,6 @@ a.poi:focus-visible .poi-pin {
 }
 
 a.poi:focus-visible {
-  outline: none;
 }
 
 a.poi:focus-visible .poi-pin {
@@ -557,7 +580,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .poi-label-when {
-  color: var(--copper-light);
+  color: var(--rust);
   font-family: var(--font-body), Georgia, serif;
   font-size: 0.875rem;
   font-weight: 700;
@@ -654,19 +677,29 @@ a.poi:focus-visible .poi-pin {
    flattened to a segmental one at this size. 50% horizontally puts the
    springing points at the corners, so the top is one continuous dome. */
 .btn {
-  border-radius: 50% 50% 0.4rem 0.4rem / 52% 52% 0.4rem 0.4rem;
+  /* A fixed width, so the dome can be derived from it as a length. A
+     percentage would resolve the vertical half against the button's height —
+     which is how this ended up a rounded lozenge rather than an arch. */
+  --door-w: 15rem;
+  width: var(--door-w);
+  max-width: 100%;
+  min-height: 6.4rem;
+  border-radius:
+    calc(var(--door-w) / 2) calc(var(--door-w) / 2) 0.45rem 0.45rem /
+    calc(var(--door-w) * var(--arch-rise) / 2)
+    calc(var(--door-w) * var(--arch-rise) / 2) 0.45rem 0.45rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 14rem;
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(0.95rem, 1.4vw, 1.08rem);
   font-weight: 600;
   letter-spacing: 0.09em;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 1.3rem 1.9rem 1rem;
+  padding: 0.9rem 1.4rem;
+  text-align: center;
   transition:
     transform 0.18s ease,
     box-shadow 0.18s ease,
@@ -674,18 +707,26 @@ a.poi:focus-visible .poi-pin {
     color 0.18s ease;
 }
 
+/* Outlined, like the venue doorway — a solid 240x102 block of forest was the
+   heaviest thing on a watercolour page, heavier than the portrait above it.
+   Hover fills it: you walk through the door. */
 .btn-primary {
-  background: var(--forest);
-  color: #fbf4e6;
-  box-shadow: 0 0.35rem 0.9rem rgba(23, 61, 41, 0.18);
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--forest) 62%, transparent);
+  color: var(--forest);
 }
 
-.btn-primary:hover,
-.btn-primary:focus-visible {
-  background: var(--deep-forest);
-  box-shadow: 0 0.55rem 1.2rem rgba(23, 61, 41, 0.26);
-  outline: none;
+.btn-primary:hover {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: #fbf4e6;
   transform: translateY(-2px);
+}
+
+.btn-primary:focus-visible {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: #fbf4e6;
 }
 
 /* In-page anchors (#schedule, #travel, #faq …) land below the fixed nav so
@@ -762,7 +803,7 @@ a.poi:focus-visible .poi-pin {
   bottom: -0.5rem;
   left: 50%;
   width: 0.95rem;
-  height: 0.5rem;
+  height: 0.475rem;
   margin-left: -0.475rem;
   border: 1px solid var(--copper);
   border-bottom: 0;
@@ -794,7 +835,6 @@ a.poi:focus-visible .poi-pin {
 .home-nav-toggle:focus-visible {
   border-color: var(--copper);
   background: #fffdf7;
-  outline: none;
 }
 
 .home-nav-toggle-bars {
@@ -903,6 +943,10 @@ a.poi:focus-visible .poi-pin {
   right: -2.5rem;
 }
 
+.hero-copy {
+  width: 100%;
+}
+
 .hero-inner {
   display: flex;
   flex-direction: column;
@@ -917,7 +961,7 @@ a.poi:focus-visible .poi-pin {
      would turn the dome into an ellipse the moment the box stopped being
      square. Keeping the width a length keeps the arch a true semicircle. */
   --portrait-w: clamp(14.5rem, 32vw, 20.5rem);
-  --arch-gap: 1.35rem;
+  --arch-gap: 1.5rem;
   /* The outer arch is positioned, so the flow doesn't know it is there and the
      names' swashes came up under it on narrow screens. */
   margin-bottom: calc(var(--arch-gap) + 0.35rem);
@@ -948,9 +992,9 @@ a.poi:focus-visible .poi-pin {
   overflow: hidden;
   border-radius: calc(var(--portrait-w) / 2) calc(var(--portrait-w) / 2) 0.45rem
     0.45rem;
-  box-shadow:
-    0 0 0 0.6rem var(--arch-mat),
-    0 0.8rem 1.8rem rgba(31, 26, 17, 0.13);
+  /* Mat only. A blurred shadow here made the largest, first instance of the
+     arch read as a sticker — the same reason the section photos have none. */
+  box-shadow: 0 0 0 0.75rem var(--arch-mat);
 }
 
 .hero-portrait {
@@ -962,7 +1006,11 @@ a.poi:focus-visible .poi-pin {
   object-position: 50% 50%;
 }
 
+/* Carattere's leading A carries a swash well left of its origin, so centring
+   on the advance width leaves the name sitting ~0.11em left of the date line
+   below it. The padding pushes the ink back onto the axis. */
 .hero-names {
+  padding-left: 0.22em;
   color: var(--forest);
   font-family: var(--font-script), cursive;
   font-size: clamp(4.2rem, 13vw, 9rem);
@@ -999,7 +1047,7 @@ a.poi:focus-visible .poi-pin {
 .hero-countdown {
   display: inline-block;
   margin-top: 1.5rem;
-  color: var(--copper-light);
+  color: var(--rust);
   font-family: var(--font-body), Georgia, serif;
   font-style: italic;
   font-size: clamp(0.95rem, 1.5vw, 1.15rem);
@@ -1010,7 +1058,7 @@ a.poi:focus-visible .poi-pin {
 .home-main {
   display: flex;
   flex-direction: column;
-  gap: clamp(4rem, 9vw, 7.5rem);
+  gap: clamp(7rem, 10vw, 9rem);
   padding: clamp(3rem, 7vw, 6rem) max(1.2rem, calc((100vw - var(--max)) / 2));
 }
 
@@ -1025,18 +1073,18 @@ a.poi:focus-visible .poi-pin {
   /* The same arch, flattened: these are landscape shots, and a full round dome
      would crop into the tops of their heads. The ratio is fixed here, so
      percentages stay concentric on their own. */
-  border-radius: 50% 50% 0.5rem 0.5rem / 40% 40% 0.5rem 0.5rem;
+  border-radius: 50% 50% 0.5rem 0.5rem / 44% 44% 0.5rem 0.5rem;
   /* Mat only, no drop shadow: the double frame is the whole idea, and a soft
      shadow under it turned the photo into a sticker. */
-  box-shadow: 0 0 0 0.5rem var(--arch-mat);
+  box-shadow: 0 0 0 0.72rem var(--arch-mat);
 }
 
 .section-photo::after {
   content: '';
   position: absolute;
-  inset: -1.1rem;
+  inset: -1.45rem;
   border: 1px solid var(--arch-line);
-  border-radius: 50% 50% 1.3rem 1.3rem / 40% 40% 1.3rem 1.3rem;
+  border-radius: 50% 50% 1.3rem 1.3rem / 44% 44% 1.3rem 1.3rem;
   pointer-events: none;
 }
 
@@ -1055,7 +1103,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .home-kicker {
-  color: var(--copper);
+  color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(0.875rem, 1.2vw, 0.95rem);
   font-weight: 600;
@@ -1074,6 +1122,13 @@ a.poi:focus-visible .poi-pin {
 
 /* The motif at its smallest: a little arch standing on a ground line. The
    registry and placeholder pages share it, so every page is marked the same. */
+/* "Travel" ends on a swash that overruns its advance width by 12px, so the
+   word sat 8px right of the ornament centred beneath it. The other two titles
+   are within 2px and need nothing. */
+.home-travel .home-section-title {
+  padding-right: 0.186em;
+}
+
 .home-ornament,
 .soon-ornament,
 .registry-ornament {
@@ -1092,7 +1147,7 @@ a.poi:focus-visible .poi-pin {
   bottom: 0;
   left: 50%;
   width: 1.2rem;
-  height: 0.66rem;
+  height: 0.6rem;
   margin-left: -0.6rem;
   border: 1px solid var(--copper);
   border-bottom: 0;
@@ -1106,7 +1161,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .travel-intro p {
-  color: var(--copper-light);
+  color: var(--rust);
   font-family: var(--font-body), Georgia, serif;
   font-size: clamp(0.95rem, 1.35vw, 1.06rem);
   font-style: italic;
@@ -1125,7 +1180,7 @@ a.poi:focus-visible .poi-pin {
    plain centred prose under a letterspaced label, the way each event's date
    line sits above its own note. */
 .travel-note h3 {
-  color: var(--copper);
+  color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-size: 0.95rem;
   font-weight: 600;
@@ -1197,7 +1252,6 @@ a.poi:focus-visible .poi-pin {
 .travel-spot-name:focus-visible {
   color: var(--rust);
   background-size: 100% 1.5px;
-  outline: none;
 }
 
 .travel-spot-note {
@@ -1285,7 +1339,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .faq-link:hover {
-  color: var(--copper-light);
+  color: var(--rust);
   text-decoration: underline;
 }
 
@@ -1300,6 +1354,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .footer-names {
+  padding-left: 0.22em;
   color: var(--forest);
   font-family: var(--font-script), cursive;
   font-size: clamp(3rem, 7vw, 4.6rem);
@@ -1308,7 +1363,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .footer-date {
-  color: var(--base-text);
+  color: var(--burnt-copper);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(1.05rem, 2vw, 1.3rem);
   font-weight: 600;
@@ -1318,7 +1373,7 @@ a.poi:focus-visible .poi-pin {
 
 .footer-venue {
   display: inline-block;
-  color: var(--copper-light);
+  color: var(--burnt-copper);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(0.92rem, 1.5vw, 1.05rem);
   text-decoration: none;
@@ -1402,7 +1457,6 @@ a.poi:focus-visible .poi-pin {
   .home-nav-links a:hover,
   .home-nav-links a:focus-visible {
     background: rgba(246, 238, 223, 0.9);
-    outline: none;
   }
 
   /* Stacked rows, so the arch under the current section would land on the rule
@@ -1550,7 +1604,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .soon-back {
-  color: var(--copper-light);
+  color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-size: 0.95rem;
   font-weight: 600;
@@ -1634,28 +1688,43 @@ a.poi:focus-visible .poi-pin {
 }
 
 .registry-cta {
-  background: var(--forest);
-  border-radius: 50% 50% 0.4rem 0.4rem / 52% 52% 0.4rem 0.4rem;
-  box-shadow: 0 0.35rem 0.9rem rgba(23, 61, 41, 0.18);
-  color: var(--paper);
-  display: inline-block;
+  --door-w: 18rem;
+  align-items: center;
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--forest) 62%, transparent);
+  border-radius:
+    calc(var(--door-w) / 2) calc(var(--door-w) / 2) 0.45rem 0.45rem /
+    calc(var(--door-w) * var(--arch-rise) / 2)
+    calc(var(--door-w) * var(--arch-rise) / 2) 0.45rem 0.45rem;
+  color: var(--forest);
+  display: inline-flex;
+  justify-content: center;
   font-family: var(--font-display), Georgia, serif;
   font-size: 1.05rem;
   font-weight: 600;
   letter-spacing: 0.06em;
-  min-width: 16rem;
-  padding: 1.3rem 2.1rem 1rem;
+  max-width: 100%;
+  min-height: 7.4rem;
+  padding: 0.9rem 1rem;
   text-align: center;
+  width: var(--door-w);
   text-decoration: none;
   transition:
     background 0.18s ease,
     transform 0.18s ease;
 }
 
-.registry-cta:hover,
-.registry-cta:focus-visible {
-  background: var(--deep-forest);
+.registry-cta:hover {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: var(--paper);
   transform: translateY(-2px);
+}
+
+.registry-cta:focus-visible {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: var(--paper);
 }
 
 .registry-note {
@@ -1666,7 +1735,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .registry-back {
-  color: var(--copper-light);
+  color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-size: 0.95rem;
   font-weight: 600;
@@ -1717,12 +1786,20 @@ a.poi:focus-visible .poi-pin {
   z-index: 40;
 }
 
-.registry-bubble:hover,
-.registry-bubble:focus-visible {
+.registry-bubble:hover {
   background: var(--forest);
   border-color: var(--forest);
   color: var(--paper);
   transform: translateY(-2px);
+}
+
+.registry-bubble:focus-visible {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: var(--paper);
+  box-shadow:
+    0 8px 18px -12px rgba(47, 42, 33, 0.55),
+    var(--focus-ring);
 }
 
 @media (max-width: 480px) {
@@ -1788,16 +1865,34 @@ a.poi:focus-visible .poi-pin {
   scroll-margin-top: calc(var(--nav-h) + 1rem);
 }
 
-/* :not(:first-of-type) rather than an adjacent-sibling rule, because the
-   forecast credit sits between two of the events and would otherwise take the
-   rule away from the one below it. */
-.sched-stack > .sched-event:not(:first-of-type) {
-  border-top: 1px solid var(--rule);
+/* A rule that stops short of the column, because this is a seam *inside* a
+   chapter: a full-width hairline here was drawn more strongly than the break
+   between two whole sections. :not(:first-of-type) rather than an
+   adjacent-sibling rule, because the forecast credit sits between two of the
+   events and would otherwise take the rule away from the one below it. */
+.sched-stack > .sched-event {
+  position: relative;
+}
+
+.sched-stack > .sched-event:not(:first-of-type)::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, 24rem);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(155, 100, 58, 0.4),
+    transparent
+  );
 }
 
 /* The ornament above the watch party is its own divider; no rule as well. */
-.sched-stack > .sched-divider + .sched-event {
-  border-top: 0;
+.sched-stack > .sched-divider + .sched-event::after {
+  display: none;
 }
 
 .sched-head {
@@ -1815,7 +1910,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .sched-date {
-  color: var(--copper-light);
+  color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(1.05rem, 1.5vw, 1.2rem);
   font-weight: 700;
@@ -1909,21 +2004,27 @@ a.poi:focus-visible .poi-pin {
   white-space: nowrap;
 }
 
+/* 700, not 600: at 21.6px this is the only place a secondary carries running
+   text, and bold is what puts it over WCAG's large-text line — which is what
+   the shaadi's sunflower was always pitched against. */
 .sched-what {
   color: var(--accent-sec);
   font-family: var(--font-display), Georgia, serif;
   font-size: 1.35rem;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.3;
 }
 
-/* Small and quiet: it disambiguates, it does not announce. */
+/* Small and quiet: it disambiguates, it does not announce. Quiet by being a
+   neutral next to a saturated time, not by being faded — fading a colour toward
+   the paper took this to 2.00:1 on the carnival's pink. The floor keeps it at
+   14px once the parent clamps down on a phone. */
 .sched-meridiem {
-  font-size: 0.6em;
+  color: var(--muted-ink);
+  font-size: max(0.875rem, 0.6em);
   font-weight: 600;
   letter-spacing: 0;
   margin-left: 0.1em;
-  opacity: 0.55;
 }
 
 .sched-art {
@@ -1962,7 +2063,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .sched-note {
-  color: var(--copper-light);
+  color: var(--rust);
   font-family: var(--font-body), Georgia, serif;
   font-size: clamp(0.95rem, 1.35vw, 1.06rem);
   font-style: italic;
@@ -1983,17 +2084,21 @@ a.poi:focus-visible .poi-pin {
    watercolour paper read as a control borrowed from somewhere else. */
 .sched-venue-link {
   align-items: center;
+  --door-w: 17rem;
   border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
-  border-radius: 50% 50% 0.4rem 0.4rem / 46% 46% 0.4rem 0.4rem;
+  border-radius:
+    calc(var(--door-w) / 2) calc(var(--door-w) / 2) 0.45rem 0.45rem /
+    calc(var(--door-w) * var(--arch-rise) / 2)
+    calc(var(--door-w) * var(--arch-rise) / 2) 0.45rem 0.45rem;
   display: inline-flex;
   flex-direction: column;
   gap: 0.18rem;
-  padding: 1.55rem 1.6rem 1.05rem;
+  padding: 1.75rem 1.6rem 1.05rem;
   text-decoration: none;
   transition:
     background-color 0.18s ease,
     border-color 0.18s ease;
-  width: 17rem;
+  width: var(--door-w);
   max-width: 100%;
 }
 
@@ -2001,7 +2106,6 @@ a.poi:focus-visible .poi-pin {
 .sched-venue-link:focus-visible {
   background: color-mix(in srgb, var(--accent) 7%, transparent);
   border-color: color-mix(in srgb, var(--accent) 75%, transparent);
-  outline: none;
 }
 
 .sched-venue-name {
@@ -2032,13 +2136,15 @@ a.poi:focus-visible .poi-pin {
 }
 
 .sched-wx-credit {
-  color: var(--rust);
+  color: var(--muted-ink);
   font-family: var(--font-display), Georgia, serif;
   font-size: 0.875rem;
   letter-spacing: 0.1em;
-  margin: 0;
-  opacity: 0.55;
-  padding-bottom: clamp(2.6rem, 5vw, 3.5rem);
+  /* Pulled up inside the carnival's own trailing space: as a sibling it was
+     opening a 189px gap, the largest break in a section whose peers sit 112px
+     apart and whose deliberate divider sits at 143px. */
+  margin: calc(-1 * clamp(2.6rem, 5vw, 3.5rem) + 1rem) 0 0;
+  padding-bottom: 0.9rem;
   text-align: center;
   text-transform: uppercase;
 }
@@ -2092,20 +2198,16 @@ a.poi:focus-visible .poi-pin {
   }
 
   .sched-times time {
-    font-size: 1.15rem;
+    font-size: 1.4rem;
   }
 
   .sched-what {
-    font-size: 1.05rem;
+    font-size: 1.18rem;
   }
 }
 
-/* The forecast reads as a range across the event, so the separator and the rain
-   chance sit quieter than the temperatures themselves. */
+/* The forecast reads as a range across the event, so the separator sits quieter
+   than the temperatures — as a lighter ink, not as faded text. */
 .sched-range-sep {
-  opacity: 0.45;
-}
-
-.sched-rain {
-  opacity: 0.72;
+  color: var(--muted-ink);
 }
