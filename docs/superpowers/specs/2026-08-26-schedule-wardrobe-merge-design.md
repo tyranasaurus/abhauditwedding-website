@@ -1,6 +1,10 @@
-# Schedule + Wardrobe merge
+# Schedule + Wardrobe merge, and the fold into the homepage
 
 **Date:** 2026-08-26 · **Branch:** `schedule-wardrobe-merge`
+
+Two passes, in order. The first merged `/schedule` and `/wardrobe` into one
+page. The second folded that page into the homepage and gave the whole site an
+arch. Sections below marked **(pass 2)** supersede what pass 1 says.
 
 ## Problem
 
@@ -11,9 +15,10 @@ overlapping copy (event name, vibe) that could drift apart.
 
 ## Decision
 
-One page, `SchedulePage`, served on **both `/schedule` and `/wardrobe`**. Neither
-redirects, so every `/wardrobe#anchor` link already handed out keeps resolving.
-Anchors are unchanged: `#sunset-shaadi`, `#carnegie-to-carnation`,
+One page, served on **both `/schedule` and `/wardrobe`** — and, after pass 2,
+folded into the homepage with both old paths redirecting to it. Every
+`/wardrobe#anchor` link already handed out still resolves. Anchors are
+unchanged: `#sunset-shaadi`, `#carnegie-to-carnation`,
 `#naach-the-night-away`, `#seahawks-season-opener`.
 
 Each event is a centred name and date, then a pair of columns sized to their own
@@ -71,9 +76,14 @@ shows as the cloud cover it really is.
 Windows live in `events.ts` as `forecastWindow: { date, from, to }` and only the
 two outdoor events have one; the sangeet and the watch party are indoors.
 
-A WMO code maps to an emoji plus words; the words go in `aria-label` (phrased
-direction-neutrally, since the carnival warms while the ceremony cools) and the
-emoji is `aria-hidden` so it is not read twice. Any failure — offline, blocked,
+A WMO code maps to a `SkyKind` — one value that both picks the drawing and reads
+out in `aria-label` (phrased direction-neutrally, since the carnival warms while
+the ceremony cools). The drawing is `aria-hidden` so it is not read twice.
+**(pass 2)** it is line art in `currentColor`, not an emoji: the emoji were the
+only glossy raster artwork on a hand-painted page and took their colour from
+whichever font the device shipped. One cloud is drawn at three sizes and reused
+across the nine conditions; the two sun-and-cloud glyphs fill the cloud with
+`--paper` so the sun reads as behind it. Any failure — offline, blocked,
 or dates outside the window — resolves to an empty map, and the date renders
 bare with no stray separator. Attribution sits under the last event and only
 appears when the fetch succeeded (the data is CC BY 4.0).
@@ -189,16 +199,78 @@ overflow at 1440, 1024, 900, 820, 768, 600, 390 or 320px. The 320px case needed
 a fix — the timeline's `max-content` label column could not shrink, so below
 430px labels are allowed to wrap.
 
+## Pass 2 — one long page
+
+The site is now a single scroll: hero → `#schedule` (the four events, in full) →
+`#travel` → `#faq` → footer. Nothing links away except `/registry`.
+
+**Routing.** `/schedule` and `/wardrobe` redirect to `/#anchor` from an inline
+script in `index.html` `<head>`, before the module script and before anything
+paints. A Vercel `redirects` entry was rejected: `/schedule` needs to land on
+`#schedule`, but a `Location` that carries its own fragment *replaces* the
+request's fragment, which would break every `/wardrobe#sunset-shaadi` link in
+the wild. The client-side redirect can tell the two cases apart. The rewrites in
+`vercel.json` stay — without them those paths 404 at the edge and the script
+never runs.
+
+**Deleted.** `SchedulePage.tsx`, `ScrollCue.tsx` (it targeted `.intro-frame`,
+which stopped existing two passes ago), the compact four-row `#schedule` list,
+the `#explore` "Wardrobe Guide" card, and with them `schedule`/`ScheduleStop`
+and `exploreCards` from `home.ts`. About 700 lines of CSS went too — the old
+`/wardrobe` page's `.event-panel` / `.attire-*` / `.intro-*` blocks, the scroll
+cue, `.schedule-*`, `.explore-*`, `.btn-ghost`. The `.accent-*` tokens stayed:
+`/map` still uses them.
+
+**Deep links** re-run on a `ResizeObserver` over `documentElement` for three
+seconds, not on a fixed delay. The page keeps growing after the initial jump —
+display faces swap in, artwork decodes, and the forecast arrives and adds its
+credit line, which alone moved `#naach-the-night-away` 77px. The observer stops
+the moment the guest scrolls, so it never fights them.
+
+**The countdown** counts calendar days in `America/Los_Angeles` rather than
+milliseconds to a timestamp, so it turns over at midnight in Carnation instead
+of at whatever hour the ceremony starts. Both days of the weekend read "It's
+today!"; after that it retires rather than counting up.
+
+**The nav** doubles as a position indicator — whichever section owns the top
+third of the viewport takes `aria-current` and a small arch under its name.
+
+## The arch (pass 2)
+
+The motif, taken from the couple's own withjoy page: a photo in a paper mat,
+traced further out by a single forest line. It carries the hero portrait, the
+three couple photos, both buttons, the venue link, every ornament rule, and the
+nav's position marker.
+
+Two shapes, and which one an element gets is decided by its content:
+
+- **Round.** Radii are **lengths** — `calc(var(--portrait-w) / 2)` — so the arch
+  is a true semicircle and the mat and the line stay concentric. A percentage
+  cannot do this: the vertical half resolves against *height*, so the dome turns
+  elliptical the moment the box stops being square. Used on the hero, whose box
+  is `1 / 1.08` so the square portrait lands in it whole.
+- **Segmental.** Radii are **percentages**, `50%` horizontally so the springing
+  points sit at the corners and the apex is dead centre. Only works where the
+  aspect ratio is fixed, which it is on the section photos (`16 / 10`, vertical
+  `40%`) and effectively is on the buttons and the venue link. Used wherever a
+  full dome would crop into the tops of their heads.
+
+The timeline bullets stayed circles. They are 8px punctuation on a spine, not a
+frame, and an arch at that size is mush.
+
+**The buttons and the venue link.** One `.btn`, arch-topped, no pill. The venue
+link is not a `.btn` at all: nothing else in the schedule is a filled box, and
+one drop-shadowed green pill on watercolour paper read as a control borrowed
+from another site. It is an outlined doorway in the event's own `--accent`
+carrying three lines — Sam's Tavern / South Lake Union / GET DIRECTIONS → — so
+it names the place, locates it, and says what tapping it does. "SLU" is gone;
+out-of-town guests have no reason to know it.
+
+**Travel and Q&A** dropped their cream cards for the hairlines the schedule
+already used, and `--rule` moved to `:root` so every rule on the site is the
+same weight.
+
 ## Deliberately not done
 
-- The homepage redesign (a single long scroll: landing → schedule → travel →
-  Q&A) is the next piece of work. **`/schedule` then becomes a redirect to the
-  homepage anchor** — deliberately not done yet, because redirecting before the
-  homepage carries this content would send guests from the full page to a bare
-  list with no artwork or dress codes.
-- The homepage "Wardrobe Guide" explore card still says "Wardrobe Guide" and
-  points at `/wardrobe`. It resolves via the alias, but the naming should be
-  settled in the homepage pass.
-- The old `.event-panel` / `.attire-*` CSS is now dead but left in place rather
-  than risking a large deletion this close to the wedding.
 - `/map` remains built and unrouted.
+- The seating chart is still a placeholder, blocked on full guest names.
