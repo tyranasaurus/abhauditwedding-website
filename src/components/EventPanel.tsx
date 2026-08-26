@@ -1,60 +1,95 @@
-import type { WardrobeEvent } from '@/data/events'
-import { renderWords } from '@/lib/render-words'
+import type { CSSProperties } from 'react'
+import type { WeddingEvent } from '@/data/events'
+import type { DayForecast } from '@/lib/use-forecast'
 
-export function EventPanel({ event }: { event: WardrobeEvent }) {
+export function EventPanel({
+  event,
+  forecast,
+}: {
+  event: WeddingEvent
+  forecast?: DayForecast
+}) {
+  // --tp/--bp trim the transparent band baked into each webp; --art widens the
+  // artwork column on the watch party. See the notes on WeddingEvent.
+  const style = {
+    '--tp': event.trimTop,
+    '--bp': event.trimBottom,
+    ...(event.artWidth ? { '--art': event.artWidth } : {}),
+  } as CSSProperties
+
   return (
     <article
-      className={`event-panel ${event.className}${event.bonus ? ' is-bonus' : ''}`}
+      className={`sched-event ${event.className}`}
       id={event.anchor}
+      style={style}
     >
-      <header className="event-heading">
-        <h2>{renderWords(event.title)}</h2>
-        <p className="event-label">{event.label}</p>
-        <p className="event-datetime">{event.datetime}</p>
+      <header className="sched-head">
+        <h2>{event.title}</h2>
+        <p className="sched-date">
+          {event.date}
+          {forecast && (
+            <span
+              className="sched-wx"
+              aria-label={`Forecast: ${
+                forecast.description ? `${forecast.description}, ` : ''
+              }high ${forecast.high}, low ${forecast.low} Fahrenheit`}
+            >
+              {' · '}
+              {forecast.glyph && (
+                <>
+                  <span className="sched-sky" aria-hidden="true">
+                    {forecast.glyph}
+                  </span>{' '}
+                </>
+              )}
+              {forecast.high}°<span className="sched-lo"> / {forecast.low}°</span>
+            </span>
+          )}
+        </p>
       </header>
 
-      <div className="event-stage">
-        <img
-          src={event.image}
-          alt={event.imageAlt}
-          className="stage-cutout"
-          width={event.imageWidth}
-          height={event.imageHeight}
-          loading="lazy"
-          decoding="async"
-        />
+      <div className={`sched-cols${event.timeline ? '' : ' is-solo'}`}>
+        {event.timeline && (
+          <ol className="sched-times">
+            {event.timeline.map((entry) => (
+              <li key={`${entry.time} ${entry.label}`}>
+                <time>{entry.time}</time>
+                <span className="sched-what">{entry.label}</span>
+              </li>
+            ))}
+          </ol>
+        )}
+
+        <figure className="sched-art">
+          <img
+            src={event.image}
+            alt={event.imageAlt}
+            width={event.imageWidth}
+            height={event.imageHeight}
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption className="sched-vibe">{event.vibe}</figcaption>
+        </figure>
       </div>
 
-      <p className="attire-vibe">
-        {renderWords(event.vibe, event.vibeAccentIndexes)}
-      </p>
+      <div className="sched-note">
+        {event.lead && <p className="sched-lead">{event.lead}</p>}
+        <p className="sched-tip">{event.note}</p>
+      </div>
 
-      {event.ethnic && event.western && (
-        <div className="attire-grid">
-          <div>
-            <h3>Ethnic</h3>
-            <p>{event.ethnic}</p>
-          </div>
-          <div>
-            <h3>Western</h3>
-            <p>{event.western}</p>
-          </div>
-        </div>
-      )}
-
-      <footer className="event-footer">
-        <p className="event-notes">{event.note}</p>
-        {event.rsvpUrl && (
+      {event.venue && (
+        <p className="sched-venue">
           <a
-            className="btn event-rsvp"
-            href={event.rsvpUrl}
+            className="btn btn-primary"
+            href={event.venue.url}
             target="_blank"
             rel="noopener noreferrer"
           >
-            Count me in
+            {event.venue.label}
           </a>
-        )}
-      </footer>
+        </p>
+      )}
     </article>
   )
 }

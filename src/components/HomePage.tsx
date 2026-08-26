@@ -201,9 +201,8 @@ function Schedule() {
       <SectionTitle kicker="The Weekend" title="Schedule" />
       <ol className="schedule-list">
         {schedule.map((stop, i) => {
-          // Events can carry up to two actions: RSVP (its own form) and the
-          // wardrobe "what to wear" link. With one action the whole card is the
-          // link; with two, the card is static and each cue is its own link.
+          // Each event carries at most one action: the link into its entry on
+          // the schedule page. With one action the whole card is the link.
           type Cue = {
             key: string
             label: string
@@ -212,18 +211,10 @@ function Schedule() {
             external: boolean
           }
           const cues: Cue[] = []
-          if (stop.rsvpUrl)
-            cues.push({
-              key: 'rsvp',
-              label: 'Count me in',
-              href: stop.rsvpUrl,
-              cls: 'schedule-rsvp',
-              external: true,
-            })
           if (stop.href)
             cues.push({
               key: 'wear',
-              label: 'What to wear',
+              label: 'Times and what to wear',
               href: stop.href,
               cls: 'schedule-cue',
               external: false,

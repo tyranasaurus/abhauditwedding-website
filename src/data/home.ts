@@ -1,6 +1,6 @@
 // All content transferred from withjoy.com/abhauditwedding, restyled for our
-// watercolor wedding-card site. Schedule entries deep-link into the wardrobe
-// guide (/wardrobe#<anchor>) and venue map (/map).
+// watercolor wedding-card site. Schedule entries deep-link into the schedule
+// page (/schedule#<anchor>), which also carries the wardrobe guidance.
 
 export const hero = {
   names: 'Abha & Udit',
@@ -8,19 +8,16 @@ export const hero = {
   venue: 'Carnation Farms · Carnation, Washington',
 } as const
 
-// The big weekend at a glance. Each links into the wardrobe guide where the
-// dress code for that event lives.
+// The big weekend at a glance. Each links into the schedule page, where that
+// event's timings and dress code live. Times here are when to arrive.
 export interface ScheduleStop {
   day: string
   date: string
   kind: string
   time: string
   title: string
-  /** Wardrobe guide anchor for this event's dress code. */
+  /** Schedule page anchor for this event's times and dress code. */
   href?: string
-  /** A standalone RSVP link for this event only (opens in a new tab). When set,
-   *  the card links here and shows an RSVP cue instead of the wardrobe link. */
-  rsvpUrl?: string
   accent: 'sunset' | 'carnival' | 'forest' | 'slate'
 }
 
@@ -29,9 +26,9 @@ export const schedule: ScheduleStop[] = [
     day: 'Saturday',
     date: 'September 5, 2026',
     kind: 'Wedding Ceremony',
-    time: '4:00 PM',
+    time: '3:30 PM',
     title: 'Sunset Shaadi',
-    href: '/wardrobe#sunset-shaadi',
+    href: '/schedule#sunset-shaadi',
     accent: 'sunset',
   },
   {
@@ -40,16 +37,16 @@ export const schedule: ScheduleStop[] = [
     kind: 'Baraat & Carnival',
     time: '10:00 AM',
     title: 'From Carnegie to Carnation',
-    href: '/wardrobe#carnegie-to-carnation',
+    href: '/schedule#carnegie-to-carnation',
     accent: 'carnival',
   },
   {
     day: 'Sunday',
     date: 'September 6, 2026',
     kind: 'Sangeet Reception',
-    time: '5:00 PM',
+    time: '4:45 PM',
     title: 'Naach the Night Away',
-    href: '/wardrobe#naach-the-night-away',
+    href: '/schedule#naach-the-night-away',
     accent: 'forest',
   },
   {
@@ -58,9 +55,7 @@ export const schedule: ScheduleStop[] = [
     kind: 'Season Opener Watch Party',
     time: '5:00 PM',
     title: 'Seahawks Season Opener',
-    href: '/wardrobe#seahawks-season-opener',
-    rsvpUrl:
-      'https://docs.google.com/forms/d/e/1FAIpQLScxUkCDBMpNt1xRp4Qe1BiSN5k7LaoW-4j6-K7MjtFxvmhWCg/viewform',
+    href: '/schedule#seahawks-season-opener',
     accent: 'slate',
   },
 ]
@@ -192,12 +187,8 @@ export interface Faq {
 export const faqs: Faq[] = [
   {
     q: 'What should I wear?',
-    a: 'We created a wardrobe guide for inspiration. But more than anything, we care that you feel comfortable, stay safe, and are there with us on time. Your presence to enjoy with us matters far more than any specific outfit.',
-    link: { label: 'Open the Wardrobe Guide', href: '/wardrobe' },
-  },
-  {
-    q: 'What will the weather be like?',
-    a: 'During the day, Seattle should be beautiful and sunny, averaging around 75–80°F, but it can get chilly at night.',
+    a: 'Every event has its own look, and each one is on the schedule alongside the times. But more than anything, we care that you feel comfortable, stay safe, and are there with us on time. Your presence to enjoy with us matters far more than any specific outfit.',
+    link: { label: 'Open the Schedule', href: '/schedule' },
   },
   {
     q: 'I am coming from out of town. Where should I stay?',
@@ -206,6 +197,10 @@ export const faqs: Faq[] = [
   {
     q: 'Can we join the baraat?',
     a: 'Please do! Abha and Udit are both leading the baraat, and we would love all of our friends and family to join us in the procession and open up the carnival together.',
+  },
+  {
+    q: 'Will there be vegetarian food?',
+    a: 'All of the food at our events is vegetarian.',
   },
   {
     q: 'Is the wedding indoors or outdoors?',

@@ -3,6 +3,10 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/schedule",
+      "destination": "/index.html"
+    },
+    {
       "source": "/wardrobe",
       "destination": "/index.html"
     },

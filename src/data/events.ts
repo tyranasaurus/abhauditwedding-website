@@ -1,106 +1,126 @@
-export interface WardrobeEvent {
+export interface TimelineEntry {
+  time: string
+  label: string
+}
+
+export interface WeddingEvent {
   /** Section accent palette, set per className in index.css. */
   className: 'sunset-ceremony' | 'carnival-garden' | 'forest-gala' | 'seahawks-opener'
-  /** Anchor id, so the map page can deep-link to /wardrobe#<anchor>. */
+  /** Anchor id, so other pages can deep-link to /schedule#<anchor>. */
   anchor: string
-  label: string
-  datetime: string
   title: string
+  /** Date line under the title. Start times live in the timeline, not here. */
+  date: string
+  /** Outdoor events only: the day to look up in the live forecast. */
+  forecastDate?: string
+  /** Dress code, rendered as the caption over the artwork. */
   vibe: string
-  /** Word indexes within `vibe` that take the secondary/tertiary accent. */
-  vibeAccentIndexes: number[]
   image: string
   imageAlt: string
   imageWidth: number
   imageHeight: number
-  /** Attire guidance, omitted for reminder-only events (e.g. the watch party). */
-  ethnic?: string
-  western?: string
-  /** When set, the panel shows an RSVP button linking here (its own form). */
-  rsvpUrl?: string
-  /** Present on optional/bonus events: renders a framed divider before the
-   *  panel and de-emphasizes the panel itself, so it reads as an extra rather
-   *  than a peer of the main events. */
-  bonus?: { eyebrow: string; lead: string }
+  /** Each webp carries a transparent band above and below the painting. These pull
+   *  the image box in to the real edges so the caption lands on the artwork rather
+   *  than below empty space. Percentage margins resolve against WIDTH, so each value
+   *  is the measured alpha padding scaled by the image's height/width ratio, then
+   *  nudged by eye. A negative value pushes the caption down instead. */
+  trimTop: string
+  trimBottom: string
+  /** Width of the artwork column; the watch party runs wider. */
+  artWidth?: string
+  timeline?: TimelineEntry[]
+  /** Optional paragraph describing the event, above the italic wardrobe note. */
+  lead?: string
   note: string
+  /** Optional venue link rendered as a button (the watch party). */
+  venue?: { label: string; url: string }
+  /** Draws an ornament divider before the panel, marking it as an optional extra. */
+  divider?: boolean
 }
 
-export const intro = {
-  title: 'Wardrobe Guidance',
-  paragraphs: [
-    'We created this as inspiration, not as a shopping list. The weekend includes a full schedule of sun, heat, grass, games, and dancing, with limited time between events.',
-    'More than anything, we care that you feel comfortable, stay safe, and are there with us on time. Your presence to enjoy with us matters far more than any specific outfit.',
-  ],
-  signature: 'Abha & Udit',
-} as const
-
 // Ordered chronologically across the wedding weekend.
-export const events: WardrobeEvent[] = [
+export const events: WeddingEvent[] = [
   {
     className: 'sunset-ceremony',
     anchor: 'sunset-shaadi',
-    label: 'CEREMONY',
-    datetime: 'Saturday, September 5, 2026 · 4:00 PM',
     title: 'Sunset Shaadi',
+    date: 'Saturday, September 5',
+    forecastDate: '2026-09-05',
     vibe: 'Traditional Elegance',
-    vibeAccentIndexes: [1],
     image: '/art/shaadi.webp',
     imageAlt: 'Four guests dressed for the Sunset Shaadi ceremony',
-    imageWidth: 958,
-    imageHeight: 1038,
-    ethnic: 'Classic Ethnics',
-    western: 'Summer Cocktail',
+    imageWidth: 800,
+    imageHeight: 1200,
+    trimTop: '16.35%',
+    trimBottom: '25.5%',
+    timeline: [
+      { time: '3:30 PM', label: 'Refreshments' },
+      { time: '4:00 PM', label: 'Ceremony' },
+      { time: '7:00 PM', label: 'Dinner' },
+      { time: '8:00 PM', label: 'Speeches' },
+    ],
     note: 'Dinner will be at dusk, so light layers could help ward off the evening chill.',
   },
   {
     className: 'carnival-garden',
     anchor: 'carnegie-to-carnation',
-    label: 'BARAAT & CARNIVAL',
-    datetime: 'Sunday, September 6, 2026 · 10:00 AM',
     title: 'From Carnegie to Carnation',
+    date: 'Sunday, September 6',
+    forecastDate: '2026-09-06',
     vibe: 'Colors in Bloom',
-    vibeAccentIndexes: [1, 2],
     image: '/art/carnival.webp',
     imageAlt: 'Four guests dressed for the Baraat and Carnival',
-    imageWidth: 1074,
-    imageHeight: 1144,
-    ethnic: 'Wedding Casual',
-    western: 'Garden Casual',
+    imageWidth: 800,
+    imageHeight: 1000,
+    trimTop: '4%',
+    trimBottom: '7.75%',
+    timeline: [
+      { time: '10:00 AM', label: "Abha and Udit's Baraat" },
+      { time: '11:30 AM', label: 'Carnival Booths Open' },
+      { time: '12:00 PM', label: 'Bride vs Groom Games' },
+      { time: '2:00 PM', label: 'Carnival Finale' },
+    ],
+    lead: 'Carnival is a mela (festive fair) style event that Abha and Udit are so excited to put on. It’s a chance to grab food, do activities, play games and hang out in the beautiful venue.',
     note: 'Dress for the sun and lawn games. Abha is skipping the heels, and you can too!',
   },
   {
     className: 'forest-gala',
     anchor: 'naach-the-night-away',
-    label: 'SANGEET RECEPTION',
-    datetime: 'Sunday, September 6, 2026 · 5:00 PM',
     title: 'Naach the Night Away',
+    date: 'Sunday, September 6',
     vibe: 'Glitz and Glam',
-    vibeAccentIndexes: [1, 2],
     image: '/art/reception.webp',
     imageAlt: 'Four guests dressed for the Sangeet reception',
-    imageWidth: 1053,
-    imageHeight: 1102,
-    ethnic: 'Formal Evening Ethnics or Indo-Westerns',
-    western: 'Creative Cocktail',
+    imageWidth: 800,
+    imageHeight: 1132,
+    trimTop: '18.6%',
+    trimBottom: '21.4%',
+    timeline: [
+      { time: '4:45 PM', label: 'Appetizers Served' },
+      { time: '5:00 PM', label: 'Sangeet First Half' },
+      { time: '6:00 PM', label: 'Dinner and Photos' },
+      { time: '6:30 PM', label: 'Sangeet Second Half' },
+      { time: '7:00 PM', label: 'Dance Party' },
+    ],
     note: 'Dinner, dosti, and dance!',
   },
   {
     className: 'seahawks-opener',
     anchor: 'seahawks-season-opener',
-    label: 'FOOTBALL WATCH PARTY',
-    datetime: 'Wednesday, September 9, 2026 · 5:00 PM',
     title: 'Seahawks Season Opener',
+    date: 'Wednesday, September 9 · 5:00 PM',
     vibe: 'Twelfth Man Spirit',
-    vibeAccentIndexes: [1, 2],
     image: '/art/seahawks.webp',
     imageAlt: 'Four guests in Seahawks gear at a game-day watch party',
     imageWidth: 1300,
     imageHeight: 1257,
-    rsvpUrl:
-      'https://docs.google.com/forms/d/e/1FAIpQLScxUkCDBMpNt1xRp4Qe1BiSN5k7LaoW-4j6-K7MjtFxvmhWCg/viewform',
-    bonus: {
-      eyebrow: 'OPTIONAL AFTERPARTY',
-      lead: "If you're still in town a few days later…",
+    trimTop: '0.8%',
+    trimBottom: '-3.47%',
+    artWidth: '420px',
+    divider: true,
+    venue: {
+      label: 'Sam’s Tavern SLU',
+      url: 'https://maps.app.goo.gl/GnV7sKQTn7k1LSkr6',
     },
     note: 'Quite the summer for rings in Seattle. Join us to celebrate Abha, Udit, and the Seahawks as they all run it back for more. Go Hawks!',
   },
