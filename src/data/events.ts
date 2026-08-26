@@ -11,8 +11,8 @@ export interface WeddingEvent {
   title: string
   /** Date line under the title. Start times live in the timeline, not here. */
   date: string
-  /** Outdoor events only: the day to look up in the live forecast. */
-  forecastDate?: string
+  /** Outdoor events only: the hours to read the live forecast across. */
+  forecastWindow?: { date: string; from: number; to: number }
   /** Dress code, rendered as the caption over the artwork. */
   vibe: string
   image: string
@@ -45,7 +45,7 @@ export const events: WeddingEvent[] = [
     anchor: 'sunset-shaadi',
     title: 'Sunset Shaadi',
     date: 'Saturday, September 5',
-    forecastDate: '2026-09-05',
+    forecastWindow: { date: '2026-09-05', from: 15, to: 22 },
     vibe: 'Traditional Elegance',
     image: '/art/shaadi.webp',
     imageAlt: 'Four guests dressed for the Sunset Shaadi ceremony',
@@ -66,7 +66,7 @@ export const events: WeddingEvent[] = [
     anchor: 'carnegie-to-carnation',
     title: 'From Carnegie to Carnation',
     date: 'Sunday, September 6',
-    forecastDate: '2026-09-06',
+    forecastWindow: { date: '2026-09-06', from: 10, to: 15 },
     vibe: 'Colors in Bloom',
     image: '/art/carnival.webp',
     imageAlt: 'Four guests dressed for the Baraat and Carnival',

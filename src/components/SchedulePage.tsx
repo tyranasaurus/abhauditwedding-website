@@ -3,12 +3,12 @@ import { SiteNav } from '@/components/SiteNav'
 import { EventPanel } from '@/components/EventPanel'
 import { ScrollCue } from '@/components/ScrollCue'
 import { events } from '@/data/events'
-import { useForecast } from '@/lib/use-forecast'
+import { useForecast, type ForecastWindow } from '@/lib/use-forecast'
 
-/** The days we show weather for — the two outdoor events. */
-const FORECAST_DATES = events
-  .map((event) => event.forecastDate)
-  .filter((date): date is string => Boolean(date))
+/** The hours we show weather for — the two outdoor events. */
+const FORECAST_WINDOWS: ForecastWindow[] = events.flatMap((event) =>
+  event.forecastWindow ? [{ key: event.anchor, ...event.forecastWindow }] : [],
+)
 
 /**
  * Schedule and wardrobe in one page, served on both /schedule and /wardrobe so
@@ -16,7 +16,7 @@ const FORECAST_DATES = events
  * its anchor.
  */
 export function SchedulePage() {
-  const forecast = useForecast(FORECAST_DATES)
+  const forecast = useForecast(FORECAST_WINDOWS)
 
   useEffect(() => {
     document.title = 'Schedule · Abha & Udit'
@@ -54,9 +54,7 @@ export function SchedulePage() {
             )}
             <EventPanel
               event={event}
-              forecast={
-                event.forecastDate ? forecast.get(event.forecastDate) : undefined
-              }
+              forecast={forecast.get(event.anchor)}
             />
           </Fragment>
         ))}

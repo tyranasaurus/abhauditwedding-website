@@ -49,14 +49,34 @@ events), per-event standalone routes (anchors are enough), and keeping
 
 Open-Meteo, no API key, CORS-friendly, ~16 days of range. Fetched in the
 visitor's browser on each load, so there is nothing to rebuild or redeploy and
-the numbers sharpen on their own as the wedding approaches.
+the numbers sharpen on their own as the wedding approaches. Repeat calls return
+identical values — the figure only moves when the model re-runs, a few times a
+day — so caching would buy nothing and would add a stale-value window.
 
-Shown only on the two **outdoor** events; the sangeet and the watch party are
-indoors. A WMO `weather_code` maps to an emoji plus words, and the words go in
-`aria-label` while the emoji is `aria-hidden` so it is not read twice. Any
-failure — offline, blocked, or dates outside the window — resolves to an empty
-map, and the date renders bare with no stray separator. Attribution sits under
-the last event and only appears when the fetch succeeded (the data is CC BY 4.0).
+**Hourly, across the hours each event actually runs**, not the daily summary.
+Two reasons, both observed on real data for 5 September:
+
+- The daily low happens around 4am. It said 48° for a ceremony that never drops
+  below 58°, making the evening sound ten degrees colder than it will be.
+- The daily condition code read "drizzle" off three afternoon hours whose
+  precipitation probability was **4%** — a rain cloud on the wedding day for no
+  reason.
+
+So the page shows the temperature at the start and end of the window (which is
+also the fact behind the "light layers" note: 3–10pm falls from 67° to 53°), and
+surfaces a rain *probability* only at `RAIN_THRESHOLD` (25%) or above. Below
+that the glyph is chosen from the sky codes alone, so a low-probability wet code
+shows as the cloud cover it really is.
+
+Windows live in `events.ts` as `forecastWindow: { date, from, to }` and only the
+two outdoor events have one; the sangeet and the watch party are indoors.
+
+A WMO code maps to an emoji plus words; the words go in `aria-label` (phrased
+direction-neutrally, since the carnival warms while the ceremony cools) and the
+emoji is `aria-hidden` so it is not read twice. Any failure — offline, blocked,
+or dates outside the window — resolves to an empty map, and the date renders
+bare with no stray separator. Attribution sits under the last event and only
+appears when the fetch succeeded (the data is CC BY 4.0).
 
 ## Artwork
 

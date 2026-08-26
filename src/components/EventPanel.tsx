@@ -1,13 +1,13 @@
 import type { CSSProperties } from 'react'
 import type { WeddingEvent } from '@/data/events'
-import type { DayForecast } from '@/lib/use-forecast'
+import type { WindowForecast } from '@/lib/use-forecast'
 
 export function EventPanel({
   event,
   forecast,
 }: {
   event: WeddingEvent
-  forecast?: DayForecast
+  forecast?: WindowForecast
 }) {
   // --tp/--bp trim the transparent band baked into each webp; --art widens the
   // artwork column on the watch party. See the notes on WeddingEvent.
@@ -30,9 +30,11 @@ export function EventPanel({
           {forecast && (
             <span
               className="sched-wx"
-              aria-label={`Forecast: ${
-                forecast.description ? `${forecast.description}, ` : ''
-              }high ${forecast.high}, low ${forecast.low} Fahrenheit`}
+              aria-label={`Forecast during the event: ${forecast.description}, ${
+                forecast.start
+              } to ${forecast.end} degrees Fahrenheit${
+                forecast.showRain ? `, ${forecast.rain} percent chance of rain` : ''
+              }`}
             >
               {' · '}
               {forecast.glyph && (
@@ -42,7 +44,11 @@ export function EventPanel({
                   </span>{' '}
                 </>
               )}
-              {forecast.high}°<span className="sched-lo"> / {forecast.low}°</span>
+              {forecast.start}° <span className="sched-arrow">→</span>{' '}
+              {forecast.end}°
+              {forecast.showRain && (
+                <span className="sched-rain"> · {forecast.rain}% rain</span>
+              )}
             </span>
           )}
         </p>
