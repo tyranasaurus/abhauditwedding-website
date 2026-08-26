@@ -16,6 +16,7 @@ import {
   mapsSearch,
 } from '@/data/home'
 import { SiteNav } from '@/components/SiteNav'
+import { RegistryBubble } from '@/components/RegistryBubble'
 
 const WEDDING_DATE = new Date('2026-09-05T16:00:00-07:00')
 
@@ -528,6 +529,7 @@ export function HomePage() {
         <Faq />
       </main>
       <Footer />
+      <RegistryBubble />
     </div>
   )
 }

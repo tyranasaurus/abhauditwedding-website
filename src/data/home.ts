@@ -169,7 +169,16 @@ export const stay = {
 
 // Registry --------------------------------------------------------------
 export const registry = {
-  url: 'https://withjoy.com/abhauditwedding/registry',
+  /** Deep link straight to our list on Joy, so guests land on the gifts. */
+  url: 'https://withjoy.com/abhauditwedding/registry?pid=b3e72f03-4062-4a06-bebf-f714fb8c8a49',
+  kicker: 'With love',
+  title: 'Registry',
+  paragraphs: [
+    'Your presence at Carnation Farms is the whole gift. Getting to celebrate these two days with you is more than we could ask for.',
+    'If you would still like to send something, our list lives on Joy. It has a bit of everything, and it updates as things are claimed.',
+  ],
+  cta: 'Open our registry',
+  note: 'Opens withjoy.com in a new tab.',
 } as const
 
 // Q & A -----------------------------------------------------------------

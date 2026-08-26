@@ -3,8 +3,10 @@
 A static wedding site built with Vite + React 19 + TypeScript. Styling is hand
 written CSS in `src/index.css` (Tailwind 4 is imported only for `@theme` design
 tokens and the base reset, not for utility classes in markup). One built bundle
-is served on three paths via `vercel.json` rewrites: `/` (homepage), `/wardrobe`
-(attire guide), and `/seating-chart`; `App.tsx` picks the view from the path.
+is served on four paths via `vercel.json` rewrites: `/` (homepage), `/wardrobe`
+(attire guide), `/seating-chart`, and `/registry`; `App.tsx` picks the view from
+the path. Adding a page means adding both the branch in `App.tsx` and the
+rewrite in `vercel.json` — without the rewrite the URL 404s at Vercel's edge.
 `MapPage.tsx` (venue map) is built but deliberately unrouted — there is no
 `/map` rewrite, so that URL 404s until one is added.
 
