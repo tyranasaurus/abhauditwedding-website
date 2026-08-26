@@ -2423,6 +2423,7 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 .sched-event {
   --accent: var(--forest);
   --accent-sec: var(--rust);
+  --accent-mark: var(--rust);
   padding-block: clamp(2.4rem, 5vw, 3.25rem);
   scroll-margin-top: var(--nav-h);
 }
@@ -2488,7 +2489,7 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   padding: 0;
   width: fit-content;
   max-width: 100%;
-  border-left: 1px solid color-mix(in srgb, var(--accent-sec) 45%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--accent-mark) 45%, transparent);
 }
 
 .sched-times li {
@@ -2502,13 +2503,15 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 
 .sched-times li::before {
   background: var(--paper);
-  border: 1.5px solid var(--accent-sec);
+  border: 1.5px solid var(--accent-mark);
   border-radius: 50%;
   content: '';
   height: 8px;
   left: -4.5px;
   position: absolute;
-  top: 1.55em;
+  /* Centre on the row: an em offset drifts as soon as the type scale moves. */
+  top: 50%;
+  transform: translateY(-50%);
   width: 8px;
 }
 
@@ -2518,7 +2521,9 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   font-size: 1.45rem;
   font-variant-numeric: tabular-nums;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  /* No tracking: Cormorant has no tabular figures, so letter-spacing prises the
+     digits of "11" and "12" apart into "1 1". */
+  letter-spacing: 0;
   /* Mixed one- and two-digit hours, so align right and the meridiems line up. */
   text-align: right;
   white-space: nowrap;

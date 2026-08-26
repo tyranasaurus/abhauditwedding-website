@@ -20,7 +20,12 @@ export interface WeddingEvent {
    *  timeline bullets, the spine and the timeline labels. Every secondary is
    *  deepened along its own hue to about 5:1 on the paper, because it has to
    *  carry label text as well as decoration. */
-  accents: { primary: string; secondary: string }
+  accents: {
+    primary: string
+    secondary: string
+    /** Bullets and spine, when they should differ from `secondary`. */
+    marks?: string
+  }
   /** One colour per word of `vibe`. */
   vibeColors: string[]
   image: string
@@ -78,8 +83,9 @@ export const events: WeddingEvent[] = [
     date: 'Sunday, September 6',
     forecastWindow: { date: '2026-09-06', from: 10, to: 15 },
     vibe: 'Colors in Bloom',
-    accents: { primary: '#d94b6d', secondary: '#755798' },
-    // Blue is a caption-only third note; the carnival artwork is a full rainbow.
+    // The one event with four colours, so the bullets take the blue rather
+    // than doubling the purple.
+    accents: { primary: '#d94b6d', secondary: '#755798', marks: '#3685ad' },
     vibeColors: ['#3685ad', '#d94b6d', '#755798'],
     image: '/art/carnival.webp',
     imageAlt: 'Four guests dressed for the Baraat and Carnival',
