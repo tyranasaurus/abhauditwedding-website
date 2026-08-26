@@ -80,38 +80,43 @@ appears when the fetch succeeded (the data is CC BY 4.0).
 
 ## Colour
 
-Each event carries three roles in `events.ts`, plus one colour per word of its
-dress-code caption. All of them are sampled from that event's own artwork, or
-taken from the palette the live wardrobe page already used.
+Two roles per event, and the mapping is the same for every event:
 
-| event | lead (name, times) | mark (dots, spine) | label (timeline text) |
-|---|---|---|---|
-| Sunset Shaadi | `#d0601e` sunset orange | `#ac7815` goldenrod, from the sky | `#8c4217` deep sunset |
-| Carnival | `#d94b6d` pink | `#755798` purple | `#755798` purple |
-| Sangeet | `#28433a` deep forest | `#c26520` copper | `#28433a` deep forest |
-| Seahawks | `#33486e` navy | `#5c8330` action green | `#33486e` navy |
+- **primary** — the event name and the times
+- **secondary** — the timeline bullets, the spine, the timeline labels, and the
+  accented word of the dress-code caption
 
-Captions: *Traditional* orange / *Elegance* goldenrod · *Colors* blue
-`#3685ad` / *in* pink / *Bloom* purple · *Glitz* forest / *and* copper / *Glam*
-forest · *12th Man* navy / *Spirit* green.
+| event | primary | secondary |
+|---|---|---|
+| Sunset Shaadi | `#d0601e` sunset orange | `#885f11` dark goldenrod, from the sky |
+| Carnival | `#d94b6d` pink | `#755798` purple |
+| Sangeet | `#28433a` deep forest | `#9e521a` copper |
+| Seahawks | `#33486e` navy | `#4f7029` action green |
 
-**The label role exists because of legibility, not decoration.** Timeline labels
-carry real reading load, so they take each palette's most legible tone rather
-than its brightest — 5.1:1 to 9.3:1, at weight 600. The shaadi had no such tone
-(its whole palette sits at 3.3–3.4:1), so its lead hue was deepened along its own
-hue to `#8c4217` at 6.2:1. The note paragraph stays the global `--copper-light`
-and is never event-coloured.
+Captions: *Traditional* / **Elegance** · *Colors* **in** *Bloom* · *Glitz*
+**and** *Glam* · *12th Man* **Spirit** — the bold word taking the secondary.
+Carnival's "Colors" is blue `#3685ad`, a caption-only third note, because that
+artwork is a full rainbow and one accent under-sells it.
 
-Raw watercolour tones can't be used directly: sampled straight from the art they
-sit at 1.2–2.2:1 on cream. Sunflower yellow is the hard limit — at 4.5:1 it stops
-being yellow — so the goldenrod is pitched at 3.34:1 and used only at display
-size, where 3:1 is the bar.
+**Every secondary is deepened along its own hue to roughly 5:1** on the paper —
+4.93 to 5.10 across the four. That is a colour-role decision, not a contrast
+afterthought: the secondary has to carry timeline label text as well as
+decoration, and the artwork's own tones are far too pale for that (sampled
+straight from the images they sit at 1.2–2.2:1). An earlier pass gave labels
+their own per-event colour chosen purely for legibility, which fixed contrast
+but broke the system — three of the four events ended up mapping roles
+differently. One secondary doing all three jobs is what keeps it consistent.
 
-The caption is set 20% larger than the artwork's other type. Its overlap onto the
-painting is an `em` margin, so that bump was paired with rescaling the margin
-from `-0.62em` to `-0.517em`, holding the 11 / 11 / 17 / 6 px alignment.
+Sunflower yellow is the limit case: at 4.5:1 it stops reading as yellow, so the
+shaadi's goldenrod is the deepest of the set. The note paragraph and the
+date/forecast line stay global (`--copper-light`) and are never event-coloured,
+so nothing carrying sustained reading load depends on an event's palette.
 
-## Artwork## Artwork
+The caption is set 20% larger than before. Its overlap onto the painting is an
+`em` margin, so that bump was paired with rescaling the margin from `-0.62em` to
+`-0.517em`, holding the 11 / 11 / 17 / 6 px alignment.
+
+## Artwork## Artwork## Artwork
 
 The three main watercolours were replaced with the background-removed masks from
 the archived prototype repo (`Clean artwork alpha masks`, 2026-08-25), which had

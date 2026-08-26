@@ -15,11 +15,12 @@ export interface WeddingEvent {
   forecastWindow?: { date: string; from: number; to: number }
   /** Dress code, rendered as the caption over the artwork. */
   vibe: string
-  /** Colours sampled from this event's own artwork.
-   *  `lead` takes the event name and the times, `mark` the timeline dots and
-   *  spine, and `label` the timeline labels — which carry real reading load, so
-   *  it is the palette's most legible tone rather than its brightest. */
-  accents: { lead: string; mark: string; label: string }
+  /** Two colours sampled from this event's own artwork.
+   *  `primary` takes the event name and the times; `secondary` takes the
+   *  timeline bullets, the spine and the timeline labels. Every secondary is
+   *  deepened along its own hue to about 5:1 on the paper, because it has to
+   *  carry label text as well as decoration. */
+  accents: { primary: string; secondary: string }
   /** One colour per word of `vibe`. */
   vibeColors: string[]
   image: string
@@ -53,10 +54,9 @@ export const events: WeddingEvent[] = [
     date: 'Saturday, September 5',
     forecastWindow: { date: '2026-09-05', from: 15, to: 22 },
     vibe: 'Traditional Elegance',
-    // Sunset orange off the figures, dark goldenrod off the sky, and the same
-    // sunset hue deepened to 6.2:1 for the labels.
-    accents: { lead: '#d0601e', mark: '#ac7815', label: '#8c4217' },
-    vibeColors: ['#d0601e', '#ac7815'],
+    // Sunset orange off the figures; the sky's goldenrod deepened to carry text.
+    accents: { primary: '#d0601e', secondary: '#885f11' },
+    vibeColors: ['#d0601e', '#885f11'],
     image: '/art/shaadi.webp',
     imageAlt: 'Four guests dressed for the Sunset Shaadi ceremony',
     imageWidth: 800,
@@ -78,7 +78,8 @@ export const events: WeddingEvent[] = [
     date: 'Sunday, September 6',
     forecastWindow: { date: '2026-09-06', from: 10, to: 15 },
     vibe: 'Colors in Bloom',
-    accents: { lead: '#d94b6d', mark: '#755798', label: '#755798' },
+    accents: { primary: '#d94b6d', secondary: '#755798' },
+    // Blue is a caption-only third note; the carnival artwork is a full rainbow.
     vibeColors: ['#3685ad', '#d94b6d', '#755798'],
     image: '/art/carnival.webp',
     imageAlt: 'Four guests dressed for the Baraat and Carnival',
@@ -100,8 +101,8 @@ export const events: WeddingEvent[] = [
     title: 'Naach the Night Away',
     date: 'Sunday, September 6',
     vibe: 'Glitz and Glam',
-    accents: { lead: '#28433a', mark: '#c26520', label: '#28433a' },
-    vibeColors: ['#28433a', '#c26520', '#28433a'],
+    accents: { primary: '#28433a', secondary: '#9e521a' },
+    vibeColors: ['#28433a', '#9e521a', '#28433a'],
     image: '/art/reception.webp',
     imageAlt: 'Four guests dressed for the Sangeet reception',
     imageWidth: 800,
@@ -123,8 +124,8 @@ export const events: WeddingEvent[] = [
     title: 'Seahawks Season Opener',
     date: 'Wednesday, September 9 · 5:00 PM',
     vibe: '12th Man Spirit',
-    accents: { lead: '#33486e', mark: '#5c8330', label: '#33486e' },
-    vibeColors: ['#33486e', '#33486e', '#5c8330'],
+    accents: { primary: '#33486e', secondary: '#4f7029' },
+    vibeColors: ['#33486e', '#33486e', '#4f7029'],
     image: '/art/seahawks.webp',
     imageAlt: 'Four guests in Seahawks gear at a game-day watch party',
     imageWidth: 1300,

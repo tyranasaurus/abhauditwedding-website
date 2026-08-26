@@ -15,9 +15,8 @@ export function EventPanel({
   const style = {
     '--tp': event.trimTop,
     '--bp': event.trimBottom,
-    '--accent': event.accents.lead,
-    '--accent-mark': event.accents.mark,
-    '--accent-label': event.accents.label,
+    '--accent': event.accents.primary,
+    '--accent-sec': event.accents.secondary,
     ...(event.artWidth ? { '--art': event.artWidth } : {}),
   } as CSSProperties
 
