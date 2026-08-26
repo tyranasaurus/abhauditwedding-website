@@ -15,8 +15,9 @@ export function EventPanel({
   const style = {
     '--tp': event.trimTop,
     '--bp': event.trimBottom,
-    '--accent': event.accents[0],
-    '--accent-2': event.accents[1],
+    '--accent': event.accents.lead,
+    '--accent-mark': event.accents.mark,
+    '--accent-label': event.accents.label,
     ...(event.artWidth ? { '--art': event.artWidth } : {}),
   } as CSSProperties
 
@@ -79,7 +80,7 @@ export function EventPanel({
             decoding="async"
           />
           <figcaption className="sched-vibe">
-            {renderWords(event.vibe, event.vibeAccents)}
+            {renderWords(event.vibe, event.vibeColors)}
           </figcaption>
         </figure>
       </div>

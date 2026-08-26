@@ -2417,11 +2417,13 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   margin-top: 0;
 }
 
-/* --accent and --accent-2 are set per event from events.ts, sampled from that
-   event's own artwork; these are the fallbacks. */
+/* Set per event from events.ts, sampled from that event's own artwork; these
+   are the fallbacks. --accent leads, --accent-mark takes the timeline dots and
+   spine, --accent-label the timeline labels. */
 .sched-event {
   --accent: var(--forest);
-  --accent-2: var(--copper);
+  --accent-mark: var(--copper);
+  --accent-label: var(--ink);
   padding-block: clamp(2.4rem, 5vw, 3.25rem);
   scroll-margin-top: var(--nav-h);
 }
@@ -2487,7 +2489,7 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   padding: 0;
   width: fit-content;
   max-width: 100%;
-  border-left: 1px solid color-mix(in srgb, var(--accent-2) 45%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--accent-mark) 45%, transparent);
 }
 
 .sched-times li {
@@ -2501,7 +2503,7 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 
 .sched-times li::before {
   background: var(--paper);
-  border: 1.5px solid var(--accent-2);
+  border: 1.5px solid var(--accent-mark);
   border-radius: 50%;
   content: '';
   height: 8px;
@@ -2522,7 +2524,7 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 }
 
 .sched-what {
-  color: var(--ink);
+  color: var(--accent-label);
   font-family: var(--font-display), Georgia, serif;
   font-size: 1.3rem;
   font-weight: 600;
@@ -2552,10 +2554,10 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 .sched-vibe {
   color: var(--accent);
   font-family: var(--font-script), cursive;
-  font-size: clamp(1.9rem, 3.4vw, 2.5rem);
+  font-size: clamp(2.28rem, 4.08vw, 3rem);
   font-weight: 400;
   line-height: 0.84;
-  margin: -0.62em 0 0;
+  margin: -0.517em 0 0;
   position: relative;
   text-wrap: balance;
   /* It overlaps the artwork, so a little paper glow keeps it legible. */

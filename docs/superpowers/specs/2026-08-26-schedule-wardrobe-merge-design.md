@@ -80,28 +80,38 @@ appears when the fetch succeeded (the data is CC BY 4.0).
 
 ## Colour
 
-Each event carries two colours in `events.ts`, sampled from its own artwork:
+Each event carries three roles in `events.ts`, plus one colour per word of its
+dress-code caption. All of them are sampled from that event's own artwork, or
+taken from the palette the live wardrobe page already used.
 
-| event | lead | second |
-|---|---|---|
-| Sunset Shaadi | `#d0601e` sunset orange | `#ac7815` dark goldenrod, from the sky |
-| Carnival | `#d94b6d` pink | `#9344a7` purple |
-| Sangeet | `#28433a` deep forest | `#9b643a` copper (the site's `--copper`) |
-| Seahawks | `#33486e` navy | `#5c8330` action green |
+| event | lead (name, times) | mark (dots, spine) | label (timeline text) |
+|---|---|---|---|
+| Sunset Shaadi | `#d0601e` sunset orange | `#ac7815` goldenrod, from the sky | `#8c4217` deep sunset |
+| Carnival | `#d94b6d` pink | `#755798` purple | `#755798` purple |
+| Sangeet | `#28433a` deep forest | `#c26520` copper | `#28433a` deep forest |
+| Seahawks | `#33486e` navy | `#5c8330` action green | `#33486e` navy |
 
-The lead takes the event name and the times; the second takes the timeline dots,
-the spine, and the last word of the dress-code caption — restoring the per-word
-colouring the wardrobe page always had. Timeline labels stay `--ink` at weight
-600, and the note paragraph stays the global `--copper-light`, so nothing that
-carries real reading load depends on an event colour.
+Captions: *Traditional* orange / *Elegance* goldenrod · *Colors* blue
+`#3685ad` / *in* pink / *Bloom* purple · *Glitz* forest / *and* copper / *Glam*
+forest · *12th Man* navy / *Spirit* green.
 
-The raw watercolour tones are too pale to use directly: sampled straight from the
-art they sit at 1.2–2.2:1 on cream. Each was darkened along its own hue until it
-cleared its threshold. Sunflower yellow is the constraint — at 4.5:1 it turns
-olive, so the goldenrod is pitched at 3.34:1 and used only at display size, where
-3:1 is the bar.
+**The label role exists because of legibility, not decoration.** Timeline labels
+carry real reading load, so they take each palette's most legible tone rather
+than its brightest — 5.1:1 to 9.3:1, at weight 600. The shaadi had no such tone
+(its whole palette sits at 3.3–3.4:1), so its lead hue was deepened along its own
+hue to `#8c4217` at 6.2:1. The note paragraph stays the global `--copper-light`
+and is never event-coloured.
 
-## Artwork
+Raw watercolour tones can't be used directly: sampled straight from the art they
+sit at 1.2–2.2:1 on cream. Sunflower yellow is the hard limit — at 4.5:1 it stops
+being yellow — so the goldenrod is pitched at 3.34:1 and used only at display
+size, where 3:1 is the bar.
+
+The caption is set 20% larger than the artwork's other type. Its overlap onto the
+painting is an `em` margin, so that bump was paired with rescaling the margin
+from `-0.62em` to `-0.517em`, holding the 11 / 11 / 17 / 6 px alignment.
+
+## Artwork## Artwork
 
 The three main watercolours were replaced with the background-removed masks from
 the archived prototype repo (`Clean artwork alpha masks`, 2026-08-25), which had
