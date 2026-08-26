@@ -91,11 +91,11 @@ export const exploreCards: ExploreCard[] = [
 // Travel ----------------------------------------------------------------
 export const travel = {
   intro:
-    "The wedding lands on Labor Day weekend in the Seattle area — here's how to get around, plus where to stay.",
+    "The wedding lands on Labor Day weekend in the Seattle area — here's how to get around, plus a few of our favorite spots.",
   notes: [
     {
-      title: 'Getting In',
-      body: 'Fly into Seattle–Tacoma International Airport (SEA), or Paine Field (PAE) in Everett for a smaller alternative. From SEA you can take public transport all the way to Downtown Redmond and the hotel. From PAE, transit connections are limited so plan on a car. Either way, getting from Redmond to Carnation is difficult without a car, so we recommend a rental car, or carpooling with another group that has one.',
+      title: 'From the Airport',
+      body: "From SEA airport, you should be able to take the Link Light Rail all the way to Downtown Redmond Station. That's a very short walk from the Hilton Garden Inn and many other hotels, and it's a cute little downtown worth spending some time in. From there the wedding venue is a 20-minute drive — you will need a rental car or a carpool! Reach out to us if you would like help with a carpool.",
     },
   ],
   seattleSpots: [

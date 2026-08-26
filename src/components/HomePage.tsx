@@ -11,7 +11,6 @@ import {
   schedule,
   exploreCards,
   travel,
-  stay,
   faqs,
   venue,
   mapsSearch,
@@ -366,25 +365,6 @@ function Travel() {
             <p>{note.body}</p>
           </Reveal>
         ))}
-        <Reveal
-          as="article"
-          className="travel-note"
-          delay={travel.notes.length * 0.08}
-        >
-          <h3>{stay.hotel.name}</h3>
-          <p className="travel-note-meta">
-            {stay.hotel.area} · {stay.hotel.rate} · {stay.hotel.parking}
-          </p>
-          <p>{stay.hotel.cutoffNote}</p>
-          <a
-            href={stay.hotel.bookUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-primary stay-book-btn"
-          >
-            Book here
-          </a>
-        </Reveal>
       </div>
 
       <div className="travel-lists">

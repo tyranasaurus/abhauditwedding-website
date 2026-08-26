@@ -1786,7 +1786,8 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 
 .travel-notes {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* auto-fit, so a lone note fills the row instead of sitting half-width */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
   gap: clamp(1.2rem, 3vw, 2rem);
   max-width: 54rem;
   margin: 0 auto clamp(1.2rem, 3vw, 2rem);
