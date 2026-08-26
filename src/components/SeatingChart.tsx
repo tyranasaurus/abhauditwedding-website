@@ -58,8 +58,12 @@ export function SeatingChart() {
       ? firstMatch.table
       : null
   const lit = active ?? soleMatchTable
+  // Tables are numbered from zero, so never test a table number for truthiness.
+  const hasLit = lit !== null
 
-  const activeGuests = lit ? sortedGuests.filter((guest) => guest.table === lit) : []
+  const activeGuests = hasLit
+    ? sortedGuests.filter((guest) => guest.table === lit)
+    : []
 
   const togglePin = (table: number) =>
     setPinned((current) => (current === table ? null : table))
@@ -186,7 +190,7 @@ export function SeatingChart() {
               ))}
             </div>
             <p className="seating-status" role="status">
-              {lit ? (
+              {hasLit ? (
                 <>
                   <strong>Table {lit}</strong> ·{' '}
                   {activeGuests.map((guest) => guest.name).join(', ')}
