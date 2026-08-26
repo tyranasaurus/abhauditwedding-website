@@ -12,9 +12,9 @@ export interface ForecastWindow {
 }
 
 export interface WindowForecast {
-  /** Temperature at the start and end of the window, in °F. */
-  start: number
-  end: number
+  /** Coolest and warmest it gets during the event, in °F. */
+  low: number
+  high: number
   glyph: string
   description: string
   /** Highest chance of precipitation across the window, 0–100. */
@@ -130,27 +130,23 @@ export function useForecast(windows: ForecastWindow[]): Map<string, WindowForeca
           const temps: number[] = []
           const codes: number[] = []
           let rain = 0
-          let first: number | null = null
-          let last: number | null = null
 
           for (let hour = window.from; hour <= window.to; hour++) {
             const i = at.get(`${window.date}T${String(hour).padStart(2, '0')}:00`)
             if (i == null) continue
             const temp = hourly.temperature_2m?.[i]
             if (temp == null) continue
-            if (first === null) first = temp
-            last = temp
             temps.push(temp)
             const code = hourly.weather_code?.[i]
             if (code != null) codes.push(code)
             rain = Math.max(rain, hourly.precipitation_probability?.[i] ?? 0)
           }
 
-          if (first === null || last === null || !temps.length) continue
+          if (!temps.length) continue
           const [glyph, description] = summarise(codes, rain)
           next.set(window.key, {
-            start: Math.round(first),
-            end: Math.round(last),
+            low: Math.round(Math.min(...temps)),
+            high: Math.round(Math.max(...temps)),
             glyph,
             description,
             rain: Math.round(rain),

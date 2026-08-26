@@ -2475,9 +2475,6 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   letter-spacing: 0;
 }
 
-.sched-lo {
-  opacity: 0.62;
-}
 
 /* The pair is sized to its own content and centred, so it sits under the
    centred event name rather than drifting into two half-empty columns. */
@@ -2651,10 +2648,10 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   }
 }
 
-/* The forecast reads as a range across the event, so the arrow and the rain
+/* The forecast reads as a range across the event, so the separator and the rain
    chance sit quieter than the temperatures themselves. */
-.sched-arrow {
-  opacity: 0.5;
+.sched-range-sep {
+  opacity: 0.45;
 }
 
 .sched-rain {

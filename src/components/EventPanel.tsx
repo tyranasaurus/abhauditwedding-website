@@ -30,9 +30,9 @@ export function EventPanel({
           {forecast && (
             <span
               className="sched-wx"
-              aria-label={`Forecast during the event: ${forecast.description}, ${
-                forecast.start
-              } to ${forecast.end} degrees Fahrenheit${
+              aria-label={`Forecast during the event: ${forecast.description}, low ${
+                forecast.low
+              }, high ${forecast.high} degrees Fahrenheit${
                 forecast.showRain ? `, ${forecast.rain} percent chance of rain` : ''
               }`}
             >
@@ -44,8 +44,8 @@ export function EventPanel({
                   </span>{' '}
                 </>
               )}
-              {forecast.start}° <span className="sched-arrow">→</span>{' '}
-              {forecast.end}°
+              {forecast.low}°<span className="sched-range-sep"> / </span>
+              {forecast.high}°
               {forecast.showRain && (
                 <span className="sched-rain"> · {forecast.rain}% rain</span>
               )}

@@ -62,8 +62,8 @@ Two reasons, both observed on real data for 5 September:
   precipitation probability was **4%** — a rain cloud on the wedding day for no
   reason.
 
-So the page shows the temperature at the start and end of the window (which is
-also the fact behind the "light layers" note: 3–10pm falls from 67° to 53°), and
+So the page shows the low and high **across the event's own hours** — 53° / 67°
+for a 3–10pm ceremony, rather than the day's 48° that happens at 4am — and
 surfaces a rain *probability* only at `RAIN_THRESHOLD` (25%) or above. Below
 that the glyph is chosen from the sky codes alone, so a low-probability wet code
 shows as the cloud cover it really is.
