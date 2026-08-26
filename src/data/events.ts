@@ -70,9 +70,9 @@ export const events: WeddingEvent[] = [
     image: '/art/carnival.webp',
     imageAlt: 'Four guests dressed for the Baraat and Carnival',
     imageWidth: 800,
-    imageHeight: 1000,
+    imageHeight: 960,
     trimTop: '4%',
-    trimBottom: '7.75%',
+    trimBottom: '4.81%',
     timeline: [
       { time: '10:00 AM', label: "Abha and Udit's Baraat" },
       { time: '11:00 AM', label: 'Carnival Booths Open' },
