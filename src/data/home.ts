@@ -158,19 +158,12 @@ export function mapsSearch(query: string) {
 }
 
 // Where to stay ---------------------------------------------------------
+// The group block closed on 14 August 2026 and its booking link now 403s, so
+// the rate, cutoff and URL are gone. The hotel is still where most guests are.
 export const stay = {
-  intro: "Here is the hotel block — we'd love for everyone to stay close.",
   hotel: {
     name: 'Hilton Garden Inn',
     area: 'Downtown Redmond',
-    address: 'Hilton Garden Inn Redmond Seattle, Redmond Way, Redmond, WA',
-    rate: '$180 / night',
-    parking: 'Free parking',
-    bookBy: 'Book by August 14, 2026',
-    cutoffNote:
-      "The group cutoff is 8/14/26 — the booking link stops working after that date, so please reserve before then.",
-    bookUrl:
-      'https://www.hilton.com/en/book/reservation/rooms/?ctyhocn=LKEGIGI&arrivalDate=2026-09-04&departureDate=2026-09-06&groupCode=99K&room1NumAdults=1',
   },
 } as const
 
@@ -199,8 +192,7 @@ export const faqs: Faq[] = [
   },
   {
     q: 'I am coming from out of town. Where should I stay?',
-    a: `We've reserved a block of rooms at the ${stay.hotel.name} in ${stay.hotel.area} at a special group rate. Reserve yours before the ${stay.hotel.bookBy.replace('Book by ', '')} cutoff:`,
-    link: { label: 'Reserve your room', href: stay.hotel.bookUrl },
+    a: `Most of our guests are staying in ${stay.hotel.area} — the ${stay.hotel.name} and several other hotels are a short walk from the Link light rail station, and the venue is about a 20-minute drive from there.`,
   },
   {
     q: 'Can we join the baraat?',
