@@ -125,7 +125,7 @@ export function MapPage() {
           </span>
         </a>
 
-        <a className="map-back" href="/wardrobe">
+        <a className="map-back" href="/#schedule">
           ← Wardrobe guide
         </a>
       </div>

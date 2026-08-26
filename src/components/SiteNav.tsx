@@ -11,10 +11,10 @@ const MENU_AT = 820
  * Shared top navigation. On pages tall enough to scroll it is transparent at the
  * top and fades to a solid cream bar once scrolled; on single-screen pages (the
  * map) there is nothing to scroll, so it stays solid rather than floating
- * transparently over the content. Homepage section links point at `/#anchor` so
- * they work from any page: same-path on the homepage just scrolls, elsewhere it
- * navigates home first. Schedule is its own page. Narrow screens have no room for the links, so they fold into a
- * menu behind the bar's button.
+ * transparently over the content. The homepage carries every section, so the
+ * links point at `/#anchor`: on the homepage that just scrolls, elsewhere it
+ * navigates home first. Narrow screens have no room for the links, so they fold
+ * into a menu behind the bar's button.
  */
 export function SiteNav() {
   const [solid, setSolid] = useState(true)
@@ -76,7 +76,7 @@ export function SiteNav() {
         className={`home-nav-links ${menuOpen ? 'is-open' : ''}`}
         id="home-nav-links"
       >
-        <a href="/schedule" onClick={close}>
+        <a href="/#schedule" onClick={close}>
           Schedule
         </a>
         <a href="/#travel" onClick={close}>

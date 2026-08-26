@@ -106,12 +106,14 @@ export function EventPanel({
       {event.venue && (
         <p className="sched-venue">
           <a
-            className="btn btn-primary"
+            className="sched-venue-link"
             href={event.venue.url}
             target="_blank"
             rel="noopener noreferrer"
           >
-            {event.venue.label}
+            <span className="sched-venue-name">{event.venue.name}</span>
+            <span className="sched-venue-area">{event.venue.area}</span>
+            <span className="sched-venue-cue">Get directions →</span>
           </a>
         </p>
       )}

@@ -13,7 +13,7 @@
     />
     <meta name="theme-color" content="#f6eedf" />
     <meta name="color-scheme" content="light" />
-    <title>Abha &amp; Udit Wedding</title>
+    <title>Abha &amp; Udit Wedding · September 5–6, 2026</title>
     <meta
       name="description"
       content="Abha &amp; Udit are getting married September 5–6, 2026 at Carnation Farms in Carnation, Washington. Schedule, travel, where to stay, what to wear, and more."
@@ -33,6 +33,17 @@
       content="Watercolour of a white barn with a red roof and an A&U monogram on the door, among evergreens"
     />
     <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      // The schedule and wardrobe pages folded into the homepage. Send those
+      // URLs — and any anchor already handed out — to the matching section
+      // before the app boots, so nothing painted from the old paths.
+      (function () {
+        var path = location.pathname.replace(/\/+$/, '')
+        if (path === '/schedule' || path === '/wardrobe') {
+          location.replace('/' + (location.hash || '#schedule'))
+        }
+      })()
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

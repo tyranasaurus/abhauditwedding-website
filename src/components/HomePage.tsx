@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react'
 import {
   motion,
   useReducedMotion,
@@ -6,19 +6,16 @@ import {
   useTransform,
   AnimatePresence,
 } from 'motion/react'
-import {
-  hero,
-  schedule,
-  exploreCards,
-  travel,
-  faqs,
-  venue,
-  mapsSearch,
-} from '@/data/home'
+import { hero, travel, faqs, venue, mapsSearch } from '@/data/home'
+import { events } from '@/data/events'
+import { EventPanel } from '@/components/EventPanel'
+import { useForecast, type ForecastWindow } from '@/lib/use-forecast'
 import { SiteNav } from '@/components/SiteNav'
 import { RegistryBubble } from '@/components/RegistryBubble'
 
-const WEDDING_DATE = new Date('2026-09-05T16:00:00-07:00')
+/** The weekend, as calendar days in the venue's own timezone. */
+const FIRST_DAY = '2026-09-05'
+const LAST_DAY = '2026-09-06'
 
 // A small scroll-reveal wrapper used throughout the page. Fades and lifts its
 // children into place the first time they enter the viewport.
@@ -50,13 +47,7 @@ function Reveal({
   )
 }
 
-function SectionTitle({
-  kicker,
-  title,
-}: {
-  kicker: string
-  title: string
-}) {
+function SectionTitle({ kicker, title }: { kicker: string; title: string }) {
   return (
     <Reveal className="home-section-head" as="header">
       <p className="home-kicker">{kicker}</p>
@@ -66,23 +57,48 @@ function SectionTitle({
   )
 }
 
+// Calendar-day arithmetic rather than elapsed hours: the count should turn over
+// at midnight in Carnation, not at whatever hour the ceremony happens to start.
+const pacificDay = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'America/Los_Angeles',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+})
+
+function todayInPacific() {
+  const parts = pacificDay.formatToParts(new Date())
+  const part = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((p) => p.type === type)?.value ?? ''
+  return `${part('year')}-${part('month')}-${part('day')}`
+}
+
+/** Whole days from one YYYY-MM-DD to another, both read as UTC so DST can't skew it. */
+function daysBetween(from: string, to: string) {
+  return Math.round(
+    (Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000,
+  )
+}
+
+function countdownLabel(today: string) {
+  const untilFirst = daysBetween(today, FIRST_DAY)
+  if (untilFirst > 1) return `${untilFirst} days to go`
+  if (untilFirst === 1) return 'Tomorrow'
+  // Both days of the weekend read the same; after that the count retires.
+  return daysBetween(today, LAST_DAY) >= 0 ? "It's today!" : null
+}
+
 function Countdown() {
-  const [days, setDays] = useState<number | null>(null)
+  const [label, setLabel] = useState<string | null>(null)
   useEffect(() => {
-    const tick = () => {
-      const ms = WEDDING_DATE.getTime() - Date.now()
-      setDays(Math.max(0, Math.ceil(ms / 86_400_000)))
-    }
+    const tick = () => setLabel(countdownLabel(todayInPacific()))
     tick()
-    const id = window.setInterval(tick, 60_000)
+    // Day-granular, so a slow tick is plenty — it only has to survive midnight.
+    const id = window.setInterval(tick, 300_000)
     return () => window.clearInterval(id)
   }, [])
-  if (days === null) return null
-  return (
-    <span className="hero-countdown">
-      {days === 0 ? 'The day is here' : `${days} days to go`}
-    </span>
-  )
+  if (!label) return null
+  return <span className="hero-countdown">{label}</span>
 }
 
 function Hero() {
@@ -124,15 +140,18 @@ function Hero() {
         <motion.div
           className="hero-portrait-wrap"
           style={{ y: portraitY }}
-          initial={reduce ? false : { opacity: 0, scale: 0.92 }}
+          initial={reduce ? false : { opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, ease: [0.22, 0.61, 0.36, 1] }}
         >
+          {/* The arch that the rest of the page echoes: the photo sits in a
+              paper mat, traced a little further out by a single forest line. */}
           <motion.span
-            className="hero-portrait-ring"
+            className="hero-portrait-arch"
             aria-hidden="true"
-            animate={reduce ? {} : { rotate: 360 }}
-            transition={{ duration: 90, repeat: Infinity, ease: 'linear' }}
+            initial={reduce ? false : { opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.1, delay: 0.35, ease: [0.22, 0.61, 0.36, 1] }}
           />
           <span className="hero-portrait-clip">
             <img
@@ -190,7 +209,16 @@ function Hero() {
   )
 }
 
+/** The hours we show weather for — the two outdoor events. */
+const FORECAST_WINDOWS: ForecastWindow[] = events.flatMap((event) =>
+  event.forecastWindow ? [{ key: event.anchor, ...event.forecastWindow }] : [],
+)
+/** The credit sits under the last event that carries a forecast, not the page. */
+const LAST_FORECAST = FORECAST_WINDOWS.at(-1)?.key
+
 function Schedule() {
+  const forecast = useForecast(FORECAST_WINDOWS)
+
   return (
     <section className="home-schedule" id="schedule" aria-label="Schedule">
       <SectionPhoto
@@ -199,92 +227,28 @@ function Schedule() {
         position="50% 45%"
       />
       <SectionTitle kicker="The Weekend" title="Schedule" />
-      <ol className="schedule-list">
-        {schedule.map((stop, i) => {
-          // Each event carries at most one action: the link into its entry on
-          // the schedule page. With one action the whole card is the link.
-          type Cue = {
-            key: string
-            label: string
-            href: string
-            cls: string
-            external: boolean
-          }
-          const cues: Cue[] = []
-          if (stop.href)
-            cues.push({
-              key: 'wear',
-              label: 'Times and what to wear',
-              href: stop.href,
-              cls: 'schedule-cue',
-              external: false,
-            })
-          // One action -> the whole card is the link; two -> static card, each cue links.
-          const lead = cues.length === 1 ? cues[0] : null
-          const body = (
-            <>
-              <span className="schedule-when">
-                <span className="schedule-day">{stop.day}</span>
-                <span className="schedule-date">{stop.date}</span>
-                <span className="schedule-time">{stop.time}</span>
-              </span>
-              <span className="schedule-bullet" aria-hidden="true" />
-              <span className="schedule-what">
-                <span className="schedule-kind">{stop.kind}</span>
-                <span className="schedule-title">{stop.title}</span>
-                {lead ? (
-                  <span className={lead.cls}>{lead.label} →</span>
-                ) : (
-                  <span className="schedule-cues">
-                    {cues.map((c) => (
-                      <a
-                        key={c.key}
-                        className={`${c.cls} schedule-cue-link`}
-                        href={c.href}
-                        {...(c.external
-                          ? { target: '_blank', rel: 'noopener noreferrer' }
-                          : {})}
-                      >
-                        {c.label} →
-                      </a>
-                    ))}
-                  </span>
-                )}
-              </span>
-            </>
-          )
-          return (
-            <Reveal
-              as="li"
-              className={`schedule-stop accent-${stop.accent}`}
-              key={stop.title}
-              delay={i * 0.08}
-            >
-              {lead ? (
-                <a
-                  className="schedule-link"
-                  href={lead.href}
-                  {...(lead.external
-                    ? { target: '_blank', rel: 'noopener noreferrer' }
-                    : {})}
-                >
-                  {body}
-                </a>
-              ) : (
-                <div className="schedule-link schedule-link--static">{body}</div>
-              )}
-            </Reveal>
-          )
-        })}
-      </ol>
+      <div className="sched-stack">
+        {events.map((event) => (
+          <Fragment key={event.anchor}>
+            {event.divider && (
+              <div className="sched-divider" aria-hidden="true">
+                <div className="home-ornament" />
+              </div>
+            )}
+            <EventPanel event={event} forecast={forecast.get(event.anchor)} />
+            {event.anchor === LAST_FORECAST && forecast.size > 0 && (
+              <p className="sched-wx-credit">Forecasts for Carnation · Open-Meteo</p>
+            )}
+          </Fragment>
+        ))}
+      </div>
     </section>
   )
 }
 
-// A full-bleed photo of the two of them. The live site leads each page with a
-// hero photo; we echo that by opening the matching sections with the same
-// shots. `position` tunes object-position so the couple stays centered as the
-// band crops to its fixed height.
+// A photo of the two of them, matted and set in the same arch as the hero. The
+// dome here is shallower — these are landscape shots, and a full round arch
+// would crop into the tops of their heads.
 function SectionPhoto({
   src,
   alt,
@@ -304,36 +268,6 @@ function SectionPhoto({
         loading="lazy"
       />
     </Reveal>
-  )
-}
-
-function Explore() {
-  return (
-    <section className="home-explore" id="explore" aria-label="Wardrobe">
-      <SectionTitle kicker="Plan Your Visit" title="Wardrobe" />
-      <div className="explore-grid">
-        {exploreCards.map((card, i) => (
-          <Reveal as="article" key={card.href} delay={i * 0.1}>
-            <motion.a
-              className="explore-card"
-              href={card.href}
-              whileHover={{ y: -8 }}
-              transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-            >
-              <div className="explore-art">
-                <img src={card.image} alt={card.imageAlt} loading="lazy" />
-              </div>
-              <div className="explore-body">
-                <p className="explore-kicker">{card.kicker}</p>
-                <h3 className="explore-title">{card.title}</h3>
-                {card.blurb ? <p className="explore-blurb">{card.blurb}</p> : null}
-                <span className="explore-cue">{card.cue} →</span>
-              </div>
-            </motion.a>
-          </Reveal>
-        ))}
-      </div>
-    </section>
   )
 }
 
@@ -493,7 +427,10 @@ function Footer() {
           {venue.name} · {venue.addressLines.join(', ')}
         </a>
         <nav className="footer-nav" aria-label="Site">
-          <a href="/wardrobe">Wardrobe Guide</a>
+          <a href="#schedule">Schedule</a>
+          <a href="#travel">Travel</a>
+          <a href="#faq">Q&amp;A</a>
+          <a href="/registry">Registry</a>
         </nav>
       </Reveal>
     </footer>
@@ -501,11 +438,44 @@ function Footer() {
 }
 
 export function HomePage() {
+  // Everything lives on this one page now, so a deep link is a hash. The browser
+  // tries to scroll before React has rendered the target, and the page keeps
+  // growing after that as the display faces swap in and the artwork decodes —
+  // each of which moves the target further down. So re-run the jump at every
+  // point the page can still have settled, and stop the moment the guest
+  // scrolls for themselves.
   useEffect(() => {
-    const prev = document.title
-    document.title = 'Abha & Udit Wedding · September 5–6, 2026'
+    const id = window.location.hash.slice(1)
+    if (!id) return
+    let taken = false
+    const jump = () => {
+      if (taken) return
+      document
+        .getElementById(decodeURIComponent(id))
+        ?.scrollIntoView({ behavior: 'auto', block: 'start' })
+    }
+    const release = () => {
+      taken = true
+    }
+    const opts = { once: true, passive: true } as const
+    window.addEventListener('wheel', release, opts)
+    window.addEventListener('touchstart', release, opts)
+    window.addEventListener('keydown', release, { once: true })
+
+    requestAnimationFrame(jump)
+    // Anything that changes the page's height moves the target: a display face
+    // swapping in, the artwork decoding, the forecast arriving and adding its
+    // credit line. Follow the height rather than guessing at a delay.
+    const follow = new ResizeObserver(jump)
+    follow.observe(document.documentElement)
+    const settled = window.setTimeout(() => follow.disconnect(), 3000)
+
     return () => {
-      document.title = prev
+      window.removeEventListener('wheel', release)
+      window.removeEventListener('touchstart', release)
+      window.removeEventListener('keydown', release)
+      follow.disconnect()
+      window.clearTimeout(settled)
     }
   }, [])
 
@@ -515,7 +485,6 @@ export function HomePage() {
       <Hero />
       <main className="home-main">
         <Schedule />
-        <Explore />
         <Travel />
         <Faq />
       </main>

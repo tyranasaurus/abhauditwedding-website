@@ -1,87 +1,12 @@
 // All content transferred from withjoy.com/abhauditwedding, restyled for our
-// watercolor wedding-card site. Schedule entries deep-link into the schedule
-// page (/schedule#<anchor>), which also carries the wardrobe guidance.
+// watercolor wedding-card site. The weekend itself lives in events.ts and
+// renders inline on the homepage; everything around it is here.
 
 export const hero = {
   names: 'Abha & Udit',
   date: 'September 5–6, 2026',
   venue: 'Carnation Farms · Carnation, Washington',
 } as const
-
-// The big weekend at a glance. Each links into the schedule page, where that
-// event's timings and dress code live. Times here are when to arrive.
-export interface ScheduleStop {
-  day: string
-  date: string
-  kind: string
-  time: string
-  title: string
-  /** Schedule page anchor for this event's times and dress code. */
-  href?: string
-  accent: 'sunset' | 'carnival' | 'forest' | 'slate'
-}
-
-export const schedule: ScheduleStop[] = [
-  {
-    day: 'Saturday',
-    date: 'September 5, 2026',
-    kind: 'Wedding Ceremony',
-    time: '3:30 PM',
-    title: 'Sunset Shaadi',
-    href: '/schedule#sunset-shaadi',
-    accent: 'sunset',
-  },
-  {
-    day: 'Sunday',
-    date: 'September 6, 2026',
-    kind: 'Baraat & Carnival',
-    time: '10:00 AM',
-    title: 'From Carnegie to Carnation',
-    href: '/schedule#carnegie-to-carnation',
-    accent: 'carnival',
-  },
-  {
-    day: 'Sunday',
-    date: 'September 6, 2026',
-    kind: 'Sangeet Reception',
-    time: '4:30 PM',
-    title: 'Naach the Night Away',
-    href: '/schedule#naach-the-night-away',
-    accent: 'forest',
-  },
-  {
-    day: 'Wednesday',
-    date: 'September 9, 2026',
-    kind: 'Season Opener Watch Party',
-    time: '5:00 PM',
-    title: 'Seahawks Season Opener',
-    href: '/schedule#seahawks-season-opener',
-    accent: 'slate',
-  },
-]
-
-// The two interactive companion pages we link out to.
-export interface ExploreCard {
-  href: string
-  kicker: string
-  title: string
-  blurb?: string
-  image: string
-  imageAlt: string
-  cue: string
-}
-
-export const exploreCards: ExploreCard[] = [
-  {
-    href: '/wardrobe',
-    kicker: 'What to Wear',
-    title: 'Wardrobe Guide',
-    image: '/art/shaadi.webp',
-    imageAlt: 'Watercolor of guests dressed for the ceremony',
-    cue: 'Open the guide',
-  },
-  // The Venue Map card is parked while /map is unlinked (see App.tsx / MapPage.tsx).
-]
 
 // Travel ----------------------------------------------------------------
 export const travel = {
@@ -188,7 +113,7 @@ export const faqs: Faq[] = [
   {
     q: 'What should I wear?',
     a: 'Every event has its own look, and each one is on the schedule alongside the times. But more than anything, we care that you feel comfortable, stay safe, and are there with us on time. Your presence to enjoy with us matters far more than any specific outfit.',
-    link: { label: 'Open the Schedule', href: '/schedule' },
+    link: { label: 'Open the Schedule', href: '#schedule' },
   },
   {
     q: 'I am coming from out of town. Where should I stay?',

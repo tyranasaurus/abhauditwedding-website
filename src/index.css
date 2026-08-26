@@ -25,6 +25,13 @@
   --copper-light: #ba5919;
   --muted-ink: #685a45;
   --soft-green: #d2d9cd;
+  /* One hairline weight for every rule on the site: between events, between
+     Q&A rows, under each travel spot. */
+  --rule: rgba(155, 100, 58, 0.26);
+  /* The arch. The picture sits on a paper mat, traced further out by a single
+     forest line — the shape the whole page is built from. */
+  --arch-mat: #fffdf7;
+  --arch-line: rgba(44, 104, 60, 0.62);
   --palette-forest: #2c683c;
   --palette-carnival: #d94e78;
   --palette-sunset: #d86a22;
@@ -79,432 +86,6 @@ body {
 img {
   display: block;
   max-width: 100%;
-}
-
-.wardrobe-site {
-  min-height: 100vh;
-  overflow: hidden;
-}
-
-.intro-page,
-.event-panel {
-  isolation: isolate;
-  position: relative;
-}
-
-.intro-page {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  /* A little more breathing room below the intro than between event sections. */
-  margin-bottom: 2.5rem;
-  min-height: 100svh;
-  padding: 3rem max(1.2rem, calc((100vw - 1120px) / 2));
-}
-
-.intro-frame {
-  align-items: center;
-  display: grid;
-  gap: 1.8rem;
-  grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1fr);
-  width: 100%;
-}
-
-.barn-watercolor {
-  /* No drop-shadow: the logo has built-in transparency meant to read like
-     watercolor on the paper, and a shadow traces every soft edge and wash. */
-  margin-inline: auto;
-  width: min(35rem, 100%);
-  height: auto;
-}
-
-.intro-copy {
-  text-align: center;
-}
-
-h1,
-h2,
-.attire-vibe,
-.signature {
-  font-family: var(--font-script), cursive;
-  font-weight: 400;
-  line-height: 0.96;
-  margin: 0;
-}
-
-h1 {
-  color: var(--forest);
-  font-size: clamp(4.3rem, 11vw, 8rem);
-  margin-inline: auto;
-  max-width: 10ch;
-}
-
-.ornament {
-  background: linear-gradient(90deg, transparent, var(--copper), transparent);
-  height: 1px;
-  margin: 1.25rem auto 1.5rem;
-  width: min(22rem, 100%);
-}
-
-.intro-notes {
-  color: var(--base-text);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.1rem, 2vw, 1.48rem);
-  line-height: 1.5;
-  margin-inline: auto;
-  max-width: 35rem;
-}
-
-.intro-notes p {
-  margin: 0;
-}
-
-.intro-notes p + p {
-  margin-top: 1.1rem;
-}
-
-.signature {
-  color: var(--forest);
-  font-size: clamp(3.1rem, 6vw, 4.6rem);
-  margin-top: 1.4rem;
-}
-
-.event-gallery {
-  display: grid;
-  gap: clamp(2.5rem, 7vw, 6rem);
-  padding: 0 max(0.85rem, calc((100vw - 1080px) / 2)) 4rem;
-}
-
-.event-panel {
-  --accent: var(--forest);
-  --accent-2: var(--copper);
-  --accent-3: var(--burnt-copper);
-  align-content: center;
-  display: grid;
-  gap: 1.1rem;
-  min-height: 100svh;
-  overflow: hidden;
-  padding: clamp(2rem, 4vw, 3.4rem) clamp(1.45rem, 3vw, 2.4rem);
-}
-
-.event-panel::before {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(155, 100, 58, 0.9) 25%,
-    rgba(155, 100, 58, 0.9) 75%,
-    transparent
-  );
-  content: '';
-  height: 2px;
-  left: 50%;
-  position: absolute;
-  top: 0;
-  transform: translateX(-50%);
-  width: min(64rem, 90%);
-}
-
-.event-panel.forest-gala {
-  --accent: #28433a;
-  --accent-2: #c26520;
-  --accent-3: #28433a;
-}
-
-.event-panel.carnival-garden {
-  --accent: #d94b6d;
-  --accent-2: #3685ad;
-  --accent-3: #755798;
-}
-
-.event-panel.sunset-ceremony {
-  --accent: #d0601e;
-  --accent-2: #d0601e;
-  --accent-3: #d0601e;
-}
-
-/* Seahawks colors softened to sit inside the watercolor palette. */
-.event-panel.seahawks-opener {
-  --accent: #33486e;
-  --accent-2: #6f9c3c;
-  --accent-3: #5b6f78;
-}
-
-/* Framed break before a bonus/optional event, setting it apart from the
-   three main events. */
-.bonus-break {
-  display: grid;
-  justify-items: center;
-  text-align: center;
-  gap: 0.7rem;
-  max-width: 38rem;
-  margin: 0 auto;
-  padding: clamp(1.5rem, 5vw, 4rem) 1.5rem clamp(0.5rem, 2vw, 1.5rem);
-}
-
-.bonus-break .home-ornament {
-  margin: 0 0 0.35rem;
-}
-
-.bonus-break-eyebrow {
-  color: var(--copper);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(0.9rem, 1.7vw, 1.15rem);
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  margin: 0;
-}
-
-.bonus-break-lead {
-  color: var(--copper-light);
-  font-family: var(--font-body), Georgia, serif;
-  font-size: clamp(1.2rem, 2.6vw, 1.8rem);
-  font-style: italic;
-  line-height: 1.4;
-  margin: 0;
-}
-
-/* The bonus panel itself reads lighter and shorter than its peers. */
-.event-panel.is-bonus {
-  min-height: auto;
-  gap: 0.8rem;
-  padding-top: clamp(0.5rem, 1.5vw, 1.2rem);
-  padding-bottom: clamp(3rem, 8vw, 6rem);
-}
-
-.event-panel.is-bonus::before {
-  content: none;
-}
-
-.event-panel.is-bonus .event-heading h2 {
-  font-size: clamp(2.6rem, 5.8vw, 4.4rem);
-}
-
-.event-panel.is-bonus .attire-vibe {
-  font-size: clamp(2.2rem, 4.8vw, 3.6rem);
-}
-
-.event-panel.is-bonus .event-stage {
-  max-width: min(40rem, 100%);
-}
-
-.event-panel.is-bonus .stage-cutout {
-  opacity: 0.92;
-}
-
-.event-heading {
-  text-align: center;
-}
-
-.event-heading h2 {
-  color: var(--accent);
-  font-size: clamp(4.2rem, 9.6vw, 7.8rem);
-}
-
-.event-label {
-  align-items: center;
-  color: var(--copper);
-  display: flex;
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1rem, 2.1vw, 1.7rem);
-  font-weight: 600;
-  gap: 1rem;
-  justify-content: center;
-  letter-spacing: 0.2em;
-  margin: 0.5rem 0 0;
-}
-
-.event-label::before,
-.event-label::after {
-  background: var(--copper);
-  content: '';
-  height: 1px;
-  max-width: 7.5rem;
-  width: 14vw;
-}
-
-.event-datetime {
-  color: var(--copper-light);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.15rem, 2vw, 1.55rem);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  margin: 0.4rem 0 0;
-}
-
-.event-stage {
-  margin: -0.8rem auto -0.4rem;
-  max-width: min(44rem, 100%);
-  position: relative;
-  width: 100%;
-}
-
-.stage-cutout {
-  filter: saturate(1.03);
-  opacity: 0.96;
-  width: 100%;
-  height: auto;
-  z-index: 1;
-}
-
-.event-panel.forest-gala .event-heading h2 > span:nth-child(4),
-.event-panel.sunset-ceremony .attire-vibe > span:nth-child(2) {
-  margin-left: 0.12em;
-}
-
-.attire-vibe {
-  color: var(--accent);
-  font-size: clamp(3.4rem, 7.2vw, 5.8rem);
-  line-height: 0.8;
-  text-align: center;
-}
-
-.vibe-accent-2 {
-  color: var(--accent-2);
-}
-
-.vibe-accent-3 {
-  color: var(--accent-3);
-}
-
-.event-panel.carnival-garden .attire-vibe > span:nth-child(1) {
-  color: var(--accent-2);
-}
-
-.event-panel.carnival-garden .attire-vibe > span:nth-child(2) {
-  color: var(--accent);
-}
-
-.attire-grid {
-  display: grid;
-  gap: 1.25rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin: 0.75rem auto 0;
-  max-width: 45rem;
-  text-align: center;
-  width: 100%;
-}
-
-.attire-grid > div + div {
-  border-left: 1px solid rgba(155, 100, 58, 0.35);
-}
-
-.attire-grid h3 {
-  color: var(--base-text);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.7rem, 3vw, 2.3rem);
-  font-weight: 700;
-  line-height: 1;
-  margin: 0;
-}
-
-.attire-grid p {
-  color: var(--base-text);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1rem, 2vw, 1.4rem);
-  line-height: 1.35;
-  margin: 0.75rem auto 0;
-  max-width: 16rem;
-}
-
-.event-footer {
-  margin: 0 auto;
-  max-width: 48rem;
-  text-align: center;
-}
-
-.event-notes {
-  color: var(--copper-light);
-  font-family: var(--font-body), Georgia, serif;
-  font-size: clamp(1rem, 1.8vw, 1.3rem);
-  font-style: italic;
-  line-height: 1.45;
-  margin: 0;
-}
-
-/* RSVP button on panels that carry their own form (the watch party). */
-.event-rsvp {
-  background: var(--accent);
-  color: #fbf4e6;
-  margin-top: 1.4rem;
-  box-shadow: 0 0.5rem 1.1rem color-mix(in srgb, var(--accent) 30%, transparent);
-}
-
-.event-rsvp:hover,
-.event-rsvp:focus-visible {
-  background: color-mix(in srgb, var(--accent) 82%, #000);
-  box-shadow: 0 0.7rem 1.5rem color-mix(in srgb, var(--accent) 38%, transparent);
-  outline: none;
-  transform: translateY(-2px);
-}
-
-/* Position/appearance only; motion/react drives the bob, fade, and centering. */
-.scroll-cue {
-  position: fixed;
-  bottom: 1.5rem;
-  left: 50%;
-  z-index: 5;
-  display: grid;
-  place-items: center;
-  width: 2.6rem;
-  height: 2.6rem;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: none;
-  color: var(--copper);
-  cursor: pointer;
-}
-
-@media (max-width: 900px) {
-  /* Stack the logo over the copy. */
-  .intro-frame {
-    grid-template-columns: 1fr;
-  }
-
-  .intro-copy {
-    margin-inline: auto;
-    max-width: 36rem;
-  }
-
-  .event-panel {
-    min-height: auto;
-  }
-}
-
-@media (max-width: 720px) {
-  .intro-page {
-    padding: 2.1rem 1rem 2.8rem;
-  }
-
-  .event-gallery {
-    padding: 0 0.72rem 2rem;
-  }
-
-  .event-panel {
-    gap: 0.85rem;
-    padding: 1.25rem 0.85rem;
-  }
-
-  .event-label {
-    letter-spacing: 0.1em;
-  }
-
-  .event-label::before,
-  .event-label::after {
-    width: 10vw;
-  }
-
-  .attire-grid {
-    gap: 0.9rem;
-  }
-
-  .attire-grid h3 {
-    font-size: 1.45rem;
-  }
-
-  .attire-grid p {
-    font-size: 0.92rem;
-  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -1069,19 +650,23 @@ a.poi:focus-visible .poi-pin {
 }
 
 /* Shared buttons ---------------------------------------------------- */
+/* A doorway rather than a pill: the same arch as the portrait and the photos,
+   flattened to a segmental one at this size. 50% horizontally puts the
+   springing points at the corners, so the top is one continuous dome. */
 .btn {
-  border-radius: 999px;
+  border-radius: 50% 50% 0.4rem 0.4rem / 44% 44% 0.4rem 0.4rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-width: 14rem;
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  font-size: clamp(0.95rem, 1.4vw, 1.08rem);
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 0.72rem 1.7rem;
+  padding: 1.15rem 1.9rem 0.95rem;
   transition:
     transform 0.18s ease,
     box-shadow 0.18s ease,
@@ -1092,27 +677,13 @@ a.poi:focus-visible .poi-pin {
 .btn-primary {
   background: var(--forest);
   color: #fbf4e6;
-  box-shadow: 0 0.5rem 1.1rem rgba(23, 61, 41, 0.26);
+  box-shadow: 0 0.35rem 0.9rem rgba(23, 61, 41, 0.18);
 }
 
 .btn-primary:hover,
 .btn-primary:focus-visible {
   background: var(--deep-forest);
-  box-shadow: 0 0.7rem 1.5rem rgba(23, 61, 41, 0.34);
-  outline: none;
-  transform: translateY(-2px);
-}
-
-.btn-ghost {
-  background: rgba(255, 252, 245, 0.6);
-  border: 1px solid var(--copper);
-  color: var(--rust);
-}
-
-.btn-ghost:hover,
-.btn-ghost:focus-visible {
-  background: #fffdf7;
-  border-color: var(--rust);
+  box-shadow: 0 0.55rem 1.2rem rgba(23, 61, 41, 0.26);
   outline: none;
   transform: translateY(-2px);
 }
@@ -1321,42 +892,55 @@ a.poi:focus-visible .poi-pin {
 }
 
 .hero-portrait-wrap {
+  /* A length, not a percentage: half of it is the arch radius, and a percentage
+     in border-radius resolves against height for the vertical half — which
+     would turn the dome into an ellipse the moment the box stopped being
+     square. Keeping the width a length keeps the arch a true semicircle. */
+  --portrait-w: clamp(14.5rem, 32vw, 20.5rem);
+  --arch-gap: 1.35rem;
+  /* The outer arch is positioned, so the flow doesn't know it is there and the
+     names' swashes came up under it on narrow screens. */
+  margin-bottom: calc(var(--arch-gap) + 0.35rem);
   position: relative;
-  width: clamp(15rem, 34vw, 22rem);
-  aspect-ratio: 1;
+  width: var(--portrait-w);
+  /* Barely taller than it is wide, so the dome takes the top half and the
+     square photo lands in it whole — cover would otherwise trim their arms. */
+  aspect-ratio: 1 / 1.08;
   display: grid;
   place-items: center;
 }
 
-.hero-portrait-ring {
+/* The single forest line, traced concentrically outside the mat. */
+.hero-portrait-arch {
   position: absolute;
-  inset: -0.9rem;
-  border-radius: 50%;
-  border: 1.5px dashed rgba(155, 100, 58, 0.5);
+  inset: calc(-1 * var(--arch-gap));
+  border: 1px solid var(--arch-line);
+  border-radius:
+    calc(var(--portrait-w) / 2 + var(--arch-gap))
+    calc(var(--portrait-w) / 2 + var(--arch-gap))
+    0.75rem 0.75rem;
+  pointer-events: none;
 }
 
 .hero-portrait-clip {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
   overflow: hidden;
+  border-radius: calc(var(--portrait-w) / 2) calc(var(--portrait-w) / 2) 0.45rem
+    0.45rem;
   box-shadow:
-    0 0 0 0.5rem #fffdf7,
-    0 0 0 0.58rem var(--paper-shadow),
-    0 1.4rem 2.8rem rgba(31, 26, 17, 0.26);
+    0 0 0 0.6rem var(--arch-mat),
+    0 0.8rem 1.8rem rgba(31, 26, 17, 0.13);
 }
 
 .hero-portrait {
   width: 100%;
   height: 100%;
+  /* couple.webp is a square head-to-waist crop; the arch is taller than it is
+     wide, so cover trims the sides and shows the full height. */
   object-fit: cover;
-  /* couple.webp is pre-cropped to a square head-to-waist framing, so the circle
-     just needs object-fit: cover — the tiny scale nudges the corners out so the
-     dashed ring never reveals a straight edge. */
-  transform: scale(1.04);
-  transform-origin: 50% 42%;
+  object-position: 50% 50%;
 }
-
 
 .hero-names {
   color: var(--forest);
@@ -1416,23 +1000,24 @@ a.poi:focus-visible .poi-pin {
    ring, and soft drop shadow rather than running edge to edge. */
 .section-photo {
   position: relative;
-  width: min(100% - 2.4rem, 54rem);
-  margin: 0 auto clamp(2.2rem, 5vw, 3.5rem);
-  border-radius: 0.85rem;
-  box-shadow:
-    0 0 0 0.5rem #fffdf7,
-    0 0 0 0.6rem var(--paper-shadow),
-    0 1.6rem 3rem rgba(31, 26, 17, 0.2);
+  width: min(100% - 3.2rem, 42rem);
+  margin: 0 auto clamp(2.6rem, 5vw, 3.8rem);
+  /* The same arch, flattened: these are landscape shots, and a full round dome
+     would crop into the tops of their heads. The ratio is fixed here, so
+     percentages stay concentric on their own. */
+  border-radius: 50% 50% 0.5rem 0.5rem / 40% 40% 0.5rem 0.5rem;
+  /* Mat only, no drop shadow: the double frame is the whole idea, and a soft
+     shadow under it turned the photo into a sticker. */
+  box-shadow: 0 0 0 0.5rem var(--arch-mat);
 }
 
 .section-photo::after {
   content: '';
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
+  inset: -1.1rem;
+  border: 1px solid var(--arch-line);
+  border-radius: 50% 50% 0.8rem 0.8rem / 40% 40% 0.8rem 0.8rem;
   pointer-events: none;
-  /* Soft vignette so the photo settles into the warm paper. */
-  box-shadow: inset 0 0 4.5rem rgba(31, 26, 17, 0.18);
 }
 
 .section-photo-img {
@@ -1441,7 +1026,7 @@ a.poi:focus-visible .poi-pin {
   aspect-ratio: 16 / 10;
   object-fit: cover;
   object-position: 50% 40%;
-  border-radius: 0.85rem;
+  border-radius: inherit;
 }
 
 .home-section-head {
@@ -1467,352 +1052,85 @@ a.poi:focus-visible .poi-pin {
   margin: 0.7rem 0 0;
 }
 
-.home-ornament {
+/* The motif at its smallest: a little arch standing on a ground line. The
+   registry and placeholder pages share it, so every page is marked the same. */
+.home-ornament,
+.soon-ornament,
+.registry-ornament {
+  position: relative;
   background: linear-gradient(90deg, transparent, var(--copper), transparent);
   height: 1px;
-  margin: 1rem auto 0;
+  margin: 1.7rem auto 0;
   width: min(16rem, 70%);
 }
 
-/* Schedule ---------------------------------------------------------- */
-.schedule-list {
-  list-style: none;
-  margin: 0 auto;
-  padding: 0;
-  max-width: 50rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.schedule-stop {
-  --accent: var(--forest);
-}
-
-.schedule-link {
-  display: grid;
-  grid-template-columns: minmax(9rem, 0.5fr) auto 1fr;
-  align-items: center;
-  gap: clamp(1rem, 3vw, 2.2rem);
-  background: rgba(255, 252, 245, 0.55);
-  border: 1px solid rgba(155, 100, 58, 0.22);
-  border-left: 4px solid var(--accent);
-  border-radius: 0.9rem;
-  padding: clamp(1rem, 2.5vw, 1.5rem) clamp(1.1rem, 3vw, 1.9rem);
-  text-decoration: none;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background-color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.schedule-link:hover,
-.schedule-link:focus-visible {
-  background: #fffdf7;
-  border-color: rgba(155, 100, 58, 0.4);
-  border-left-color: var(--accent);
-  box-shadow: 0 0.7rem 1.6rem rgba(47, 42, 33, 0.12);
-  outline: none;
-  transform: translateX(4px);
-}
-
-.schedule-when {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.25;
-}
-
-.schedule-day {
-  color: var(--accent);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 1.35rem;
-  font-weight: 700;
-}
-
-.schedule-date {
-  color: var(--muted-ink);
-  font-family: var(--font-body), Georgia, serif;
-  font-size: 0.95rem;
-}
-
-.schedule-time {
-  color: var(--copper-light);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-top: 0.15rem;
-}
-
-.schedule-bullet {
-  width: 0.7rem;
-  height: 0.7rem;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 0.28rem color-mix(in srgb, var(--accent) 22%, transparent);
-}
-
-.schedule-what {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-}
-
-.schedule-kind {
-  color: var(--copper);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.schedule-title {
-  color: var(--ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.7rem, 3.4vw, 2.4rem);
-  font-weight: 700;
-  margin-top: 0.1rem;
-}
-
-.schedule-cue {
-  color: var(--accent);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  margin-top: 0.35rem;
-  opacity: 0.85;
-}
-
-/* A clear, button-styled RSVP for events with their own form, so it reads as
-   an action rather than a quiet cue link like "What to wear". */
-.schedule-rsvp {
-  align-self: flex-start;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-top: 0.75rem;
-  padding: 0.5rem 1.15rem;
-  border-radius: 999px;
-  background: var(--accent);
-  color: #fbf4e6;
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  box-shadow: 0 0.4rem 0.9rem rgba(47, 42, 33, 0.18);
-  transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease,
-    background-color 0.18s ease;
-}
-
-.schedule-link:hover .schedule-rsvp,
-.schedule-link:focus-visible .schedule-rsvp {
-  background: var(--accent-deep);
-  box-shadow: 0 0.65rem 1.3rem rgba(47, 42, 33, 0.26);
-  transform: translateY(-2px);
-}
-
-/* Events with two actions (RSVP + what to wear): the card is static and each
-   cue is its own link instead of the whole card being one link. */
-.schedule-link--static {
-  cursor: default;
-}
-
-.schedule-link--static:hover,
-.schedule-link--static:focus-within {
-  transform: none;
-  box-shadow: none;
-  background: rgba(255, 252, 245, 0.55);
-  border-color: rgba(155, 100, 58, 0.22);
-}
-
-.schedule-cues {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.6rem;
-  margin-top: 0.5rem;
-}
-
-.schedule-cues .schedule-cue,
-.schedule-cues .schedule-rsvp {
-  margin-top: 0;
-}
-
-a.schedule-cue-link {
-  text-decoration: none;
-  cursor: pointer;
-}
-
-a.schedule-cue.schedule-cue-link:hover,
-a.schedule-cue.schedule-cue-link:focus-visible {
-  opacity: 1;
-  text-decoration: underline;
-  outline: none;
-}
-
-a.schedule-rsvp.schedule-cue-link:hover,
-a.schedule-rsvp.schedule-cue-link:focus-visible {
-  background: var(--accent-deep);
-  box-shadow: 0 0.65rem 1.3rem rgba(47, 42, 33, 0.26);
-  transform: translateY(-2px);
-  outline: none;
-}
-
-/* Explore cards ----------------------------------------------------- */
-.explore-grid {
-  display: grid;
-  /* Single Wardrobe card for now (Venue Map is parked): one centered column at
-     roughly the old two-up card width rather than a lone card in the left slot. */
-  grid-template-columns: min(27rem, 100%);
-  justify-content: center;
-  gap: clamp(1.2rem, 3vw, 2rem);
-  max-width: 56rem;
-  margin: 0 auto;
-}
-
-.explore-card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background: rgba(255, 252, 245, 0.6);
-  border: 1px solid rgba(155, 100, 58, 0.22);
-  border-radius: 1.1rem;
-  overflow: hidden;
-  text-decoration: none;
-  box-shadow: 0 0.6rem 1.4rem rgba(47, 42, 33, 0.08);
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
-}
-
-.explore-card:hover {
-  border-color: rgba(155, 100, 58, 0.45);
-  box-shadow: 0 1.1rem 2.4rem rgba(47, 42, 33, 0.16);
-}
-
-.explore-art {
-  aspect-ratio: 16 / 11;
-  overflow: hidden;
-  background: radial-gradient(circle at 50% 40%, #fbf3e3, #ecdcc0);
-  display: grid;
-  place-items: center;
-}
-
-.explore-art img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  padding: 0.6rem;
-  transition: transform 0.4s ease;
-}
-
-.explore-card:hover .explore-art img {
-  transform: scale(1.05);
-}
-
-.explore-body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: clamp(1.2rem, 2.5vw, 1.7rem);
-}
-
-.explore-kicker {
-  color: var(--copper);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  margin: 0;
-}
-
-.explore-title {
-  color: var(--forest);
-  font-family: var(--font-script), cursive;
-  font-size: clamp(2.2rem, 4.5vw, 3rem);
-  line-height: 1;
-  margin: 0.6rem 0 0.6rem;
-}
-
-.explore-blurb {
-  color: var(--muted-ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1rem, 1.6vw, 1.15rem);
-  line-height: 1.45;
-  margin: 0;
-}
-
-.explore-cue {
-  color: var(--rust);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  margin-top: auto;
-  padding-top: 1rem;
+.home-ornament::before,
+.soon-ornament::before,
+.registry-ornament::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 1.2rem;
+  height: 0.66rem;
+  margin-left: -0.6rem;
+  border: 1px solid var(--copper);
+  border-bottom: 0;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
 }
 
 /* Travel ------------------------------------------------------------ */
-.travel-intro,
+.travel-intro {
+  margin: 0 auto clamp(2rem, 4vw, 2.8rem);
+  max-width: 40rem;
+}
 
-.travel-intro p,
+.travel-intro p {
+  color: var(--copper-light);
+  font-family: var(--font-body), Georgia, serif;
+  font-size: clamp(0.95rem, 1.35vw, 1.06rem);
+  font-style: italic;
+  line-height: 1.6;
+  margin: 0;
+  text-align: center;
+  text-wrap: pretty;
+}
 
 .travel-notes {
-  display: grid;
-  /* auto-fit, so a lone note fills the row instead of sitting half-width */
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
-  gap: clamp(1.2rem, 3vw, 2rem);
-  max-width: 54rem;
-  margin: 0 auto clamp(1.2rem, 3vw, 2rem);
+  margin: 0 auto;
+  max-width: 40rem;
 }
 
-.travel-note {
-  background: rgba(255, 252, 245, 0.55);
-  border: 1px solid rgba(155, 100, 58, 0.22);
-  border-radius: 1rem;
-  padding: clamp(1.2rem, 2.5vw, 1.7rem);
-}
-
+/* No card: on a watercolour page the practical paragraphs read better as
+   plain centred prose under a letterspaced label, the way each event's date
+   line sits above its own note. */
 .travel-note h3 {
-  color: var(--forest);
+  color: var(--copper-light);
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.3rem, 2.4vw, 1.6rem);
+  font-size: clamp(1.05rem, 1.5vw, 1.2rem);
   font-weight: 700;
-  margin: 0 0 0.5rem;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.7rem;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .travel-note p {
   color: var(--muted-ink);
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1rem, 1.6vw, 1.12rem);
-  line-height: 1.5;
-  margin: 0 0 0.8rem;
-}
-
-/* Hotel card meta line (area · rate) inside the Travel cards grid. */
-.travel-note .travel-note-meta {
-  color: var(--copper);
-  font-weight: 700;
-  margin-bottom: 0.45rem;
+  font-size: clamp(1.05rem, 1.7vw, 1.18rem);
+  line-height: 1.62;
+  margin: 0;
+  text-align: center;
+  text-wrap: pretty;
 }
 
 .travel-lists {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(1.2rem, 3vw, 2rem);
-  max-width: 54rem;
-  margin: 0 auto;
-}
-
-.travel-list {
-  background: rgba(255, 252, 245, 0.4);
-  border: 1px solid rgba(155, 100, 58, 0.18);
-  border-radius: 1rem;
-  padding: clamp(1.2rem, 2.5vw, 1.7rem);
+  gap: clamp(2rem, 5vw, 3.6rem);
+  max-width: 52rem;
+  margin: clamp(2.6rem, 5vw, 3.6rem) auto 0;
 }
 
 .travel-list-title {
@@ -1820,29 +1138,23 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   font-family: var(--font-script), cursive;
   font-size: clamp(1.9rem, 3.6vw, 2.5rem);
   line-height: 1;
-  margin: 0 0 1rem;
+  margin: 0 0 1.1rem;
   text-align: center;
+  word-spacing: 0.14em;
 }
 
 .travel-list ul {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
+  border-top: 1px solid var(--rule);
 }
 
 .travel-list li {
-  border-bottom: 1px dashed rgba(155, 100, 58, 0.22);
-  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--rule);
   display: flex;
   flex-direction: column;
-}
-
-.travel-list li:last-child {
-  border-bottom: 0;
-  padding-bottom: 0;
+  padding: 0.8rem 0.15rem;
 }
 
 .travel-spot-name {
@@ -1850,7 +1162,7 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   color: var(--ink);
   font-family: var(--font-display), Georgia, serif;
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.12rem;
   text-decoration: none;
   background-image: linear-gradient(var(--rust), var(--rust));
   background-position: 0 100%;
@@ -1874,7 +1186,7 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   font-size: 0.9rem;
   font-style: italic;
   line-height: 1.4;
-  margin-top: 0.2rem;
+  margin-top: 0.22rem;
 }
 
 /* Q & A ------------------------------------------------------------- */
@@ -1882,17 +1194,13 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   list-style: none;
   margin: 0 auto;
   padding: 0;
-  max-width: 48rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
+  max-width: 44rem;
+  border-top: 1px solid var(--rule);
 }
 
+/* Hairlines instead of cards, matching the rules between events. */
 .faq-item {
-  background: rgba(255, 252, 245, 0.5);
-  border: 1px solid rgba(155, 100, 58, 0.2);
-  border-radius: 0.85rem;
-  overflow: hidden;
+  border-bottom: 1px solid var(--rule);
 }
 
 .faq-q {
@@ -1905,11 +1213,17 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   border: 0;
   cursor: pointer;
   text-align: left;
-  padding: clamp(1rem, 2.2vw, 1.3rem) clamp(1.1rem, 2.5vw, 1.5rem);
+  padding: clamp(1.05rem, 2.2vw, 1.35rem) 0.15rem;
   color: var(--ink);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(1.1rem, 2vw, 1.32rem);
   font-weight: 700;
+  transition: color 0.18s ease;
+}
+
+.faq-q:hover,
+.faq-q:focus-visible {
+  color: var(--rust);
 }
 
 .faq-icon {
@@ -1926,21 +1240,23 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 .faq-a p {
   color: var(--muted-ink);
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1rem, 1.7vw, 1.18rem);
-  line-height: 1.55;
+  font-size: clamp(1.02rem, 1.7vw, 1.18rem);
+  line-height: 1.6;
   margin: 0;
-  padding: 0 clamp(1.1rem, 2.5vw, 1.5rem) clamp(1.1rem, 2.4vw, 1.4rem);
+  padding: 0 0.15rem clamp(1.1rem, 2.4vw, 1.4rem);
+  max-width: 38rem;
+  text-wrap: pretty;
 }
 
-/* When an answer carries a call-to-action (e.g. the hotel reservation link),
-   it sits beneath the copy and only adds the bottom padding the <p> drops. */
+/* When an answer carries a call-to-action it sits beneath the copy and only
+   adds the bottom padding the <p> drops. */
 .faq-a p:has(+ .faq-link) {
-  padding-bottom: 0.6rem;
+  padding-bottom: 0.55rem;
 }
 
 .faq-link {
   display: inline-block;
-  margin: 0 clamp(1.1rem, 2.5vw, 1.5rem) clamp(1.1rem, 2.4vw, 1.4rem);
+  margin: 0 0.15rem clamp(1.1rem, 2.4vw, 1.4rem);
   color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(1rem, 1.7vw, 1.18rem);
@@ -2069,36 +1385,13 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
     outline: none;
   }
 
-  .explore-grid,
   .travel-notes,
   .travel-lists {
     grid-template-columns: 1fr;
   }
-
 }
 
 @media (max-width: 560px) {
-  .schedule-link {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-    text-align: left;
-  }
-
-  .schedule-bullet {
-    display: none;
-  }
-
-  .schedule-when {
-    flex-direction: row;
-    align-items: baseline;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-  }
-
-  .schedule-time {
-    margin-top: 0;
-  }
-
   /* Stack the date and venue cleanly; the inline dot would dangle at the end
      of the date line once the venue wraps below it. */
   .hero-meta {
@@ -2159,9 +1452,7 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 }
 
 .soon-ornament {
-  background: linear-gradient(90deg, transparent, var(--copper), transparent);
-  height: 1px;
-  margin: 1.1rem auto 1.4rem;
+  margin-bottom: 1.4rem;
   width: min(15rem, 100%);
 }
 
@@ -2231,9 +1522,7 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 }
 
 .registry-ornament {
-  background: linear-gradient(90deg, transparent, var(--copper), transparent);
-  height: 1px;
-  margin: 1.1rem auto 1.5rem;
+  margin-bottom: 1.5rem;
   width: min(15rem, 100%);
 }
 
@@ -2253,15 +1542,17 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 
 .registry-cta {
   background: var(--forest);
-  border-radius: 999px;
-  box-shadow: 0 10px 24px -14px rgba(23, 61, 41, 0.75);
+  border-radius: 50% 50% 0.4rem 0.4rem / 44% 44% 0.4rem 0.4rem;
+  box-shadow: 0 0.35rem 0.9rem rgba(23, 61, 41, 0.18);
   color: var(--paper);
   display: inline-block;
   font-family: var(--font-display), Georgia, serif;
   font-size: 1.05rem;
   font-weight: 600;
   letter-spacing: 0.06em;
-  padding: 0.85rem 2.1rem;
+  min-width: 16rem;
+  padding: 1.3rem 2.1rem 1rem;
+  text-align: center;
   text-decoration: none;
   transition:
     background 0.18s ease,
@@ -2367,54 +1658,31 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 }
 
 /* ------------------------------------------------------------------ *
- * Schedule — served on both /schedule and /wardrobe. Times on the
- * left, the wardrobe artwork on the right with its dress code set as
- * an overlapping caption, and one note centred beneath the pair.
+ * Schedule — the four events, rendered inline in the homepage's
+ * #schedule section. Times on the left, the wardrobe artwork on the
+ * right with its dress code set as an overlapping caption, and one
+ * note centred beneath the pair.
  * ------------------------------------------------------------------ */
 
-.sched-site {
+/* The homepage column already supplies the page gutter, so the events only
+   need their own measure. */
+.sched-stack {
   --sched-col: 1000px;
-  --sched-rule: rgba(155, 100, 58, 0.26);
-  padding-bottom: clamp(3rem, 6vw, 5rem);
 }
 
-.sched-intro,
 .sched-event,
-.sched-divider,
-.sched-wx-credit {
+.sched-divider {
   width: 100%;
   max-width: var(--sched-col);
   margin-inline: auto;
-  padding-inline: 1.5rem;
-}
-
-.sched-intro {
-  padding-top: calc(var(--nav-h) + clamp(1.5rem, 4vw, 2.75rem));
-  text-align: center;
-}
-
-/* The global h1 caps at 10ch for the hero; this one is a single word. */
-.sched-intro h1 {
-  color: var(--forest);
-  word-spacing: 0.18em;
-  font-size: clamp(3.4rem, 8vw, 5.6rem);
-  max-width: none;
-}
-
-.sched-ornament {
-  background: linear-gradient(90deg, transparent, var(--copper), transparent);
-  height: 1px;
-  margin: 1.4rem auto 0;
-  max-width: 22rem;
-  opacity: 0.85;
 }
 
 /* Marks the watch party as an optional extra rather than a peer event. */
 .sched-divider {
-  padding-top: clamp(1.4rem, 3vw, 2rem);
+  padding-top: clamp(1.2rem, 3vw, 1.9rem);
 }
 
-.sched-divider .sched-ornament {
+.sched-divider .home-ornament {
   margin-top: 0;
 }
 
@@ -2425,14 +1693,20 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   --accent: var(--forest);
   --accent-sec: var(--rust);
   --accent-mark: var(--rust);
-  padding-block: clamp(2.4rem, 5vw, 3.25rem);
-  scroll-margin-top: var(--nav-h);
+  padding-block: clamp(2.6rem, 5vw, 3.5rem);
+  scroll-margin-top: calc(var(--nav-h) + 1rem);
 }
 
-/* The divider sits between the reception and the watch party, so the two are
-   not adjacent siblings and the watch party correctly takes no rule. */
-.sched-event + .sched-event {
-  border-top: 1px solid var(--sched-rule);
+/* :not(:first-of-type) rather than an adjacent-sibling rule, because the
+   forecast credit sits between two of the events and would otherwise take the
+   rule away from the one below it. */
+.sched-stack > .sched-event:not(:first-of-type) {
+  border-top: 1px solid var(--rule);
+}
+
+/* The ornament above the watch party is its own divider; no rule as well. */
+.sched-stack > .sched-divider + .sched-event {
+  border-top: 0;
 }
 
 .sched-head {
@@ -2605,17 +1879,71 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 }
 
 .sched-venue {
-  margin: 1.25rem 0 0;
+  margin: 1.5rem 0 0;
   text-align: center;
+}
+
+/* A doorway in the event's own colour rather than the site's green button:
+   nothing else on this page is a filled box, and one drop-shadowed pill on
+   watercolour paper read as a control borrowed from somewhere else. */
+.sched-venue-link {
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: 50% 50% 0.4rem 0.4rem / 46% 46% 0.4rem 0.4rem;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  padding: 1.55rem 1.6rem 1.05rem;
+  text-decoration: none;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease;
+  width: 17rem;
+  max-width: 100%;
+}
+
+.sched-venue-link:hover,
+.sched-venue-link:focus-visible {
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 75%, transparent);
+  outline: none;
+}
+
+.sched-venue-name {
+  color: var(--accent);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+}
+
+.sched-venue-area {
+  color: var(--muted-ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.sched-venue-cue {
+  color: var(--accent-sec);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  margin-top: 0.35rem;
+  text-transform: uppercase;
 }
 
 .sched-wx-credit {
   color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
-  font-size: 0.95rem;
+  font-size: 0.875rem;
   letter-spacing: 0.1em;
-  margin: clamp(1.8rem, 4vw, 2.6rem) auto 0;
-  opacity: 0.6;
+  margin: 0;
+  opacity: 0.55;
+  padding-bottom: clamp(2.6rem, 5vw, 3.5rem);
   text-align: center;
   text-transform: uppercase;
 }

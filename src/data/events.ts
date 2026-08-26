@@ -6,7 +6,7 @@ export interface TimelineEntry {
 export interface WeddingEvent {
   /** Section accent palette, set per className in index.css. */
   className: 'sunset-ceremony' | 'carnival-garden' | 'forest-gala' | 'seahawks-opener'
-  /** Anchor id, so other pages can deep-link to /schedule#<anchor>. */
+  /** Anchor id, so other pages can deep-link to /#<anchor>. */
   anchor: string
   title: string
   /** Date line under the title. Start times live in the timeline, not here. */
@@ -43,7 +43,7 @@ export interface WeddingEvent {
   /** What the event is and what to wear to it, in one voice. */
   note: string
   /** Optional venue link rendered as a button (the watch party). */
-  venue?: { label: string; url: string }
+  venue?: { name: string; area: string; url: string }
   /** Draws an ornament divider before the panel, marking it as an optional extra. */
   divider?: boolean
 }
@@ -135,7 +135,8 @@ export const events: WeddingEvent[] = [
     artWidth: '420px',
     divider: true,
     venue: {
-      label: 'Sam’s Tavern SLU',
+      name: 'Sam’s Tavern',
+      area: 'South Lake Union',
       url: 'https://maps.app.goo.gl/GnV7sKQTn7k1LSkr6',
     },
     note: 'Quite the summer for rings in Seattle. Join us to celebrate Abha, Udit, and the Seahawks as they all run it back for more. Go Hawks!',
