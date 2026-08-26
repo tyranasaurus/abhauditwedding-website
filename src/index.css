@@ -2396,6 +2396,7 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 /* The global h1 caps at 10ch for the hero; this one is a single word. */
 .sched-intro h1 {
   color: var(--forest);
+  word-spacing: 0.18em;
   font-size: clamp(3.4rem, 8vw, 5.6rem);
   max-width: none;
 }
@@ -2441,6 +2442,9 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 
 .sched-head h2 {
   color: var(--accent);
+  /* Carattere's swashes overrun their advance widths, so "Night Away" collides
+     without extra room between words. */
+  word-spacing: 0.18em;
   font-size: clamp(2.6rem, 6.4vw, 4.6rem);
   text-wrap: balance;
 }
@@ -2487,14 +2491,19 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   list-style: none;
   margin: 0;
   padding: 0;
-  width: fit-content;
+  /* Fixed, not fit-content: the spine is the strongest vertical on the page and
+     was landing at three different x positions as you scrolled. */
+  width: 19.5rem;
   max-width: 100%;
   border-left: 1px solid color-mix(in srgb, var(--accent-mark) 45%, transparent);
 }
 
 .sched-times li {
   display: grid;
-  grid-template-columns: max-content max-content;
+  /* A fixed first track is shared by every row. max-content is not: each li is
+     its own grid container, so it sized to that row's own string and the labels
+     ragged by 11px wherever the hours were not all the same width. */
+  grid-template-columns: 3.9em max-content;
   gap: 0.95rem;
   align-items: baseline;
   padding: 1.4rem 0 1.4rem 1.5rem;
@@ -2519,7 +2528,9 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   color: var(--accent);
   font-family: var(--font-display), Georgia, serif;
   font-size: 1.45rem;
-  font-variant-numeric: tabular-nums;
+  /* Cormorant defaults to old-style figures, so digit heights vary by glyph and
+     the times neither align nor sit level with their bullets. */
+  font-variant-numeric: lining-nums tabular-nums;
   font-weight: 700;
   /* No tracking: Cormorant has no tabular figures, so letter-spacing prises the
      digits of "11" and "12" apart into "1 1". */
@@ -2568,6 +2579,7 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 
 .sched-vibe {
   color: var(--accent);
+  word-spacing: 0.16em;
   font-family: var(--font-script), cursive;
   font-size: clamp(2.28rem, 4.08vw, 3rem);
   font-weight: 400;
@@ -2599,7 +2611,7 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 }
 
 .sched-wx-credit {
-  color: var(--copper);
+  color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-size: 0.95rem;
   letter-spacing: 0.1em;
