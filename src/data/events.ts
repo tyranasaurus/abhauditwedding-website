@@ -54,9 +54,9 @@ export const events: WeddingEvent[] = [
     date: 'Saturday, September 5',
     forecastWindow: { date: '2026-09-05', from: 15, to: 22 },
     vibe: 'Traditional Elegance',
-    // Sunset orange off the figures; the sky's goldenrod deepened to carry text.
-    accents: { primary: '#d0601e', secondary: '#885f11' },
-    vibeColors: ['#d0601e', '#885f11'],
+    // Sunset orange off the figures; the sky's sunflower, pitched to stay legible.
+    accents: { primary: '#d0601e', secondary: '#a07903' },
+    vibeColors: ['#d0601e', '#a07903'],
     image: '/art/shaadi.webp',
     imageAlt: 'Four guests dressed for the Sunset Shaadi ceremony',
     imageWidth: 800,

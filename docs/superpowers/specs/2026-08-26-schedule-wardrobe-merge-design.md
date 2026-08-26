@@ -88,7 +88,7 @@ Two roles per event, and the mapping is the same for every event:
 
 | event | primary | secondary |
 |---|---|---|
-| Sunset Shaadi | `#d0601e` sunset orange | `#885f11` dark goldenrod, from the sky |
+| Sunset Shaadi | `#d0601e` sunset orange | `#a07903` sunflower, from the sky |
 | Carnival | `#d94b6d` pink | `#755798` purple |
 | Sangeet | `#28433a` deep forest | `#9e521a` copper |
 | Seahawks | `#33486e` navy | `#4f7029` action green |
@@ -98,8 +98,12 @@ Captions: *Traditional* / **Elegance** · *Colors* **in** *Bloom* · *Glitz*
 Carnival's "Colors" is blue `#3685ad`, a caption-only third note, because that
 artwork is a full rainbow and one accent under-sells it.
 
-**Every secondary is deepened along its own hue to roughly 5:1** on the paper —
-4.93 to 5.10 across the four. That is a colour-role decision, not a contrast
+**Every secondary is pitched against the large-text bar**, which is what it is
+actually used at: 48px in the caption and 21.6px semibold in the labels, both of
+which WCAG counts as large, so the threshold is 3:1 rather than 4.5:1. The
+purple, copper and green sit near 5:1; the shaadi's sunflower is deliberately
+brighter at 3.49:1, because pushing it to 5:1 turns it olive and it stops being
+a sunflower at all. That is a colour-role decision, not a contrast
 afterthought: the secondary has to carry timeline label text as well as
 decoration, and the artwork's own tones are far too pale for that (sampled
 straight from the images they sit at 1.2–2.2:1). An earlier pass gave labels
@@ -107,14 +111,26 @@ their own per-event colour chosen purely for legibility, which fixed contrast
 but broke the system — three of the four events ended up mapping roles
 differently. One secondary doing all three jobs is what keeps it consistent.
 
-Sunflower yellow is the limit case: at 4.5:1 it stops reading as yellow, so the
-shaadi's goldenrod is the deepest of the set. The note paragraph and the
+The note paragraph and the
 date/forecast line stay global (`--copper-light`) and are never event-coloured,
 so nothing carrying sustained reading load depends on an event's palette.
 
-The caption is set 20% larger than before. Its overlap onto the painting is an
-`em` margin, so that bump was paired with rescaling the margin from `-0.62em` to
-`-0.517em`, holding the 11 / 11 / 17 / 6 px alignment.
+## Timeline typography
+
+The time is the thing worth seeing, so it is 1.45rem bold in the primary, and the
+meridiem is a single lowercase letter at 0.6em and 55% opacity — `3:30p`. It
+disambiguates without competing. The full `3:30 PM` stays in `aria-label`, and the
+letter itself is `aria-hidden`, so screen readers still hear the real time.
+
+The time column is right-aligned: the carnival mixes one- and two-digit hours, so
+this lines the meridiems up and tucks each time against its own label.
+
+## Caption placement
+
+The caption sits 20% larger than it began and overlaps the artwork by 8 / 8 / 14 /
+3 px. That overlap is an `em` margin, so it moves whenever the font size does —
+the 20% bump was paired with rescaling `-0.62em` to `-0.517em` to hold the
+alignment, then nudged to `-0.465em` to sit a little lower on the painting.
 
 ## Artwork## Artwork## Artwork
 

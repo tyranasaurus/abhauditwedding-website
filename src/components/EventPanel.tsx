@@ -60,12 +60,30 @@ export function EventPanel({
       <div className={`sched-cols${event.timeline ? '' : ' is-solo'}`}>
         {event.timeline && (
           <ol className="sched-times">
-            {event.timeline.map((entry) => (
-              <li key={`${entry.time} ${entry.label}`}>
-                <time>{entry.time}</time>
-                <span className="sched-what">{entry.label}</span>
-              </li>
-            ))}
+            {event.timeline.map((entry) => {
+              // "3:30 PM" sets as 3:30 with a small quiet p, so the hour is what
+              // catches the eye rather than the meridiem.
+              const parts = entry.time.match(/^(.*?)\s*([AP])M$/i)
+              const clock = parts?.[1]
+              const meridiem = parts?.[2]
+              return (
+                <li key={`${entry.time} ${entry.label}`}>
+                  <time aria-label={entry.time}>
+                    {clock && meridiem ? (
+                      <>
+                        {clock}
+                        <span className="sched-meridiem" aria-hidden="true">
+                          {meridiem.toLowerCase()}
+                        </span>
+                      </>
+                    ) : (
+                      entry.time
+                    )}
+                  </time>
+                  <span className="sched-what">{entry.label}</span>
+                </li>
+              )
+            })}
           </ol>
         )}
 
