@@ -2065,8 +2065,38 @@ a.poi:focus-visible .poi-pin {
 }
 
 .sched-wx {
+  /* The forecast never breaks across lines mid-reading. */
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
+}
+
+/* The long form is the default; the brief one only exists for the narrow
+   panel. */
+.sched-date-brief {
+  display: none;
+}
+
+/* Keyed to the panel's own width rather than the window's, so it is the
+   measure of the line that decides — a panel is narrow on a phone and also
+   narrow in the stacked laptop layout. This block sits after the rules it
+   overrides: a @container rule loses to a later rule of equal specificity. */
+@container (max-width: 480px) {
+  .sched-date-full {
+    display: none;
+  }
+
+  .sched-date-brief {
+    display: inline;
+  }
+
+  /* inline-block rather than block, so the forecast takes a line of its own
+     only when the date and the temperatures genuinely cannot share one. */
+  .sched-wx {
+    display: inline-block;
+    /* An inline-block drops the whitespace at its own leading edge, which ate
+       the space before the separator. */
+    margin-left: 0.32em;
+  }
 }
 
 /* Line art at the cap height of the date it sits in, inked in the same copper
@@ -2083,8 +2113,16 @@ a.poi:focus-visible .poi-pin {
    centred event name rather than drifting into two half-empty columns. */
 .sched-cols {
   display: grid;
-  grid-template-columns: minmax(0, max-content) minmax(0, var(--art, 420px));
-  gap: clamp(1.4rem, 4.4vw, 4rem);
+  /* --art is the picture this event asked for; --art-cap is what the panel can
+     actually afford at its current width. The pair is what lets a narrow panel
+     keep the timeline beside its painting instead of stacking. */
+  grid-template-columns:
+    minmax(0, max-content)
+    minmax(0, min(var(--art, 420px), var(--art-cap, 420px)));
+  /* The list and the painting are one object, so the space between them has to
+     read as smaller than the space between rows of the list — 70px. It used to
+     be 64px, near enough to the pitch that the pair stopped grouping. */
+  gap: clamp(1rem, 2.6vw, 2.4rem);
   align-items: center;
   justify-content: center;
 }
@@ -2102,8 +2140,12 @@ a.poi:focus-visible .poi-pin {
   margin: 0;
   padding: 0;
   /* Fixed, not fit-content: the spine is the strongest vertical on the page and
-     was landing at three different x positions as you scrolled. */
-  width: 22rem;
+     was landing at three different x positions as you scrolled. The cost of
+     sharing one width is that every panel is as wide as the longest label
+     anywhere in the schedule — "Carnival Festival Begins", which needs 320px —
+     so a panel of short labels carries the difference as slack on its right.
+     20rem is that longest label exactly, with nothing spare. */
+  width: 20rem;
   max-width: 100%;
   border-left: 1px solid color-mix(in srgb, var(--accent-mark) 45%, transparent);
 }
@@ -2201,7 +2243,18 @@ a.poi:focus-visible .poi-pin {
 
 /* Below 830px of *panel* the two tracks stop fitting, so the artwork goes
    above the times at its full width instead of being crushed beside them. */
+/* A 13-15" laptop puts the panel at 685px. It used to fall straight through to
+   the stacked layout, which cost 1,600px of page height and left the timeline
+   as a 352px island in the middle of an empty band. It stays side by side now;
+   the picture gives up what the pair needs to fit. */
 @container (max-width: 830px) {
+  .sched-cols {
+    --art-cap: 340px;
+  }
+}
+
+/* Only a phone stacks. */
+@container (max-width: 560px) {
   .sched-cols,
   .sched-cols.is-solo {
     grid-template-columns: minmax(0, 1fr);
