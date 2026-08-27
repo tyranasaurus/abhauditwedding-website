@@ -160,8 +160,8 @@ export const events: WeddingEvent[] = [
     vibe: '12th Man Spirit',
     // The club's own two: College Navy and Action Green.
     accents: { primary: '#002244', secondary: '#69be28' },
-    // Green, navy, green — "12th" and "Spirit" carry the green.
-    vibeColors: ['#69be28', '#002244', '#69be28'],
+    // Navy, green, navy — the club leads with navy, so the caption does too.
+    vibeColors: ['#002244', '#69be28', '#002244'],
     captionDrop: '0.32em',
     image: '/art/seahawks.webp',
     imageAlt: 'Four guests in Seahawks gear at a game-day watch party',
