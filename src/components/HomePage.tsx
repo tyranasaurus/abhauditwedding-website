@@ -509,13 +509,19 @@ export function HomePage() {
   return (
     <div className="home" id="top">
       <SiteNav />
-      <Hero />
-      <main className="home-main">
-        <Schedule />
-        <Travel />
-        <Faq />
-      </main>
-      <Footer />
+      {/* The painting is a set the page walks across: a fixed plate that never
+          scrolls, with the whole document travelling over it inside a
+          translucent column. */}
+      <div className="page-plate" aria-hidden="true" />
+      <div className="page-column">
+        <Hero />
+        <main className="home-main">
+          <Schedule />
+          <Travel />
+          <Faq />
+        </main>
+        <Footer />
+      </div>
       <RegistryBubble />
     </div>
   )

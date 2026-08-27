@@ -8,7 +8,10 @@ export function SeatingChart() {
   return (
     <>
       <SiteNav />
-      <main className="soon-page" aria-labelledby="seating-title">
+      {/* Same painted plate as the homepage, so the link doesn't drop guests
+          onto a bare page. */}
+      <div className="page-plate" aria-hidden="true" />
+      <main className="soon-page page-column" aria-labelledby="seating-title">
         <p className="soon-kicker">Seating chart</p>
         <h1 id="seating-title" className="soon-title">
           Coming soon

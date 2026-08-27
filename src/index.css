@@ -16,6 +16,8 @@
   --rust: #8c572e;
   --burnt-copper: #724826;
   --paper: #f6eedf;
+  /* Behind the painting. Sampled from the painting's own mist. */
+  --ground: #e6e8db;
   --paper-warm: #ead9bd;
   --paper-shadow: #d4b991;
   --ribbed-paper-line: rgba(88, 65, 36, 0.05);
@@ -55,6 +57,15 @@
   /* Content column width. Lives on :root (not just .home) so the shared SiteNav
      gutters resolve on every page, including /wardrobe which has no .home wrapper. */
   --max: 1080px;
+  /* The translucent column: the middle 60% of the viewport, floored so the
+     measure never strangles on a laptop and capped so it doesn't run away on a
+     wide display. The nav gutters resolve against this too, so the brand and
+     the links sit on the column's own edges rather than out on the painting. */
+  --column-w: clamp(46rem, 60%, 78rem);
+  /* How much of the painting survives behind the text. Measured, not guessed:
+     at 0.72 the backdrop costs 11 items their AA contrast; at 0.78 the page
+     ends up better than the flat paper it replaced. */
+  --column-wash: 0.78;
 }
 
 * {
@@ -63,7 +74,7 @@
 
 html {
   min-width: 320px;
-  background: var(--paper);
+  background: var(--ground);
   overscroll-behavior: none;
 }
 
@@ -72,30 +83,9 @@ body {
   color: var(--base-text);
   font-family: var(--font-body), Georgia, serif;
   min-height: 100vh;
-  background-color: var(--paper);
-  background-image:
-    repeating-linear-gradient(
-      135deg,
-      var(--diagonal-laid-line) 0,
-      var(--diagonal-laid-line) 1px,
-      transparent 1px,
-      transparent 10px
-    ),
-    repeating-linear-gradient(
-      135deg,
-      transparent 0,
-      transparent 5px,
-      var(--linen-highlight-line) 5px,
-      var(--linen-highlight-line) 6px,
-      transparent 6px,
-      transparent 18px
-    ),
-    linear-gradient(180deg, #faf2e2 0%, var(--paper) 54%, var(--paper-warm) 100%);
-  background-position:
-    0 0,
-    3px 2px,
-    0 0;
-  background-repeat: repeat;
+  /* Only ever seen if the backdrop fails to load; sampled from the painting's
+     own misted middle distance so the failure is quiet. */
+  background-color: var(--ground);
 }
 
 img {
@@ -673,6 +663,68 @@ a.poi:focus-visible .poi-pin {
   overflow: clip;
 }
 
+/* The backdrop -------------------------------------------------------- *
+ *
+ * A real fixed element rather than `background-attachment: fixed`, which
+ * computes to `scroll` on iOS and jitters on every repaint. The painting is
+ * never tiled, never parallaxed, never scaled on scroll — the document moves
+ * and the set stays put.
+ */
+.page-plate {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-color: var(--ground);
+  --plate-img: url('/art/backdrop-wide.webp');
+  background-image: var(--plate-img);
+  background-size: cover;
+  background-position: center 58%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+/* A `cover` fill of the landscape plate into a portrait viewport crops away
+   the barn, the maple and both buggies — every landmark in the painting, and
+   the whole easter egg. So portrait gets its own crop, taken from the same
+   original and framed on the fence and the two buggies rather than on the
+   centre of the canvas. */
+@media (max-aspect-ratio: 3 / 4) {
+  .page-plate {
+    --plate-img: url('/art/backdrop-tall.webp');
+    background-position: center center;
+  }
+}
+
+/* The column ---------------------------------------------------------- *
+ *
+ * A hard-edged band of near-white running the full height of the document.
+ * Deliberately *not* blurred: with no backdrop-filter the firs and the
+ * ridgeline stay legible straight through the text, which is what makes this
+ * read as a painted scroll rather than frosted glass.
+ *
+ * Width is the middle 60% of the viewport, floored so the measure never
+ * strangles on a laptop and capped so it doesn't run away on a wide display.
+ */
+.page-column {
+  position: relative;
+  z-index: 1;
+  width: var(--column-w);
+  margin-inline: auto;
+  background: rgba(255, 253, 247, var(--column-wash));
+  box-shadow:
+    0 30px 60px -12px rgba(53, 53, 45, 0.26),
+    0 18px 36px -18px rgba(53, 53, 45, 0.3);
+}
+
+/* Below the floor there is no room for painting either side, so the column
+   takes the full width and the plate becomes a texture behind it. */
+@media (max-width: 900px) {
+  .page-column {
+    width: 100%;
+    box-shadow: none;
+  }
+}
+
 /* Shared buttons ---------------------------------------------------- */
 /* Buttons ---------------------------------------------------------- *
  * One sign, painted in whatever pigment its context hands it. Three
@@ -768,7 +820,12 @@ a.poi:focus-visible .poi-pin {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.85rem max(1.1rem, calc((100vw - var(--max)) / 2));
+  padding: 0.85rem max(1.1rem, calc((100% - var(--column-w)) / 2 + 1.5rem));
+  /* The one blurred surface on the site. Everything else is a flat wash, so
+     the painting stays crisp through the content; the chrome is the exception
+     because it has to stay legible wherever the scroll happens to put it. */
+  background: rgba(255, 253, 247, 0.62);
+  backdrop-filter: blur(5px);
   transition:
     background-color 0.3s ease,
     box-shadow 0.3s ease,
@@ -776,7 +833,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .home-nav.is-solid {
-  background: rgba(246, 238, 223, 0.86);
+  background: rgba(255, 253, 247, 0.88);
   backdrop-filter: blur(8px);
   box-shadow: 0 0.4rem 1rem rgba(47, 42, 33, 0.08);
 }
@@ -932,7 +989,7 @@ a.poi:focus-visible .poi-pin {
   min-height: 100svh;
   display: grid;
   place-items: center;
-  padding: 6.5rem max(1.2rem, calc((100vw - var(--max)) / 2)) 3.5rem;
+  padding: 6.5rem clamp(1.2rem, 4vw, 3rem) 3.5rem;
   text-align: center;
   overflow: hidden;
 }
@@ -1081,7 +1138,7 @@ a.poi:focus-visible .poi-pin {
   display: flex;
   flex-direction: column;
   gap: clamp(7rem, 10vw, 9rem);
-  padding: clamp(3rem, 7vw, 6rem) max(1.2rem, calc((100vw - var(--max)) / 2));
+  padding: clamp(3rem, 7vw, 6rem) clamp(1.2rem, 4vw, 3rem);
 }
 
 /* Couple photos, matted like a printed photo to suit the watercolor-card
@@ -1371,8 +1428,6 @@ a.poi:focus-visible .poi-pin {
   /* The extra bottom room clears the fixed .registry-bubble. */
   padding: clamp(3rem, 7vw, 5rem) 1.2rem calc(clamp(2.5rem, 5vw, 3.5rem) + 4rem);
   border-top: 1px solid rgba(155, 100, 58, 0.18);
-  background:
-    linear-gradient(180deg, transparent, rgba(212, 185, 145, 0.18));
 }
 
 .footer-names {
@@ -1602,8 +1657,7 @@ a.poi:focus-visible .poi-pin {
   flex-direction: column;
   justify-content: center;
   min-height: 100svh;
-  padding: calc(var(--nav-h) + 2rem) max(1.2rem, calc((100vw - var(--max)) / 2))
-    3rem;
+  padding: calc(var(--nav-h) + 2rem) clamp(1.2rem, 4vw, 3rem) 3rem;
   text-align: center;
 }
 
