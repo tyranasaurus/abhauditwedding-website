@@ -1013,31 +1013,6 @@ a.poi:focus-visible .poi-pin {
   pointer-events: none;
 }
 
-.hero-sprig {
-  position: absolute;
-  z-index: -1;
-  width: clamp(8rem, 18vw, 16rem);
-  height: auto;
-  pointer-events: none;
-}
-
-/* Hung from the corners of the content area, inside the bezel like everything
-   else. The old -2.5rem offset dated from when the hero's box was the whole
-   column and the bleed fell off the page edge; now that the bezel insets the
-   hero, the same offset pushes the densest part of the cluster into `.hero`'s
-   own `overflow: hidden` and all that survives is a stray leaf. */
-.hero-sprig--tl {
-  /* Clear of the fixed nav, which is translucent — at top:0 the cluster smears
-     through it. */
-  top: var(--nav-h);
-  left: 0;
-}
-
-.hero-sprig--br {
-  bottom: 0;
-  right: 0;
-}
-
 .hero-copy {
   width: 100%;
 }
@@ -1188,43 +1163,39 @@ a.poi:focus-visible .poi-pin {
   padding: clamp(3rem, 7vw, 6rem) 0;
 }
 
-/* Couple photos, matted like a printed photo to suit the watercolor-card
-   styling. The live site opens each page with a hero photo; we echo that at the
-   top of the matching sections — here centered in the column with a paper mat,
-   ring, and soft drop shadow rather than running edge to edge. */
+/* The dividing bands.
+ *
+ * Exactly one arch on the page, and it is the opening. These photographs are
+ * the other treatment: the full width of the column, mounted on a paper mat
+ * like a print laid on the page, and used to separate one section from the
+ * next rather than to open one. Keeping them rectangular is what stops the
+ * site having three unrelated picture frames in it — which is the thing the
+ * Joy site does and shouldn't. */
 .section-photo {
-  /* Thick paper mat, thin forest line a little outside it — both scale with
-     the frame so the proportions hold from phone to desktop. */
-  --mat: clamp(0.6rem, 1.7vw, 1.45rem);
-  --arch-gap: clamp(1.05rem, 2.7vw, 2.3rem);
-  position: relative;
-  width: min(100% - 4.4rem, 40rem);
+  /* The mat is padding, not a spread shadow: it has to live inside the band's
+     own width, or it eats into the column's bezel and the photographs end up
+     wider than everything else on the page. */
+  --mat: clamp(0.5rem, 1.4vw, 1.1rem);
+  width: 100%;
   margin: 0 auto clamp(2.8rem, 5vw, 4rem);
-  /* A true semicircle on a 5:4 box: 50% horizontally puts the springing points
-     at the corners, and 62.5% of the height is exactly half the width, so the
-     dome is a half-circle rather than a flattened ellipse. */
-  border-radius: 50% 50% 0.55rem 0.55rem / 62.5% 62.5% 0.55rem 0.55rem;
-  /* Mat only, no drop shadow: the double frame is the whole idea, and a soft
-     shadow under it turned the photo into a sticker. */
-  box-shadow: 0 0 0 var(--mat) var(--arch-mat);
-}
-
-.section-photo::after {
-  content: '';
-  position: absolute;
-  inset: calc(-1 * var(--arch-gap));
-  border: 1px solid var(--arch-line);
-  border-radius: 50% 50% 1.4rem 1.4rem / 62.5% 62.5% 1.4rem 1.4rem;
-  pointer-events: none;
+  padding: var(--mat);
+  background: var(--arch-mat);
+  border-radius: 0.4rem;
+  box-shadow:
+    0 1px 2px rgba(47, 42, 33, 0.06),
+    0 10px 26px rgba(47, 42, 33, 0.14);
 }
 
 .section-photo-img {
   display: block;
   width: 100%;
-  aspect-ratio: 5 / 4;
+  /* Wide enough to read as a band rather than a picture. The sources are all
+     about 16:10, so this crops a little off the top and bottom and nothing off
+     the sides. */
+  aspect-ratio: 16 / 9;
   object-fit: cover;
   object-position: 50% 42%;
-  border-radius: inherit;
+  border-radius: 0.15rem;
 }
 
 .home-section-head {
@@ -1611,19 +1582,6 @@ a.poi:focus-visible .poi-pin {
   }
 
   .hero-dot {
-    display: none;
-  }
-
-  /* Keep the top-left sprig flush in the corner; the bottom-right one clipped
-     against the right viewport edge as a hard vertical line. */
-  .hero-sprig--tl {
-    width: 7rem;
-    top: -1.5rem;
-    left: -1.5rem;
-    opacity: 0.55 !important;
-  }
-
-  .hero-sprig--br {
     display: none;
   }
 }

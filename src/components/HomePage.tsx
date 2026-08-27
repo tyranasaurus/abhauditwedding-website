@@ -115,24 +115,6 @@ function Hero() {
   return (
     <header className="hero" ref={ref}>
       <div className="hero-sky" aria-hidden="true" />
-      {/* The corner sprigs are artwork, not motion — reduced motion should drop
-          the settling-in animation, not the flowers. */}
-      <motion.img
-        src="/art/map/sprig-corner.webp"
-        alt=""
-        className="hero-sprig hero-sprig--tl"
-        initial={reduce ? false : { opacity: 0, rotate: -8, scale: 0.9 }}
-        animate={{ opacity: 0.85, rotate: 0, scale: 1 }}
-        transition={{ duration: reduce ? 0 : 1.2, ease: 'easeOut' }}
-      />
-      <motion.img
-        src="/art/map/sprig-corner.webp"
-        alt=""
-        className="hero-sprig hero-sprig--br"
-        initial={reduce ? false : { opacity: 0, rotate: 172, scale: 0.9 }}
-        animate={{ opacity: 0.85, rotate: 180, scale: 1 }}
-        transition={{ duration: reduce ? 0 : 1.2, ease: 'easeOut' }}
-      />
 
       <div className="hero-inner">
         <motion.div
