@@ -137,7 +137,7 @@ export const events: WeddingEvent[] = [
     imageAlt: 'Four guests in Seahawks gear at a game-day watch party',
     imageWidth: 799,
     imageHeight: 762,
-    artWidth: '465px',
+    artWidth: '520px',
     divider: true,
     venue: {
       name: 'Sam’s Tavern',
