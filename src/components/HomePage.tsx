@@ -258,9 +258,35 @@ function Schedule() {
 // which is what it became once the needle took the dividing job.
 //
 // `focus` is where the two of them are in the frame, as fractions across and
-// down. It is the only framing number the page carries: the stylesheet works
-// out what it means for each band shape, because which axis gets cropped flips
-// as the band narrows. Set from the cropper.
+// down. It is the only framing number the page carries; the band shape decides
+// what it means, because which axis gets cropped flips as the band narrows.
+// Set from the cropper.
+
+/* All three photographs are 1.6:1. `cover` fits whichever dimension is short
+ * and crops the other, so a band wider than 1.6 crops the height and shows the
+ * whole width, and a band taller than 1.6 does the reverse. The visible
+ * fraction on the cropped axis is the ratio of the two aspects, and
+ * object-position is measured against the part that does NOT fit — hence
+ * (focus - visible/2) / (1 - visible), clamped, because a value outside 0–1
+ * would slide the picture off its own box and leave a gap.
+ *
+ * This arithmetic used to live in the stylesheet as clamp(calc(…)) inside
+ * object-position. It was correct, and it computed to 0% on WebKit and on
+ * older Chrome, which is a crop hard against the left edge: on the square band
+ * that small phones get, one of them was sliced off at the right edge while
+ * every phone wider than 600px looked perfect. Percentages are worked out here
+ * now and handed over as plain values, so nothing is left for a browser to
+ * evaluate. */
+const SOURCE_RATIO = 1.6
+
+function framing(band: number, [cx, cy]: [number, number]) {
+  const visible = band > SOURCE_RATIO ? SOURCE_RATIO / band : band / SOURCE_RATIO
+  const focus = band > SOURCE_RATIO ? cy : cx
+  const raw = (focus - visible / 2) / (1 - visible)
+  const pos = `${Math.round(Math.min(1, Math.max(0, raw)) * 100)}%`
+  return band > SOURCE_RATIO ? `50% ${pos}` : `${pos} 50%`
+}
+
 function SectionPhoto({
   src,
   alt,
@@ -278,7 +304,11 @@ function SectionPhoto({
           alt={alt}
           className="section-photo-img"
           style={
-            { '--focus-cx': focus[0], '--focus-cy': focus[1] } as CSSProperties
+            {
+              '--pos-wide': framing(16 / 9, focus),
+              '--pos-mid': framing(4 / 3, focus),
+              '--pos-square': framing(1, focus),
+            } as CSSProperties
           }
           loading="lazy"
         />

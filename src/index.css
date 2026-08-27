@@ -1306,26 +1306,24 @@ a.poi:focus-visible .poi-pin {
 
 /* Framing the bands.
  *
- * Each photograph carries one pair of numbers — --focus-cx / --focus-cy, where
- * the two of them are in the frame — and the band works out the rest, because
- * which axis gets cropped flips as the band narrows. All three sources are
- * 1.6:1. `cover` fits whichever dimension is short and crops the other, so a
- * band wider than 1.6 crops the height and shows the whole width, and a band
- * taller than 1.6 does the reverse.
+ * Each photograph carries one pair of numbers — where the two of them are in
+ * the frame — and the band works out the rest, because which axis gets cropped
+ * flips as the band narrows. All three sources are 1.6:1. `cover` fits
+ * whichever dimension is short and crops the other, so a band wider than 1.6
+ * crops the height and shows the whole width, and a band taller than 1.6 does
+ * the reverse.
  *
- * The visible fraction on the cropped axis is the ratio of the two aspects,
- * and object-position is measured against the part that does NOT fit — hence
- * `(focus - visible/2) / (1 - visible)`. Clamped, because a value outside
- * 0–100% would slide the picture off its own box and leave a gap. */
+ * The arithmetic that turns that pair into a position for each band shape
+ * lives in HomePage, not here. */
 .section-photo-img {
   display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
   object-fit: cover;
-  /* 16/9 over 1.6 leaves 90% of the height, and the full width — so only the
-     vertical half of the focus does anything here. */
-  object-position: 50%
-    clamp(0%, calc((var(--focus-cy, 0.5) - 0.45) / 0.1 * 100%), 100%);
+  /* 16/9 over 1.6 leaves 90% of the height and the full width, so only the
+     vertical half of the focus does anything here. Worked out in HomePage and
+     handed over ready-made — see the note there for why. */
+  object-position: var(--pos-wide, 50% 50%);
   /* Everything else on this page is a soft-edged wash or a cutout — the
      needle, the wardrobe figures, the backdrop itself. A hard rectangle with a
      drop shadow was the one object pasted *onto* the paper rather than printed
@@ -1341,25 +1339,17 @@ a.poi:focus-visible .poi-pin {
     /* 4/3 over 1.6 keeps 83.3% of the width. A nudge, not a crop — and from
        here down it is the horizontal half of the focus that matters. */
     aspect-ratio: 4 / 3;
-    object-position: clamp(
-        0%,
-        calc((var(--focus-cx, 0.5) - 0.41667) / 0.16667 * 100%),
-        100%
-      )
-      50%;
+    object-position: var(--pos-mid, 50% 50%);
   }
 }
 
 @media (max-width: 600px) {
   .section-photo-img {
-    /* Square keeps 62.5%, which is what actually brings them close. */
+    /* Square keeps 62.5%, which is what actually brings them close — and is
+       also the least forgiving band on the page, so it is the one that showed
+       the calc() bug as a person sliced off at the edge. */
     aspect-ratio: 1 / 1;
-    object-position: clamp(
-        0%,
-        calc((var(--focus-cx, 0.5) - 0.3125) / 0.375 * 100%),
-        100%
-      )
-      50%;
+    object-position: var(--pos-square, 50% 50%);
   }
 }
 
