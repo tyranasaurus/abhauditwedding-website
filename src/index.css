@@ -62,14 +62,13 @@
      wide display. The nav gutters resolve against this too, so the brand and
      the links sit on the column's own edges rather than out on the painting. */
   --column-w: clamp(46rem, 60%, 78rem);
-  /* How much of the painting survives behind the text. Set by eye at 0.70 so
-     the painting stays the point. Measured after the bezel landed: 27 of the
-     202 text items that sit on the column fall below AA contrast, against 26
-     on the flat paper this replaced — so it costs the page essentially
-     nothing. Both counts are dominated by the carnival pink and the sunset
-     orange, which were already marginal before any of this; darkening those
-     two inks is what would move the number, not this one. 0.78 would take it
-     to 15 if we ever want to trade painting for legibility. */
+  /* How much of the painting survives behind the text. Chosen by eye at 0.65,
+     which puts the painting firmly in charge. Measured cost, of the 202 text
+     items that sit on the column: 0.65 leaves 40 below AA contrast, 0.70
+     leaves 27, 0.78 leaves 15, against 26 on the flat paper this replaced.
+     Every count is dominated by the carnival pink and the sunset orange, both
+     already marginal before any of this — darkening those two inks is what
+     would actually move the number, not this one. */
   --column-wash: 0.65;
   /* The margin between the column's edge and anything inside it. */
   --column-bezel: clamp(1.25rem, 2.6vw, 2.5rem);
@@ -1056,16 +1055,24 @@ a.poi:focus-visible .poi-pin {
      in border-radius resolves against height for the vertical half — which
      would turn the dome into an ellipse the moment the box stopped being
      square. Keeping the width a length keeps the arch a true semicircle. */
-  --portrait-w: clamp(14.5rem, 32vw, 20.5rem);
-  --arch-gap: 1.5rem;
+  --portrait-w: clamp(11rem, 64vw, 34rem);
+  /* Shrinks with the screen. The ring sits outside --portrait-w, so on a phone
+     a fixed gap is what pushes the arch to within a few pixels of the bezel. */
+  --arch-gap: clamp(1.05rem, 3vw, 1.5rem);
   /* The outer arch is positioned, so the flow doesn't know it is there and the
      names' swashes came up under it on narrow screens. */
   margin-bottom: calc(var(--arch-gap) + 0.35rem);
   position: relative;
   width: var(--portrait-w);
-  /* Barely taller than it is wide, so the dome takes the top half and the
-     square photo lands in it whole — cover would otherwise trim their arms. */
-  aspect-ratio: 1 / 1.08;
+  /* Half again as wide as it is tall. The dome is still a true semicircle —
+     its rise is half the width, which is 0.83 of the height here, so it
+     springs from low on the jambs and the arch reads wide rather than as a
+     doorway. Everything below this opening gets a full-width band instead. */
+  aspect-ratio: 5 / 3;
+  /* This box is a flex item of .hero-inner, so its automatic minimum size is
+     its content — the square photo at full width. Without this, that minimum
+     wins and the aspect-ratio above is silently ignored. */
+  min-height: 0;
   display: grid;
   place-items: center;
 }
@@ -1096,10 +1103,12 @@ a.poi:focus-visible .poi-pin {
 .hero-portrait {
   width: 100%;
   height: 100%;
-  /* couple.webp is a square head-to-waist crop; the arch is taller than it is
-     wide, so cover trims the sides and shows the full height. */
+  /* couple.webp is a square head-to-hip crop. The arch is now wider than it is
+     tall, so cover keeps the full width and takes a 60% band out of the
+     height; biasing that band upward lands it on their faces and stops it just
+     above the waist, which is the crop this opening wants. */
   object-fit: cover;
-  object-position: 50% 50%;
+  object-position: 50% 10%;
 }
 
 /* Carattere's leading A carries a swash well left of its origin, so centring
@@ -1610,7 +1619,7 @@ a.poi:focus-visible .poi-pin {
   }
 
   .hero-portrait-wrap {
-    --portrait-w: clamp(11rem, 33vh, 20.5rem);
+    --portrait-w: clamp(15rem, 58vh, 34rem);
     --arch-gap: 1.15rem;
   }
 
@@ -1644,7 +1653,9 @@ a.poi:focus-visible .poi-pin {
   }
 
   .hero-portrait-wrap {
-    --portrait-w: clamp(9rem, 30vh, 14.5rem);
+    /* Short *and* narrow, so the width is the binding constraint as often as
+       the height is; whichever runs out first wins. */
+    --portrait-w: clamp(11rem, min(50vh, 64vw), 24rem);
     --arch-gap: 1.05rem;
   }
 
