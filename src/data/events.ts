@@ -112,7 +112,10 @@ export const events: WeddingEvent[] = [
     // The one event with four colours, so the bullets take the blue rather
     // than doubling the purple.
     accents: { primary: '#d94b6d', secondary: '#755798', marks: '#3685ad' },
-    vibeColors: ['#3685ad', '#d94b6d', '#755798'],
+    // The caption's blue is deeper than the marks' blue on purpose: #3685ad is
+    // a bullet colour, and set as a word it reads as a mark rather than as
+    // text. Same hue, 234°, taken down until it carries.
+    vibeColors: ['#05678e', '#d94b6d', '#755798'],
     captionDrop: '0.26em',
     image: '/art/carnival.webp',
     imageAlt: 'Four guests dressed for the Baraat and Carnival',
