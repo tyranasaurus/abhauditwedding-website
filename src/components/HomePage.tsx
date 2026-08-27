@@ -258,9 +258,35 @@ function Schedule() {
 // which is what it became once the needle took the dividing job.
 //
 // `focus` is where the two of them are in the frame, as fractions across and
-// down. It is the only framing number the page carries: the stylesheet works
-// out what it means for each band shape, because which axis gets cropped flips
-// as the band narrows. Set from the cropper.
+// down. It is the only framing number the page carries; the band shape decides
+// what it means, because which axis gets cropped flips as the band narrows.
+// Set from the cropper.
+
+/* All three photographs are 1.6:1. `cover` fits whichever dimension is short
+ * and crops the other, so a band wider than 1.6 crops the height and shows the
+ * whole width, and a band taller than 1.6 does the reverse. The visible
+ * fraction on the cropped axis is the ratio of the two aspects, and
+ * object-position is measured against the part that does NOT fit — hence
+ * (focus - visible/2) / (1 - visible), clamped, because a value outside 0–1
+ * would slide the picture off its own box and leave a gap.
+ *
+ * This arithmetic used to live in the stylesheet as clamp(calc(…)) inside
+ * object-position. It was correct, and it computed to 0% on WebKit and on
+ * older Chrome, which is a crop hard against the left edge: on the square band
+ * that small phones get, one of them was sliced off at the right edge while
+ * every phone wider than 600px looked perfect. Percentages are worked out here
+ * now and handed over as plain values, so nothing is left for a browser to
+ * evaluate. */
+const SOURCE_RATIO = 1.6
+
+function framing(band: number, [cx, cy]: [number, number]) {
+  const visible = band > SOURCE_RATIO ? SOURCE_RATIO / band : band / SOURCE_RATIO
+  const focus = band > SOURCE_RATIO ? cy : cx
+  const raw = (focus - visible / 2) / (1 - visible)
+  const pos = `${Math.round(Math.min(1, Math.max(0, raw)) * 100)}%`
+  return band > SOURCE_RATIO ? `50% ${pos}` : `${pos} 50%`
+}
+
 function SectionPhoto({
   src,
   alt,
@@ -278,7 +304,11 @@ function SectionPhoto({
           alt={alt}
           className="section-photo-img"
           style={
-            { '--focus-cx': focus[0], '--focus-cy': focus[1] } as CSSProperties
+            {
+              '--pos-wide': framing(16 / 9, focus),
+              '--pos-mid': framing(4 / 3, focus),
+              '--pos-square': framing(1, focus),
+            } as CSSProperties
           }
           loading="lazy"
         />
@@ -488,45 +518,101 @@ function Footer() {
   )
 }
 
-export function HomePage() {
-  // Everything lives on this one page now, so a deep link is a hash. The browser
-  // tries to scroll before React has rendered the target, and the page keeps
-  // growing after that as the display faces swap in and the artwork decodes —
-  // each of which moves the target further down. So re-run the jump at every
-  // point the page can still have settled, and stop the moment the guest
-  // scrolls for themselves.
-  useEffect(() => {
-    const id = window.location.hash.slice(1)
-    if (!id) return
-    let taken = false
-    const jump = () => {
-      if (taken) return
-      document
-        .getElementById(decodeURIComponent(id))
-        ?.scrollIntoView({ behavior: 'auto', block: 'start' })
-    }
-    const release = () => {
-      taken = true
-    }
-    const opts = { once: true, passive: true } as const
-    window.addEventListener('wheel', release, opts)
-    window.addEventListener('touchstart', release, opts)
-    window.addEventListener('keydown', release, { once: true })
+function offsetOf(id: string) {
+  const el = document.getElementById(id)
+  if (!el) return 0
+  return Math.round(el.getBoundingClientRect().top + window.scrollY)
+}
 
-    requestAnimationFrame(jump)
-    // Anything that changes the page's height moves the target: a display face
-    // swapping in, the artwork decoding, the forecast arriving and adding its
-    // credit line. Follow the height rather than guessing at a delay.
-    const follow = new ResizeObserver(jump)
-    follow.observe(document.documentElement)
-    const settled = window.setTimeout(() => follow.disconnect(), 3000)
+export function HomePage() {
+  // Everything lives on this one page now, so a deep link is a hash — and a
+  // hash is only as good as the page's height at the instant it is followed.
+  // The artwork decodes, the forecast lands, and the display faces swap in;
+  // each moves the target out from under the guest. The stand-in faces in the
+  // stylesheet cure the largest of those, but a jump still has to be held onto
+  // until the page has genuinely stopped moving.
+  useEffect(() => {
+    // Whatever correction is currently running, so a second hash can end it.
+    let stop = () => {}
+
+    const hold = (raw: string) => {
+      stop()
+      const id = decodeURIComponent(raw)
+      if (!document.getElementById(id)) return
+
+      let taken = false
+      // The last scroll position this effect itself asked for. Anything else
+      // the page ends up at came from the guest.
+      let ours = -1
+
+      const jump = () => {
+        if (taken) return
+        const target = document.getElementById(id)
+        if (!target) return
+        target.scrollIntoView({ behavior: 'auto', block: 'start' })
+        ours = Math.round(window.scrollY)
+      }
+
+      // Watching the scroll position rather than sniffing for touchmove and
+      // wheel, because the guest can scroll before this bundle has even
+      // arrived — on a slow connection they had already flicked past the
+      // section by the time the listeners existed, and the correction hauled
+      // them back. A position that isn't the one we asked for is theirs,
+      // however they got there: drag, flick, momentum, keyboard, or the
+      // browser's own restoration. A tap moves nothing, so a tap keeps the
+      // correction alive — which is the whole point.
+      const release = () => {
+        taken = true
+        stop()
+      }
+      const watch = () => {
+        if (ours >= 0 && Math.abs(Math.round(window.scrollY) - ours) > 2) release()
+      }
+
+      const passive = { passive: true } as const
+      window.addEventListener('scroll', watch, passive)
+      window.addEventListener('keydown', release)
+
+      // Follow the page's height rather than guessing at a delay, and wait on
+      // the two things that reflow it most: the faces, and the images.
+      const follow = new ResizeObserver(jump)
+      follow.observe(document.documentElement)
+      window.addEventListener('load', jump)
+      document.fonts?.ready.then(jump).catch(() => {})
+
+      // If the guest is already reading somewhere else — scrolled away while
+      // the bundle was still downloading — leave them there. A scroll of
+      // exactly zero means the browser never got to the fragment at all,
+      // which is the case this correction exists for.
+      const away = window.scrollY > 0 && Math.abs(window.scrollY - offsetOf(id)) > window.innerHeight
+      if (!away) requestAnimationFrame(jump)
+
+      const settled = window.setTimeout(() => stop(), 4000)
+
+      stop = () => {
+        follow.disconnect()
+        window.clearTimeout(settled)
+        window.removeEventListener('load', jump)
+        window.removeEventListener('scroll', watch)
+        window.removeEventListener('keydown', release)
+        stop = () => {}
+      }
+    }
+
+    // The nav's own links change the hash without remounting anything, so the
+    // menu taps that need this most used to get no correction at all.
+    const onHash = () => {
+      const next = window.location.hash.slice(1)
+      if (next) hold(next)
+    }
+    window.addEventListener('hashchange', onHash)
+
+    const first = window.location.hash.slice(1)
+    if (first) hold(first)
 
     return () => {
-      window.removeEventListener('wheel', release)
-      window.removeEventListener('touchstart', release)
-      window.removeEventListener('keydown', release)
-      follow.disconnect()
-      window.clearTimeout(settled)
+      window.removeEventListener('hashchange', onHash)
+      stop()
     }
   }, [])
 
