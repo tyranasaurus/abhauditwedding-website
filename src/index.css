@@ -1884,14 +1884,27 @@ a.poi:focus-visible .poi-pin {
 
 .sched-head h2 {
   color: var(--accent);
+  font-family: var(--font-script), cursive;
+  /* Carattere's swashes overrun their advance widths, so the A of "Away" runs
+     back under the t of "Night" without extra room between words. */
+  word-spacing: 0.34em;
+  /* A script sets far smaller on the body than a serif does at the same px, so
+     the clamp lifts to hold the same presence. */
+  font-size: clamp(2.9rem, 6.9vw, 5rem);
+  line-height: 1;
+  text-wrap: balance;
+}
+
+/* What kind of event it is, in the serif the name used to be set in. Never
+   below 24px, which is where WCAG's large-text line sits — under it the
+   carnival's pink could not carry this at 4.5:1. */
+.sched-kind {
+  color: var(--accent);
   font-family: var(--font-display), Georgia, serif;
-  font-weight: 600;
-  /* Formal, invitation-like spacing between the words. */
-  word-spacing: 0.18em;
-  /* Cormorant sets optically smaller than the body face at the same px, so the
-     clamp lifts a touch to land where the old size read. */
-  font-size: clamp(2.5rem, 6.1vw, 4.4rem);
-  line-height: 1.12;
+  font-size: clamp(1.55rem, 2.2vw, 1.85rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  margin: 0.5rem 0 0;
   text-wrap: balance;
 }
 
@@ -1902,6 +1915,10 @@ a.poi:focus-visible .poi-pin {
   font-weight: 700;
   letter-spacing: 0.08em;
   margin: 1rem 0 0;
+}
+
+.sched-kind + .sched-date {
+  margin-top: 0.55rem;
 }
 
 .sched-wx {

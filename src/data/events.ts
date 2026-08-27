@@ -9,6 +9,8 @@ export interface WeddingEvent {
   /** Anchor id, so other pages can deep-link to /#<anchor>. */
   anchor: string
   title: string
+  /** What kind of event this is, set under the name. */
+  subtitle?: string
   /** Date line under the title. Start times live in the timeline, not here. */
   date: string
   /** Outdoor events only: the hours to read the live forecast across. */
@@ -54,6 +56,7 @@ export const events: WeddingEvent[] = [
     className: 'sunset-ceremony',
     anchor: 'sunset-shaadi',
     title: 'Sunset Shaadi',
+    subtitle: 'Wedding Ceremony',
     date: 'Saturday, September 5',
     forecastWindow: { date: '2026-09-05', from: 15, to: 22 },
     vibe: 'Traditional Elegance',
@@ -78,6 +81,7 @@ export const events: WeddingEvent[] = [
     className: 'carnival-garden',
     anchor: 'carnegie-to-carnation',
     title: 'From Carnegie to Carnation',
+    subtitle: 'Baraat and Carnival',
     date: 'Sunday, September 6',
     forecastWindow: { date: '2026-09-06', from: 10, to: 15 },
     vibe: 'Colors in Bloom',
@@ -102,6 +106,7 @@ export const events: WeddingEvent[] = [
     className: 'forest-gala',
     anchor: 'naach-the-night-away',
     title: 'Naach the Night Away',
+    subtitle: 'Sangeet and Reception',
     date: 'Sunday, September 6',
     vibe: 'Glitz and Glam',
     accents: { primary: '#28433a', secondary: '#9e521a' },

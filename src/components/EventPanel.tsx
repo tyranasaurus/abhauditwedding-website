@@ -28,6 +28,7 @@ export function EventPanel({
     >
       <header className="sched-head">
         <h2>{event.title}</h2>
+        {event.subtitle && <p className="sched-kind">{event.subtitle}</p>}
         <p className="sched-date">
           {event.date}
           {forecast && (
