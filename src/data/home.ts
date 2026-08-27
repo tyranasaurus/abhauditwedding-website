@@ -55,7 +55,7 @@ export const travel = {
     { name: 'Leavenworth', note: '', query: 'Leavenworth, WA' },
     {
       name: 'Mount Rainier National Park',
-      note: '',
+      note: 'Check nps.gov for timed-entry reservations before you go.',
       query: 'Paradise, Mount Rainier National Park, WA',
     },
     { name: 'Diablo Lake', note: '', query: 'Diablo Lake Overlook, North Cascades, WA' },
