@@ -95,8 +95,9 @@ function daysBetween(from: string, to: string) {
 function countdownLabel({ day, hour }: { day: string; hour: number }) {
   // The weekend itself is read from the real date, never the shifted one: on
   // the morning of the 5th the site must not still be saying "Tomorrow". Both
-  // days read the same, and after that the count retires.
-  if (daysBetween(day, LAST_DAY) < 0) return null
+  // days read the same, and afterwards the line stops counting and says thank
+  // you instead — the site outlives the wedding by a good while.
+  if (daysBetween(day, LAST_DAY) < 0) return 'Thanks for coming'
   if (daysBetween(day, FIRST_DAY) <= 0) return "It's today!"
 
   // Everything before the weekend steps at midday rather than at midnight, so

@@ -693,17 +693,21 @@ a.poi:focus-visible .poi-pin {
    the barn, the maple and both buggies — every landmark in the painting, and
    the whole easter egg. So portrait gets its own plate.
  *
- * It is composed rather than cropped, because no crop can do it: holding the
- * buggies, the fence and the barn takes about 78% of the painting's width, and
- * that band is far too wide to fill a phone. So the band sits along the bottom
- * at its own proportions and the sky above it is extended with a flat wash
- * mixed from the painting's own top edge. A stretched slice of the painting
- * was the first attempt and it dragged the paper texture into vertical
- * streaks; a plain gradient joins invisibly.
+ * It is composed rather than cropped, because no crop can do it: the scene is
+ * far wider than a phone. So the painting sits along the bottom half at its
+ * own proportions and the sky above it is extended with a flat wash mixed from
+ * the painting's own top edge. A stretched slice of the painting was the first
+ * attempt and it dragged the paper texture into vertical streaks; a plain
+ * gradient joins invisibly.
  *
- * Anchored bottom so the scene is never the part that gets cropped — on a
- * viewport shorter than the plate it is sky that goes, which is the half we
- * invented. */
+ * The window is the middle half of the painting — both buggies and their
+ * pullers, the striped fence, the autumn maple, and the left edge of the barn.
+ * Zooming this far in is what puts the art at half the height rather than a
+ * third, and it is why the plate is 0.47 aspect: just under the narrowest
+ * common phone, so `cover` never trims the sides and the barn survives.
+ *
+ * Anchored bottom, so on a viewport shorter than the plate what gets cropped
+ * is the sky we invented rather than the scene. */
 @media (max-aspect-ratio: 3 / 4) {
   .page-plate {
     --plate-img: url('/art/backdrop-tall.webp');
