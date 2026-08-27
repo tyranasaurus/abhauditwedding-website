@@ -1,10 +1,53 @@
 @import 'tailwindcss';
 
-/* Design tokens (Tailwind 4 @theme): fonts are loaded via <link> in index.html. */
+/* The three faces arrive over the network, and until they do the page is set in
+   Georgia — which is 12% wider than Cormorant and 14% narrower than Libre
+   Baskerville. Every paragraph on the page therefore re-wrapped the moment the
+   real faces landed, and the document lost ~250px of height in one frame. A
+   guest who had followed a link to #travel or #faq was left 200px below the
+   section they asked for, staring into the middle of a photograph.
+
+   So Georgia is served through a @font-face that scales it to each real face's
+   own measure and overrides its ascent and descent to match. The stand-in now
+   occupies the same space as the face replacing it, and the swap moves nothing.
+
+   Every percentage below was measured against the shipped faces at 100px, not
+   guessed — and only against Georgia, so the src names only Georgia. A device
+   without it (most Android) finds no source, skips the family, and falls
+   through to `Georgia, serif` exactly as before: no fix, but no wrongly-scaled
+   stand-in either. There the scroll correction in HomePage carries the anchor. */
+@font-face {
+  font-family: 'Carattere Stand-in';
+  src: local('Georgia');
+  size-adjust: 69.02%;
+  ascent-override: 115.9%;
+  descent-override: 50.7%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Cormorant Stand-in';
+  src: local('Georgia');
+  size-adjust: 88.34%;
+  ascent-override: 104.6%;
+  descent-override: 32.5%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Baskerville Stand-in';
+  src: local('Georgia');
+  size-adjust: 115.73%;
+  ascent-override: 83.8%;
+  descent-override: 23.3%;
+  line-gap-override: 0%;
+}
+
+/* Design tokens (Tailwind 4 @theme): fonts are loaded via <link> in index.html.
+   Each token carries its own metric-matched stand-in, so the ~40 call sites that
+   say `var(--font-x), Georgia, serif` inherit the fix without being touched. */
 @theme {
-  --font-script: 'Carattere', cursive;
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body: 'Libre Baskerville', Georgia, serif;
+  --font-script: 'Carattere', 'Carattere Stand-in', cursive;
+  --font-display: 'Cormorant Garamond', 'Cormorant Stand-in', Georgia, serif;
+  --font-body: 'Libre Baskerville', 'Baskerville Stand-in', Georgia, serif;
 }
 
 :root {
@@ -66,6 +109,10 @@
      not guessed: 2.75rem of brand or menu button plus 0.85rem of padding either
      side. Desktop and phone now agree. */
   --nav-h: 4.45rem;
+  /* Where a fragment jump parks a target: clear of the fixed nav with enough
+     air that a script title's ascender can't tuck under it. One value, so the
+     three places that need it can't drift apart again. */
+  --anchor-pad: calc(var(--nav-h) + 1.35rem);
   /* Content column width. Lives on :root (not just .home) so the shared SiteNav
      gutters resolve on every page, including /wardrobe which has no .home wrapper. */
   --max: 1080px;
@@ -853,9 +900,9 @@ a.poi:focus-visible .poi-pin {
 }
 
 /* In-page anchors (#schedule, #travel, #faq …) land below the fixed nav so
-   the section title is never tucked under it. Nav is ~4rem; add a little gap. */
+   the section title is never tucked under it. */
 .home section[id] {
-  scroll-margin-top: 5rem;
+  scroll-margin-top: var(--anchor-pad);
 }
 
 /* Top navigation ---------------------------------------------------- */
@@ -1028,7 +1075,7 @@ a.poi:focus-visible .poi-pin {
 /* Deep-links like /wardrobe#sunset-shaadi must land below the fixed nav. */
 .intro-page,
 .event-panel {
-  scroll-margin-top: var(--nav-h);
+  scroll-margin-top: var(--anchor-pad);
 }
 
 /* Hero -------------------------------------------------------------- */
@@ -1841,7 +1888,7 @@ a.poi:focus-visible .poi-pin {
   --accent-mark: var(--rust);
   --sched-pad: clamp(3.25rem, 6vw, 4.5rem);
   padding-block: var(--sched-pad);
-  scroll-margin-top: calc(var(--nav-h) + 1rem);
+  scroll-margin-top: var(--anchor-pad);
 }
 
 /* Whatever single link an event carries out of itself. */

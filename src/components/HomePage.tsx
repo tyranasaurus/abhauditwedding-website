@@ -488,45 +488,101 @@ function Footer() {
   )
 }
 
-export function HomePage() {
-  // Everything lives on this one page now, so a deep link is a hash. The browser
-  // tries to scroll before React has rendered the target, and the page keeps
-  // growing after that as the display faces swap in and the artwork decodes —
-  // each of which moves the target further down. So re-run the jump at every
-  // point the page can still have settled, and stop the moment the guest
-  // scrolls for themselves.
-  useEffect(() => {
-    const id = window.location.hash.slice(1)
-    if (!id) return
-    let taken = false
-    const jump = () => {
-      if (taken) return
-      document
-        .getElementById(decodeURIComponent(id))
-        ?.scrollIntoView({ behavior: 'auto', block: 'start' })
-    }
-    const release = () => {
-      taken = true
-    }
-    const opts = { once: true, passive: true } as const
-    window.addEventListener('wheel', release, opts)
-    window.addEventListener('touchstart', release, opts)
-    window.addEventListener('keydown', release, { once: true })
+function offsetOf(id: string) {
+  const el = document.getElementById(id)
+  if (!el) return 0
+  return Math.round(el.getBoundingClientRect().top + window.scrollY)
+}
 
-    requestAnimationFrame(jump)
-    // Anything that changes the page's height moves the target: a display face
-    // swapping in, the artwork decoding, the forecast arriving and adding its
-    // credit line. Follow the height rather than guessing at a delay.
-    const follow = new ResizeObserver(jump)
-    follow.observe(document.documentElement)
-    const settled = window.setTimeout(() => follow.disconnect(), 3000)
+export function HomePage() {
+  // Everything lives on this one page now, so a deep link is a hash — and a
+  // hash is only as good as the page's height at the instant it is followed.
+  // The artwork decodes, the forecast lands, and the display faces swap in;
+  // each moves the target out from under the guest. The stand-in faces in the
+  // stylesheet cure the largest of those, but a jump still has to be held onto
+  // until the page has genuinely stopped moving.
+  useEffect(() => {
+    // Whatever correction is currently running, so a second hash can end it.
+    let stop = () => {}
+
+    const hold = (raw: string) => {
+      stop()
+      const id = decodeURIComponent(raw)
+      if (!document.getElementById(id)) return
+
+      let taken = false
+      // The last scroll position this effect itself asked for. Anything else
+      // the page ends up at came from the guest.
+      let ours = -1
+
+      const jump = () => {
+        if (taken) return
+        const target = document.getElementById(id)
+        if (!target) return
+        target.scrollIntoView({ behavior: 'auto', block: 'start' })
+        ours = Math.round(window.scrollY)
+      }
+
+      // Watching the scroll position rather than sniffing for touchmove and
+      // wheel, because the guest can scroll before this bundle has even
+      // arrived — on a slow connection they had already flicked past the
+      // section by the time the listeners existed, and the correction hauled
+      // them back. A position that isn't the one we asked for is theirs,
+      // however they got there: drag, flick, momentum, keyboard, or the
+      // browser's own restoration. A tap moves nothing, so a tap keeps the
+      // correction alive — which is the whole point.
+      const release = () => {
+        taken = true
+        stop()
+      }
+      const watch = () => {
+        if (ours >= 0 && Math.abs(Math.round(window.scrollY) - ours) > 2) release()
+      }
+
+      const passive = { passive: true } as const
+      window.addEventListener('scroll', watch, passive)
+      window.addEventListener('keydown', release)
+
+      // Follow the page's height rather than guessing at a delay, and wait on
+      // the two things that reflow it most: the faces, and the images.
+      const follow = new ResizeObserver(jump)
+      follow.observe(document.documentElement)
+      window.addEventListener('load', jump)
+      document.fonts?.ready.then(jump).catch(() => {})
+
+      // If the guest is already reading somewhere else — scrolled away while
+      // the bundle was still downloading — leave them there. A scroll of
+      // exactly zero means the browser never got to the fragment at all,
+      // which is the case this correction exists for.
+      const away = window.scrollY > 0 && Math.abs(window.scrollY - offsetOf(id)) > window.innerHeight
+      if (!away) requestAnimationFrame(jump)
+
+      const settled = window.setTimeout(() => stop(), 4000)
+
+      stop = () => {
+        follow.disconnect()
+        window.clearTimeout(settled)
+        window.removeEventListener('load', jump)
+        window.removeEventListener('scroll', watch)
+        window.removeEventListener('keydown', release)
+        stop = () => {}
+      }
+    }
+
+    // The nav's own links change the hash without remounting anything, so the
+    // menu taps that need this most used to get no correction at all.
+    const onHash = () => {
+      const next = window.location.hash.slice(1)
+      if (next) hold(next)
+    }
+    window.addEventListener('hashchange', onHash)
+
+    const first = window.location.hash.slice(1)
+    if (first) hold(first)
 
     return () => {
-      window.removeEventListener('wheel', release)
-      window.removeEventListener('touchstart', release)
-      window.removeEventListener('keydown', release)
-      follow.disconnect()
-      window.clearTimeout(settled)
+      window.removeEventListener('hashchange', onHash)
+      stop()
     }
   }, [])
 
