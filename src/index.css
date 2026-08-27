@@ -1232,27 +1232,42 @@ a.poi:focus-visible .poi-pin {
   }
 }
 
+/* Framing the bands.
+ *
+ * Each photograph carries one pair of numbers — --focus-cx / --focus-cy, where
+ * the two of them are in the frame — and the band works out the rest, because
+ * which axis gets cropped flips as the band narrows. All three sources are
+ * 1.6:1. `cover` fits whichever dimension is short and crops the other, so a
+ * band wider than 1.6 crops the height and shows the whole width, and a band
+ * taller than 1.6 does the reverse.
+ *
+ * The visible fraction on the cropped axis is the ratio of the two aspects,
+ * and object-position is measured against the part that does NOT fit — hence
+ * `(focus - visible/2) / (1 - visible)`. Clamped, because a value outside
+ * 0–100% would slide the picture off its own box and leave a gap. */
 .section-photo-img {
   display: block;
   width: 100%;
-  /* On a wide screen the band is wider than the 1.6:1 sources, so `cover`
-     crops top and bottom and shows the whole width — which is why --focus-x
-     has no effect here and the framing is simply the photograph as taken. */
   aspect-ratio: 16 / 9;
   object-fit: cover;
-  object-position: var(--focus-x, 50%) 42%;
+  /* 16/9 over 1.6 leaves 90% of the height, and the full width — so only the
+     vertical half of the focus does anything here. */
+  object-position: 50%
+    clamp(0%, calc((var(--focus-cy, 0.5) - 0.45) / 0.1 * 100%), 100%);
   border-radius: 0.15rem;
 }
 
-/* Narrower screens turn the crop the other way up. Once the band is *taller*
-   than 1.6:1 the browser fits the height and crops the width instead, and
-   --focus-x starts doing the work: each photograph closes in on the two of
-   them rather than handing half its width to ferns, water or surf. A wide thin
-   band is no use on a phone anyway. */
 @media (max-width: 900px) {
   .section-photo-img {
-    /* 4:3 keeps 83% of the width — a nudge, not a crop. */
+    /* 4/3 over 1.6 keeps 83.3% of the width. A nudge, not a crop — and from
+       here down it is the horizontal half of the focus that matters. */
     aspect-ratio: 4 / 3;
+    object-position: clamp(
+        0%,
+        calc((var(--focus-cx, 0.5) - 0.41667) / 0.16667 * 100%),
+        100%
+      )
+      50%;
   }
 }
 
@@ -1260,6 +1275,12 @@ a.poi:focus-visible .poi-pin {
   .section-photo-img {
     /* Square keeps 62.5%, which is what actually brings them close. */
     aspect-ratio: 1 / 1;
+    object-position: clamp(
+        0%,
+        calc((var(--focus-cx, 0.5) - 0.3125) / 0.375 * 100%),
+        100%
+      )
+      50%;
   }
 }
 

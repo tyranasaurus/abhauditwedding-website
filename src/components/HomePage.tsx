@@ -226,7 +226,7 @@ function Schedule() {
       <SectionPhoto
         src="/art/couple-schedule.webp"
         alt="Abha and Udit among the ferns and string lights at Carnation Farms"
-        focus="92%"
+        focus={[0.62, 0.68]}
       />
       <SectionTitle title="Schedule" />
       <div className="sched-stack">
@@ -248,10 +248,10 @@ function Schedule() {
 // A photo of the two of them, matted and set in the same arch as the hero. The
 // dome here is shallower — these are landscape shots, and a full round arch
 // would crop into the tops of their heads.
-// `focus` is where the two of them are in the frame, as a percentage across.
-// It does nothing on a wide screen — the band is wider than the source there,
-// so the whole width shows and there is nothing to choose between. It is what
-// picks the crop once the band narrows on a phone.
+// Where the two of them are in the frame, as fractions across and down. This
+// is the only framing number the page carries: the stylesheet works out what
+// it means for each band shape, because which axis gets cropped flips as the
+// band narrows. Set from the cropper.
 function SectionPhoto({
   src,
   alt,
@@ -259,7 +259,7 @@ function SectionPhoto({
 }: {
   src: string
   alt: string
-  focus: string
+  focus: [number, number]
 }) {
   return (
     <>
@@ -279,7 +279,9 @@ function SectionPhoto({
           src={src}
           alt={alt}
           className="section-photo-img"
-          style={{ '--focus-x': focus } as CSSProperties}
+          style={
+            { '--focus-cx': focus[0], '--focus-cy': focus[1] } as CSSProperties
+          }
           loading="lazy"
         />
       </Reveal>
@@ -293,7 +295,7 @@ function Travel() {
       <SectionPhoto
         src="/art/couple-travel.webp"
         alt="Abha and Udit on the ferry across Puget Sound"
-        focus="4%"
+        focus={[0.32, 0.59]}
       />
       <SectionTitle title="Travel" />
       <Reveal className="travel-intro">
@@ -450,7 +452,7 @@ function Faq() {
       <SectionPhoto
         src="/art/couple-beach.webp"
         alt="Abha and Udit walking along the shore at the water's edge"
-        focus="96%"
+        focus={[0.59, 0.49]}
       />
       <SectionTitle title="Q & A" />
       <ul className="faq-list">
