@@ -13,7 +13,7 @@ export const travel = {
   notes: [
     {
       title: 'Getting to the Venue',
-      body: "From SEA airport, you should be able to take the Link Light Rail all the way to Downtown Redmond Station. That's a very short walk from the Hilton Garden Inn and many other hotels, and it's a cute little downtown worth spending some time in. From there the wedding venue is a 20-minute drive — you will need a rental car or a carpool! Reach out to us if you would like help with a carpool.",
+      body: "From SEA airport, you should be able to take the Link Light Rail all the way to Downtown Redmond Station. That's a very short walk from the Hilton Garden Inn and many other hotels, and it's a cute little downtown worth spending some time in. From there the wedding venue is a 20-minute drive, and you will want a rental car or a carpool — rideshare gets thin this far out and we would hate for anyone to be stranded at the end of the night. Reach out to us if you would like help with a carpool.",
     },
   ],
   seattleSpots: [

@@ -1355,11 +1355,18 @@ a.poi:focus-visible .poi-pin {
   word-spacing: 0.14em;
 }
 
+/* The body face, not the display one. This is the only long-form paragraph in
+   Travel, and Cormorant is a high-contrast display serif — small x-height,
+   hairline thins — which is why it read as less legible than the list notes
+   beside it. Those are already Libre Baskerville, and the spot names get away
+   with Cormorant only because 700 thickens the thins. Libre Baskerville sets
+   much larger at the same px, so the size comes down and the leading goes up
+   to carry the wider face. */
 .travel-note p {
-  color: var(--muted-ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.14rem, 1.85vw, 1.3rem);
-  line-height: 1.62;
+  color: var(--base-text);
+  font-family: var(--font-body), Georgia, serif;
+  font-size: clamp(1rem, 1.4vw, 1.1rem);
+  line-height: 1.75;
   margin: 0;
   text-align: center;
   text-wrap: pretty;
