@@ -1164,7 +1164,7 @@ a.poi:focus-visible .poi-pin {
 .travel-intro p {
   color: var(--rust);
   font-family: var(--font-body), Georgia, serif;
-  font-size: clamp(0.95rem, 1.35vw, 1.06rem);
+  font-size: clamp(1.05rem, 1.5vw, 1.18rem);
   font-style: italic;
   line-height: 1.6;
   margin: 0;
@@ -1194,7 +1194,7 @@ a.poi:focus-visible .poi-pin {
 .travel-note p {
   color: var(--muted-ink);
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.05rem, 1.7vw, 1.18rem);
+  font-size: clamp(1.14rem, 1.85vw, 1.3rem);
   line-height: 1.62;
   margin: 0;
   text-align: center;
@@ -1238,7 +1238,7 @@ a.poi:focus-visible .poi-pin {
   color: var(--ink);
   font-family: var(--font-display), Georgia, serif;
   font-weight: 700;
-  font-size: 1.12rem;
+  font-size: 1.2rem;
   text-decoration: none;
   background-image: linear-gradient(var(--rust), var(--rust));
   background-position: 0 100%;
@@ -1258,7 +1258,7 @@ a.poi:focus-visible .poi-pin {
 .travel-spot-note {
   color: var(--muted-ink);
   font-family: var(--font-body), Georgia, serif;
-  font-size: 0.9rem;
+  font-size: 0.97rem;
   font-style: italic;
   line-height: 1.4;
   margin-top: 0.22rem;
@@ -1884,20 +1884,24 @@ a.poi:focus-visible .poi-pin {
 
 .sched-head h2 {
   color: var(--accent);
-  /* Carattere's swashes overrun their advance widths, so "Night Away" collides
-     without extra room between words. */
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 600;
+  /* Formal, invitation-like spacing between the words. */
   word-spacing: 0.18em;
-  font-size: clamp(2.4rem, 5.9vw, 4.2rem);
+  /* Cormorant sets optically smaller than the body face at the same px, so the
+     clamp lifts a touch to land where the old size read. */
+  font-size: clamp(2.5rem, 6.1vw, 4.4rem);
+  line-height: 1.12;
   text-wrap: balance;
 }
 
 .sched-date {
   color: var(--copper-light);
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.15rem, 1.65vw, 1.32rem);
+  font-size: clamp(1.25rem, 1.8vw, 1.45rem);
   font-weight: 700;
   letter-spacing: 0.08em;
-  margin: 0.5rem 0 0;
+  margin: 1rem 0 0;
 }
 
 .sched-wx {
@@ -2025,10 +2029,10 @@ a.poi:focus-visible .poi-pin {
   color: var(--accent);
   word-spacing: 0.16em;
   font-family: var(--font-script), cursive;
-  font-size: calc(var(--art, 375px) * 0.125);
+  font-size: calc(var(--art, 375px) * 0.138);
   font-weight: 400;
   line-height: 0.84;
-  margin: calc(-0.465em + var(--cap-drop, 0em)) 0 0;
+  margin: calc(-0.42em + var(--cap-drop, 0em)) 0 0;
   position: relative;
   text-wrap: balance;
   /* It overlaps the artwork, so a little paper glow keeps it legible. */
@@ -2041,7 +2045,7 @@ a.poi:focus-visible .poi-pin {
 .sched-note {
   color: var(--copper-light);
   font-family: var(--font-body), Georgia, serif;
-  font-size: clamp(1.02rem, 1.5vw, 1.16rem);
+  font-size: clamp(1.1rem, 1.62vw, 1.28rem);
   font-style: italic;
   line-height: 1.6;
   margin: clamp(0.85rem, 1.5vw, 1.2rem) auto 0;
