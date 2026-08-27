@@ -73,7 +73,7 @@
      measure never strangles on a laptop and capped so it doesn't run away on a
      wide display. The nav gutters resolve against this too, so the brand and
      the links sit on the column's own edges rather than out on the painting. */
-  --column-w: clamp(46rem, 60%, 78rem);
+  --column-w: clamp(36.8rem, 48%, 62.4rem);
   /* How much of the painting survives behind the text. Chosen by eye at 0.65,
      which puts the painting firmly in charge. Measured cost, of the 202 text
      items that sit on the column: 0.65 leaves 40 below AA contrast, 0.70
@@ -1332,39 +1332,22 @@ a.poi:focus-visible .poi-pin {
 }
 
 /* Travel ------------------------------------------------------------ */
-.travel-intro {
-  margin: 0 auto clamp(2rem, 4vw, 2.8rem);
-  max-width: 40rem;
-}
-
-.travel-intro p {
-  color: var(--rust);
-  font-family: var(--font-body), Georgia, serif;
-  font-size: clamp(1.05rem, 1.5vw, 1.18rem);
-  font-style: italic;
-  line-height: 1.6;
-  margin: 0;
-  text-align: center;
-  text-wrap: pretty;
-}
-
 .travel-notes {
-  margin: 0 auto;
-  max-width: 40rem;
+  margin: 0 auto clamp(2.6rem, 5vw, 3.6rem);
+  max-width: 44rem;
 }
 
-/* No card: on a watercolour page the practical paragraphs read better as
-   plain centred prose under a letterspaced label, the way each event's date
-   line sits above its own note. */
+/* Set exactly like the three list titles below it, so Travel reads as four
+   named sub-sections in one voice rather than one small letterspaced label
+   followed by three cursive ones. */
 .travel-note h3 {
-  color: var(--rust);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  margin: 0 0 0.85rem;
+  color: var(--forest);
+  font-family: var(--font-script), cursive;
+  font-size: clamp(1.9rem, 3.6vw, 2.5rem);
+  line-height: 1;
+  margin: 0 0 1.1rem;
   text-align: center;
-  text-transform: uppercase;
+  word-spacing: 0.14em;
 }
 
 .travel-note p {

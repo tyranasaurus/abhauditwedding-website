@@ -296,10 +296,6 @@ function Travel() {
         alt="Abha and Udit on the ferry across Puget Sound"
         focus={[0.32, 0.59]}
       />
-      <Reveal className="travel-intro">
-        <p>{travel.intro}</p>
-      </Reveal>
-
       <div className="travel-notes">
         {travel.notes.map((note, i) => (
           <Reveal

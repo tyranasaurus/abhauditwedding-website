@@ -100,23 +100,6 @@ export function EventPanel({
 
       <p className="sched-note">{event.note}</p>
 
-      {event.venue && (
-        <p className="sched-action">
-          <a
-            className="lnk-venue"
-            href={event.venue.url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span className="sched-venue-name">{event.venue.name}</span>
-            <span className="sched-venue-area">{event.venue.area}</span>
-            {/* No arrow: the stroke under this line already says the link goes
-                somewhere, so the verb can carry the direction on its own. */}
-            <span className="sched-venue-cue">Get directions</span>
-          </a>
-        </p>
-      )}
-
     </article>
   )
 }
