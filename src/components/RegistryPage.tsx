@@ -51,7 +51,7 @@ export function RegistryPage() {
           </div>
 
           <a
-            className="registry-cta"
+            className="btn btn-lead registry-cta"
             href={registry.url}
             target="_blank"
             rel="noopener noreferrer"
@@ -60,7 +60,7 @@ export function RegistryPage() {
           </a>
           <p className="registry-note">{registry.note}</p>
 
-          <a className="registry-back" href="/#top">
+          <a className="btn btn-back registry-back" href="/#top">
             ← Back home
           </a>
         </motion.div>

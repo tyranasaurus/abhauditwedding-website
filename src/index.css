@@ -674,60 +674,81 @@ a.poi:focus-visible .poi-pin {
 }
 
 /* Shared buttons ---------------------------------------------------- */
-/* A doorway rather than a pill: the same arch as the portrait and the photos,
-   flattened to a segmental one at this size. 50% horizontally puts the
-   springing points at the corners, so the top is one continuous dome. */
+/* Buttons ---------------------------------------------------------- *
+ * One sign, painted in whatever pigment its context hands it. Three
+ * things keep it from reading as a web control on a sheet of paper:
+ *
+ *  - the fill is mixed with --paper rather than with transparency, so it
+ *    sits on the sheet as pigment instead of floating over it as a film,
+ *    and the page's paper grain stops at the sign's edge the way it would
+ *    under a painted area;
+ *  - the bottom edge carries more pigment than the other three, because
+ *    that is what a wash does when it pools;
+ *  - nothing lifts on hover. Hover deepens the wash and firms the edge.
+ *    Nothing on this page floats.
+ * ------------------------------------------------------------------ */
 .btn {
-  /* A fixed width, so the dome can be derived from it as a length. A
-     percentage would resolve the vertical half against the button's height —
-     which is how this ended up a rounded lozenge rather than an arch. */
-  --door-w: 15rem;
-  width: var(--door-w);
-  max-width: 100%;
-  min-height: 6.4rem;
-  border-radius:
-    calc(var(--door-w) / 2) calc(var(--door-w) / 2) 0.45rem 0.45rem /
-    calc(var(--door-w) * var(--arch-rise) / 2)
-    calc(var(--door-w) * var(--arch-rise) / 2) 0.45rem 0.45rem;
+  /* Ink is contextual — the text and the edge take whatever pigment the page
+     hands them. The wash is not: it stays the A&U green on every button, which
+     is what makes four signs on four pages read as one family. (Washing in the
+     event's own navy came out a cool grey against warm paper — right in
+     principle, mud on the page.) */
+  --btn-ink: var(--forest);
+  --btn-wash: var(--forest);
+  --btn-radius: 0.85rem;
+  align-items: center;
+  background: color-mix(in srgb, var(--btn-wash) 10%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--btn-ink) 42%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--btn-ink) 64%, transparent);
+  border-radius: var(--btn-radius);
+  color: var(--btn-ink);
   cursor: pointer;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(0.95rem, 1.4vw, 1.08rem);
+  font-size: 1.05rem;
   font-weight: 600;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  text-decoration: none;
-  padding: 0.9rem 1.4rem;
+  justify-content: center;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+  padding: 0.95rem 1.6rem;
   text-align: center;
+  text-decoration: none;
   transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease,
     background-color 0.18s ease,
+    border-color 0.18s ease,
     color 0.18s ease;
 }
 
-/* Outlined, like the venue doorway — a solid 240x102 block of forest was the
-   heaviest thing on a watercolour page, heavier than the portrait above it.
-   Hover fills it: you walk through the door. */
-.btn-primary {
-  background: transparent;
-  border: 1px solid color-mix(in srgb, var(--forest) 62%, transparent);
-  color: var(--forest);
+.btn:hover {
+  background: color-mix(in srgb, var(--btn-wash) 19%, var(--paper));
+  border-color: color-mix(in srgb, var(--btn-ink) 72%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--btn-ink) 88%, transparent);
 }
 
-.btn-primary:hover {
-  background: var(--forest);
-  border-color: var(--forest);
-  color: #fbf4e6;
-  transform: translateY(-2px);
+/* A sign: three stacked lines, and the room a sign needs around them. */
+.btn-sign {
+  gap: 0.18rem;
+  padding: 1.2rem 1.6rem 1.1rem;
+  width: 17rem;
+  max-width: 100%;
 }
 
-.btn-primary:focus-visible {
-  background: var(--forest);
-  border-color: var(--forest);
-  color: #fbf4e6;
+/* The one action on a page. */
+.btn-lead {
+  font-size: clamp(0.9rem, 2.4vw, 1.05rem);
+  letter-spacing: 0.04em;
+  max-width: 100%;
+  padding: 1.1rem 0.9rem;
+  width: min(21rem, calc(100vw - 3rem));
+}
+
+/* A way out, not a destination. */
+.btn-back {
+  --btn-radius: 0.6rem;
+  font-size: 0.98rem;
+  letter-spacing: 0.04em;
+  padding: 0.55rem 1.05rem;
 }
 
 /* In-page anchors (#schedule, #travel, #faq …) land below the fixed nav so
@@ -1622,21 +1643,6 @@ a.poi:focus-visible .poi-pin {
   width: min(15rem, 100%);
 }
 
-.soon-back {
-  color: var(--rust);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-decoration: none;
-  transition: color 0.18s ease;
-}
-
-.soon-back:hover,
-.soon-back:focus-visible {
-  color: var(--forest);
-}
-
 /* ---------------------------------------------------------------------------
    Registry (/registry) — a single centred card whose job is the outbound link.
 --------------------------------------------------------------------------- */
@@ -1706,47 +1712,9 @@ a.poi:focus-visible .poi-pin {
   margin: 0;
 }
 
+/* Spacing only; the sign itself is .btn .btn-lead. */
 .registry-cta {
-  /* "Give to Our Next Adventure Fund" is a long label for a button; the
-     doorway widens and the type steps down on narrow screens so it holds one
-     line rather than wrapping. */
-  --door-w: min(21rem, calc(100vw - 3rem));
-  align-items: center;
-  background: transparent;
-  border: 1px solid color-mix(in srgb, var(--forest) 62%, transparent);
-  border-radius:
-    calc(var(--door-w) / 2) calc(var(--door-w) / 2) 0.45rem 0.45rem /
-    calc(var(--door-w) * var(--arch-rise) / 2)
-    calc(var(--door-w) * var(--arch-rise) / 2) 0.45rem 0.45rem;
-  color: var(--forest);
-  display: inline-flex;
-  justify-content: center;
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(0.9rem, 2.4vw, 1.05rem);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  max-width: 100%;
-  min-height: 7.4rem;
-  padding: 0.9rem 0.5rem;
-  text-align: center;
-  width: var(--door-w);
-  text-decoration: none;
-  transition:
-    background 0.18s ease,
-    transform 0.18s ease;
-}
-
-.registry-cta:hover {
-  background: var(--forest);
-  border-color: var(--forest);
-  color: var(--paper);
-  transform: translateY(-2px);
-}
-
-.registry-cta:focus-visible {
-  background: var(--forest);
-  border-color: var(--forest);
-  color: var(--paper);
+  margin-top: 0.4rem;
 }
 
 .registry-note {
@@ -1757,26 +1725,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .registry-back {
-  color: var(--rust);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
   margin-top: 2.2rem;
-  text-decoration: none;
-  transition: color 0.18s ease;
-}
-
-.registry-back:hover,
-.registry-back:focus-visible {
-  color: var(--forest);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .registry-cta:hover,
-  .registry-cta:focus-visible {
-    transform: none;
-  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -2100,26 +2049,10 @@ a.poi:focus-visible .poi-pin {
 /* A doorway in the event's own colour rather than the site's green button:
    nothing else on this page is a filled box, and one drop-shadowed pill on
    watercolour paper read as a control borrowed from somewhere else. */
+/* Painted in the event's own pigment, the same one the artwork beside it
+   was sampled from. */
 .sched-venue-link {
-  align-items: center;
-  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
-  border-radius: 0.85rem;
-  display: inline-flex;
-  flex-direction: column;
-  gap: 0.18rem;
-  padding: 1.2rem 1.6rem 1.1rem;
-  text-decoration: none;
-  transition:
-    background-color 0.18s ease,
-    border-color 0.18s ease;
-  width: 17rem;
-  max-width: 100%;
-}
-
-.sched-venue-link:hover,
-.sched-venue-link:focus-visible {
-  background: color-mix(in srgb, var(--accent) 7%, transparent);
-  border-color: color-mix(in srgb, var(--accent) 75%, transparent);
+  --btn-ink: var(--accent);
 }
 
 .sched-venue-name {
@@ -2140,7 +2073,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .sched-venue-cue {
-  color: var(--accent-sec);
+  color: var(--btn-ink);
   font-family: var(--font-display), Georgia, serif;
   font-size: 0.875rem;
   font-weight: 600;

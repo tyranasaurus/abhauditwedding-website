@@ -102,7 +102,7 @@ export function EventPanel({
       {event.venue && (
         <p className="sched-venue">
           <a
-            className="sched-venue-link"
+            className="btn btn-sign sched-venue-link"
             href={event.venue.url}
             target="_blank"
             rel="noopener noreferrer"
