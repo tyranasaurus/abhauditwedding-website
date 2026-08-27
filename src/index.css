@@ -1944,7 +1944,9 @@ a.poi:focus-visible .poi-pin {
   text-align: center;
 }
 
-.sched-venue {
+/* Whatever single link an event carries out of itself — the watch party's
+   venue sign, the reception's seating chart. */
+.sched-action {
   margin: 1.5rem 0 0;
   text-align: center;
 }

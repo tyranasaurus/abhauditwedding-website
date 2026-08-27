@@ -46,6 +46,8 @@ export interface WeddingEvent {
   note: string
   /** Optional venue link rendered as a button (the watch party). */
   venue?: { name: string; area: string; url: string }
+  /** A single link out of the event, e.g. the reception's seating chart. */
+  cta?: { label: string; href: string }
   /** Draws an ornament divider before the panel, marking it as an optional extra. */
   divider?: boolean
 }
@@ -123,6 +125,7 @@ export const events: WeddingEvent[] = [
       { time: '7:00 PM', label: 'Dance Party' },
     ],
     note: 'Dosti, Dinner, Dancing and Dhamaal!',
+    cta: { label: 'Seating chart', href: '/seating-chart' },
   },
   {
     className: 'seahawks-opener',

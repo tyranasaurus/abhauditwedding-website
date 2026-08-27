@@ -100,7 +100,7 @@ export function EventPanel({
       <p className="sched-note">{event.note}</p>
 
       {event.venue && (
-        <p className="sched-venue">
+        <p className="sched-action">
           <a
             className="btn btn-sign sched-venue-link"
             href={event.venue.url}
@@ -110,6 +110,14 @@ export function EventPanel({
             <span className="sched-venue-name">{event.venue.name}</span>
             <span className="sched-venue-area">{event.venue.area}</span>
             <span className="sched-venue-cue">Get directions →</span>
+          </a>
+        </p>
+      )}
+
+      {event.cta && (
+        <p className="sched-action">
+          <a className="btn" href={event.cta.href}>
+            {event.cta.label} →
           </a>
         </p>
       )}
