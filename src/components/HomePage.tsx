@@ -1,21 +1,21 @@
-import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react'
 import {
   motion,
   useReducedMotion,
   useScroll,
   useTransform,
   AnimatePresence,
-} from "motion/react";
-import { hero, travel, faqs, venue, mapsSearch } from "@/data/home";
-import { events } from "@/data/events";
-import { EventPanel } from "@/components/EventPanel";
-import { useForecast, type ForecastWindow } from "@/lib/use-forecast";
-import { SiteNav } from "@/components/SiteNav";
-import { RegistryBubble } from "@/components/RegistryBubble";
+} from 'motion/react'
+import { hero, travel, faqs, registry, venue, mapsSearch } from '@/data/home'
+import { events } from '@/data/events'
+import { EventPanel } from '@/components/EventPanel'
+import { useForecast, type ForecastWindow } from '@/lib/use-forecast'
+import { SiteNav } from '@/components/SiteNav'
+import { RegistryBubble } from '@/components/RegistryBubble'
 
 /** The weekend, as calendar days in the venue's own timezone. */
-const FIRST_DAY = "2026-09-05";
-const LAST_DAY = "2026-09-06";
+const FIRST_DAY = '2026-09-05'
+const LAST_DAY = '2026-09-06'
 
 // A small scroll-reveal wrapper used throughout the page. Fades and lifts its
 // children into place the first time they enter the viewport.
@@ -24,27 +24,27 @@ function Reveal({
   className,
   delay = 0,
   y = 26,
-  as = "div",
+  as = 'div',
 }: {
-  children: ReactNode;
-  className?: string;
-  delay?: number;
-  y?: number;
-  as?: "div" | "section" | "li" | "article" | "header" | "figure";
+  children: ReactNode
+  className?: string
+  delay?: number
+  y?: number
+  as?: 'div' | 'section' | 'li' | 'article' | 'header' | 'figure'
 }) {
-  const reduce = useReducedMotion();
-  const Tag = motion[as];
+  const reduce = useReducedMotion()
+  const Tag = motion[as]
   return (
     <Tag
       className={className}
       initial={reduce ? false : { opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "0px 0px -12% 0px" }}
+      viewport={{ once: true, margin: '0px 0px -12% 0px' }}
       transition={{ duration: 0.7, delay, ease: [0.22, 0.61, 0.36, 1] }}
     >
       {children}
     </Tag>
-  );
+  )
 }
 
 function SectionTitle({ kicker, title }: { kicker: string; title: string }) {
@@ -54,23 +54,23 @@ function SectionTitle({ kicker, title }: { kicker: string; title: string }) {
       <h2 className="home-section-title">{title}</h2>
       <div className="home-ornament" aria-hidden="true" />
     </Reveal>
-  );
+  )
 }
 
 // Calendar-day arithmetic rather than elapsed hours: the count should turn over
 // at midnight in Carnation, not at whatever hour the ceremony happens to start.
-const pacificDay = new Intl.DateTimeFormat("en-CA", {
-  timeZone: "America/Los_Angeles",
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-});
+const pacificDay = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'America/Los_Angeles',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+})
 
 function todayInPacific() {
-  const parts = pacificDay.formatToParts(new Date());
+  const parts = pacificDay.formatToParts(new Date())
   const part = (type: Intl.DateTimeFormatPartTypes) =>
-    parts.find((p) => p.type === type)?.value ?? "";
-  return `${part("year")}-${part("month")}-${part("day")}`;
+    parts.find((p) => p.type === type)?.value ?? ''
+  return `${part('year')}-${part('month')}-${part('day')}`
 }
 
 /** Whole days from one YYYY-MM-DD to another, both read as UTC so DST can't skew it. */
@@ -78,44 +78,40 @@ function daysBetween(from: string, to: string) {
   return Math.round(
     (Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) /
       86_400_000,
-  );
+  )
 }
 
 function countdownLabel(today: string) {
-  const untilFirst = daysBetween(today, FIRST_DAY);
-  if (untilFirst > 1) return `${untilFirst} days to go`;
-  if (untilFirst === 1) return "Tomorrow";
+  const untilFirst = daysBetween(today, FIRST_DAY)
+  if (untilFirst > 1) return `${untilFirst} days to go`
+  if (untilFirst === 1) return 'Tomorrow'
   // Both days of the weekend read the same; after that the count retires.
-  return daysBetween(today, LAST_DAY) >= 0 ? "It's today!" : null;
+  return daysBetween(today, LAST_DAY) >= 0 ? "It's today!" : null
 }
 
 function Countdown() {
-  const [label, setLabel] = useState<string | null>(null);
+  const [label, setLabel] = useState<string | null>(null)
   useEffect(() => {
-    const tick = () => setLabel(countdownLabel(todayInPacific()));
-    tick();
+    const tick = () => setLabel(countdownLabel(todayInPacific()))
+    tick()
     // Day-granular, so a slow tick is plenty — it only has to survive midnight.
-    const id = window.setInterval(tick, 300_000);
-    return () => window.clearInterval(id);
-  }, []);
-  if (!label) return null;
-  return <span className="hero-countdown">{label}</span>;
+    const id = window.setInterval(tick, 300_000)
+    return () => window.clearInterval(id)
+  }, [])
+  if (!label) return null
+  return <span className="hero-countdown">{label}</span>
 }
 
 function Hero() {
-  const reduce = useReducedMotion();
-  const ref = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion()
+  const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start start", "end start"],
-  });
+    offset: ['start start', 'end start'],
+  })
   // Gentle parallax: the portrait drifts up a touch as you scroll past.
-  const portraitY = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [0, reduce ? 0 : -60],
-  );
-  const copyY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 40]);
+  const portraitY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -60])
+  const copyY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 40])
 
   return (
     <header className="hero" ref={ref}>
@@ -128,7 +124,7 @@ function Hero() {
         className="hero-sprig hero-sprig--tl"
         initial={reduce ? false : { opacity: 0, rotate: -8, scale: 0.9 }}
         animate={{ opacity: 0.85, rotate: 0, scale: 1 }}
-        transition={{ duration: reduce ? 0 : 1.2, ease: "easeOut" }}
+        transition={{ duration: reduce ? 0 : 1.2, ease: 'easeOut' }}
       />
       <motion.img
         src="/art/map/sprig-corner.webp"
@@ -136,7 +132,7 @@ function Hero() {
         className="hero-sprig hero-sprig--br"
         initial={reduce ? false : { opacity: 0, rotate: 172, scale: 0.9 }}
         animate={{ opacity: 0.85, rotate: 180, scale: 1 }}
-        transition={{ duration: reduce ? 0 : 1.2, ease: "easeOut" }}
+        transition={{ duration: reduce ? 0 : 1.2, ease: 'easeOut' }}
       />
 
       <div className="hero-inner">
@@ -207,15 +203,15 @@ function Hero() {
         </motion.div>
       </div>
     </header>
-  );
+  )
 }
 
 /** The hours we show weather for — the two outdoor events. */
 const FORECAST_WINDOWS: ForecastWindow[] = events.flatMap((event) =>
   event.forecastWindow ? [{ key: event.anchor, ...event.forecastWindow }] : [],
-);
+)
 function Schedule() {
-  const forecast = useForecast(FORECAST_WINDOWS);
+  const forecast = useForecast(FORECAST_WINDOWS)
 
   return (
     <section className="home-schedule" id="schedule" aria-label="Schedule">
@@ -238,7 +234,7 @@ function Schedule() {
         ))}
       </div>
     </section>
-  );
+  )
 }
 
 // A photo of the two of them, matted and set in the same arch as the hero. The
@@ -249,9 +245,9 @@ function SectionPhoto({
   alt,
   position,
 }: {
-  src: string;
-  alt: string;
-  position?: string;
+  src: string
+  alt: string
+  position?: string
 }) {
   return (
     <Reveal as="figure" className="section-photo">
@@ -263,7 +259,7 @@ function SectionPhoto({
         loading="lazy"
       />
     </Reveal>
-  );
+  )
 }
 
 function Travel() {
@@ -359,7 +355,7 @@ function Travel() {
         </Reveal>
       </div>
     </section>
-  );
+  )
 }
 
 function FaqItem({
@@ -368,13 +364,13 @@ function FaqItem({
   link,
   index,
 }: {
-  q: string;
-  a: string;
-  link?: { label: string; href: string };
-  index: number;
+  q: string
+  a: string
+  link?: { label: string; href: string }
+  index: number
 }) {
-  const [open, setOpen] = useState(false);
-  const panelId = `faq-answer-${index}`;
+  const [open, setOpen] = useState(false)
+  const panelId = `faq-answer-${index}`
   return (
     <Reveal as="li" className="faq-item" delay={(index % 2) * 0.06}>
       <button
@@ -400,7 +396,7 @@ function FaqItem({
             className="faq-a"
             id={panelId}
             initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
+            animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.28, ease: [0.22, 0.61, 0.36, 1] }}
           >
@@ -410,7 +406,7 @@ function FaqItem({
                 className="faq-link"
                 href={link.href}
                 {...(/^https?:/.test(link.href)
-                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
                   : {})}
               >
                 {link.label} →
@@ -420,7 +416,7 @@ function FaqItem({
         )}
       </AnimatePresence>
     </Reveal>
-  );
+  )
 }
 
 function Faq() {
@@ -438,7 +434,7 @@ function Faq() {
         ))}
       </ul>
     </section>
-  );
+  )
 }
 
 function Footer() {
@@ -454,17 +450,19 @@ function Footer() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          {venue.name} · {venue.addressLines.join(", ")}
+          {venue.name} · {venue.addressLines.join(', ')}
         </a>
         <nav className="footer-nav" aria-label="Site">
           <a href="#schedule">Schedule</a>
           <a href="#travel">Travel</a>
           <a href="#faq">Q&amp;A</a>
-          <a href="/registry">Registry</a>
+          <a href={registry.url} target="_blank" rel="noopener noreferrer">
+            Registry
+          </a>
         </nav>
       </Reveal>
     </footer>
-  );
+  )
 }
 
 export function HomePage() {
@@ -475,39 +473,39 @@ export function HomePage() {
   // point the page can still have settled, and stop the moment the guest
   // scrolls for themselves.
   useEffect(() => {
-    const id = window.location.hash.slice(1);
-    if (!id) return;
-    let taken = false;
+    const id = window.location.hash.slice(1)
+    if (!id) return
+    let taken = false
     const jump = () => {
-      if (taken) return;
+      if (taken) return
       document
         .getElementById(decodeURIComponent(id))
-        ?.scrollIntoView({ behavior: "auto", block: "start" });
-    };
+        ?.scrollIntoView({ behavior: 'auto', block: 'start' })
+    }
     const release = () => {
-      taken = true;
-    };
-    const opts = { once: true, passive: true } as const;
-    window.addEventListener("wheel", release, opts);
-    window.addEventListener("touchstart", release, opts);
-    window.addEventListener("keydown", release, { once: true });
+      taken = true
+    }
+    const opts = { once: true, passive: true } as const
+    window.addEventListener('wheel', release, opts)
+    window.addEventListener('touchstart', release, opts)
+    window.addEventListener('keydown', release, { once: true })
 
-    requestAnimationFrame(jump);
+    requestAnimationFrame(jump)
     // Anything that changes the page's height moves the target: a display face
     // swapping in, the artwork decoding, the forecast arriving and adding its
     // credit line. Follow the height rather than guessing at a delay.
-    const follow = new ResizeObserver(jump);
-    follow.observe(document.documentElement);
-    const settled = window.setTimeout(() => follow.disconnect(), 3000);
+    const follow = new ResizeObserver(jump)
+    follow.observe(document.documentElement)
+    const settled = window.setTimeout(() => follow.disconnect(), 3000)
 
     return () => {
-      window.removeEventListener("wheel", release);
-      window.removeEventListener("touchstart", release);
-      window.removeEventListener("keydown", release);
-      follow.disconnect();
-      window.clearTimeout(settled);
-    };
-  }, []);
+      window.removeEventListener('wheel', release)
+      window.removeEventListener('touchstart', release)
+      window.removeEventListener('keydown', release)
+      follow.disconnect()
+      window.clearTimeout(settled)
+    }
+  }, [])
 
   return (
     <div className="home" id="top">
@@ -521,5 +519,5 @@ export function HomePage() {
       <Footer />
       <RegistryBubble />
     </div>
-  );
+  )
 }

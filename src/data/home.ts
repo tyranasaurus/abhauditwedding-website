@@ -110,17 +110,12 @@ export const stay = {
 } as const
 
 // Registry --------------------------------------------------------------
+// There is no registry page on this site any more; every route to it — the
+// nav, the footer, the corner bubble, the Q&A answer — hands the guest
+// straight to Joy.
 export const registry = {
   /** Deep link straight to the fund on Joy, past the couple picker. */
   url: 'https://withjoy.com/abhauditwedding/registry?pid=b3e72f03-4062-4a06-bebf-f714fb8c8a49',
-  kicker: 'Our registry',
-  title: 'Our Next Adventure Fund',
-  paragraphs: [
-    'Your presence at Carnation Farms is the whole gift. Getting to celebrate these two days with you is more than we could ask for.',
-    'We have not put together a list of things. Our registry is just Our Next Adventure Fund, and anything you send goes toward the trips ahead of us.',
-  ],
-  cta: 'Give to Our Next Adventure Fund',
-  note: 'Opens withjoy.com in a new tab.',
 } as const
 
 // Q & A -----------------------------------------------------------------
@@ -155,8 +150,8 @@ export const faqs: Faq[] = [
   },
   {
     q: 'Do you have a registry?',
-    a: 'We do, though it is not a list of things — just a single Adventure Fund. Your presence means the most to us, but if you would like to give, you can find it here:',
-    link: { label: 'Visit our Adventure Fund', href: registry.url },
+    a: 'We do, though it is not a list of things — just Our Next Adventure Fund. Your presence means the most to us, but if you would like to give, you can find it here:',
+    link: { label: 'Visit Our Next Adventure Fund', href: registry.url },
   },
   {
     q: 'Where should I park?',

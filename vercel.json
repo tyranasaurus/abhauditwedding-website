@@ -13,10 +13,13 @@
     {
       "source": "/seating-chart",
       "destination": "/index.html"
-    },
+    }
+  ],
+  "redirects": [
     {
       "source": "/registry",
-      "destination": "/index.html"
+      "destination": "https://withjoy.com/abhauditwedding/registry?pid=b3e72f03-4062-4a06-bebf-f714fb8c8a49",
+      "permanent": false
     }
   ]
 }

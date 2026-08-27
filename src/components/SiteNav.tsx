@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
 
+import { registry } from '@/data/home'
+
 /** Scroll distance before the transparent bar fades to solid. */
 const SOLID_AT = 80
 
@@ -124,7 +126,12 @@ export function SiteNav() {
         <a href="/#faq" onClick={close} aria-current={here === 'faq' ? 'true' : undefined}>
           Q&amp;A
         </a>
-        <a href="/registry" onClick={close}>
+        <a
+          href={registry.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={close}
+        >
           Registry
         </a>
       </div>

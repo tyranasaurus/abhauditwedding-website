@@ -1156,8 +1156,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .home-ornament,
-.soon-ornament,
-.registry-ornament {
+.soon-ornament {
   position: relative;
   background: linear-gradient(90deg, transparent, var(--copper), transparent);
   height: 1px;
@@ -1166,8 +1165,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .home-ornament::before,
-.soon-ornament::before,
-.registry-ornament::before {
+.soon-ornament::before {
   content: '';
   position: absolute;
   bottom: 0;
@@ -1641,91 +1639,6 @@ a.poi:focus-visible .poi-pin {
 .soon-ornament {
   margin-bottom: 1.4rem;
   width: min(15rem, 100%);
-}
-
-/* ---------------------------------------------------------------------------
-   Registry (/registry) — a single centred card whose job is the outbound link.
---------------------------------------------------------------------------- */
-.registry-page {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 100svh;
-  padding: calc(var(--nav-h) + 2rem) max(1.2rem, calc((100vw - var(--max)) / 2))
-    3rem;
-  text-align: center;
-}
-
-.registry-card {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  max-width: 34rem;
-  width: 100%;
-}
-
-.registry-mark {
-  height: auto;
-  margin: 0 0 0.4rem;
-  mix-blend-mode: multiply;
-  opacity: 0.95;
-  width: min(11rem, 46vw);
-}
-
-.registry-kicker {
-  color: var(--copper);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  margin: 0;
-  text-transform: uppercase;
-}
-
-.registry-title {
-  color: var(--forest);
-  font-family: var(--font-script), cursive;
-  font-size: clamp(2.9rem, 6.2vw, 4.6rem);
-  font-weight: 400;
-  line-height: 0.92;
-  margin: 0.45rem 0 0;
-  text-wrap: balance;
-}
-
-.registry-ornament {
-  margin-bottom: 1.5rem;
-  width: min(15rem, 100%);
-}
-
-.registry-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-  margin: 0 0 2rem;
-}
-
-.registry-copy p {
-  color: var(--muted-ink);
-  font-size: 1.02rem;
-  line-height: 1.8;
-  margin: 0;
-}
-
-/* Spacing only; the sign itself is .btn .btn-lead. */
-.registry-cta {
-  margin-top: 0.4rem;
-}
-
-.registry-note {
-  color: var(--muted-ink);
-  font-size: 0.9375rem;
-  margin: 0.85rem 0 0;
-  opacity: 0.8;
-}
-
-.registry-back {
-  margin-top: 2.2rem;
 }
 
 /* ---------------------------------------------------------------------------
