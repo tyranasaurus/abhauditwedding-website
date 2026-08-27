@@ -71,35 +71,44 @@
   --diagonal-laid-line: rgba(91, 68, 38, 0.055);
   --linen-highlight-line: rgba(255, 250, 237, 0.34);
   /* ------------------------------------------------------------------
-   * Forest and sepia, one copper whisper.
+   * Green is the site. Copper is what you can act on. The event owns
+   * its panel.
    *
-   * Everything outside an event panel takes a role from this list and
-   * nothing else. Eighteen text colours is a craft fair; mist is quiet.
+   * The backdrop is 35% green by pixel at a mean hue of 128°, so green
+   * is not a preference here — it is the painting's own dominant family.
+   * Everything the site says is one of four greens; the only warm ink
+   * left outside an event panel sits on things a guest can tap.
    *
    *   --forest      script titles, the monogram, the arch line
-   *   --ink         emphasis and interactive — FAQ questions, place names
+   *   --ink         emphasis — FAQ questions
    *   --base-text   body sentences
-   *   --muted-ink   captions, meta, dates, nav, footer
-   *   --rust        the couple's own italic asides, and only those
+   *   --muted-ink   captions, meta, nav, footer, the countdown
+   *   --rust        links, and only links
    *   --rule        every hairline
    *
-   * Inside an event panel: that event's primary accent plus these
-   * neutrals. The accent takes the title, the subtitle and the times;
-   * the activity names are content and take --base-text, because the
-   * least readable thing in the panel should not be the part that says
-   * what is happening.
+   * Inside an event panel: that event's own colours and nothing else —
+   * no copper, no forest, no sepia. The primary accent takes the title,
+   * the subtitle, the date, the activity names and the note; the second
+   * accent takes the times; the marks keep the luminous version.
+   *
+   * Every floor below is measured over the darkest firs the column ever
+   * crosses, which composite to #b5b9ae under the wash — not against the
+   * cream, which flatters by about 1.7x. That is why the body green is
+   * not --forest: the brand green reads 3.34 there, which is a 90px
+   * title's floor, not a paragraph's.
    * ------------------------------------------------------------------ */
-  --ink: #2f2a21;
+  /* Emphasis. The deepest green in the set — 6.06 over the firs. */
+  --ink: #173d29;
   /* The document default. It was #8f6430, a mid saturated yellow-brown, which
      measured 3.95:1 against the column over the treeline — under AA — and sat
      in the same tonal register as the painting, so ink and ground never
      separated. A watercolour is captioned in a warm sepia-black, not in raw
      sienna. This reads 8.57:1 at its worst. */
-  --base-text: #3f3a30;
+  --base-text: #254d36;
   /* Deep enough to clear AA against the darkest firs the column ever crosses:
      the plate's 99.9th-percentile dark is #2b3a25, which composites to #b5b9ae
      under the wash, and this reads 4.59 there. */
-  --muted-ink: #4c4838;
+  --muted-ink: #354e3b;
   --soft-green: #d2d9cd;
   /* One hairline weight for every rule on the site: between events, between
      Q&A rows, under each travel spot. The colour is the needle painting's own
@@ -1269,7 +1278,9 @@ a.poi:focus-visible .poi-pin {
 .hero-countdown {
   display: inline-block;
   margin-top: 1.5rem;
-  color: var(--rust);
+  /* Was rust. Copper means "this does something" now, and a countdown does
+     not. */
+  color: var(--muted-ink);
   font-family: var(--font-body), Georgia, serif;
   font-style: italic;
   font-size: clamp(0.95rem, 1.5vw, 1.15rem);
@@ -1478,9 +1489,12 @@ a.poi:focus-visible .poi-pin {
   padding: 0.8rem 0.15rem;
 }
 
+/* A link has to look like one before it is touched. There is no hover on a
+   phone, so the copper and the painted stroke are both there at rest and the
+   hover only deepens them. */
 .travel-spot-name {
   align-self: flex-start;
-  color: var(--ink);
+  color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-weight: 700;
   font-size: 1.2rem;
@@ -1488,7 +1502,7 @@ a.poi:focus-visible .poi-pin {
   background-image: linear-gradient(var(--rust), var(--rust));
   background-position: 0 100%;
   background-repeat: no-repeat;
-  background-size: 0 1.5px;
+  background-size: 100% 1px;
   transition:
     color 0.18s ease,
     background-size 0.22s ease;
@@ -1496,8 +1510,8 @@ a.poi:focus-visible .poi-pin {
 
 .travel-spot-name:hover,
 .travel-spot-name:focus-visible {
-  color: var(--rust);
-  background-size: 100% 1.5px;
+  color: var(--burnt-copper);
+  background-size: 100% 2.5px;
 }
 
 .travel-spot-note {
@@ -1583,12 +1597,14 @@ a.poi:focus-visible .poi-pin {
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(1rem, 1.7vw, 1.18rem);
   font-weight: 700;
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
 }
 
 .faq-link:hover {
-  color: var(--rust);
-  text-decoration: underline;
+  color: var(--burnt-copper);
+  text-decoration-thickness: 2.5px;
 }
 
 /* Footer ------------------------------------------------------------ */
@@ -1617,7 +1633,7 @@ a.poi:focus-visible .poi-pin {
 
 .footer-venue {
   display: inline-block;
-  color: var(--burnt-copper);
+  color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(0.92rem, 1.5vw, 1.05rem);
   text-decoration: none;
@@ -2041,8 +2057,10 @@ a.poi:focus-visible .poi-pin {
 /* What kind of event it is, in the serif the name used to be set in. Never
    below 24px, which is where WCAG's large-text line sits — under it the
    carnival's pink could not carry this at 4.5:1. */
+/* The second accent, so the head is not three lines of one colour: the title
+   and the date take the primary and this sits between them in the other. */
 .sched-kind {
-  color: var(--accent);
+  color: var(--accent-sec);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(1.55rem, 2.2vw, 1.85rem);
   font-weight: 500;
@@ -2052,7 +2070,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .sched-date {
-  color: var(--muted-ink);
+  color: var(--accent);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(1.25rem, 1.8vw, 1.45rem);
   font-weight: 700;
@@ -2183,8 +2201,12 @@ a.poi:focus-visible .poi-pin {
   width: 8px;
 }
 
+/* The second accent. For Sunset Shaadi that is the painting's own sunflower
+   gold at hue 77°, three degrees off the sunflowers and larches it was sampled
+   from; for the Carnival it is the purple, for the Sangeet the copper. It had
+   been declared in events.ts and used nowhere. */
 .sched-times time {
-  color: var(--accent);
+  color: var(--accent-sec);
   font-family: var(--font-display), Georgia, serif;
   font-size: 1.85rem;
   /* Cormorant defaults to old-style figures, so digit heights vary by glyph and
@@ -2199,11 +2221,11 @@ a.poi:focus-visible .poi-pin {
   white-space: nowrap;
 }
 
-/* The content of the row, so it reads as content: sepia, not the secondary
-   accent. In gold or purple it was the least legible thing in the panel, which
-   is backwards — the accent belongs on the title and the times. */
+/* The content of the row. It takes the event's primary accent, not the site's
+   green: a panel carries its own colours and nothing else, which is what stops
+   the schedule reading as copper and forest and four event palettes at once. */
 .sched-what {
-  color: var(--base-text);
+  color: var(--accent);
   font-family: var(--font-display), Georgia, serif;
   font-size: 1.5rem;
   font-weight: 600;
@@ -2291,7 +2313,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .sched-note {
-  color: var(--rust);
+  color: var(--accent);
   font-family: var(--font-body), Georgia, serif;
   font-size: clamp(1.1rem, 1.62vw, 1.28rem);
   font-style: italic;
