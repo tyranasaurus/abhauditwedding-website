@@ -94,7 +94,7 @@ export const events: WeddingEvent[] = [
     imageWidth: 792,
     imageHeight: 838,
     timeline: [
-      { time: '3:30 PM', label: 'Refreshments' },
+      { time: '3:45 PM', label: 'Refreshments' },
       { time: '4:00 PM', label: 'Ceremony' },
       { time: '7:00 PM', label: 'Dinner' },
       { time: '8:00 PM', label: 'Speeches' },
@@ -143,7 +143,7 @@ export const events: WeddingEvent[] = [
     imageWidth: 784,
     imageHeight: 813,
     timeline: [
-      { time: '4:30 PM', label: 'Appetizers Served' },
+      { time: '4:45 PM', label: 'Appetizers Served' },
       { time: '5:00 PM', label: 'Sangeet First Half' },
       { time: '6:00 PM', label: 'Dinner and Photos' },
       { time: '6:30 PM', label: 'Sangeet Second Half' },
