@@ -63,11 +63,13 @@
      the links sit on the column's own edges rather than out on the painting. */
   --column-w: clamp(46rem, 60%, 78rem);
   /* How much of the painting survives behind the text. Set by eye at 0.70 so
-     the painting stays the point; for the record, that leaves 31 pieces of
-     text below AA contrast against the 28 the old flat paper had. The gap is
-     almost entirely the carnival pink and the sunset orange, both of which
-     were already marginal before any of this — darkening those two inks would
-     close it without touching this number. */
+     the painting stays the point. Measured after the bezel landed: 27 of the
+     202 text items that sit on the column fall below AA contrast, against 26
+     on the flat paper this replaced — so it costs the page essentially
+     nothing. Both counts are dominated by the carnival pink and the sunset
+     orange, which were already marginal before any of this; darkening those
+     two inks is what would move the number, not this one. 0.78 would take it
+     to 15 if we ever want to trade painting for legibility. */
   --column-wash: 0.7;
   /* The margin between the column's edge and anything inside it. */
   --column-bezel: clamp(1.25rem, 2.6vw, 2.5rem);
