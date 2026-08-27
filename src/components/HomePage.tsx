@@ -185,16 +185,6 @@ function Hero() {
             <span className="hero-venue">{hero.venue}</span>
           </motion.div>
           <motion.div
-            className="hero-actions"
-            initial={reduce ? false : { opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.6 }}
-          >
-            <a className="btn btn-primary" href="#schedule">
-              See the weekend
-            </a>
-          </motion.div>
-          <motion.div
             initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.9 }}
@@ -211,9 +201,6 @@ function Hero() {
 const FORECAST_WINDOWS: ForecastWindow[] = events.flatMap((event) =>
   event.forecastWindow ? [{ key: event.anchor, ...event.forecastWindow }] : [],
 )
-/** The credit sits under the last event that carries a forecast, not the page. */
-const LAST_FORECAST = FORECAST_WINDOWS.at(-1)?.key
-
 function Schedule() {
   const forecast = useForecast(FORECAST_WINDOWS)
 
@@ -234,9 +221,6 @@ function Schedule() {
               </div>
             )}
             <EventPanel event={event} forecast={forecast.get(event.anchor)} />
-            {event.anchor === LAST_FORECAST && forecast.size > 0 && (
-              <p className="sched-wx-credit">Forecasts for Carnation · Open-Meteo</p>
-            )}
           </Fragment>
         ))}
       </div>
