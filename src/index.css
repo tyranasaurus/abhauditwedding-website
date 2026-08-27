@@ -70,7 +70,7 @@
      orange, which were already marginal before any of this; darkening those
      two inks is what would move the number, not this one. 0.78 would take it
      to 15 if we ever want to trade painting for legibility. */
-  --column-wash: 0.7;
+  --column-wash: 0.65;
   /* The margin between the column's edge and anything inside it. */
   --column-bezel: clamp(1.25rem, 2.6vw, 2.5rem);
 }
