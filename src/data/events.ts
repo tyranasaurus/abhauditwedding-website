@@ -48,8 +48,10 @@ export interface WeddingEvent {
   venue?: { name: string; area: string; url: string }
   /** A single link out of the event, e.g. the reception's seating chart. */
   cta?: { label: string; href: string }
-  /** Draws an ornament divider before the panel, marking it as an optional extra. */
-  divider?: boolean
+  /** Marks the panel as an optional extra rather than a peer event. A drawn
+   *  line cannot say "this one is optional" — only words can, which is why
+   *  this is a string and not a flag. Set above the title. */
+  aside?: string
 }
 
 // Ordered chronologically across the wedding weekend.
@@ -141,7 +143,7 @@ export const events: WeddingEvent[] = [
     imageWidth: 799,
     imageHeight: 762,
     artWidth: '520px',
-    divider: true,
+    aside: 'If you’re still in town',
     venue: {
       name: 'Sam’s Tavern',
       area: 'South Lake Union',

@@ -16,7 +16,6 @@ export function SeatingChart() {
         <h1 id="seating-title" className="soon-title">
           Coming soon
         </h1>
-        <div className="soon-ornament" aria-hidden="true" />
         <a className="btn btn-back" href="/#top">
           ← Back home
         </a>

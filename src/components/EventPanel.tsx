@@ -27,6 +27,7 @@ export function EventPanel({
       style={style}
     >
       <header className="sched-head">
+        {event.aside && <p className="sched-aside">{event.aside}</p>}
         <h2>{event.title}</h2>
         {event.subtitle && <p className="sched-kind">{event.subtitle}</p>}
         <p className="sched-date">

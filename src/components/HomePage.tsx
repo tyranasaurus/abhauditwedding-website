@@ -1,5 +1,4 @@
 import {
-  Fragment,
   useEffect,
   useRef,
   useState,
@@ -57,7 +56,6 @@ function SectionTitle({ title }: { title: string }) {
   return (
     <Reveal className="home-section-head" as="header">
       <h2 className="home-section-title">{title}</h2>
-      <div className="home-ornament" aria-hidden="true" />
     </Reveal>
   )
 }
@@ -141,8 +139,6 @@ function Hero() {
 
   return (
     <header className="hero" ref={ref}>
-      <div className="hero-sky" aria-hidden="true" />
-
       <div className="hero-inner">
         <motion.div
           className="hero-portrait-wrap"
@@ -231,14 +227,11 @@ function Schedule() {
       <SectionTitle title="Schedule" />
       <div className="sched-stack">
         {events.map((event) => (
-          <Fragment key={event.anchor}>
-            {event.divider && (
-              <div className="sched-divider" aria-hidden="true">
-                <div className="home-ornament" />
-              </div>
-            )}
-            <EventPanel event={event} forecast={forecast.get(event.anchor)} />
-          </Fragment>
+          <EventPanel
+            key={event.anchor}
+            event={event}
+            forecast={forecast.get(event.anchor)}
+          />
         ))}
       </div>
     </section>
@@ -271,6 +264,8 @@ function SectionPhoto({
           src="/art/needle-divider.webp"
           alt=""
           aria-hidden="true"
+          width={1100}
+          height={148}
           loading="lazy"
         />
       </Reveal>
@@ -469,7 +464,6 @@ function Footer() {
     <footer className="home-footer">
       <Reveal>
         <p className="footer-names">{hero.names}</p>
-        <div className="home-ornament" aria-hidden="true" />
         <p className="footer-date">{hero.date}</p>
         <a
           className="footer-venue"
