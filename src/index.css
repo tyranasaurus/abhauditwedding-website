@@ -1128,16 +1128,6 @@ a.poi:focus-visible .poi-pin {
   margin-bottom: clamp(1.8rem, 4vw, 3rem);
 }
 
-.home-kicker {
-  color: var(--rust);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(0.875rem, 1.2vw, 0.95rem);
-  font-weight: 600;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  margin: 0;
-}
-
 .home-section-title {
   color: var(--forest);
   font-family: var(--font-script), cursive;

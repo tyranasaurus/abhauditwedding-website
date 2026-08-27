@@ -47,10 +47,9 @@ function Reveal({
   )
 }
 
-function SectionTitle({ kicker, title }: { kicker?: string; title: string }) {
+function SectionTitle({ title }: { title: string }) {
   return (
     <Reveal className="home-section-head" as="header">
-      {kicker ? <p className="home-kicker">{kicker}</p> : null}
       <h2 className="home-section-title">{title}</h2>
       <div className="home-ornament" aria-hidden="true" />
     </Reveal>
@@ -427,7 +426,7 @@ function Faq() {
         alt="Abha and Udit walking along the shore at the water's edge"
         position="50% 50%"
       />
-      <SectionTitle kicker="Good to Know" title="Q & A" />
+      <SectionTitle title="Q & A" />
       <ul className="faq-list">
         {faqs.map((f, i) => (
           <FaqItem key={f.q} q={f.q} a={f.a} link={f.link} index={i} />
