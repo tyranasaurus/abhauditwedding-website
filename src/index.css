@@ -62,10 +62,13 @@
      wide display. The nav gutters resolve against this too, so the brand and
      the links sit on the column's own edges rather than out on the painting. */
   --column-w: clamp(46rem, 60%, 78rem);
-  /* How much of the painting survives behind the text. Measured, not guessed:
-     at 0.72 the backdrop costs 11 items their AA contrast; at 0.78 the page
-     ends up better than the flat paper it replaced. */
-  --column-wash: 0.78;
+  /* How much of the painting survives behind the text. Set by eye at 0.70 so
+     the painting stays the point; for the record, that leaves 31 pieces of
+     text below AA contrast against the 28 the old flat paper had. The gap is
+     almost entirely the carnival pink and the sunset orange, both of which
+     were already marginal before any of this — darkening those two inks would
+     close it without touching this number. */
+  --column-wash: 0.7;
 }
 
 * {
