@@ -1177,6 +1177,19 @@ a.poi:focus-visible .poi-pin {
   padding: clamp(3rem, 7vw, 6rem) 0;
 }
 
+/* The needle spray that heads each band. The painting is 7.8:1 once its
+   transparent margin is trimmed off, which is a rule's proportions rather than
+   a block's — at 17rem across it stands 37px tall, so it costs a section head
+   about as much room as the hairline it replaces and reads as drawn rather
+   than ruled. It is a true cutout, so it sits straight on the backdrop. */
+.needle-rule {
+  display: block;
+  width: min(17rem, 62%);
+  height: auto;
+  margin: 0 auto clamp(1.8rem, 4vw, 2.8rem);
+  opacity: 0.9;
+}
+
 /* The dividing bands.
  *
  * Exactly one arch on the page, and it is the opening. These photographs are
@@ -1198,6 +1211,25 @@ a.poi:focus-visible .poi-pin {
   box-shadow:
     0 1px 2px rgba(47, 42, 33, 0.06),
     0 10px 26px rgba(47, 42, 33, 0.14);
+}
+
+/* On a phone the column is the whole screen, so a mat plus the column's bezel
+   leaves the photograph looking inset twice over. Below the column's own
+   breakpoint the bands run edge to edge instead — the negative margin cancels
+   exactly the bezel they inherit. */
+@media (max-width: 900px) {
+  .section-photo {
+    width: auto;
+    margin-inline: calc(-1 * var(--column-bezel));
+    padding: 0;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .section-photo-img {
+    border-radius: 0;
+  }
 }
 
 .section-photo-img {

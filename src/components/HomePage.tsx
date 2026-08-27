@@ -251,15 +251,28 @@ function SectionPhoto({
   position?: string
 }) {
   return (
-    <Reveal as="figure" className="section-photo">
-      <img
-        src={src}
-        alt={alt}
-        className="section-photo-img"
-        style={position ? { objectPosition: position } : undefined}
-        loading="lazy"
-      />
-    </Reveal>
+    <>
+      {/* The needle spray always travels with the photograph below it: the two
+          together are what separate one section from the next. */}
+      <Reveal>
+        <img
+          className="needle-rule"
+          src="/art/needle-divider.webp"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+        />
+      </Reveal>
+      <Reveal as="figure" className="section-photo">
+        <img
+          src={src}
+          alt={alt}
+          className="section-photo-img"
+          style={position ? { objectPosition: position } : undefined}
+          loading="lazy"
+        />
+      </Reveal>
+    </>
   )
 }
 
