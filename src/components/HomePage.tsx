@@ -476,23 +476,17 @@ function Footer() {
         >
           {venue.label}
         </a>
+        {/* The registry sits in the row rather than below it as its own ask:
+            it is the same kind of destination as the three sections, and the
+            top nav already lists it alongside them. */}
         <nav className="footer-nav" aria-label="Site">
           <a href="#schedule">Schedule</a>
           <a href="#travel">Travel</a>
           <a href="#faq">Q&amp;A</a>
-        </nav>
-        {/* The nav row above is navigation; this is the ask, and it waits until
-            the very bottom of the page to make it. */}
-        <p className="footer-registry">
-          <a
-            className="btn btn-lead"
-            href={registry.url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Our registry →
+          <a href={registry.url} target="_blank" rel="noopener noreferrer">
+            Registry
           </a>
-        </p>
+        </nav>
       </Reveal>
     </footer>
   )
