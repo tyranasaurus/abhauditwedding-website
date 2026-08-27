@@ -43,7 +43,7 @@
      always derived from the element's own width. */
   --arch-rise: 0.55;
   --arch-mat: #fffdf7;
-  --arch-line: rgba(44, 104, 60, 0.62);
+  --arch-line: rgba(44, 104, 60, 0.85);
   /* One focus indicator for the whole site. A box-shadow rather than an
      outline, because it follows border-radius and so arches with the doorways. */
   --focus-ring:
@@ -1055,7 +1055,11 @@ a.poi:focus-visible .poi-pin {
      in border-radius resolves against height for the vertical half — which
      would turn the dome into an ellipse the moment the box stopped being
      square. Keeping the width a length keeps the arch a true semicircle. */
-  --portrait-w: clamp(11rem, 64vw, 34rem);
+  /* Below 901px the column is the whole viewport, so 70% of the content it can
+     hold is about 64vw once the bezel is out; the wide-screen figure is set
+     just below. A length throughout, never a percentage — half of it is the
+     arch's radius, and a border-radius percentage resolves against height. */
+  --portrait-w: min(64vw, 34rem);
   /* Shrinks with the screen. The ring sits outside --portrait-w, so on a phone
      a fixed gap is what pushes the arch to within a few pixels of the bezel. */
   --arch-gap: clamp(1.05rem, 3vw, 1.5rem);
@@ -1064,11 +1068,12 @@ a.poi:focus-visible .poi-pin {
   margin-bottom: calc(var(--arch-gap) + 0.35rem);
   position: relative;
   width: var(--portrait-w);
-  /* Half again as wide as it is tall. The dome is still a true semicircle —
-     its rise is half the width, which is 0.83 of the height here, so it
-     springs from low on the jambs and the arch reads wide rather than as a
-     doorway. Everything below this opening gets a full-width band instead. */
-  aspect-ratio: 5 / 3;
+  /* Barely wider than it is tall. The source is a square head-to-hip crop, so
+     this is as short as the box can get while still holding Udit's belt line
+     and Abha's arm the whole way round him — anything wider cuts the bottom
+     off. The dome is a true semicircle either way: its rise is half the width,
+     comfortably inside the height at this ratio. */
+  aspect-ratio: 1.05 / 1;
   /* This box is a flex item of .hero-inner, so its automatic minimum size is
      its content — the square photo at full width. Without this, that minimum
      wins and the aspect-ratio above is silently ignored. */
@@ -1077,11 +1082,25 @@ a.poi:focus-visible .poi-pin {
   place-items: center;
 }
 
-/* The single forest line, traced concentrically outside the mat. */
+/* 70% of the column's content width, expressed as a length so the arch radius
+   still resolves. The column is 60vw with a 2.6vw bezel each side, so 70% of
+   what it can hold is 0.7 x (60 - 5.2) = 38.4vw — but only while the column is
+   actually 60vw. Below about 1227px it sits on its 46rem floor and stops
+   shrinking, which is what the lower bound covers; above 1920 the upper bound
+   stops the arch running away. */
+@media (min-width: 901px) {
+  .hero-portrait-wrap {
+    --portrait-w: clamp(29.5rem, 38.4vw, 46rem);
+  }
+}
+
+/* The single forest line, traced concentrically outside the mat. Heavier than
+   the one on the section photos: this is the largest arch on the site and a
+   hairline disappeared against the painting behind it. */
 .hero-portrait-arch {
   position: absolute;
   inset: calc(-1 * var(--arch-gap));
-  border: 1px solid var(--arch-line);
+  border: 2.5px solid var(--arch-line);
   border-radius:
     calc(var(--portrait-w) / 2 + var(--arch-gap))
     calc(var(--portrait-w) / 2 + var(--arch-gap))
@@ -1095,20 +1114,22 @@ a.poi:focus-visible .poi-pin {
   overflow: hidden;
   border-radius: calc(var(--portrait-w) / 2) calc(var(--portrait-w) / 2) 0.45rem
     0.45rem;
-  /* Mat only. A blurred shadow here made the largest, first instance of the
-     arch read as a sticker — the same reason the section photos have none. */
-  box-shadow: 0 0 0 0.75rem var(--arch-mat);
+  /* The mat fills the whole gap out to the line, so no backdrop shows between
+     the two. A spread shadow's outer radius is the element's radius plus the
+     spread, which is exactly the arch's own radius, so the two stay concentric
+     at every size. No blur: it made the largest, first instance of the arch
+     read as a sticker. */
+  box-shadow: 0 0 0 var(--arch-gap) var(--arch-mat);
 }
 
 .hero-portrait {
   width: 100%;
   height: 100%;
-  /* couple.webp is a square head-to-hip crop. The arch is now wider than it is
-     tall, so cover keeps the full width and takes a 60% band out of the
-     height; biasing that band upward lands it on their faces and stops it just
-     above the waist, which is the crop this opening wants. */
+  /* couple.webp is a square head-to-hip crop and the box is 1.05:1, so cover
+     keeps the full width and takes 95% of the height. Anchored at the top,
+     that band runs from just above his hair down past his belt. */
   object-fit: cover;
-  object-position: 50% 10%;
+  object-position: 50% 0%;
 }
 
 /* Carattere's leading A carries a swash well left of its origin, so centring
@@ -1619,7 +1640,7 @@ a.poi:focus-visible .poi-pin {
   }
 
   .hero-portrait-wrap {
-    --portrait-w: clamp(15rem, 58vh, 34rem);
+    --portrait-w: min(clamp(29.5rem, 38.4vw, 46rem), 78vh);
     --arch-gap: 1.15rem;
   }
 
@@ -1653,9 +1674,8 @@ a.poi:focus-visible .poi-pin {
   }
 
   .hero-portrait-wrap {
-    /* Short *and* narrow, so the width is the binding constraint as often as
-       the height is; whichever runs out first wins. */
-    --portrait-w: clamp(11rem, min(50vh, 64vw), 24rem);
+    /* Short *and* narrow, so whichever of the two runs out first wins. */
+    --portrait-w: min(64vw, 34rem, 62vh);
     --arch-gap: 1.05rem;
   }
 
