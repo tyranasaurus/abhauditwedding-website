@@ -113,6 +113,9 @@ function daysBetween(from: string, to: string) {
   )
 }
 
+/** Pacific hour at which the count drops by one. */
+const STEP_HOUR = 15
+
 function countdownLabel({ day, hour }: { day: string; hour: number }) {
   // The weekend itself is read from the real date, never the shifted one: on
   // the morning of the 5th the site must not still be saying "Tomorrow". Both
@@ -121,10 +124,12 @@ function countdownLabel({ day, hour }: { day: string; hour: number }) {
   if (daysBetween(day, LAST_DAY) < 0) return 'Thanks for coming'
   if (daysBetween(day, FIRST_DAY) <= 0) return "It's today!"
 
-  // Everything before the weekend steps at midday rather than at midnight, so
-  // the number never changes while everyone is asleep — the count you go to bed
-  // on is the one you wake up to.
-  const counted = hour < 12 ? addDays(day, -1) : day
+  // Everything before the weekend steps at 3pm rather than at midnight, so the
+  // number never changes while everyone is asleep — the count you go to bed on
+  // is the one you wake up to. 3pm because that is when the weekend actually
+  // starts: refreshments are at 3:30 on the Saturday, so "10 days to go" is
+  // true right up to the hour the wedding would have begun.
+  const counted = hour < STEP_HOUR ? addDays(day, -1) : day
   const untilFirst = daysBetween(counted, FIRST_DAY)
   return untilFirst > 1 ? `${untilFirst} days to go` : 'Tomorrow'
 }
