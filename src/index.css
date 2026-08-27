@@ -73,7 +73,7 @@
      measure never strangles on a laptop and capped so it doesn't run away on a
      wide display. The nav gutters resolve against this too, so the brand and
      the links sit on the column's own edges rather than out on the painting. */
-  --column-w: clamp(36.8rem, 48%, 62.4rem);
+  --column-w: clamp(40.5rem, 52.8%, 68.6rem);
   /* How much of the painting survives behind the text. Chosen by eye at 0.65,
      which puts the painting firmly in charge. Measured cost, of the 202 text
      items that sit on the column: 0.65 leaves 40 below AA contrast, 0.70
@@ -1689,6 +1689,24 @@ a.poi:focus-visible .poi-pin {
     --arch-gap: 1.15rem;
   }
 
+  /* The arch takes whichever is smaller: the 100px-cut width, or the room
+     actually left under it. A fixed pixel cut could never win this on its own —
+     the arch is 38.4vw, so it grows with screen *width* while the space for it
+     grows with *height*, and those are not correlated. A 16in laptop is wider
+     than a 14in but barely taller, so it was worse off.
+     21.5rem is the rest of the stack measured at 1440: 88px of hero padding,
+     24 below the arch, 20.8 of row gap, 195 of names + date + countdown, and
+     15 to breathe. svh, not vh, so it is the height with the browser chrome
+     showing — the state the countdown has to survive. */
+  @supports (height: 100svh) {
+    .hero-portrait-wrap {
+      --portrait-w: min(
+        calc(clamp(29.5rem, 38.4vw, 46rem) - 6.25rem),
+        calc((100svh - 21.5rem) * 1.05)
+      );
+    }
+  }
+
   .hero-inner {
     gap: 1.3rem;
   }
@@ -1812,6 +1830,12 @@ a.poi:focus-visible .poi-pin {
    are the fallbacks. --accent takes the event name and the times, --accent-sec
    the timeline bullets, spine and labels. */
 .sched-event {
+  /* The panel measures itself, not the window. Two columns need 352px of times
+     plus a 4rem gap plus 420px of artwork — 836px — and whether that fits is a
+     question about the column, which is 53% of the viewport, not about the
+     viewport. Keyed to the window it stayed two-up inside a 685px column at
+     1440 and squeezed the paintings to 311px to do it. */
+  container-type: inline-size;
   --accent: var(--forest);
   --accent-sec: var(--rust);
   --accent-mark: var(--rust);
@@ -2096,6 +2120,27 @@ a.poi:focus-visible .poi-pin {
   height: auto;
   opacity: 0.96;
   width: 100%;
+}
+
+/* Below 830px of *panel* the two tracks stop fitting, so the artwork goes
+   above the times at its full width instead of being crushed beside them. */
+@container (max-width: 830px) {
+  .sched-cols,
+  .sched-cols.is-solo {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.7rem;
+    justify-items: center;
+  }
+
+  /* Artwork first, so you can see which event you have landed on. */
+  .sched-art {
+    order: -1;
+    width: min(var(--art, 420px), 100%);
+  }
+
+  .sched-times {
+    justify-self: center;
+  }
 }
 
 .sched-vibe {

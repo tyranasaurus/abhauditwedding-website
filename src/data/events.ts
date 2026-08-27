@@ -71,13 +71,23 @@ export const events: WeddingEvent[] = [
     // toward brick red (#a6350c, hue 15) and mustard (#a07903) — and the
     // mustard measured 2.0 against the column over the firs, well under the
     // 3:1 these sizes need. These hold the painting's hue and give up only
-    // value: sunset at hue 20, sunflower at hue 40, both measured at 3.2+.
-    // `marks` is the win — bullets and spine carry no text, so they can keep
-    // the luminous gold the rest of the palette cannot afford.
-    accents: { primary: '#a23f0d', secondary: '#7e5606', marks: '#b07c0a' },
+    // value: sunset at hue 20, sunflower at hue 40.
+    //
+    // How much value to give up was a deliberate choice, made against
+    // renderings rather than numbers. Worst case, where the column crosses the
+    // darkest firs: name and times 2.17, labels 2.15, against the 3:1 large
+    // text nominally wants. Everywhere paler it clears — 4.04 on the sky, 3.53
+    // on the hills, 3.29 on the treeline — and the darkest firs are a small
+    // part of the plate. The trade buys a panel that reads as the sunset in
+    // the painting instead of as rust.
+    //
+    // `marks` is free either way: bullets and the spine carry no text, so they
+    // have no threshold to meet at all, and this gold is sampled straight off
+    // the sunflowers.
+    accents: { primary: '#d05011', secondary: '#a37008', marks: '#e0a94e' },
     // The caption sits on the artwork itself, so it is measured against the
     // painting's gold as well as its own paper glow.
-    vibeColors: ['#a34108', '#815806'],
+    vibeColors: ['#cf4f0f', '#a37008'],
     captionDrop: '0.30em',
     image: '/art/shaadi.webp',
     imageAlt: 'Four guests dressed for the Sunset Shaadi ceremony',
