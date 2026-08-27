@@ -52,9 +52,9 @@
 
 :root {
   --forest: #4d6044;
-  --deep-forest: #173d29;
-  --pine: #254d36;
-  --copper: #9b643a;
+  --deep-forest: #283b1c;
+  --pine: #364a28;
+  --copper: #9f6143;
   /* Kept only as the parent hue of --rule and for the map/registry kickers.
      It is not a text colour on the homepage: it used to carry every date line
      and every event note, which put the page's hottest, most saturated ink on
