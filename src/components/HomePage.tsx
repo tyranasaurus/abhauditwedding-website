@@ -1,4 +1,10 @@
-import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from 'react'
 import {
   motion,
   useReducedMotion,
@@ -11,7 +17,6 @@ import { events } from '@/data/events'
 import { EventPanel } from '@/components/EventPanel'
 import { useForecast, type ForecastWindow } from '@/lib/use-forecast'
 import { SiteNav } from '@/components/SiteNav'
-import { RegistryBubble } from '@/components/RegistryBubble'
 
 /** The weekend, as calendar days in the venue's own timezone. */
 const FIRST_DAY = '2026-09-05'
@@ -49,27 +54,55 @@ function Reveal({
 
 function SectionTitle({ title }: { title: string }) {
   return (
-    <Reveal className="home-section-head" as="header">
-      <h2 className="home-section-title">{title}</h2>
-      <div className="home-ornament" aria-hidden="true" />
-    </Reveal>
+    <>
+      {/* The needle spray travels with the title, not with the photograph: the
+          two marks that jointly say "new chapter" have to be adjacent, or the
+          picture arrives before you have been told which section you are in. */}
+      <Reveal>
+        <img
+          className="needle-rule"
+          src="/art/needle-divider.webp"
+          alt=""
+          aria-hidden="true"
+          width={1100}
+          height={148}
+          loading="lazy"
+        />
+      </Reveal>
+      <Reveal className="home-section-head" as="header">
+        <h2 className="home-section-title">{title}</h2>
+      </Reveal>
+    </>
   )
 }
 
-// Calendar-day arithmetic rather than elapsed hours: the count should turn over
-// at midnight in Carnation, not at whatever hour the ceremony happens to start.
-const pacificDay = new Intl.DateTimeFormat('en-CA', {
+// Calendar-day arithmetic rather than elapsed hours: the count turns over on a
+// date boundary in Carnation, not at whatever hour the ceremony happens to
+// start. The hour comes along too, because the number steps at midday.
+const pacificNowFormat = new Intl.DateTimeFormat('en-CA', {
   timeZone: 'America/Los_Angeles',
   year: 'numeric',
   month: '2-digit',
   day: '2-digit',
+  hour: '2-digit',
+  hourCycle: 'h23',
 })
 
-function todayInPacific() {
-  const parts = pacificDay.formatToParts(new Date())
+function nowInPacific() {
+  const parts = pacificNowFormat.formatToParts(new Date())
   const part = (type: Intl.DateTimeFormatPartTypes) =>
     parts.find((p) => p.type === type)?.value ?? ''
-  return `${part('year')}-${part('month')}-${part('day')}`
+  return {
+    day: `${part('year')}-${part('month')}-${part('day')}`,
+    hour: Number(part('hour')),
+  }
+}
+
+/** Shifts a YYYY-MM-DD by whole days, in UTC so DST can't skew it. */
+function addDays(day: string, n: number) {
+  return new Date(Date.parse(`${day}T00:00:00Z`) + n * 86_400_000)
+    .toISOString()
+    .slice(0, 10)
 }
 
 /** Whole days from one YYYY-MM-DD to another, both read as UTC so DST can't skew it. */
@@ -80,20 +113,28 @@ function daysBetween(from: string, to: string) {
   )
 }
 
-function countdownLabel(today: string) {
-  const untilFirst = daysBetween(today, FIRST_DAY)
-  if (untilFirst > 1) return `${untilFirst} days to go`
-  if (untilFirst === 1) return 'Tomorrow'
-  // Both days of the weekend read the same; after that the count retires.
-  return daysBetween(today, LAST_DAY) >= 0 ? "It's today!" : null
+function countdownLabel({ day, hour }: { day: string; hour: number }) {
+  // The weekend itself is read from the real date, never the shifted one: on
+  // the morning of the 5th the site must not still be saying "Tomorrow". Both
+  // days read the same, and afterwards the line stops counting and says thank
+  // you instead — the site outlives the wedding by a good while.
+  if (daysBetween(day, LAST_DAY) < 0) return 'Thanks for coming'
+  if (daysBetween(day, FIRST_DAY) <= 0) return "It's today!"
+
+  // Everything before the weekend steps at midday rather than at midnight, so
+  // the number never changes while everyone is asleep — the count you go to bed
+  // on is the one you wake up to.
+  const counted = hour < 12 ? addDays(day, -1) : day
+  const untilFirst = daysBetween(counted, FIRST_DAY)
+  return untilFirst > 1 ? `${untilFirst} days to go` : 'Tomorrow'
 }
 
 function Countdown() {
   const [label, setLabel] = useState<string | null>(null)
   useEffect(() => {
-    const tick = () => setLabel(countdownLabel(todayInPacific()))
+    const tick = () => setLabel(countdownLabel(nowInPacific()))
     tick()
-    // Day-granular, so a slow tick is plenty — it only has to survive midnight.
+    // Day-granular, so a slow tick is plenty — it only has to survive midday.
     const id = window.setInterval(tick, 300_000)
     return () => window.clearInterval(id)
   }, [])
@@ -114,26 +155,6 @@ function Hero() {
 
   return (
     <header className="hero" ref={ref}>
-      <div className="hero-sky" aria-hidden="true" />
-      {/* The corner sprigs are artwork, not motion — reduced motion should drop
-          the settling-in animation, not the flowers. */}
-      <motion.img
-        src="/art/map/sprig-corner.webp"
-        alt=""
-        className="hero-sprig hero-sprig--tl"
-        initial={reduce ? false : { opacity: 0, rotate: -8, scale: 0.9 }}
-        animate={{ opacity: 0.85, rotate: 0, scale: 1 }}
-        transition={{ duration: reduce ? 0 : 1.2, ease: 'easeOut' }}
-      />
-      <motion.img
-        src="/art/map/sprig-corner.webp"
-        alt=""
-        className="hero-sprig hero-sprig--br"
-        initial={reduce ? false : { opacity: 0, rotate: 172, scale: 0.9 }}
-        animate={{ opacity: 0.85, rotate: 180, scale: 1 }}
-        transition={{ duration: reduce ? 0 : 1.2, ease: 'easeOut' }}
-      />
-
       <div className="hero-inner">
         <motion.div
           className="hero-portrait-wrap"
@@ -214,66 +235,67 @@ function Schedule() {
 
   return (
     <section className="home-schedule" id="schedule" aria-label="Schedule">
+      <SectionTitle title="Schedule" />
       <SectionPhoto
         src="/art/couple-schedule.webp"
         alt="Abha and Udit among the ferns and string lights at Carnation Farms"
-        position="50% 45%"
+        focus={[0.62, 0.68]}
       />
-      <SectionTitle title="Schedule" />
       <div className="sched-stack">
         {events.map((event) => (
-          <Fragment key={event.anchor}>
-            {event.divider && (
-              <div className="sched-divider" aria-hidden="true">
-                <div className="home-ornament" />
-              </div>
-            )}
-            <EventPanel event={event} forecast={forecast.get(event.anchor)} />
-          </Fragment>
+          <EventPanel
+            key={event.anchor}
+            event={event}
+            forecast={forecast.get(event.anchor)}
+          />
         ))}
       </div>
     </section>
   )
 }
 
-// A photo of the two of them, matted and set in the same arch as the hero. The
-// dome here is shallower — these are landscape shots, and a full round arch
-// would crop into the tops of their heads.
+// A plate belonging to the section rather than a divider between sections —
+// which is what it became once the needle took the dividing job.
+//
+// `focus` is where the two of them are in the frame, as fractions across and
+// down. It is the only framing number the page carries: the stylesheet works
+// out what it means for each band shape, because which axis gets cropped flips
+// as the band narrows. Set from the cropper.
 function SectionPhoto({
   src,
   alt,
-  position,
+  focus,
 }: {
   src: string
   alt: string
-  position?: string
+  focus: [number, number]
 }) {
   return (
-    <Reveal as="figure" className="section-photo">
-      <img
-        src={src}
-        alt={alt}
-        className="section-photo-img"
-        style={position ? { objectPosition: position } : undefined}
-        loading="lazy"
-      />
-    </Reveal>
+    <>
+      <Reveal as="figure" className="section-photo">
+        <img
+          src={src}
+          alt={alt}
+          className="section-photo-img"
+          style={
+            { '--focus-cx': focus[0], '--focus-cy': focus[1] } as CSSProperties
+          }
+          loading="lazy"
+        />
+      </Reveal>
+    </>
   )
 }
 
 function Travel() {
   return (
     <section className="home-travel" id="travel" aria-label="Travel">
+      <SectionTitle title="Travel" />
       <SectionPhoto
         src="/art/couple-travel.webp"
         alt="Abha and Udit on the ferry across Puget Sound"
-        position="50% 48%"
+        focus={[0.32, 0.59]}
       />
-      <SectionTitle title="Travel" />
-      <Reveal className="travel-intro">
-        <p>{travel.intro}</p>
-      </Reveal>
-
       <div className="travel-notes">
         {travel.notes.map((note, i) => (
           <Reveal
@@ -421,12 +443,12 @@ function FaqItem({
 function Faq() {
   return (
     <section className="home-faq" id="faq" aria-label="Questions and answers">
+      <SectionTitle title="Q & A" />
       <SectionPhoto
         src="/art/couple-beach.webp"
         alt="Abha and Udit walking along the shore at the water's edge"
-        position="50% 50%"
+        focus={[0.59, 0.49]}
       />
-      <SectionTitle title="Q & A" />
       <ul className="faq-list">
         {faqs.map((f, i) => (
           <FaqItem key={f.q} q={f.q} a={f.a} link={f.link} index={i} />
@@ -441,7 +463,6 @@ function Footer() {
     <footer className="home-footer">
       <Reveal>
         <p className="footer-names">{hero.names}</p>
-        <div className="home-ornament" aria-hidden="true" />
         <p className="footer-date">{hero.date}</p>
         <a
           className="footer-venue"
@@ -451,6 +472,9 @@ function Footer() {
         >
           {venue.label}
         </a>
+        {/* The registry sits in the row rather than below it as its own ask:
+            it is the same kind of destination as the three sections, and the
+            top nav already lists it alongside them. */}
         <nav className="footer-nav" aria-label="Site">
           <a href="#schedule">Schedule</a>
           <a href="#travel">Travel</a>
@@ -509,14 +533,19 @@ export function HomePage() {
   return (
     <div className="home" id="top">
       <SiteNav />
-      <Hero />
-      <main className="home-main">
-        <Schedule />
-        <Travel />
-        <Faq />
-      </main>
-      <Footer />
-      <RegistryBubble />
+      {/* The painting is a set the page walks across: a fixed plate that never
+          scrolls, with the whole document travelling over it inside a
+          translucent column. */}
+      <div className="page-plate" aria-hidden="true" />
+      <div className="page-column">
+        <Hero />
+        <main className="home-main">
+          <Schedule />
+          <Travel />
+          <Faq />
+        </main>
+        <Footer />
+      </div>
     </div>
   )
 }
