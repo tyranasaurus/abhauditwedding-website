@@ -51,7 +51,7 @@
 }
 
 :root {
-  --forest: #2c683c;
+  --forest: #4d6044;
   --deep-forest: #173d29;
   --pine: #254d36;
   --copper: #9b643a;
@@ -60,8 +60,8 @@
      and every event note, which put the page's hottest, most saturated ink on
      its most administrative row. */
   --copper-light: #8f400f;
-  --rust: #7d4a26;
-  --burnt-copper: #6a4223;
+  --rust: #7f482d;
+  --burnt-copper: #6d402a;
   --paper: #f6eedf;
   /* Behind the painting. Sampled from the painting's own mist. */
   --ground: #e6e8db;
@@ -74,10 +74,17 @@
    * Green is the site. Copper is what you can act on. The event owns
    * its panel.
    *
-   * The backdrop is 35% green by pixel at a mean hue of 128°, so green
-   * is not a preference here — it is the painting's own dominant family.
-   * Everything the site says is one of four greens; the only warm ink
-   * left outside an event panel sits on things a guest can tap.
+   * The greens and the copper are sampled from the hero backdrop, which
+   * is the reference: its greens sit at hue 134 and its coppers — the
+   * maple, the barn roof, the buggies — at 46. Green is a third of the
+   * painting by pixel, so it is not a preference here, it is the artwork's
+   * own dominant family. Everything the site says is one of four greens;
+   * the only warm ink outside an event panel sits on what you can tap.
+   *
+   * These were at hue 150-158 and the copper at 54, which matched the
+   * needle divider (153) rather than the painting. Three painted assets
+   * were claiming to be the same green across a 36° spread — monogram
+   * 117, backdrop 134, needle 153. The text now sits on the backdrop's.
    *
    *   --forest      script titles, the monogram, the arch line
    *   --ink         emphasis — FAQ questions
@@ -97,18 +104,18 @@
    * not --forest: the brand green reads 3.34 there, which is a 90px
    * title's floor, not a paragraph's.
    * ------------------------------------------------------------------ */
-  /* Emphasis. The deepest green in the set — 6.06 over the firs. */
-  --ink: #173d29;
+  /* Emphasis. The deepest green in the set. */
+  --ink: #293a1f;
   /* The document default. It was #8f6430, a mid saturated yellow-brown, which
      measured 3.95:1 against the column over the treeline — under AA — and sat
      in the same tonal register as the painting, so ink and ground never
      separated. A watercolour is captioned in a warm sepia-black, not in raw
      sienna. This reads 8.57:1 at its worst. */
-  --base-text: #254d36;
+  --base-text: #38492e;
   /* Deep enough to clear AA against the darkest firs the column ever crosses:
      the plate's 99.9th-percentile dark is #2b3a25, which composites to #b5b9ae
      under the wash, and this reads 4.59 there. */
-  --muted-ink: #354e3b;
+  --muted-ink: #3d4d34;
   --soft-green: #d2d9cd;
   /* One hairline weight for every rule on the site: between events, between
      Q&A rows, under each travel spot. The colour is the needle painting's own
