@@ -84,6 +84,11 @@
   --column-wash: 0.65;
   /* The margin between the column's edge and anything inside it. */
   --column-bezel: clamp(1.25rem, 2.6vw, 2.5rem);
+  /* One measure for running prose. Set by character count, not by taste: at
+     the display face's capped 1.28rem this is ~72 characters, the top of the
+     comfortable band. It only binds above about 1300px — below that the
+     column is narrower than the measure and the prose simply fills it. */
+  --measure: 46rem;
 }
 
 * {
@@ -1334,7 +1339,7 @@ a.poi:focus-visible .poi-pin {
 /* Travel ------------------------------------------------------------ */
 .travel-notes {
   margin: 0 auto clamp(2.6rem, 5vw, 3.6rem);
-  max-width: 44rem;
+  max-width: var(--measure);
 }
 
 /* Set exactly like the three list titles below it, so Travel reads as four
@@ -1436,7 +1441,7 @@ a.poi:focus-visible .poi-pin {
   list-style: none;
   margin: 0 auto;
   padding: 0;
-  max-width: 44rem;
+  max-width: var(--measure);
   border-top: 1px solid var(--rule);
 }
 
@@ -1486,7 +1491,9 @@ a.poi:focus-visible .poi-pin {
   line-height: 1.6;
   margin: 0;
   padding: 0 0.15rem clamp(1.1rem, 2.4vw, 1.4rem);
-  max-width: 38rem;
+  /* Not --measure: this sets at 1.18rem, so the same cap would run to ~78
+     characters. Trimmed to land at the same ~74 as everything else. */
+  max-width: 43rem;
   text-wrap: pretty;
 }
 
@@ -2108,7 +2115,7 @@ a.poi:focus-visible .poi-pin {
   font-style: italic;
   line-height: 1.6;
   margin: clamp(0.85rem, 1.5vw, 1.2rem) auto 0;
-  max-width: 34rem;
+  max-width: var(--measure);
   text-wrap: pretty;
   text-align: center;
 }
