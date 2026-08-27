@@ -114,12 +114,12 @@ export const registry = {
   /** Deep link straight to the fund on Joy, past the couple picker. */
   url: 'https://withjoy.com/abhauditwedding/registry?pid=b3e72f03-4062-4a06-bebf-f714fb8c8a49',
   kicker: 'Our registry',
-  title: 'Adventure Fund',
+  title: 'Our Next Adventure Fund',
   paragraphs: [
     'Your presence at Carnation Farms is the whole gift. Getting to celebrate these two days with you is more than we could ask for.',
-    'We have not put together a list of things. Our registry is a single Adventure Fund, and anything you send goes toward the trips ahead of us.',
+    'We have not put together a list of things. Our registry is just Our Next Adventure Fund, and anything you send goes toward the trips ahead of us.',
   ],
-  cta: 'Give to the Adventure Fund',
+  cta: 'Give to Our Next Adventure Fund',
   note: 'Opens withjoy.com in a new tab.',
 } as const
 
