@@ -1147,6 +1147,17 @@ a.poi:focus-visible .poi-pin {
      that band runs from just above his hair down past his belt. */
   object-fit: cover;
   object-position: 50% 0%;
+  /* Zoomed a further 10% and carried 5% right, so the two of them sit centred
+     in the dome rather than left of it.
+     `scale` and `translate` rather than one `transform`, because the individual
+     properties compose as translate-then-scale with the translation NOT scaled,
+     which is what makes the two numbers mean what they say.
+     5% is exactly the limit at this zoom: after scaling about the centre the
+     image spans -5%..105% of the box, so carrying it 5% right lands its left
+     edge flush on the box's left edge. Any further and mat shows through on
+     the left; any more zoom would be needed to buy the room. */
+  scale: 1.1;
+  translate: 5% 0;
 }
 
 /* Carattere's leading A carries a swash well left of its origin, so centring
