@@ -691,13 +691,23 @@ a.poi:focus-visible .poi-pin {
 
 /* A `cover` fill of the landscape plate into a portrait viewport crops away
    the barn, the maple and both buggies — every landmark in the painting, and
-   the whole easter egg. So portrait gets its own crop, taken from the same
-   original and framed on the fence and the two buggies rather than on the
-   centre of the canvas. */
+   the whole easter egg. So portrait gets its own plate.
+ *
+ * It is composed rather than cropped, because no crop can do it: holding the
+ * buggies, the fence and the barn takes about 78% of the painting's width, and
+ * that band is far too wide to fill a phone. So the band sits along the bottom
+ * at its own proportions and the sky above it is extended with a flat wash
+ * mixed from the painting's own top edge. A stretched slice of the painting
+ * was the first attempt and it dragged the paper texture into vertical
+ * streaks; a plain gradient joins invisibly.
+ *
+ * Anchored bottom so the scene is never the part that gets cropped — on a
+ * viewport shorter than the plate it is sky that goes, which is the half we
+ * invented. */
 @media (max-aspect-ratio: 3 / 4) {
   .page-plate {
     --plate-img: url('/art/backdrop-tall.webp');
-    background-position: center center;
+    background-position: center bottom;
   }
 }
 
@@ -1443,8 +1453,7 @@ a.poi:focus-visible .poi-pin {
 /* Footer ------------------------------------------------------------ */
 .home-footer {
   text-align: center;
-  /* The extra bottom room clears the fixed .registry-bubble. */
-  padding: clamp(3rem, 7vw, 5rem) 0 calc(clamp(2.5rem, 5vw, 3.5rem) + 4rem);
+  padding: clamp(3rem, 7vw, 5rem) 0 clamp(3rem, 6vw, 4.5rem);
   border-top: 1px solid rgba(155, 100, 58, 0.18);
 }
 
@@ -1498,6 +1507,10 @@ a.poi:focus-visible .poi-pin {
 
 .footer-nav a:hover {
   color: var(--rust);
+}
+
+.footer-registry {
+  margin: clamp(1.6rem, 3vw, 2.2rem) 0 0;
 }
 
 /* Responsive -------------------------------------------------------- */
@@ -1689,74 +1702,6 @@ a.poi:focus-visible .poi-pin {
 .soon-ornament {
   margin-bottom: 1.4rem;
   width: min(15rem, 100%);
-}
-
-/* ---------------------------------------------------------------------------
-   Registry bubble — a small fixed pill in the bottom corner of the homepage.
---------------------------------------------------------------------------- */
-.registry-bubble {
-  align-items: center;
-  background: rgba(255, 252, 245, 0.96);
-  border: 1px solid rgba(155, 100, 58, 0.42);
-  border-radius: 999px;
-  bottom: 1.4rem;
-  box-shadow: 0 8px 18px -12px rgba(47, 42, 33, 0.55);
-  color: var(--rust);
-  display: inline-flex;
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 1rem;
-  font-weight: 600;
-  gap: 0.5rem;
-  letter-spacing: 0.05em;
-  padding: 0.62rem 1.15rem;
-  position: fixed;
-  right: 1.4rem;
-  text-decoration: none;
-  transition:
-    background 0.18s ease,
-    border-color 0.18s ease,
-    color 0.18s ease,
-    transform 0.18s ease;
-  z-index: 40;
-}
-
-.registry-bubble:hover {
-  background: var(--forest);
-  border-color: var(--forest);
-  color: var(--paper);
-  transform: translateY(-2px);
-}
-
-.registry-bubble:focus-visible {
-  background: var(--forest);
-  border-color: var(--forest);
-  color: var(--paper);
-  box-shadow:
-    0 8px 18px -12px rgba(47, 42, 33, 0.55),
-    var(--focus-ring);
-}
-
-@media (max-width: 480px) {
-  .registry-bubble {
-    bottom: 1rem;
-    font-size: 0.9375rem;
-    gap: 0.42rem;
-    padding: 0.55rem 0.95rem;
-    right: 1rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .registry-bubble:hover,
-  .registry-bubble:focus-visible {
-    transform: none;
-  }
-}
-
-@media print {
-  .registry-bubble {
-    display: none;
-  }
 }
 
 /* ------------------------------------------------------------------ *

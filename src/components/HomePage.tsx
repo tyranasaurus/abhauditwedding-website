@@ -11,7 +11,6 @@ import { events } from '@/data/events'
 import { EventPanel } from '@/components/EventPanel'
 import { useForecast, type ForecastWindow } from '@/lib/use-forecast'
 import { SiteNav } from '@/components/SiteNav'
-import { RegistryBubble } from '@/components/RegistryBubble'
 
 /** The weekend, as calendar days in the venue's own timezone. */
 const FIRST_DAY = '2026-09-05'
@@ -437,10 +436,19 @@ function Footer() {
           <a href="#schedule">Schedule</a>
           <a href="#travel">Travel</a>
           <a href="#faq">Q&amp;A</a>
-          <a href={registry.url} target="_blank" rel="noopener noreferrer">
-            Registry
-          </a>
         </nav>
+        {/* The nav row above is navigation; this is the ask, and it waits until
+            the very bottom of the page to make it. */}
+        <p className="footer-registry">
+          <a
+            className="btn btn-lead"
+            href={registry.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Our registry →
+          </a>
+        </p>
       </Reveal>
     </footer>
   )
@@ -504,7 +512,6 @@ export function HomePage() {
         </main>
         <Footer />
       </div>
-      <RegistryBubble />
     </div>
   )
 }
