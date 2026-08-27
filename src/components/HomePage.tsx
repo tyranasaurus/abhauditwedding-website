@@ -47,10 +47,10 @@ function Reveal({
   )
 }
 
-function SectionTitle({ kicker, title }: { kicker: string; title: string }) {
+function SectionTitle({ kicker, title }: { kicker?: string; title: string }) {
   return (
     <Reveal className="home-section-head" as="header">
-      <p className="home-kicker">{kicker}</p>
+      {kicker ? <p className="home-kicker">{kicker}</p> : null}
       <h2 className="home-section-title">{title}</h2>
       <div className="home-ornament" aria-hidden="true" />
     </Reveal>
@@ -220,7 +220,7 @@ function Schedule() {
         alt="Abha and Udit among the ferns and string lights at Carnation Farms"
         position="50% 45%"
       />
-      <SectionTitle kicker="The Weekend" title="Schedule" />
+      <SectionTitle title="Schedule" />
       <div className="sched-stack">
         {events.map((event) => (
           <Fragment key={event.anchor}>
@@ -270,7 +270,7 @@ function Travel() {
         alt="Abha and Udit on the ferry across Puget Sound"
         position="50% 48%"
       />
-      <SectionTitle kicker="Getting Here" title="Travel" />
+      <SectionTitle title="Travel" />
       <Reveal className="travel-intro">
         <p>{travel.intro}</p>
       </Reveal>
@@ -450,7 +450,7 @@ function Footer() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          {venue.name} · {venue.addressLines.join(', ')}
+          {venue.label}
         </a>
         <nav className="footer-nav" aria-label="Site">
           <a href="#schedule">Schedule</a>

@@ -5,7 +5,7 @@
 export const hero = {
   names: 'Abha & Udit',
   date: 'September 5–6, 2026',
-  venue: 'Carnation Farms · Carnation, Washington',
+  venue: 'Carnation Farms, Washington',
 } as const
 
 // Travel ----------------------------------------------------------------
@@ -165,6 +165,8 @@ export const faqs: Faq[] = [
 
 export const venue = {
   name: 'Carnation Farms',
+  /** How the venue is written wherever it appears on the page. */
+  label: 'Carnation Farms, Washington',
   addressLines: ['28901 NE Carnation Farm Road', 'Carnation, WA 98014'],
   mapsUrl:
     'https://www.google.com/maps/search/?api=1&query=Carnation%20Farms%2C%2028901%20NE%20Carnation%20Farm%20Road%2C%20Carnation%2C%20WA%2098014',

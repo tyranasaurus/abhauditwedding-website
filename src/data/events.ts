@@ -96,7 +96,7 @@ export const events: WeddingEvent[] = [
     imageHeight: 862,
     timeline: [
       { time: '10:00 AM', label: "Abha and Udit's Baraat" },
-      { time: '11:00 AM', label: 'Carnival Booths Open' },
+      { time: '11:00 AM', label: 'Carnival Festival Begins' },
       { time: '12:00 PM', label: 'Bride vs Groom Games' },
       { time: '2:00 PM', label: 'Carnival Finale' },
     ],
@@ -122,7 +122,7 @@ export const events: WeddingEvent[] = [
       { time: '6:30 PM', label: 'Sangeet Second Half' },
       { time: '7:00 PM', label: 'Dance Party' },
     ],
-    note: 'Dinner, dosti, and dance!',
+    note: 'Dosti, Dinner, Dancing and Dhamaal!',
   },
   {
     className: 'seahawks-opener',
