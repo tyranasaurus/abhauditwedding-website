@@ -216,7 +216,14 @@ function Hero() {
             <span className="hero-dot" aria-hidden="true">
               ·
             </span>
-            <span className="hero-venue">{hero.venue}</span>
+            <a
+              className="hero-venue"
+              href={hero.venueUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {hero.venue}
+            </a>
           </motion.div>
           <motion.div
             initial={reduce ? false : { opacity: 0 }}

@@ -1267,6 +1267,39 @@ a.poi:focus-visible .poi-pin {
   color: var(--muted-ink);
 }
 
+/* Links keep the copper and the painted stroke wherever they are, including
+   inside an event panel. The panel owns the event's voice; copper owns
+   interaction, and interaction is functional — a guest should not have to
+   learn a different signal for "tappable" in each section. */
+.hero-venue,
+.sched-venue {
+  color: var(--rust);
+  text-decoration: none;
+  background-image: linear-gradient(var(--rust), var(--rust));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  transition:
+    color 0.18s ease,
+    background-size 0.22s ease;
+}
+
+.hero-venue:hover,
+.hero-venue:focus-visible,
+.sched-venue:hover,
+.sched-venue:focus-visible {
+  color: var(--burnt-copper);
+  background-size: 100% 2.5px;
+}
+
+/* The second accent goes on the subtitle and the times. The watch party has
+   neither — no subtitle, no timeline — so its second colour had nowhere to
+   live and the panel read as one tone. Where there is no timeline, the date
+   line carries it instead. */
+.sched-event:has(.sched-cols.is-solo) .sched-date {
+  color: var(--accent-sec);
+}
+
 .hero-actions {
   display: flex;
   flex-wrap: wrap;

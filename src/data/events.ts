@@ -158,8 +158,10 @@ export const events: WeddingEvent[] = [
     title: 'Seahawks Season Opener',
     date: 'Wednesday, September 9 · 5:00 PM',
     vibe: '12th Man Spirit',
-    accents: { primary: '#33486e', secondary: '#4f7029' },
-    vibeColors: ['#33486e', '#33486e', '#4f7029'],
+    // The club's own two: College Navy and Action Green.
+    accents: { primary: '#002244', secondary: '#69be28' },
+    // Green, navy, green — "12th" and "Spirit" carry the green.
+    vibeColors: ['#69be28', '#002244', '#69be28'],
     captionDrop: '0.32em',
     image: '/art/seahawks.webp',
     imageAlt: 'Four guests in Seahawks gear at a game-day watch party',
@@ -170,7 +172,7 @@ export const events: WeddingEvent[] = [
     venue: {
       name: 'Sam’s Tavern',
       area: 'South Lake Union',
-      url: 'https://maps.app.goo.gl/GnV7sKQTn7k1LSkr6',
+      url: 'https://maps.app.goo.gl/oDNNeqmuTdAseraNA',
     },
     note: 'Quite the summer for rings in Seattle. Join us to celebrate Abha, Udit, and the Seahawks as they all run it back for more. Go Hawks!',
   },

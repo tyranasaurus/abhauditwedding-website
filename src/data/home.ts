@@ -6,6 +6,7 @@ export const hero = {
   names: 'Abha & Udit',
   date: 'September 5–6, 2026',
   venue: 'Carnation Farms, Washington',
+  venueUrl: 'https://maps.app.goo.gl/x4JhSzNTPdtRhoRa8',
 } as const
 
 // Travel ----------------------------------------------------------------

@@ -54,6 +54,19 @@ export function EventPanel({
               )}
             </span>
           )}
+          {event.venue && (
+            <>
+              {' · '}
+              <a
+                className="sched-venue"
+                href={event.venue.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {event.venue.name}
+              </a>
+            </>
+          )}
         </p>
       </header>
 
