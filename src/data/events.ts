@@ -123,8 +123,8 @@ export const events: WeddingEvent[] = [
     imageHeight: 862,
     timeline: [
       { time: '10:00 AM', label: "Abha and Udit's Baraat" },
-      { time: '11:00 AM', label: 'Carnival Festival Begins' },
-      { time: '12:00 PM', label: 'Bride vs Groom Games' },
+      { time: '11:00 AM', label: 'Carnival Begins' },
+      { time: '12:00 PM', label: 'Bride v Groom Games' },
       { time: '2:00 PM', label: 'Carnival Finale' },
     ],
     note: 'Abha and Udit are excited for everyone to join the Baraat leading into the Carnival, our festive fair! Expect fun food and activities, lawn games, and plenty of beautiful spots around the venue for photos. FYI, Abha is skipping heels, and you can too!',
