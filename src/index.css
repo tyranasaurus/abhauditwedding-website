@@ -1235,13 +1235,32 @@ a.poi:focus-visible .poi-pin {
 .section-photo-img {
   display: block;
   width: 100%;
-  /* Wide enough to read as a band rather than a picture. The sources are all
-     about 16:10, so this crops a little off the top and bottom and nothing off
-     the sides. */
+  /* On a wide screen the band is wider than the 1.6:1 sources, so `cover`
+     crops top and bottom and shows the whole width — which is why --focus-x
+     has no effect here and the framing is simply the photograph as taken. */
   aspect-ratio: 16 / 9;
   object-fit: cover;
-  object-position: 50% 42%;
+  object-position: var(--focus-x, 50%) 42%;
   border-radius: 0.15rem;
+}
+
+/* Narrower screens turn the crop the other way up. Once the band is *taller*
+   than 1.6:1 the browser fits the height and crops the width instead, and
+   --focus-x starts doing the work: each photograph closes in on the two of
+   them rather than handing half its width to ferns, water or surf. A wide thin
+   band is no use on a phone anyway. */
+@media (max-width: 900px) {
+  .section-photo-img {
+    /* 4:3 keeps 83% of the width — a nudge, not a crop. */
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (max-width: 600px) {
+  .section-photo-img {
+    /* Square keeps 62.5%, which is what actually brings them close. */
+    aspect-ratio: 1 / 1;
+  }
 }
 
 .home-section-head {
