@@ -2335,8 +2335,20 @@ a.poi:focus-visible .poi-pin {
   }
 }
 
-/* Only a phone stacks. */
-@container (max-width: 560px) {
+/* Stack whenever side by side would squeeze the painting.
+ *
+ * The pair needs the list's 315px, the gutter, and a painting worth looking at
+ * — about 300px, below which the four figures stop reading as people. That is
+ * a 660px panel. Under it the panel stacks, where the painting gets 360px and
+ * the list its full width, and neither has to give.
+ *
+ * The threshold was 560px, and the band between 560 and 660 was the worst on
+ * the site without looking like it: a 1024-1180px window puts the panel at
+ * 587-595px, which is wider than a phone and so read as "plenty of room",
+ * while the painting was squeezed to 241px — smaller than it is on a phone.
+ * Panel width is not monotonic in window width here (the column formula has a
+ * step at 900px), so this has to be keyed on the panel, not the viewport. */
+@container (max-width: 660px) {
   .sched-cols,
   .sched-cols.is-solo {
     grid-template-columns: minmax(0, 1fr);
