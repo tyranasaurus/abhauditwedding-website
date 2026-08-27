@@ -1090,7 +1090,13 @@ a.poi:focus-visible .poi-pin {
    stops the arch running away. */
 @media (min-width: 901px) {
   .hero-portrait-wrap {
-    --portrait-w: clamp(29.5rem, 38.4vw, 46rem);
+    /* 100px off the width — and 95px off the height with it, since the ratio
+       is fixed at 1.05. That is what puts the countdown above the fold on a
+       laptop: at 1440x760 it was overshooting by 94px.
+
+       Desktop only. On a phone the arch is 250px and the countdown already
+       clears, so taking 100px off there would be a 40% cut for no reason. */
+    --portrait-w: calc(clamp(29.5rem, 38.4vw, 46rem) - 6.25rem);
   }
 }
 
@@ -1682,7 +1688,7 @@ a.poi:focus-visible .poi-pin {
   }
 
   .hero-portrait-wrap {
-    --portrait-w: min(clamp(29.5rem, 38.4vw, 46rem), 78vh);
+    --portrait-w: calc(min(clamp(29.5rem, 38.4vw, 46rem), 78vh) - 6.25rem);
     --arch-gap: 1.15rem;
   }
 
@@ -1815,6 +1821,102 @@ a.poi:focus-visible .poi-pin {
   --sched-pad: clamp(3.25rem, 6vw, 4.5rem);
   padding-block: var(--sched-pad);
   scroll-margin-top: calc(var(--nav-h) + 1rem);
+}
+
+/* Whatever single link an event carries out of itself. */
+.sched-action {
+  margin: 1.6rem 0 0;
+  text-align: center;
+}
+
+/* The venue, as a link rather than a box.
+ *
+ * Nothing on this page is a filled box, and the old wash — forest at 10% over
+ * paper — composited to a flat opaque olive that was darker than the paper
+ * around it, so it did not sit on the sheet as pigment, it erased what was
+ * underneath. On the watch party it blotted out the meadow gate.
+ *
+ * What holds the three lines together is proximity, not a container: name to
+ * area is 0.1rem, area to cue is 0.5rem, and the block sits 1.6rem below the
+ * note. The stroke under the last line makes it a plinth rather than a box.
+ * The invisible padding is the tap target; `background-origin: content-box`
+ * is what stops that padding stretching the stroke with it. */
+.lnk-venue {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 20rem;
+  padding: 0.35rem 0.35rem 0.8rem;
+  border-radius: 0.25rem;
+  text-align: center;
+  text-decoration: none;
+}
+
+.sched-venue-name {
+  color: var(--accent);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+}
+
+.sched-venue-area {
+  color: var(--muted-ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: 0.1rem;
+}
+
+/* The cue is the link mechanism, so the cue carries the stroke: a permanent
+   hairline in the site's own green with the event's pigment laid over it on
+   hover, growing from the centre out. Pigment over a rule, not a border
+   switching on — and nothing lifts. */
+.sched-venue-cue {
+  color: var(--muted-ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+  padding-bottom: 0.34rem;
+  background-image:
+    linear-gradient(var(--accent), var(--accent)),
+    linear-gradient(var(--rule), var(--rule));
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  background-position:
+    50% 100%,
+    50% 100%;
+  background-size:
+    0 1.5px,
+    100% 1.5px;
+  transition:
+    background-size 0.26s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.18s ease;
+}
+
+.lnk-venue:hover .sched-venue-cue,
+.lnk-venue:focus-visible .sched-venue-cue {
+  color: var(--ink);
+  background-size:
+    100% 1.5px,
+    100% 1.5px;
+}
+
+.lnk-venue:active .sched-venue-cue {
+  background-size:
+    100% 2px,
+    100% 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sched-venue-cue {
+    transition: color 0.18s ease;
+  }
 }
 
 .sched-head {

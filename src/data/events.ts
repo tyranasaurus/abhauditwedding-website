@@ -64,10 +64,20 @@ export const events: WeddingEvent[] = [
     date: 'Saturday, September 5',
     forecastWindow: { date: '2026-09-05', from: 15, to: 22 },
     vibe: 'Traditional Elegance',
-    // The sunset's vermilion against the sky's sunflower. The brighter orange
-    // sat within 1 L* of the gold, so the two roles did no work against each other.
-    accents: { primary: '#a6350c', secondary: '#a07903' },
-    vibeColors: ['#a6350c', '#a07903'],
+    // Sampled off shaadi.webp rather than guessed. The painting's sunset lives
+    // at hue 16-40: the dome quantizes to #f6bf64 / #e79f5d / #ef8d58, the
+    // sunflowers below to #b4a340 / #d8b656 / #d66c2d. The old pair was
+    // darkened for contrast along the wrong path — off the artwork's hue,
+    // toward brick red (#a6350c, hue 15) and mustard (#a07903) — and the
+    // mustard measured 2.0 against the column over the firs, well under the
+    // 3:1 these sizes need. These hold the painting's hue and give up only
+    // value: sunset at hue 20, sunflower at hue 40, both measured at 3.2+.
+    // `marks` is the win — bullets and spine carry no text, so they can keep
+    // the luminous gold the rest of the palette cannot afford.
+    accents: { primary: '#a23f0d', secondary: '#7e5606', marks: '#b07c0a' },
+    // The caption sits on the artwork itself, so it is measured against the
+    // painting's gold as well as its own paper glow.
+    vibeColors: ['#a34108', '#815806'],
     captionDrop: '0.30em',
     image: '/art/shaadi.webp',
     imageAlt: 'Four guests dressed for the Sunset Shaadi ceremony',
