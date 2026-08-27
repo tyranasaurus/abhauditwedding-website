@@ -38,6 +38,28 @@ export const travel = {
       query: 'Marina Park Kirkland Waterfront, Kirkland, WA',
     },
   ],
+  // Driving day trips, nearest first. Labor Day 2026 is the Monday after the
+  // sangeet, so guests staying for the watch party have two free days.
+  pnwDayTrips: [
+    { name: 'Snoqualmie Falls', note: '', query: 'Snoqualmie Falls, Snoqualmie, WA' },
+    {
+      name: 'Mount Si & North Bend',
+      note: '',
+      query: 'Mount Si Trailhead, North Bend, WA',
+    },
+    {
+      name: 'Deception Pass State Park',
+      note: '',
+      query: 'Deception Pass State Park, WA',
+    },
+    { name: 'Leavenworth', note: '', query: 'Leavenworth, WA' },
+    {
+      name: 'Mount Rainier National Park',
+      note: '',
+      query: 'Paradise, Mount Rainier National Park, WA',
+    },
+    { name: 'Diablo Lake', note: '', query: 'Diablo Lake Overlook, North Cascades, WA' },
+  ],
   eastsideBites: [
     {
       name: "Victor's Celtic Coffee & Roasters",
