@@ -54,9 +54,25 @@ function Reveal({
 
 function SectionTitle({ title }: { title: string }) {
   return (
-    <Reveal className="home-section-head" as="header">
-      <h2 className="home-section-title">{title}</h2>
-    </Reveal>
+    <>
+      {/* The needle spray travels with the title, not with the photograph: the
+          two marks that jointly say "new chapter" have to be adjacent, or the
+          picture arrives before you have been told which section you are in. */}
+      <Reveal>
+        <img
+          className="needle-rule"
+          src="/art/needle-divider.webp"
+          alt=""
+          aria-hidden="true"
+          width={1100}
+          height={148}
+          loading="lazy"
+        />
+      </Reveal>
+      <Reveal className="home-section-head" as="header">
+        <h2 className="home-section-title">{title}</h2>
+      </Reveal>
+    </>
   )
 }
 
@@ -219,12 +235,12 @@ function Schedule() {
 
   return (
     <section className="home-schedule" id="schedule" aria-label="Schedule">
+      <SectionTitle title="Schedule" />
       <SectionPhoto
         src="/art/couple-schedule.webp"
         alt="Abha and Udit among the ferns and string lights at Carnation Farms"
         focus={[0.62, 0.68]}
       />
-      <SectionTitle title="Schedule" />
       <div className="sched-stack">
         {events.map((event) => (
           <EventPanel
@@ -238,13 +254,13 @@ function Schedule() {
   )
 }
 
-// A photo of the two of them, matted and set in the same arch as the hero. The
-// dome here is shallower — these are landscape shots, and a full round arch
-// would crop into the tops of their heads.
-// Where the two of them are in the frame, as fractions across and down. This
-// is the only framing number the page carries: the stylesheet works out what
-// it means for each band shape, because which axis gets cropped flips as the
-// band narrows. Set from the cropper.
+// A plate belonging to the section rather than a divider between sections —
+// which is what it became once the needle took the dividing job.
+//
+// `focus` is where the two of them are in the frame, as fractions across and
+// down. It is the only framing number the page carries: the stylesheet works
+// out what it means for each band shape, because which axis gets cropped flips
+// as the band narrows. Set from the cropper.
 function SectionPhoto({
   src,
   alt,
@@ -256,19 +272,6 @@ function SectionPhoto({
 }) {
   return (
     <>
-      {/* The needle spray always travels with the photograph below it: the two
-          together are what separate one section from the next. */}
-      <Reveal>
-        <img
-          className="needle-rule"
-          src="/art/needle-divider.webp"
-          alt=""
-          aria-hidden="true"
-          width={1100}
-          height={148}
-          loading="lazy"
-        />
-      </Reveal>
       <Reveal as="figure" className="section-photo">
         <img
           src={src}
@@ -287,12 +290,12 @@ function SectionPhoto({
 function Travel() {
   return (
     <section className="home-travel" id="travel" aria-label="Travel">
+      <SectionTitle title="Travel" />
       <SectionPhoto
         src="/art/couple-travel.webp"
         alt="Abha and Udit on the ferry across Puget Sound"
         focus={[0.32, 0.59]}
       />
-      <SectionTitle title="Travel" />
       <Reveal className="travel-intro">
         <p>{travel.intro}</p>
       </Reveal>
@@ -444,12 +447,12 @@ function FaqItem({
 function Faq() {
   return (
     <section className="home-faq" id="faq" aria-label="Questions and answers">
+      <SectionTitle title="Q & A" />
       <SectionPhoto
         src="/art/couple-beach.webp"
         alt="Abha and Udit walking along the shore at the water's edge"
         focus={[0.59, 0.49]}
       />
-      <SectionTitle title="Q & A" />
       <ul className="faq-list">
         {faqs.map((f, i) => (
           <FaqItem key={f.q} q={f.q} a={f.a} link={f.link} index={i} />
