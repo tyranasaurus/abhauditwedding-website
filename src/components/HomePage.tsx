@@ -55,20 +55,33 @@ function SectionTitle({ title }: { title: string }) {
   )
 }
 
-// Calendar-day arithmetic rather than elapsed hours: the count should turn over
-// at midnight in Carnation, not at whatever hour the ceremony happens to start.
-const pacificDay = new Intl.DateTimeFormat('en-CA', {
+// Calendar-day arithmetic rather than elapsed hours: the count turns over on a
+// date boundary in Carnation, not at whatever hour the ceremony happens to
+// start. The hour comes along too, because the number steps at midday.
+const pacificNowFormat = new Intl.DateTimeFormat('en-CA', {
   timeZone: 'America/Los_Angeles',
   year: 'numeric',
   month: '2-digit',
   day: '2-digit',
+  hour: '2-digit',
+  hourCycle: 'h23',
 })
 
-function todayInPacific() {
-  const parts = pacificDay.formatToParts(new Date())
+function nowInPacific() {
+  const parts = pacificNowFormat.formatToParts(new Date())
   const part = (type: Intl.DateTimeFormatPartTypes) =>
     parts.find((p) => p.type === type)?.value ?? ''
-  return `${part('year')}-${part('month')}-${part('day')}`
+  return {
+    day: `${part('year')}-${part('month')}-${part('day')}`,
+    hour: Number(part('hour')),
+  }
+}
+
+/** Shifts a YYYY-MM-DD by whole days, in UTC so DST can't skew it. */
+function addDays(day: string, n: number) {
+  return new Date(Date.parse(`${day}T00:00:00Z`) + n * 86_400_000)
+    .toISOString()
+    .slice(0, 10)
 }
 
 /** Whole days from one YYYY-MM-DD to another, both read as UTC so DST can't skew it. */
@@ -79,20 +92,27 @@ function daysBetween(from: string, to: string) {
   )
 }
 
-function countdownLabel(today: string) {
-  const untilFirst = daysBetween(today, FIRST_DAY)
-  if (untilFirst > 1) return `${untilFirst} days to go`
-  if (untilFirst === 1) return 'Tomorrow'
-  // Both days of the weekend read the same; after that the count retires.
-  return daysBetween(today, LAST_DAY) >= 0 ? "It's today!" : null
+function countdownLabel({ day, hour }: { day: string; hour: number }) {
+  // The weekend itself is read from the real date, never the shifted one: on
+  // the morning of the 5th the site must not still be saying "Tomorrow". Both
+  // days read the same, and after that the count retires.
+  if (daysBetween(day, LAST_DAY) < 0) return null
+  if (daysBetween(day, FIRST_DAY) <= 0) return "It's today!"
+
+  // Everything before the weekend steps at midday rather than at midnight, so
+  // the number never changes while everyone is asleep — the count you go to bed
+  // on is the one you wake up to.
+  const counted = hour < 12 ? addDays(day, -1) : day
+  const untilFirst = daysBetween(counted, FIRST_DAY)
+  return untilFirst > 1 ? `${untilFirst} days to go` : 'Tomorrow'
 }
 
 function Countdown() {
   const [label, setLabel] = useState<string | null>(null)
   useEffect(() => {
-    const tick = () => setLabel(countdownLabel(todayInPacific()))
+    const tick = () => setLabel(countdownLabel(nowInPacific()))
     tick()
-    // Day-granular, so a slow tick is plenty — it only has to survive midnight.
+    // Day-granular, so a slow tick is plenty — it only has to survive midday.
     const id = window.setInterval(tick, 300_000)
     return () => window.clearInterval(id)
   }, [])
