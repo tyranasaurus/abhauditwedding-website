@@ -1924,6 +1924,9 @@ a.poi:focus-visible .poi-pin {
    need their own measure. */
 .sched-stack {
   --sched-col: 1000px;
+  /* The longest label in the schedule plus 10px of headroom. Both the list and
+     the grid track that holds it read this, so they cannot drift apart. */
+  --times-w: 19.7rem;
 }
 
 .sched-event {
@@ -2174,8 +2177,13 @@ a.poi:focus-visible .poi-pin {
   /* --art is the picture this event asked for; --art-cap is what the panel can
      actually afford at its current width. The pair is what lets a narrow panel
      keep the timeline beside its painting instead of stacking. */
+  /* The times column asks for its full width first and the painting takes what
+     is left. The other way round, a 1280 laptop gave the artwork its 340px and
+     left the list 288px for a 305px label — so the label wrapped, or before
+     that, overflowed. The list is the content; the painting can afford the
+     27px. */
   grid-template-columns:
-    minmax(0, max-content)
+    minmax(min(var(--times-w), 100%), max-content)
     minmax(0, min(var(--art, 420px), var(--art-cap, 420px)));
   /* The list and the painting are one object, so the space between them has to
      read as smaller than the space between rows of the list — 70px. It used to
@@ -2200,10 +2208,16 @@ a.poi:focus-visible .poi-pin {
   /* Fixed, not fit-content: the spine is the strongest vertical on the page and
      was landing at three different x positions as you scrolled. The cost of
      sharing one width is that every panel is as wide as the longest label
-     anywhere in the schedule — "Carnival Festival Begins", which needs 320px —
-     so a panel of short labels carries the difference as slack on its right.
-     20rem is that longest label exactly, with nothing spare. */
-  width: 20rem;
+     anywhere in the schedule, so a panel of short labels carries the difference
+     as slack on its right.
+
+     This is that longest label plus 10px of headroom. The label is currently
+     "Bride v Groom Games" at 305px — measured at 1440 with the real faces, and
+     the same to within a pixel in the fallback stack, because the stand-in
+     faces in the token block are metric-matched. Change a label in events.ts
+     and this needs re-measuring: too small and the longest one wraps, too
+     large and every other panel pays for it. */
+  width: var(--times-w);
   max-width: 100%;
   border-left: 1px solid color-mix(in srgb, var(--accent-mark) 45%, transparent);
 }
@@ -2212,8 +2226,14 @@ a.poi:focus-visible .poi-pin {
   display: grid;
   /* A fixed first track is shared by every row. max-content is not: each li is
      its own grid container, so it sized to that row's own string and the labels
-     ragged by 11px wherever the hours were not all the same width. */
-  grid-template-columns: 4.15em max-content;
+     ragged by 11px wherever the hours were not all the same width.
+
+     minmax(0, max-content) rather than bare max-content, because the list's own
+     width is capped at 100% of whatever the panel can spare: at 1280 that is
+     288px against a 315px list, and a bare max-content column cannot shrink, so
+     the longest label ran 17px past its track and into the artwork's gutter.
+     With a floor of 0 it wraps instead, which is the right way to lose. */
+  grid-template-columns: 4.15em minmax(0, max-content);
   gap: 0.95rem;
   align-items: baseline;
   /* 1.4rem gave a 89px pitch for a 30px row. That had a reason when the list
