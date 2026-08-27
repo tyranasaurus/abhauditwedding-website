@@ -55,6 +55,10 @@
   --deep-forest: #173d29;
   --pine: #254d36;
   --copper: #9b643a;
+  /* Kept only as the parent hue of --rule and for the map/registry kickers.
+     It is not a text colour on the homepage: it used to carry every date line
+     and every event note, which put the page's hottest, most saturated ink on
+     its most administrative row. */
   --copper-light: #8f400f;
   --rust: #7d4a26;
   --burnt-copper: #6a4223;
@@ -66,6 +70,25 @@
   --ribbed-paper-line: rgba(88, 65, 36, 0.05);
   --diagonal-laid-line: rgba(91, 68, 38, 0.055);
   --linen-highlight-line: rgba(255, 250, 237, 0.34);
+  /* ------------------------------------------------------------------
+   * Forest and sepia, one copper whisper.
+   *
+   * Everything outside an event panel takes a role from this list and
+   * nothing else. Eighteen text colours is a craft fair; mist is quiet.
+   *
+   *   --forest      script titles, the monogram, the arch line
+   *   --ink         emphasis and interactive — FAQ questions, place names
+   *   --base-text   body sentences
+   *   --muted-ink   captions, meta, dates, nav, footer
+   *   --rust        the couple's own italic asides, and only those
+   *   --rule        every hairline
+   *
+   * Inside an event panel: that event's primary accent plus these
+   * neutrals. The accent takes the title, the subtitle and the times;
+   * the activity names are content and take --base-text, because the
+   * least readable thing in the panel should not be the part that says
+   * what is happening.
+   * ------------------------------------------------------------------ */
   --ink: #2f2a21;
   /* The document default. It was #8f6430, a mid saturated yellow-brown, which
      measured 3.95:1 against the column over the treeline — under AA — and sat
@@ -1111,7 +1134,11 @@ a.poi:focus-visible .poi-pin {
      hold is about 64vw once the bezel is out; the wide-screen figure is set
      just below. A length throughout, never a percentage — half of it is the
      arch's radius, and a border-radius percentage resolves against height. */
-  --portrait-w: min(64vw, 34rem);
+  /* 64vw left the arch at 250px on a 390 phone — 28% of the viewport, with a
+     long stretch of bare cream above it. 80vw is as wide as it can go: the
+     content box is 350px there and the arch ring sits outside the photo at
+     --arch-gap either side, so the photo itself cannot exceed ~326px. */
+  --portrait-w: min(80vw, 34rem);
   /* Shrinks with the screen. The ring sits outside --portrait-w, so on a phone
      a fixed gap is what pushes the arch to within a few pixels of the bezel. */
   --arch-gap: clamp(1.05rem, 3vw, 1.5rem);
@@ -1228,7 +1255,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .hero-dot {
-  color: var(--copper);
+  color: var(--muted-ink);
 }
 
 .hero-actions {
@@ -1253,7 +1280,11 @@ a.poi:focus-visible .poi-pin {
 .home-main {
   display: flex;
   flex-direction: column;
-  gap: clamp(7rem, 13vw, 13rem);
+  /* Gaps descend with nesting: no gap inside a section may exceed about 60%
+     of the gap between sections. This was 187px at 1440 on top of 72px of
+     panel padding, which put ~460px between the last line of Schedule and the
+     word Travel. */
+  gap: clamp(6rem, 9vw, 10rem);
   padding: clamp(3rem, 7vw, 6rem) 0;
 }
 
@@ -1379,19 +1410,6 @@ a.poi:focus-visible .poi-pin {
   max-width: var(--measure);
 }
 
-/* Set exactly like the three list titles below it, so Travel reads as four
-   named sub-sections in one voice rather than one small letterspaced label
-   followed by three cursive ones. */
-.travel-note h3 {
-  color: var(--forest);
-  font-family: var(--font-script), cursive;
-  font-size: clamp(1.9rem, 3.6vw, 2.5rem);
-  line-height: 1;
-  margin: 0 0 1.1rem;
-  text-align: center;
-  word-spacing: 0.14em;
-}
-
 /* The body face, not the display one. This is the only long-form paragraph in
    Travel, and Cormorant is a high-contrast display serif — small x-height,
    hairline thins — which is why it read as less legible than the list notes
@@ -1409,30 +1427,41 @@ a.poi:focus-visible .poi-pin {
   text-wrap: pretty;
 }
 
+/* The two six-item lists pair off, and the five-item list — every row of which
+   carries a note, so it is the tallest per item — runs full width beneath them.
+   Stacking Seattle and Day Trips in one column left the other 290px short and
+   opened an L-shaped hole that ran straight into the section gap. */
 .travel-lists {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(2rem, 5vw, 3.6rem);
+  gap: clamp(2rem, 4.4vw, 3rem) clamp(2rem, 5vw, 3.6rem);
   max-width: 52rem;
   margin: clamp(2.6rem, 5vw, 3.6rem) auto 0;
 }
 
-/* Seattle and the day trips stack in the left column; the Eastside list holds
-   the right on its own. */
-.travel-list-stack {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(2.2rem, 4vw, 3rem);
+.travel-list-wide {
+  grid-column: 1 / -1;
 }
 
-.travel-list-title {
-  color: var(--forest);
-  font-family: var(--font-script), cursive;
-  font-size: clamp(1.9rem, 3.6vw, 2.5rem);
-  line-height: 1;
-  margin: 0 0 1.1rem;
+/* Seattle and the day trips stack in the left column; the Eastside list holds
+   the right on its own. */
+/* Carattere is for names — the couple's, the events', the sections'. It is not
+   for list headings. These are labels, so they take the structure voice at
+   label size: the same tracked caps already used for the watch party's aside,
+   a step up in size because these head a list rather than qualify a title.
+   Seven jobs at six scales in eleven colours is what stopped the script
+   signalling anything. */
+.travel-list-title,
+.travel-note h3 {
+  color: var(--muted-ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(0.92rem, 1.25vw, 1.02rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.3;
+  margin: 0 0 1.15rem;
   text-align: center;
-  word-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .travel-list ul {
@@ -1518,7 +1547,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .faq-icon {
-  color: var(--copper);
+  color: var(--muted-ink);
   font-size: 1.6rem;
   line-height: 1;
   flex: 0 0 auto;
@@ -1864,8 +1893,10 @@ a.poi:focus-visible .poi-pin {
 }
 
 /* Set per event from events.ts, sampled from that event's own artwork; these
-   are the fallbacks. --accent takes the event name and the times, --accent-sec
-   the timeline bullets, spine and labels. */
+   are the fallbacks. --accent takes the event name, the subtitle and the
+   times; --accent-mark the bullets and the spine. The activity names used to
+   take a second accent and now take --base-text, because they are the content
+   of the row. */
 .sched-event {
   /* The panel measures itself, not the window. Two columns need 352px of times
      plus a 4rem gap plus 420px of artwork — 836px — and whether that fits is a
@@ -1874,7 +1905,6 @@ a.poi:focus-visible .poi-pin {
      1440 and squeezed the paintings to 311px to do it. */
   container-type: inline-size;
   --accent: var(--forest);
-  --accent-sec: var(--rust);
   --accent-mark: var(--rust);
   --sched-pad: clamp(3.25rem, 6vw, 4.5rem);
   padding-block: var(--sched-pad);
@@ -2022,7 +2052,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .sched-date {
-  color: var(--copper-light);
+  color: var(--muted-ink);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(1.25rem, 1.8vw, 1.45rem);
   font-weight: 700;
@@ -2086,7 +2116,14 @@ a.poi:focus-visible .poi-pin {
   grid-template-columns: 4.15em max-content;
   gap: 0.95rem;
   align-items: baseline;
-  padding: 1.4rem 0 1.4rem 0.75rem;
+  /* 1.4rem gave a 89px pitch for a 30px row. That had a reason when the list
+     was vertically centred against a 486px painting beside it and needed the
+     height — but the panel stacks below 830px, which is most laptops, and the
+     pitch stayed while the justification went. It also inverted the rhythm:
+     rows of one list sat 89px apart while the painting and the list sat 27px
+     apart, so the spacing claimed a time was barely related to the next time
+     and glued to the artwork. */
+  padding: 0.8rem 0 0.8rem 0.75rem;
   position: relative;
 }
 
@@ -2120,8 +2157,11 @@ a.poi:focus-visible .poi-pin {
   white-space: nowrap;
 }
 
+/* The content of the row, so it reads as content: sepia, not the secondary
+   accent. In gold or purple it was the least legible thing in the panel, which
+   is backwards — the accent belongs on the title and the times. */
 .sched-what {
-  color: var(--accent-sec);
+  color: var(--base-text);
   font-family: var(--font-display), Georgia, serif;
   font-size: 1.5rem;
   font-weight: 600;
@@ -2198,7 +2238,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .sched-note {
-  color: var(--copper-light);
+  color: var(--rust);
   font-family: var(--font-body), Georgia, serif;
   font-size: clamp(1.1rem, 1.62vw, 1.28rem);
   font-style: italic;

@@ -341,50 +341,49 @@ function Travel() {
       </div>
 
       <div className="travel-lists">
-        {/* Seattle and the day trips share the left column, stacked. */}
-        <div className="travel-list-stack">
-          <Reveal as="article" className="travel-list">
-            <h3 className="travel-list-title">Our Favorite Seattle Spots</h3>
-            <ul>
-              {travel.seattleSpots.map((s) => (
-                <li key={s.name}>
-                  <a
-                    className="travel-spot-name"
-                    href={mapsSearch(s.query)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {s.name}
-                  </a>
-                  {s.note ? (
-                    <span className="travel-spot-note">{s.note}</span>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-          <Reveal as="article" className="travel-list" delay={0.1}>
-            <h3 className="travel-list-title">PNW Day Trips</h3>
-            <ul>
-              {travel.pnwDayTrips.map((s) => (
-                <li key={s.name}>
-                  <a
-                    className="travel-spot-name"
-                    href={mapsSearch(s.query)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {s.name}
-                  </a>
-                  {s.note ? (
-                    <span className="travel-spot-note">{s.note}</span>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-        </div>
-        <Reveal as="article" className="travel-list" delay={0.2}>
+        {/* The two six-item lists pair off; Eastside Bites runs full width
+            beneath them because every one of its rows carries a note. */}
+        <Reveal as="article" className="travel-list">
+          <h3 className="travel-list-title">Our Favorite Seattle Spots</h3>
+          <ul>
+            {travel.seattleSpots.map((s) => (
+              <li key={s.name}>
+                <a
+                  className="travel-spot-name"
+                  href={mapsSearch(s.query)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {s.name}
+                </a>
+                {s.note ? (
+                  <span className="travel-spot-note">{s.note}</span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+        <Reveal as="article" className="travel-list">
+          <h3 className="travel-list-title">PNW Day Trips</h3>
+          <ul>
+            {travel.pnwDayTrips.map((s) => (
+              <li key={s.name}>
+                <a
+                  className="travel-spot-name"
+                  href={mapsSearch(s.query)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {s.name}
+                </a>
+                {s.note ? (
+                  <span className="travel-spot-note">{s.note}</span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+        <Reveal as="article" className="travel-list travel-list-wide">
           <h3 className="travel-list-title">Our Favorite Eastside Bites</h3>
           <ul>
             {travel.eastsideBites.map((s) => (

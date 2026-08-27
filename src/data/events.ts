@@ -87,7 +87,7 @@ export const events: WeddingEvent[] = [
     accents: { primary: '#d05011', secondary: '#a37008', marks: '#e0a94e' },
     // The caption sits on the artwork itself, so it is measured against the
     // painting's gold as well as its own paper glow.
-    vibeColors: ['#cf4f0f', '#a37008'],
+    vibeColors: ['#d05011', '#a37008'],
     captionDrop: '0.30em',
     image: '/art/shaadi.webp',
     imageAlt: 'Four guests dressed for the Sunset Shaadi ceremony',
