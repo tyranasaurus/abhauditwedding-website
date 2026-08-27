@@ -102,7 +102,14 @@ export function SiteNav() {
       aria-label="Primary"
     >
       <a className="home-nav-brand" href="/#top">
-        A&nbsp;&amp;&nbsp;U
+        {/* The painted monogram rather than the script set as live type: this is
+            the one place the letterform can be the artwork itself. */}
+        <img
+          src="/art/au-monogram-leaves.webp"
+          alt="Abha &amp; Udit — home"
+          width={1000}
+          height={484}
+        />
       </a>
 
       <div

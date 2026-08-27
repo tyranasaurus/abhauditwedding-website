@@ -52,8 +52,10 @@
   --palette-forest: #2c683c;
   --palette-carnival: #d94e78;
   --palette-sunset: #d86a22;
-  /* Height of the fixed SiteNav, used to clear content on inner pages. */
-  --nav-h: 4.25rem;
+  /* Height of the fixed SiteNav, used to clear content on inner pages. Measured,
+     not guessed: 2.75rem of brand or menu button plus 0.85rem of padding either
+     side. Desktop and phone now agree. */
+  --nav-h: 4.45rem;
   /* Content column width. Lives on :root (not just .home) so the shared SiteNav
      gutters resolve on every page, including /wardrobe which has no .home wrapper. */
   --max: 1080px;
@@ -862,12 +864,19 @@ a.poi:focus-visible .poi-pin {
   box-shadow: 0 0.4rem 1rem rgba(47, 42, 33, 0.08);
 }
 
+/* The brand is the painted monogram. At 2.75rem it matches the menu button's
+   height exactly, so the bar measures the same 71px on a phone (where the
+   button sets the height) as on a desktop (where the monogram does) — which is
+   what --nav-h is finally able to state truthfully. */
 .home-nav-brand {
-  color: var(--forest);
-  font-family: var(--font-script), cursive;
-  font-size: 2rem;
-  line-height: 1;
+  display: flex;
+  line-height: 0;
   text-decoration: none;
+}
+
+.home-nav-brand img {
+  height: 2.75rem;
+  width: auto;
 }
 
 .home-nav-links {
