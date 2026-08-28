@@ -107,8 +107,8 @@ export function SiteNav() {
         <img
           src="/art/au-monogram-leaves.webp"
           alt="Abha &amp; Udit — home"
-          width={900}
-          height={561}
+          width={620}
+          height={556}
         />
       </a>
 
