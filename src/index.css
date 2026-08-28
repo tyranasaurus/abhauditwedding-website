@@ -1280,6 +1280,7 @@ a.poi:focus-visible .poi-pin {
    learn a different signal for "tappable" in each section. */
 .hero-venue,
 .sched-venue {
+  white-space: nowrap;
   color: var(--rust);
   text-decoration: none;
   background-image: linear-gradient(var(--rust), var(--rust));
@@ -1335,7 +1336,11 @@ a.poi:focus-visible .poi-pin {
      of the gap between sections. This was 187px at 1440 on top of 72px of
      panel padding, which put ~460px between the last line of Schedule and the
      word Travel. */
-  gap: clamp(6rem, 9vw, 10rem);
+  /* The seam, and the only thing between one section's last line and the next
+     section's needle — measured, there is no stray padding in there. It came
+     down from 187px to 130 in the rhythm pass and to ~104 here: at the foot of
+     a sparse list, 130 of empty paper read as a stall rather than a breath. */
+  gap: clamp(4.5rem, 7.2vw, 8.5rem);
   padding: clamp(3rem, 7vw, 6rem) 0;
 }
 
@@ -1473,8 +1478,13 @@ a.poi:focus-visible .poi-pin {
   font-family: var(--font-body), Georgia, serif;
   font-size: clamp(1rem, 1.4vw, 1.1rem);
   line-height: 1.75;
-  margin: 0;
-  text-align: center;
+  /* Flush left, and the block still centred. Seven lines of centred text on a
+     laptop and twelve on a phone give a ragged left edge the eye has to find
+     again every line, and this is the paragraph people read to actually get
+     somewhere. The measure comes in so the rag stays shallow. */
+  margin: 0 auto;
+  max-width: 55ch;
+  text-align: left;
   text-wrap: pretty;
 }
 
@@ -1522,8 +1532,10 @@ a.poi:focus-visible .poi-pin {
   border-top: 1px solid var(--rule);
 }
 
+/* No row rule. Each name already carries a copper underline, so a hairline
+   below it put two horizontal lines within 30px of each other, a dozen times
+   down the section. The spacing does the separating now. */
 .travel-list li {
-  border-bottom: 1px solid var(--rule);
   display: flex;
   flex-direction: column;
   padding: 0.8rem 0.15rem;
@@ -1600,8 +1612,10 @@ a.poi:focus-visible .poi-pin {
   color: var(--rust);
 }
 
+/* Copper: it is the tap target for the section guests open most, and copper is
+   what the rest of the page uses to mean "this does something". */
 .faq-icon {
-  color: var(--muted-ink);
+  color: var(--rust);
   font-size: 1.6rem;
   line-height: 1;
   flex: 0 0 auto;
@@ -1611,11 +1625,16 @@ a.poi:focus-visible .poi-pin {
   overflow: hidden;
 }
 
+/* Reading text, so the reading face. Cormorant is the structure voice — dates,
+   times, the questions themselves — and a full sentence in it read as a
+   different site from the travel paragraphs three sections up. Libre
+   Baskerville sets much larger at the same px, hence the smaller size and the
+   longer leading. */
 .faq-a p {
   color: var(--muted-ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.02rem, 1.7vw, 1.18rem);
-  line-height: 1.6;
+  font-family: var(--font-body), Georgia, serif;
+  font-size: clamp(0.95rem, 1.35vw, 1.04rem);
+  line-height: 1.75;
   margin: 0;
   padding: 0 0.15rem clamp(1.1rem, 2.4vw, 1.4rem);
   /* Not --measure: this sets at 1.18rem, so the same cap would run to ~78
@@ -1662,8 +1681,10 @@ a.poi:focus-visible .poi-pin {
   margin: 0;
 }
 
+/* Not a link, so not copper. It was the one place on the page where the warm
+   ink sat on something you cannot tap. */
 .footer-date {
-  color: var(--burnt-copper);
+  color: var(--muted-ink);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(1.05rem, 2vw, 1.3rem);
   font-weight: 600;
@@ -1671,18 +1692,29 @@ a.poi:focus-visible .poi-pin {
   margin: 1rem 0 0.3rem;
 }
 
+/* Its twin in the hero carries the painted stroke at rest; this one did not,
+   so the same link looked tappable at the top of the page and not at the
+   bottom. */
 .footer-venue {
   display: inline-block;
   color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(0.92rem, 1.5vw, 1.05rem);
   text-decoration: none;
+  background-image: linear-gradient(var(--rust), var(--rust));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
   margin-bottom: 1.4rem;
+  transition:
+    color 0.18s ease,
+    background-size 0.22s ease;
 }
 
-.footer-venue:hover {
-  color: var(--forest);
-  text-decoration: underline;
+.footer-venue:hover,
+.footer-venue:focus-visible {
+  color: var(--burnt-copper);
+  background-size: 100% 2.5px;
 }
 
 .footer-nav {
@@ -2087,9 +2119,14 @@ a.poi:focus-visible .poi-pin {
 .sched-head h2 {
   color: var(--accent);
   font-family: var(--font-script), cursive;
-  /* Carattere's swashes overrun their advance widths, so the A of "Away" runs
-     back under the t of "Night" without extra room between words. */
-  word-spacing: 0.34em;
+  /* Carattere's swashes overrun their advance widths, so "Naach the Night
+     Away" needs some room or the A runs back under the t. But 0.34em was well
+     past what that takes — it opened gaps you read as gaps. 0.22em is the
+     tightest that still clears the swash: at 0.12 the A and the t touch and
+     the words run together, which I checked at 3x before settling here. The
+     hero carries none at all, but "Abha & Udit" has an ampersand between its
+     words and no swash to clear. */
+  word-spacing: 0.22em;
   /* A script sets far smaller on the body than a serif does at the same px, so
      the clamp lifts to hold the same presence. */
   font-size: clamp(2.9rem, 6.9vw, 5rem);
@@ -2356,10 +2393,18 @@ a.poi:focus-visible .poi-pin {
     justify-items: center;
   }
 
-  /* Artwork first, so you can see which event you have landed on. */
+  /* Times first. The artwork ran to about 500px on a 390px screen, so a guest
+     who tapped Schedule to find out when the ceremony starts scrolled two
+     thirds of a screen of painting to reach 3:45. The painting is still here,
+     one scroll further down, doing the same job — it just no longer stands
+     between the question and the answer. */
   .sched-art {
-    order: -1;
+    order: 1;
     width: min(var(--art, 420px), 100%);
+  }
+
+  .sched-times {
+    order: 0;
   }
 
   .sched-times {
@@ -2371,7 +2416,12 @@ a.poi:focus-visible .poi-pin {
   color: var(--accent);
   word-spacing: 0.16em;
   font-family: var(--font-script), cursive;
-  font-size: 13.8cqw;
+  /* Sized off the artwork's own width, which is what keeps the caption in
+     proportion to the painting it sits on. The watch party's artwork is 520px
+     rather than 420, so its caption reached 71.8px against the other three at
+     45.9 — title rank, on a panel whose title is 80. The cap is the size the
+     420px panels land on, so nothing else moves. */
+  font-size: min(13.8cqw, 2.87rem);
   font-weight: 400;
   line-height: 0.84;
   margin: calc(-0.42em + var(--cap-drop, 0em)) 0 0;
@@ -2404,15 +2454,16 @@ a.poi:focus-visible .poi-pin {
     justify-items: center;
   }
 
-  /* Artwork first, so you can see which event you have landed on. */
   .sched-cols {
     /* Keep --art a plain length: it feeds a font-size calc, and a percentage
        there would resolve against the parent's font size, not its width. */
     --art: 360px;
   }
 
+  /* Times first here too — this block sits after the 660px one and was
+     putting the artwork back on top below 430px. */
   .sched-art {
-    order: -1;
+    order: 1;
     width: min(var(--art), 100%);
   }
 
