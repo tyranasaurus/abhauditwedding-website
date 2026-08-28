@@ -51,13 +51,17 @@
 }
 
 :root {
-  --forest: #2c683c;
-  --deep-forest: #173d29;
-  --pine: #254d36;
-  --copper: #9b643a;
+  --forest: #4d6044;
+  --deep-forest: #283b1c;
+  --pine: #364a28;
+  --copper: #9f6143;
+  /* Kept only as the parent hue of --rule and for the map/registry kickers.
+     It is not a text colour on the homepage: it used to carry every date line
+     and every event note, which put the page's hottest, most saturated ink on
+     its most administrative row. */
   --copper-light: #8f400f;
-  --rust: #7d4a26;
-  --burnt-copper: #6a4223;
+  --rust: #7f482d;
+  --burnt-copper: #6d402a;
   --paper: #f6eedf;
   /* Behind the painting. Sampled from the painting's own mist. */
   --ground: #e6e8db;
@@ -66,17 +70,52 @@
   --ribbed-paper-line: rgba(88, 65, 36, 0.05);
   --diagonal-laid-line: rgba(91, 68, 38, 0.055);
   --linen-highlight-line: rgba(255, 250, 237, 0.34);
-  --ink: #2f2a21;
+  /* ------------------------------------------------------------------
+   * Green is the site. Copper is what you can act on. The event owns
+   * its panel.
+   *
+   * The greens and the copper are sampled from the hero backdrop, which
+   * is the reference: its greens sit at hue 134 and its coppers — the
+   * maple, the barn roof, the buggies — at 46. Green is a third of the
+   * painting by pixel, so it is not a preference here, it is the artwork's
+   * own dominant family. Everything the site says is one of four greens;
+   * the only warm ink outside an event panel sits on what you can tap.
+   *
+   * These were at hue 150-158 and the copper at 54, which matched the
+   * needle divider (153) rather than the painting. Three painted assets
+   * were claiming to be the same green across a 36° spread — monogram
+   * 117, backdrop 134, needle 153. The text now sits on the backdrop's.
+   *
+   *   --forest      script titles, the monogram, the arch line
+   *   --ink         emphasis — FAQ questions
+   *   --base-text   body sentences
+   *   --muted-ink   captions, meta, nav, footer, the countdown
+   *   --rust        links, and only links
+   *   --rule        every hairline
+   *
+   * Inside an event panel: that event's own colours and nothing else —
+   * no copper, no forest, no sepia. The primary accent takes the title,
+   * the subtitle, the date, the activity names and the note; the second
+   * accent takes the times; the marks keep the luminous version.
+   *
+   * Every floor below is measured over the darkest firs the column ever
+   * crosses, which composite to #b5b9ae under the wash — not against the
+   * cream, which flatters by about 1.7x. That is why the body green is
+   * not --forest: the brand green reads 3.34 there, which is a 90px
+   * title's floor, not a paragraph's.
+   * ------------------------------------------------------------------ */
+  /* Emphasis. The deepest green in the set. */
+  --ink: #293a1f;
   /* The document default. It was #8f6430, a mid saturated yellow-brown, which
      measured 3.95:1 against the column over the treeline — under AA — and sat
      in the same tonal register as the painting, so ink and ground never
      separated. A watercolour is captioned in a warm sepia-black, not in raw
      sienna. This reads 8.57:1 at its worst. */
-  --base-text: #3f3a30;
+  --base-text: #38492e;
   /* Deep enough to clear AA against the darkest firs the column ever crosses:
      the plate's 99.9th-percentile dark is #2b3a25, which composites to #b5b9ae
      under the wash, and this reads 4.59 there. */
-  --muted-ink: #4c4838;
+  --muted-ink: #3d4d34;
   --soft-green: #d2d9cd;
   /* One hairline weight for every rule on the site: between events, between
      Q&A rows, under each travel spot. The colour is the needle painting's own
@@ -1111,7 +1150,11 @@ a.poi:focus-visible .poi-pin {
      hold is about 64vw once the bezel is out; the wide-screen figure is set
      just below. A length throughout, never a percentage — half of it is the
      arch's radius, and a border-radius percentage resolves against height. */
-  --portrait-w: min(64vw, 34rem);
+  /* 64vw left the arch at 250px on a 390 phone — 28% of the viewport, with a
+     long stretch of bare cream above it. 80vw is as wide as it can go: the
+     content box is 350px there and the arch ring sits outside the photo at
+     --arch-gap either side, so the photo itself cannot exceed ~326px. */
+  --portrait-w: min(80vw, 34rem);
   /* Shrinks with the screen. The ring sits outside --portrait-w, so on a phone
      a fixed gap is what pushes the arch to within a few pixels of the bezel. */
   --arch-gap: clamp(1.05rem, 3vw, 1.5rem);
@@ -1228,7 +1271,40 @@ a.poi:focus-visible .poi-pin {
 }
 
 .hero-dot {
-  color: var(--copper);
+  color: var(--muted-ink);
+}
+
+/* Links keep the copper and the painted stroke wherever they are, including
+   inside an event panel. The panel owns the event's voice; copper owns
+   interaction, and interaction is functional — a guest should not have to
+   learn a different signal for "tappable" in each section. */
+.hero-venue,
+.sched-venue {
+  color: var(--rust);
+  text-decoration: none;
+  background-image: linear-gradient(var(--rust), var(--rust));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  transition:
+    color 0.18s ease,
+    background-size 0.22s ease;
+}
+
+.hero-venue:hover,
+.hero-venue:focus-visible,
+.sched-venue:hover,
+.sched-venue:focus-visible {
+  color: var(--burnt-copper);
+  background-size: 100% 2.5px;
+}
+
+/* The second accent goes on the subtitle and the times. The watch party has
+   neither — no subtitle, no timeline — so its second colour had nowhere to
+   live and the panel read as one tone. Where there is no timeline, the date
+   line carries it instead. */
+.sched-event:has(.sched-cols.is-solo) .sched-date {
+  color: var(--accent-sec);
 }
 
 .hero-actions {
@@ -1242,7 +1318,9 @@ a.poi:focus-visible .poi-pin {
 .hero-countdown {
   display: inline-block;
   margin-top: 1.5rem;
-  color: var(--rust);
+  /* Was rust. Copper means "this does something" now, and a countdown does
+     not. */
+  color: var(--muted-ink);
   font-family: var(--font-body), Georgia, serif;
   font-style: italic;
   font-size: clamp(0.95rem, 1.5vw, 1.15rem);
@@ -1253,7 +1331,11 @@ a.poi:focus-visible .poi-pin {
 .home-main {
   display: flex;
   flex-direction: column;
-  gap: clamp(7rem, 13vw, 13rem);
+  /* Gaps descend with nesting: no gap inside a section may exceed about 60%
+     of the gap between sections. This was 187px at 1440 on top of 72px of
+     panel padding, which put ~460px between the last line of Schedule and the
+     word Travel. */
+  gap: clamp(6rem, 9vw, 10rem);
   padding: clamp(3rem, 7vw, 6rem) 0;
 }
 
@@ -1379,19 +1461,6 @@ a.poi:focus-visible .poi-pin {
   max-width: var(--measure);
 }
 
-/* Set exactly like the three list titles below it, so Travel reads as four
-   named sub-sections in one voice rather than one small letterspaced label
-   followed by three cursive ones. */
-.travel-note h3 {
-  color: var(--forest);
-  font-family: var(--font-script), cursive;
-  font-size: clamp(1.9rem, 3.6vw, 2.5rem);
-  line-height: 1;
-  margin: 0 0 1.1rem;
-  text-align: center;
-  word-spacing: 0.14em;
-}
-
 /* The body face, not the display one. This is the only long-form paragraph in
    Travel, and Cormorant is a high-contrast display serif — small x-height,
    hairline thins — which is why it read as less legible than the list notes
@@ -1409,30 +1478,41 @@ a.poi:focus-visible .poi-pin {
   text-wrap: pretty;
 }
 
+/* The two six-item lists pair off, and the five-item list — every row of which
+   carries a note, so it is the tallest per item — runs full width beneath them.
+   Stacking Seattle and Day Trips in one column left the other 290px short and
+   opened an L-shaped hole that ran straight into the section gap. */
 .travel-lists {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(2rem, 5vw, 3.6rem);
+  gap: clamp(2rem, 4.4vw, 3rem) clamp(2rem, 5vw, 3.6rem);
   max-width: 52rem;
   margin: clamp(2.6rem, 5vw, 3.6rem) auto 0;
 }
 
-/* Seattle and the day trips stack in the left column; the Eastside list holds
-   the right on its own. */
-.travel-list-stack {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(2.2rem, 4vw, 3rem);
+.travel-list-wide {
+  grid-column: 1 / -1;
 }
 
-.travel-list-title {
-  color: var(--forest);
-  font-family: var(--font-script), cursive;
-  font-size: clamp(1.9rem, 3.6vw, 2.5rem);
-  line-height: 1;
-  margin: 0 0 1.1rem;
+/* Seattle and the day trips stack in the left column; the Eastside list holds
+   the right on its own. */
+/* Carattere is for names — the couple's, the events', the sections'. It is not
+   for list headings. These are labels, so they take the structure voice at
+   label size: the same tracked caps already used for the watch party's aside,
+   a step up in size because these head a list rather than qualify a title.
+   Seven jobs at six scales in eleven colours is what stopped the script
+   signalling anything. */
+.travel-list-title,
+.travel-note h3 {
+  color: var(--muted-ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(0.92rem, 1.25vw, 1.02rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.3;
+  margin: 0 0 1.15rem;
   text-align: center;
-  word-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .travel-list ul {
@@ -1449,9 +1529,12 @@ a.poi:focus-visible .poi-pin {
   padding: 0.8rem 0.15rem;
 }
 
+/* A link has to look like one before it is touched. There is no hover on a
+   phone, so the copper and the painted stroke are both there at rest and the
+   hover only deepens them. */
 .travel-spot-name {
   align-self: flex-start;
-  color: var(--ink);
+  color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-weight: 700;
   font-size: 1.2rem;
@@ -1459,7 +1542,7 @@ a.poi:focus-visible .poi-pin {
   background-image: linear-gradient(var(--rust), var(--rust));
   background-position: 0 100%;
   background-repeat: no-repeat;
-  background-size: 0 1.5px;
+  background-size: 100% 1px;
   transition:
     color 0.18s ease,
     background-size 0.22s ease;
@@ -1467,8 +1550,8 @@ a.poi:focus-visible .poi-pin {
 
 .travel-spot-name:hover,
 .travel-spot-name:focus-visible {
-  color: var(--rust);
-  background-size: 100% 1.5px;
+  color: var(--burnt-copper);
+  background-size: 100% 2.5px;
 }
 
 .travel-spot-note {
@@ -1518,7 +1601,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .faq-icon {
-  color: var(--copper);
+  color: var(--muted-ink);
   font-size: 1.6rem;
   line-height: 1;
   flex: 0 0 auto;
@@ -1554,12 +1637,14 @@ a.poi:focus-visible .poi-pin {
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(1rem, 1.7vw, 1.18rem);
   font-weight: 700;
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
 }
 
 .faq-link:hover {
-  color: var(--rust);
-  text-decoration: underline;
+  color: var(--burnt-copper);
+  text-decoration-thickness: 2.5px;
 }
 
 /* Footer ------------------------------------------------------------ */
@@ -1588,7 +1673,7 @@ a.poi:focus-visible .poi-pin {
 
 .footer-venue {
   display: inline-block;
-  color: var(--burnt-copper);
+  color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(0.92rem, 1.5vw, 1.05rem);
   text-decoration: none;
@@ -1839,6 +1924,9 @@ a.poi:focus-visible .poi-pin {
    need their own measure. */
 .sched-stack {
   --sched-col: 1000px;
+  /* The longest label in the schedule plus 10px of headroom. Both the list and
+     the grid track that holds it read this, so they cannot drift apart. */
+  --times-w: 19.7rem;
 }
 
 .sched-event {
@@ -1864,8 +1952,10 @@ a.poi:focus-visible .poi-pin {
 }
 
 /* Set per event from events.ts, sampled from that event's own artwork; these
-   are the fallbacks. --accent takes the event name and the times, --accent-sec
-   the timeline bullets, spine and labels. */
+   are the fallbacks. --accent takes the event name, the subtitle and the
+   times; --accent-mark the bullets and the spine. The activity names used to
+   take a second accent and now take --base-text, because they are the content
+   of the row. */
 .sched-event {
   /* The panel measures itself, not the window. Two columns need 352px of times
      plus a 4rem gap plus 420px of artwork — 836px — and whether that fits is a
@@ -1874,7 +1964,6 @@ a.poi:focus-visible .poi-pin {
      1440 and squeezed the paintings to 311px to do it. */
   container-type: inline-size;
   --accent: var(--forest);
-  --accent-sec: var(--rust);
   --accent-mark: var(--rust);
   --sched-pad: clamp(3.25rem, 6vw, 4.5rem);
   padding-block: var(--sched-pad);
@@ -2011,8 +2100,10 @@ a.poi:focus-visible .poi-pin {
 /* What kind of event it is, in the serif the name used to be set in. Never
    below 24px, which is where WCAG's large-text line sits — under it the
    carnival's pink could not carry this at 4.5:1. */
+/* The second accent, so the head is not three lines of one colour: the title
+   and the date take the primary and this sits between them in the other. */
 .sched-kind {
-  color: var(--accent);
+  color: var(--accent-sec);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(1.55rem, 2.2vw, 1.85rem);
   font-weight: 500;
@@ -2022,7 +2113,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .sched-date {
-  color: var(--copper-light);
+  color: var(--accent);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(1.25rem, 1.8vw, 1.45rem);
   font-weight: 700;
@@ -2035,8 +2126,38 @@ a.poi:focus-visible .poi-pin {
 }
 
 .sched-wx {
+  /* The forecast never breaks across lines mid-reading. */
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
+}
+
+/* The long form is the default; the brief one only exists for the narrow
+   panel. */
+.sched-date-brief {
+  display: none;
+}
+
+/* Keyed to the panel's own width rather than the window's, so it is the
+   measure of the line that decides — a panel is narrow on a phone and also
+   narrow in the stacked laptop layout. This block sits after the rules it
+   overrides: a @container rule loses to a later rule of equal specificity. */
+@container (max-width: 480px) {
+  .sched-date-full {
+    display: none;
+  }
+
+  .sched-date-brief {
+    display: inline;
+  }
+
+  /* inline-block rather than block, so the forecast takes a line of its own
+     only when the date and the temperatures genuinely cannot share one. */
+  .sched-wx {
+    display: inline-block;
+    /* An inline-block drops the whitespace at its own leading edge, which ate
+       the space before the separator. */
+    margin-left: 0.32em;
+  }
 }
 
 /* Line art at the cap height of the date it sits in, inked in the same copper
@@ -2053,8 +2174,21 @@ a.poi:focus-visible .poi-pin {
    centred event name rather than drifting into two half-empty columns. */
 .sched-cols {
   display: grid;
-  grid-template-columns: minmax(0, max-content) minmax(0, var(--art, 420px));
-  gap: clamp(1.4rem, 4.4vw, 4rem);
+  /* --art is the picture this event asked for; --art-cap is what the panel can
+     actually afford at its current width. The pair is what lets a narrow panel
+     keep the timeline beside its painting instead of stacking. */
+  /* The times column asks for its full width first and the painting takes what
+     is left. The other way round, a 1280 laptop gave the artwork its 340px and
+     left the list 288px for a 305px label — so the label wrapped, or before
+     that, overflowed. The list is the content; the painting can afford the
+     27px. */
+  grid-template-columns:
+    minmax(min(var(--times-w), 100%), max-content)
+    minmax(0, min(var(--art, 420px), var(--art-cap, 420px)));
+  /* The list and the painting are one object, so the space between them has to
+     read as smaller than the space between rows of the list — 70px. It used to
+     be 64px, near enough to the pitch that the pair stopped grouping. */
+  gap: clamp(1rem, 2.6vw, 2.4rem);
   align-items: center;
   justify-content: center;
 }
@@ -2072,8 +2206,18 @@ a.poi:focus-visible .poi-pin {
   margin: 0;
   padding: 0;
   /* Fixed, not fit-content: the spine is the strongest vertical on the page and
-     was landing at three different x positions as you scrolled. */
-  width: 22rem;
+     was landing at three different x positions as you scrolled. The cost of
+     sharing one width is that every panel is as wide as the longest label
+     anywhere in the schedule, so a panel of short labels carries the difference
+     as slack on its right.
+
+     This is that longest label plus 10px of headroom. The label is currently
+     "Bride v Groom Games" at 305px — measured at 1440 with the real faces, and
+     the same to within a pixel in the fallback stack, because the stand-in
+     faces in the token block are metric-matched. Change a label in events.ts
+     and this needs re-measuring: too small and the longest one wraps, too
+     large and every other panel pays for it. */
+  width: var(--times-w);
   max-width: 100%;
   border-left: 1px solid color-mix(in srgb, var(--accent-mark) 45%, transparent);
 }
@@ -2082,11 +2226,24 @@ a.poi:focus-visible .poi-pin {
   display: grid;
   /* A fixed first track is shared by every row. max-content is not: each li is
      its own grid container, so it sized to that row's own string and the labels
-     ragged by 11px wherever the hours were not all the same width. */
-  grid-template-columns: 4.15em max-content;
+     ragged by 11px wherever the hours were not all the same width.
+
+     minmax(0, max-content) rather than bare max-content, because the list's own
+     width is capped at 100% of whatever the panel can spare: at 1280 that is
+     288px against a 315px list, and a bare max-content column cannot shrink, so
+     the longest label ran 17px past its track and into the artwork's gutter.
+     With a floor of 0 it wraps instead, which is the right way to lose. */
+  grid-template-columns: 4.15em minmax(0, max-content);
   gap: 0.95rem;
   align-items: baseline;
-  padding: 1.4rem 0 1.4rem 0.75rem;
+  /* 1.4rem gave a 89px pitch for a 30px row. That had a reason when the list
+     was vertically centred against a 486px painting beside it and needed the
+     height — but the panel stacks below 830px, which is most laptops, and the
+     pitch stayed while the justification went. It also inverted the rhythm:
+     rows of one list sat 89px apart while the painting and the list sat 27px
+     apart, so the spacing claimed a time was barely related to the next time
+     and glued to the artwork. */
+  padding: 0.8rem 0 0.8rem 0.75rem;
   position: relative;
 }
 
@@ -2104,8 +2261,12 @@ a.poi:focus-visible .poi-pin {
   width: 8px;
 }
 
+/* The second accent. For Sunset Shaadi that is the painting's own sunflower
+   gold at hue 77°, three degrees off the sunflowers and larches it was sampled
+   from; for the Carnival it is the purple, for the Sangeet the copper. It had
+   been declared in events.ts and used nowhere. */
 .sched-times time {
-  color: var(--accent);
+  color: var(--accent-sec);
   font-family: var(--font-display), Georgia, serif;
   font-size: 1.85rem;
   /* Cormorant defaults to old-style figures, so digit heights vary by glyph and
@@ -2120,8 +2281,11 @@ a.poi:focus-visible .poi-pin {
   white-space: nowrap;
 }
 
+/* The content of the row. It takes the event's primary accent, not the site's
+   green: a panel carries its own colours and nothing else, which is what stops
+   the schedule reading as copper and forest and four event palettes at once. */
 .sched-what {
-  color: var(--accent-sec);
+  color: var(--accent);
   font-family: var(--font-display), Georgia, serif;
   font-size: 1.5rem;
   font-weight: 600;
@@ -2161,7 +2325,30 @@ a.poi:focus-visible .poi-pin {
 
 /* Below 830px of *panel* the two tracks stop fitting, so the artwork goes
    above the times at its full width instead of being crushed beside them. */
+/* A 13-15" laptop puts the panel at 685px. It used to fall straight through to
+   the stacked layout, which cost 1,600px of page height and left the timeline
+   as a 352px island in the middle of an empty band. It stays side by side now;
+   the picture gives up what the pair needs to fit. */
 @container (max-width: 830px) {
+  .sched-cols {
+    --art-cap: 340px;
+  }
+}
+
+/* Stack whenever side by side would squeeze the painting.
+ *
+ * The pair needs the list's 315px, the gutter, and a painting worth looking at
+ * — about 300px, below which the four figures stop reading as people. That is
+ * a 660px panel. Under it the panel stacks, where the painting gets 360px and
+ * the list its full width, and neither has to give.
+ *
+ * The threshold was 560px, and the band between 560 and 660 was the worst on
+ * the site without looking like it: a 1024-1180px window puts the panel at
+ * 587-595px, which is wider than a phone and so read as "plenty of room",
+ * while the painting was squeezed to 241px — smaller than it is on a phone.
+ * Panel width is not monotonic in window width here (the column formula has a
+ * step at 900px), so this has to be keyed on the panel, not the viewport. */
+@container (max-width: 660px) {
   .sched-cols,
   .sched-cols.is-solo {
     grid-template-columns: minmax(0, 1fr);
@@ -2198,7 +2385,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .sched-note {
-  color: var(--copper-light);
+  color: var(--accent);
   font-family: var(--font-body), Georgia, serif;
   font-size: clamp(1.1rem, 1.62vw, 1.28rem);
   font-style: italic;

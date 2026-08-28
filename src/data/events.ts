@@ -87,14 +87,14 @@ export const events: WeddingEvent[] = [
     accents: { primary: '#d05011', secondary: '#a37008', marks: '#e0a94e' },
     // The caption sits on the artwork itself, so it is measured against the
     // painting's gold as well as its own paper glow.
-    vibeColors: ['#cf4f0f', '#a37008'],
+    vibeColors: ['#d05011', '#a37008'],
     captionDrop: '0.30em',
     image: '/art/shaadi.webp',
     imageAlt: 'Four guests dressed for the Sunset Shaadi ceremony',
     imageWidth: 792,
     imageHeight: 838,
     timeline: [
-      { time: '3:30 PM', label: 'Refreshments' },
+      { time: '3:45 PM', label: 'Refreshments' },
       { time: '4:00 PM', label: 'Ceremony' },
       { time: '7:00 PM', label: 'Dinner' },
       { time: '8:00 PM', label: 'Speeches' },
@@ -105,23 +105,26 @@ export const events: WeddingEvent[] = [
     className: 'carnival-garden',
     anchor: 'carnegie-to-carnation',
     title: 'From Carnegie to Carnation',
-    subtitle: 'Baraat and Carnival',
+    subtitle: 'Baraat & Carnival',
     date: 'Sunday, September 6',
     forecastWindow: { date: '2026-09-06', from: 10, to: 15 },
     vibe: 'Colors in Bloom',
     // The one event with four colours, so the bullets take the blue rather
     // than doubling the purple.
     accents: { primary: '#d94b6d', secondary: '#755798', marks: '#3685ad' },
-    vibeColors: ['#3685ad', '#d94b6d', '#755798'],
+    // The caption's blue is deeper than the marks' blue on purpose: #3685ad is
+    // a bullet colour, and set as a word it reads as a mark rather than as
+    // text. Same hue, 234°, taken down until it carries.
+    vibeColors: ['#05678e', '#d94b6d', '#755798'],
     captionDrop: '0.26em',
     image: '/art/carnival.webp',
     imageAlt: 'Four guests dressed for the Baraat and Carnival',
     imageWidth: 793,
     imageHeight: 862,
     timeline: [
-      { time: '10:00 AM', label: "Abha and Udit's Baraat" },
-      { time: '11:00 AM', label: 'Carnival Festival Begins' },
-      { time: '12:00 PM', label: 'Bride vs Groom Games' },
+      { time: '10:00 AM', label: "Abha & Udit's Baraat" },
+      { time: '11:00 AM', label: 'Carnival Begins' },
+      { time: '12:00 PM', label: 'Bride v Groom Games' },
       { time: '2:00 PM', label: 'Carnival Finale' },
     ],
     note: 'Abha and Udit are excited for everyone to join the Baraat leading into the Carnival, our festive fair! Expect fun food and activities, lawn games, and plenty of beautiful spots around the venue for photos. FYI, Abha is skipping heels, and you can too!',
@@ -130,9 +133,9 @@ export const events: WeddingEvent[] = [
     className: 'forest-gala',
     anchor: 'naach-the-night-away',
     title: 'Naach the Night Away',
-    subtitle: 'Sangeet and Reception',
+    subtitle: 'Sangeet & Reception',
     date: 'Sunday, September 6',
-    vibe: 'Glitz and Glam',
+    vibe: 'Glitz & Glam',
     accents: { primary: '#28433a', secondary: '#9e521a' },
     vibeColors: ['#28433a', '#9e521a', '#28433a'],
     image: '/art/reception.webp',
@@ -140,9 +143,9 @@ export const events: WeddingEvent[] = [
     imageWidth: 784,
     imageHeight: 813,
     timeline: [
-      { time: '4:30 PM', label: 'Appetizers Served' },
+      { time: '4:45 PM', label: 'Appetizers Served' },
       { time: '5:00 PM', label: 'Sangeet First Half' },
-      { time: '6:00 PM', label: 'Dinner and Photos' },
+      { time: '6:00 PM', label: 'Dinner & Photos' },
       { time: '6:30 PM', label: 'Sangeet Second Half' },
       { time: '7:00 PM', label: 'Dance Party' },
     ],
@@ -155,8 +158,10 @@ export const events: WeddingEvent[] = [
     title: 'Seahawks Season Opener',
     date: 'Wednesday, September 9 · 5:00 PM',
     vibe: '12th Man Spirit',
-    accents: { primary: '#33486e', secondary: '#4f7029' },
-    vibeColors: ['#33486e', '#33486e', '#4f7029'],
+    // The club's own two: College Navy and Action Green.
+    accents: { primary: '#002244', secondary: '#69be28' },
+    // Navy, green, navy — the club leads with navy, so the caption does too.
+    vibeColors: ['#002244', '#69be28', '#002244'],
     captionDrop: '0.32em',
     image: '/art/seahawks.webp',
     imageAlt: 'Four guests in Seahawks gear at a game-day watch party',
@@ -167,7 +172,7 @@ export const events: WeddingEvent[] = [
     venue: {
       name: 'Sam’s Tavern',
       area: 'South Lake Union',
-      url: 'https://maps.app.goo.gl/GnV7sKQTn7k1LSkr6',
+      url: 'https://maps.app.goo.gl/oDNNeqmuTdAseraNA',
     },
     note: 'Quite the summer for rings in Seattle. Join us to celebrate Abha, Udit, and the Seahawks as they all run it back for more. Go Hawks!',
   },

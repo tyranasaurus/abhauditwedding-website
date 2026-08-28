@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react'
 import type { WeddingEvent } from '@/data/events'
 import type { WindowForecast } from '@/lib/use-forecast'
 import { renderWords } from '@/lib/render-words'
+import { abbreviateDate } from '@/lib/short-date'
 import { SkyGlyph } from '@/components/SkyGlyph'
 
 export function EventPanel({
@@ -31,7 +32,10 @@ export function EventPanel({
         <h2>{event.title}</h2>
         {event.subtitle && <p className="sched-kind">{event.subtitle}</p>}
         <p className="sched-date">
-          {event.date}
+          {/* Exactly one of these is ever displayed, so exactly one is ever
+              announced — the other is display:none and out of the a11y tree. */}
+          <span className="sched-date-full">{event.date}</span>
+          <span className="sched-date-brief">{abbreviateDate(event.date)}</span>
           {forecast && (
             <span
               className="sched-wx"
@@ -49,6 +53,19 @@ export function EventPanel({
                 <span className="sched-rain"> · {forecast.rain}% rain</span>
               )}
             </span>
+          )}
+          {event.venue && (
+            <>
+              {' · '}
+              <a
+                className="sched-venue"
+                href={event.venue.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {event.venue.name}
+              </a>
+            </>
           )}
         </p>
       </header>
