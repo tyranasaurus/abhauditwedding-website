@@ -2517,9 +2517,11 @@ a.poi:focus-visible .poi-pin {
 
 
 /* ---------------------------------------------------------------------------
-   Seating chart (/seating-chart) — alphabetical guest list beside a sticky
-   floor plan; hovering or tapping a name lights up that table on the plan,
-   and hovering a table lights up its guests.
+   Seating chart (/seating-chart) — guests say who they are once via the
+   autocomplete (kept in localStorage); their table then stays lit on the
+   watercolor floor plan with a "You" seal. Hovering or tapping any table
+   still shows who's seated there. On a phone the map is the page: full-bleed
+   width, sized so the whole plan fits the viewport.
 --------------------------------------------------------------------------- */
 .seating-page {
   padding: calc(var(--nav-h) + 2.4rem) max(1.2rem, calc((100vw - var(--max)) / 2))
@@ -2567,20 +2569,16 @@ a.poi:focus-visible .poi-pin {
   max-width: 34rem;
 }
 
-.seating-layout {
-  align-items: start;
-  display: grid;
-  gap: clamp(1.6rem, 3.4vw, 3rem);
-  grid-template-columns: minmax(0, 1fr) clamp(300px, 34vw, 410px);
-  margin-top: clamp(1.8rem, 3.5vw, 2.8rem);
+/* The finder — either the "Who are you?" combobox or the chip naming you. */
+.seating-finder {
+  margin: clamp(1.4rem, 2.6vw, 2rem) auto 0;
+  max-width: 26rem;
 }
 
-/* Search — the primary way in: 170 names is too many to scan. */
 .guest-search {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  margin-bottom: 1.1rem;
 }
 
 .guest-search-label {
@@ -2589,6 +2587,7 @@ a.poi:focus-visible .poi-pin {
   font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.14em;
+  text-align: center;
   text-transform: uppercase;
 }
 
@@ -2654,62 +2653,49 @@ a.poi:focus-visible .poi-pin {
   font-size: 0.875rem;
   font-style: italic;
   margin: 0;
+  text-align: center;
 }
 
-.guest-list {
-  column-gap: 2rem;
-  columns: 11.5rem;
+/* Autocomplete results float over the map rather than pushing it down. */
+.guest-options {
+  background: var(--paper);
+  border: 1px solid var(--copper);
+  border-radius: 14px;
+  box-shadow: 0 14px 34px rgba(88, 65, 36, 0.28);
+  left: 0;
   list-style: none;
-  margin: 0;
-  padding: 0;
+  margin: 0.45rem 0 0;
+  max-height: 17rem;
+  overflow-y: auto;
+  padding: 0.3rem;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 5;
 }
 
-.guest-list li {
-  break-inside: avoid;
-}
-
-.guest-name {
+.guest-option {
   align-items: baseline;
   background: none;
   border: 0;
-  border-bottom: 1px solid rgba(155, 100, 58, 0.18);
-  border-radius: 3px 3px 0 0;
+  border-radius: 9px;
   color: var(--muted-ink);
   cursor: pointer;
   display: flex;
   font-family: var(--font-body), Georgia, serif;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   gap: 0.6rem;
   justify-content: space-between;
   line-height: 1.35;
-  padding: 0.34rem 0.3rem 0.3rem;
+  padding: 0.48rem 0.7rem;
   text-align: left;
-  transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
   width: 100%;
 }
 
-.guest-name:hover,
-.guest-name:focus-visible {
-  background: rgba(44, 104, 60, 0.08);
+.guest-option:hover,
+.guest-option.is-cursor {
+  background: rgba(44, 104, 60, 0.1);
   color: var(--deep-forest);
-}
-
-.guest-name:focus-visible {
-  outline: 2px solid var(--copper-light);
-  outline-offset: 1px;
-}
-
-/* Every guest at the active table lights up, not just the hovered name. */
-.guest-name.is-lit {
-  background: rgba(44, 104, 60, 0.12);
-  border-bottom-color: var(--copper);
-  color: var(--deep-forest);
-}
-
-.guest-name.is-pinned {
-  background: rgba(186, 89, 25, 0.13);
 }
 
 .guest-table-tag {
@@ -2720,32 +2706,78 @@ a.poi:focus-visible .poi-pin {
   font-weight: 700;
 }
 
-.guest-name.is-lit .guest-table-tag {
+.guest-option:hover .guest-table-tag,
+.guest-option.is-cursor .guest-table-tag {
   color: var(--copper-light);
 }
 
-.seating-map {
-  position: sticky;
-  top: calc(var(--nav-h) + 0.8rem);
-}
-
-/* Sits below the plan so its height never shifts the map as names appear. */
-.seating-status {
-  color: var(--muted-ink);
+/* "Never mind" under the search when it was opened from the chip. */
+.guest-search-cancel {
+  align-self: center;
+  background: none;
+  border: 0;
+  color: var(--copper-light);
+  cursor: pointer;
+  font-family: var(--font-body), Georgia, serif;
   font-size: 0.875rem;
   font-style: italic;
-  line-height: 1.5;
-  margin: 0.7rem 0 0;
-  text-align: center;
+  padding: 0.2rem 0.4rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-.seating-status strong {
-  color: var(--forest);
+/* The chip naming you, with the way out ("Not you?") always in reach. */
+.me-chip {
+  align-items: center;
+  background: rgba(255, 252, 245, 0.75);
+  border: 1px solid var(--copper);
+  border-radius: 999px;
+  display: flex;
+  gap: 0.9rem;
+  justify-content: space-between;
+  padding: 0.5rem 0.6rem 0.5rem 1.1rem;
+}
+
+.me-chip-text {
+  color: var(--muted-ink);
+  font-family: var(--font-body), Georgia, serif;
+  font-size: 0.9375rem;
+  margin: 0;
+  min-width: 0;
+}
+
+.me-chip-text strong {
+  color: var(--deep-forest);
   font-family: var(--font-display), Georgia, serif;
   font-size: 1rem;
-  font-style: normal;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.me-chip-change {
+  background: none;
+  border: 1px solid rgba(155, 100, 58, 0.5);
+  border-radius: 999px;
+  color: var(--copper-light);
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.32rem 0.85rem;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.me-chip-change:hover,
+.me-chip-change:focus-visible {
+  background: rgba(155, 100, 58, 0.12);
+  outline: none;
+}
+
+.seating-map {
+  margin-top: clamp(1.5rem, 3vw, 2.4rem);
 }
 
 .seating-frame {
@@ -2755,8 +2787,10 @@ a.poi:focus-visible .poi-pin {
   margin-inline: auto;
   overflow: hidden;
   position: relative;
-  /* Fit the tall plan inside the viewport so the sticky column shows all of it. */
-  width: min(100%, calc((100svh - var(--nav-h) - 10rem) * 0.558));
+  /* Sized to the viewport but never crowding it: the svh term fits the tall
+     plan under the nav, finder, and table card with air to spare, and the
+     28rem cap keeps it a map, not a mural, on big screens. */
+  width: min(90%, calc((100svh - var(--nav-h) - 9rem) * 0.558), 28rem);
 }
 
 .seating-base {
@@ -2823,16 +2857,118 @@ a.poi:focus-visible .poi-pin {
   filter: brightness(1.12);
 }
 
+/* Your table — a steady copper seal with a paper gap ring, deliberately
+   different from the transient tap/hover glow above. Declared after
+   .is-active so that when your own table is also the tapped one, the seal
+   wins. */
+.table-spot.is-yours {
+  box-shadow:
+    inset 0 0 0 1px rgba(246, 238, 223, 0.55),
+    0 0 0 3px var(--paper),
+    0 0 0 5px var(--copper-light),
+    0 0 22px 7px rgba(186, 89, 25, 0.4);
+  filter: brightness(1.14);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .table-spot.is-yours {
+    animation: your-table-glow 2.8s ease-in-out infinite;
+  }
+}
+
+@keyframes your-table-glow {
+  50% {
+    filter: brightness(1.26);
+  }
+}
+
+/* Names whichever table has attention, above the plan where it reads first.
+   The min-height reserves two rows of pills so the map doesn't jump as
+   hovering swaps one table's guests for another's. */
+.table-card {
+  margin: 0 auto 1.1rem;
+  max-width: 34rem;
+  min-height: 6.1rem;
+  text-align: center;
+}
+
+/* Set like the venue's own chart: the table in the wedding script, the names
+   beneath it in the clean display serif — the ornate face carries the header,
+   never the list, so every name stays readable at a glance. */
+.table-card-title {
+  color: var(--forest);
+  font-family: var(--font-script), cursive;
+  font-size: clamp(1.75rem, 3vw, 2.1rem);
+  font-weight: 400;
+  line-height: 1.1;
+  margin: 0 0 0.45rem;
+}
+
+.table-card-yours {
+  color: var(--copper-light);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.0625rem;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+
+.table-card-guests {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  row-gap: 0.15rem;
+}
+
+.table-card-guest {
+  color: var(--muted-ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.0625rem;
+  letter-spacing: 0.03em;
+  line-height: 1.45;
+}
+
+/* A copper mid-dot between names, riding with the name before it so a wrapped
+   line never opens on a stray dot. */
+.table-card-guest:not(:last-child)::after {
+  color: var(--copper);
+  content: '·';
+  margin-inline: 0.55rem;
+}
+
+.table-card-guest.is-you {
+  color: var(--copper-light);
+  font-weight: 600;
+}
+
+.table-card-hint {
+  color: var(--muted-ink);
+  font-size: 0.9375rem;
+  font-style: italic;
+  line-height: 1.6;
+  /* Optically centers the hint inside the space the pills would occupy. */
+  margin: 0;
+  padding-top: 1rem;
+}
+
+/* The map is the page on a phone: near-full width, with the page gutter
+   moved onto the text blocks so the plan can outgrow them. */
 @media (max-width: 880px) {
-  .seating-layout {
-    grid-template-columns: 1fr;
+  .seating-page {
+    padding-inline: 0;
   }
 
-  .seating-map {
-    position: static;
+  .seating-header,
+  .seating-finder,
+  .table-card {
+    padding-inline: 1.2rem;
   }
 
   .seating-frame {
-    width: min(100%, 440px);
+    /* Big on purpose — the tall plan may run past one screen — but with a
+       breath of paper either side rather than pressed to the edges. */
+    width: 92%;
   }
 }

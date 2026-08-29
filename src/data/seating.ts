@@ -11,7 +11,7 @@ export const seatingIntro = {
   kicker: 'Sangeet Reception · The Hippodrome',
   title: 'Find your seat',
   blurb:
-    'Search for your name, then tap it to light up your table on the floor plan.',
+    'Tell us who you are and your table will stay lit on the floor plan. Tap any other table to see who’s seated there.',
 } as const
 
 // Positions are measured against the watercolor floor plan
