@@ -8,3 +8,4 @@ dist-ssr
 
 # Source art (large originals); committed output lives in public/art/*.webp
 art-src/
+.superpowers/

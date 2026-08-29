@@ -28,13 +28,21 @@ renders, photographic realism, stock-illustration "corporate" look.
 
 Old-world Indian wedding stationery: warm ivory paper, copper ink, forest green.
 
+Every green here sits at **OKLCh hue 134** and every warm tone at **hue 46** —
+the hero backdrop's own two families, measured from `backdrop-wide.webp`. They
+were at 150–158 and 54 until Aug 2026, which was the needle divider's green
+rather than the painting's; three painted assets were claiming to be the same
+green across a 36° spread. If you change a token in `src/index.css`, change it
+here too, or the next asset will be generated in the old hue and the drift
+starts again.
+
 | Token          | Hex       | Use                                   |
 | -------------- | --------- | ------------------------------------- |
-| Forest green   | `#2c683c` | Primary accent, foliage               |
-| Deep forest    | `#173d29` | Shadows, depth                        |
-| Copper         | `#9b643a` | Ink, linework, warm accent            |
-| Rust           | `#8c572e` | Secondary warm accent                 |
-| Burnt copper   | `#724826` | Deepest warm tone                     |
+| Forest green   | `#4d6044` | Primary accent, foliage               |
+| Deep forest    | `#283b1c` | Shadows, depth                        |
+| Copper         | `#9f6143` | Ink, linework, warm accent            |
+| Rust           | `#7f482d` | Secondary warm accent                 |
+| Burnt copper   | `#6d402a` | Deepest warm tone                     |
 | Warm ivory     | `#f6eedf` | Paper base (the background of most art) |
 | Warm paper     | `#ead9bd` | Paper variation / soft shadow         |
 | Paper shadow   | `#d4b991` | Texture ribbing, vignette             |
@@ -109,8 +117,8 @@ For art that sits *on* the ivory paper as a full panel (like `barn.webp`,
 > Indian wedding stationery style. Soft wet-on-wet bleeding washes, splotchy
 > imperfect pools, light paint-fleck splatter, hazy atmospheric background.
 > **Subject:** `<what>`, rendered with sharper foreground detail against soft
-> surroundings. Palette: warm ivory `#f6eedf`, forest green `#2c683c`, copper
-> `#9b643a`, rust `#8c572e`. No text, no lettering, no words. `<for a cutout, add:
+> surroundings. Palette: warm ivory `#f6eedf`, forest green `#4d6044`, copper
+> `#9f6143`, rust `#7f482d`. No text, no lettering, no words. `<for a cutout, add:
 > "flat digital graphic, NOT a photograph of a painting; subject directly on a
 > solid pure magenta #FF00FF background filling the frame edge to edge; no paper,
 > card, border, surface, or shadow">`.

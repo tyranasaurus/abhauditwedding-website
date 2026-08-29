@@ -1,38 +1,180 @@
 @import 'tailwindcss';
 
-/* Design tokens (Tailwind 4 @theme): fonts are loaded via <link> in index.html. */
+/* The three faces arrive over the network, and until they do the page is set in
+   Georgia — which is 12% wider than Cormorant and 14% narrower than Libre
+   Baskerville. Every paragraph on the page therefore re-wrapped the moment the
+   real faces landed, and the document lost ~250px of height in one frame. A
+   guest who had followed a link to #travel or #faq was left 200px below the
+   section they asked for, staring into the middle of a photograph.
+
+   So Georgia is served through a @font-face that scales it to each real face's
+   own measure and overrides its ascent and descent to match. The stand-in now
+   occupies the same space as the face replacing it, and the swap moves nothing.
+
+   Every percentage below was measured against the shipped faces at 100px, not
+   guessed — and only against Georgia, so the src names only Georgia. A device
+   without it (most Android) finds no source, skips the family, and falls
+   through to `Georgia, serif` exactly as before: no fix, but no wrongly-scaled
+   stand-in either. There the scroll correction in HomePage carries the anchor. */
+@font-face {
+  font-family: 'Carattere Stand-in';
+  src: local('Georgia');
+  size-adjust: 69.02%;
+  ascent-override: 115.9%;
+  descent-override: 50.7%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Cormorant Stand-in';
+  src: local('Georgia');
+  size-adjust: 88.34%;
+  ascent-override: 104.6%;
+  descent-override: 32.5%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Baskerville Stand-in';
+  src: local('Georgia');
+  size-adjust: 115.73%;
+  ascent-override: 83.8%;
+  descent-override: 23.3%;
+  line-gap-override: 0%;
+}
+
+/* Design tokens (Tailwind 4 @theme): fonts are loaded via <link> in index.html.
+   Each token carries its own metric-matched stand-in, so the ~40 call sites that
+   say `var(--font-x), Georgia, serif` inherit the fix without being touched. */
 @theme {
-  --font-script: 'Carattere', cursive;
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body: 'Libre Baskerville', Georgia, serif;
+  --font-script: 'Carattere', 'Carattere Stand-in', cursive;
+  --font-display: 'Cormorant Garamond', 'Cormorant Stand-in', Georgia, serif;
+  --font-body: 'Libre Baskerville', 'Baskerville Stand-in', Georgia, serif;
 }
 
 :root {
-  --forest: #2c683c;
-  --deep-forest: #173d29;
-  --pine: #254d36;
-  --copper: #9b643a;
-  --rust: #8c572e;
-  --burnt-copper: #724826;
+  --forest: #4d6044;
+  --deep-forest: #283b1c;
+  --pine: #364a28;
+  --copper: #9f6143;
+  /* Kept only as the parent hue of --rule and for the map/registry kickers.
+     It is not a text colour on the homepage: it used to carry every date line
+     and every event note, which put the page's hottest, most saturated ink on
+     its most administrative row. */
+  --copper-light: #8f400f;
+  --rust: #7f482d;
+  --burnt-copper: #6d402a;
   --paper: #f6eedf;
+  /* Behind the painting. Sampled from the painting's own mist. */
+  --ground: #e6e8db;
   --paper-warm: #ead9bd;
   --paper-shadow: #d4b991;
   --ribbed-paper-line: rgba(88, 65, 36, 0.05);
   --diagonal-laid-line: rgba(91, 68, 38, 0.055);
   --linen-highlight-line: rgba(255, 250, 237, 0.34);
-  --ink: #2f2a21;
-  --base-text: #8f6430;
-  --copper-light: #ba5919;
-  --muted-ink: #685a45;
+  /* ------------------------------------------------------------------
+   * Green is the site. Copper is what you can act on. The event owns
+   * its panel.
+   *
+   * The greens and the copper are sampled from the hero backdrop, which
+   * is the reference: its greens sit at hue 134 and its coppers — the
+   * maple, the barn roof, the buggies — at 46. Green is a third of the
+   * painting by pixel, so it is not a preference here, it is the artwork's
+   * own dominant family. Everything the site says is one of four greens;
+   * the only warm ink outside an event panel sits on what you can tap.
+   *
+   * These were at hue 150-158 and the copper at 54, which matched the
+   * needle divider (153) rather than the painting. Three painted assets
+   * were claiming to be the same green across a 36° spread — monogram
+   * 117, backdrop 134, needle 153. The text now sits on the backdrop's.
+   *
+   *   --forest      script titles, the monogram, the arch line
+   *   --ink         emphasis — FAQ questions
+   *   --base-text   body sentences
+   *   --muted-ink   captions, meta, nav, footer, the countdown
+   *   --rust        links, and only links
+   *   --rule        every hairline
+   *
+   * Inside an event panel: that event's own colours and nothing else —
+   * no copper, no forest, no sepia. The primary accent takes the title,
+   * the subtitle, the date, the activity names and the note; the second
+   * accent takes the times; the marks keep the luminous version.
+   *
+   * Every floor below is measured over the darkest firs the column ever
+   * crosses, which composite to #b5b9ae under the wash — not against the
+   * cream, which flatters by about 1.7x. That is why the body green is
+   * not --forest: the brand green reads 3.34 there, which is a 90px
+   * title's floor, not a paragraph's.
+   * ------------------------------------------------------------------ */
+  /* Emphasis. The deepest green in the set. */
+  --ink: #293a1f;
+  /* The document default. It was #8f6430, a mid saturated yellow-brown, which
+     measured 3.95:1 against the column over the treeline — under AA — and sat
+     in the same tonal register as the painting, so ink and ground never
+     separated. A watercolour is captioned in a warm sepia-black, not in raw
+     sienna. This reads 8.57:1 at its worst. */
+  --base-text: #38492e;
+  /* Deep enough to clear AA against the darkest firs the column ever crosses:
+     the plate's 99.9th-percentile dark is #2b3a25, which composites to #b5b9ae
+     under the wash, and this reads 4.59 there. */
+  --muted-ink: #3d4d34;
   --soft-green: #d2d9cd;
+  /* One hairline weight for every rule on the site: between events, between
+     Q&A rows, under each travel spot. The colour is the needle painting's own
+     pigment, so the page's furniture belongs to the artwork rather than
+     sitting on top of it. */
+  --rule: rgba(96, 110, 95, 0.3);
+  /* The arch. The picture sits on a paper mat, traced further out by a single
+     forest line — the shape the whole page is built from.
+
+     One number governs every dome: the rise as a fraction of the half-width,
+     so 1 is a true semicircle. Two values are in use and both are deliberate —
+     the hero portrait and the little ornament beads are full round arches at 1,
+     and everything that has to hold content across a wide box takes the
+     segmental --arch-rise. Note that a border-radius percentage resolves
+     against *height* on the vertical axis, so a shared percentage across boxes
+     of different proportions produces different arches: below, the rise is
+     always derived from the element's own width. */
+  --arch-rise: 0.55;
+  --arch-mat: #fffdf7;
+  --arch-line: rgba(44, 104, 60, 0.85);
+  /* One focus indicator for the whole site. A box-shadow rather than an
+     outline, because it follows border-radius and so arches with the doorways. */
+  --focus-ring:
+    0 0 0 2px var(--paper),
+    0 0 0 4px var(--forest);
   --palette-forest: #2c683c;
   --palette-carnival: #d94e78;
   --palette-sunset: #d86a22;
-  /* Height of the fixed SiteNav, used to clear content on inner pages. */
-  --nav-h: 4.25rem;
+  /* Height of the fixed SiteNav, used to clear content on inner pages. Measured,
+     not guessed: 2.75rem of brand or menu button plus 0.85rem of padding either
+     side. Desktop and phone now agree. */
+  --nav-h: 4.45rem;
+  /* Where a fragment jump parks a target: clear of the fixed nav with enough
+     air that a script title's ascender can't tuck under it. One value, so the
+     three places that need it can't drift apart again. */
+  --anchor-pad: calc(var(--nav-h) + 1.35rem);
   /* Content column width. Lives on :root (not just .home) so the shared SiteNav
      gutters resolve on every page, including /wardrobe which has no .home wrapper. */
   --max: 1080px;
+  /* The translucent column: the middle 60% of the viewport, floored so the
+     measure never strangles on a laptop and capped so it doesn't run away on a
+     wide display. The nav gutters resolve against this too, so the brand and
+     the links sit on the column's own edges rather than out on the painting. */
+  --column-w: clamp(40.5rem, 52.8%, 68.6rem);
+  /* How much of the painting survives behind the text. Chosen by eye at 0.65,
+     which puts the painting firmly in charge. Measured cost, of the 202 text
+     items that sit on the column: 0.65 leaves 40 below AA contrast, 0.70
+     leaves 27, 0.78 leaves 15, against 26 on the flat paper this replaced.
+     Every count is dominated by the carnival pink and the sunset orange, both
+     already marginal before any of this — darkening those two inks is what
+     would actually move the number, not this one. */
+  --column-wash: 0.65;
+  /* The margin between the column's edge and anything inside it. */
+  --column-bezel: clamp(1.25rem, 2.6vw, 2.5rem);
+  /* One measure for running prose. Set by character count, not by taste: at
+     the display face's capped 1.28rem this is ~72 characters, the top of the
+     comfortable band. It only binds above about 1300px — below that the
+     column is narrower than the measure and the prose simply fills it. */
+  --measure: 46rem;
 }
 
 * {
@@ -41,7 +183,7 @@
 
 html {
   min-width: 320px;
-  background: var(--paper);
+  background: var(--ground);
   overscroll-behavior: none;
 }
 
@@ -50,30 +192,9 @@ body {
   color: var(--base-text);
   font-family: var(--font-body), Georgia, serif;
   min-height: 100vh;
-  background-color: var(--paper);
-  background-image:
-    repeating-linear-gradient(
-      135deg,
-      var(--diagonal-laid-line) 0,
-      var(--diagonal-laid-line) 1px,
-      transparent 1px,
-      transparent 10px
-    ),
-    repeating-linear-gradient(
-      135deg,
-      transparent 0,
-      transparent 5px,
-      var(--linen-highlight-line) 5px,
-      var(--linen-highlight-line) 6px,
-      transparent 6px,
-      transparent 18px
-    ),
-    linear-gradient(180deg, #faf2e2 0%, var(--paper) 54%, var(--paper-warm) 100%);
-  background-position:
-    0 0,
-    3px 2px,
-    0 0;
-  background-repeat: repeat;
+  /* Only ever seen if the backdrop fails to load; sampled from the painting's
+     own misted middle distance so the failure is quiet. */
+  background-color: var(--ground);
 }
 
 img {
@@ -81,430 +202,16 @@ img {
   max-width: 100%;
 }
 
-.wardrobe-site {
-  min-height: 100vh;
-  overflow: hidden;
-}
-
-.intro-page,
-.event-panel {
-  isolation: isolate;
-  position: relative;
-}
-
-.intro-page {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  /* A little more breathing room below the intro than between event sections. */
-  margin-bottom: 2.5rem;
-  min-height: 100svh;
-  padding: 3rem max(1.2rem, calc((100vw - 1120px) / 2));
-}
-
-.intro-frame {
-  align-items: center;
-  display: grid;
-  gap: 1.8rem;
-  grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1fr);
-  width: 100%;
-}
-
-.barn-watercolor {
-  /* No drop-shadow: the logo has built-in transparency meant to read like
-     watercolor on the paper, and a shadow traces every soft edge and wash. */
-  margin-inline: auto;
-  width: min(35rem, 100%);
-  height: auto;
-}
-
-.intro-copy {
-  text-align: center;
-}
-
-h1,
-h2,
-.attire-vibe,
-.signature {
-  font-family: var(--font-script), cursive;
-  font-weight: 400;
-  line-height: 0.96;
-  margin: 0;
-}
-
-h1 {
-  color: var(--forest);
-  font-size: clamp(4.3rem, 11vw, 8rem);
-  margin-inline: auto;
-  max-width: 10ch;
-}
-
-.ornament {
-  background: linear-gradient(90deg, transparent, var(--copper), transparent);
-  height: 1px;
-  margin: 1.25rem auto 1.5rem;
-  width: min(22rem, 100%);
-}
-
-.intro-notes {
-  color: var(--base-text);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.1rem, 2vw, 1.48rem);
-  line-height: 1.5;
-  margin-inline: auto;
-  max-width: 35rem;
-}
-
-.intro-notes p {
-  margin: 0;
-}
-
-.intro-notes p + p {
-  margin-top: 1.1rem;
-}
-
-.signature {
-  color: var(--forest);
-  font-size: clamp(3.1rem, 6vw, 4.6rem);
-  margin-top: 1.4rem;
-}
-
-.event-gallery {
-  display: grid;
-  gap: clamp(2.5rem, 7vw, 6rem);
-  padding: 0 max(0.85rem, calc((100vw - 1080px) / 2)) 4rem;
-}
-
-.event-panel {
-  --accent: var(--forest);
-  --accent-2: var(--copper);
-  --accent-3: var(--burnt-copper);
-  align-content: center;
-  display: grid;
-  gap: 1.1rem;
-  min-height: 100svh;
-  overflow: hidden;
-  padding: clamp(2rem, 4vw, 3.4rem) clamp(1.45rem, 3vw, 2.4rem);
-}
-
-.event-panel::before {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(155, 100, 58, 0.9) 25%,
-    rgba(155, 100, 58, 0.9) 75%,
-    transparent
-  );
-  content: '';
-  height: 2px;
-  left: 50%;
-  position: absolute;
-  top: 0;
-  transform: translateX(-50%);
-  width: min(64rem, 90%);
-}
-
-.event-panel.forest-gala {
-  --accent: #28433a;
-  --accent-2: #c26520;
-  --accent-3: #28433a;
-}
-
-.event-panel.carnival-garden {
-  --accent: #d94b6d;
-  --accent-2: #3685ad;
-  --accent-3: #755798;
-}
-
-.event-panel.sunset-ceremony {
-  --accent: #d0601e;
-  --accent-2: #d0601e;
-  --accent-3: #d0601e;
-}
-
-/* Seahawks colors softened to sit inside the watercolor palette. */
-.event-panel.seahawks-opener {
-  --accent: #33486e;
-  --accent-2: #6f9c3c;
-  --accent-3: #5b6f78;
-}
-
-/* Framed break before a bonus/optional event, setting it apart from the
-   three main events. */
-.bonus-break {
-  display: grid;
-  justify-items: center;
-  text-align: center;
-  gap: 0.7rem;
-  max-width: 38rem;
-  margin: 0 auto;
-  padding: clamp(1.5rem, 5vw, 4rem) 1.5rem clamp(0.5rem, 2vw, 1.5rem);
-}
-
-.bonus-break .home-ornament {
-  margin: 0 0 0.35rem;
-}
-
-.bonus-break-eyebrow {
-  color: var(--copper);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(0.9rem, 1.7vw, 1.15rem);
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  margin: 0;
-}
-
-.bonus-break-lead {
-  color: var(--copper-light);
-  font-family: var(--font-body), Georgia, serif;
-  font-size: clamp(1.2rem, 2.6vw, 1.8rem);
-  font-style: italic;
-  line-height: 1.4;
-  margin: 0;
-}
-
-/* The bonus panel itself reads lighter and shorter than its peers. */
-.event-panel.is-bonus {
-  min-height: auto;
-  gap: 0.8rem;
-  padding-top: clamp(0.5rem, 1.5vw, 1.2rem);
-  padding-bottom: clamp(3rem, 8vw, 6rem);
-}
-
-.event-panel.is-bonus::before {
-  content: none;
-}
-
-.event-panel.is-bonus .event-heading h2 {
-  font-size: clamp(2.6rem, 5.8vw, 4.4rem);
-}
-
-.event-panel.is-bonus .attire-vibe {
-  font-size: clamp(2.2rem, 4.8vw, 3.6rem);
-}
-
-.event-panel.is-bonus .event-stage {
-  max-width: min(40rem, 100%);
-}
-
-.event-panel.is-bonus .stage-cutout {
-  opacity: 0.92;
-}
-
-.event-heading {
-  text-align: center;
-}
-
-.event-heading h2 {
-  color: var(--accent);
-  font-size: clamp(4.2rem, 9.6vw, 7.8rem);
-}
-
-.event-label {
-  align-items: center;
-  color: var(--copper);
-  display: flex;
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1rem, 2.1vw, 1.7rem);
-  font-weight: 600;
-  gap: 1rem;
-  justify-content: center;
-  letter-spacing: 0.2em;
-  margin: 0.5rem 0 0;
-}
-
-.event-label::before,
-.event-label::after {
-  background: var(--copper);
-  content: '';
-  height: 1px;
-  max-width: 7.5rem;
-  width: 14vw;
-}
-
-.event-datetime {
-  color: var(--copper-light);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.15rem, 2vw, 1.55rem);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  margin: 0.4rem 0 0;
-}
-
-.event-stage {
-  margin: -0.8rem auto -0.4rem;
-  max-width: min(44rem, 100%);
-  position: relative;
-  width: 100%;
-}
-
-.stage-cutout {
-  filter: saturate(1.03);
-  opacity: 0.96;
-  width: 100%;
-  height: auto;
-  z-index: 1;
-}
-
-.event-panel.forest-gala .event-heading h2 > span:nth-child(4),
-.event-panel.sunset-ceremony .attire-vibe > span:nth-child(2) {
-  margin-left: 0.12em;
-}
-
-.attire-vibe {
-  color: var(--accent);
-  font-size: clamp(3.4rem, 7.2vw, 5.8rem);
-  line-height: 0.8;
-  text-align: center;
-}
-
-.vibe-accent-2 {
-  color: var(--accent-2);
-}
-
-.vibe-accent-3 {
-  color: var(--accent-3);
-}
-
-.event-panel.carnival-garden .attire-vibe > span:nth-child(1) {
-  color: var(--accent-2);
-}
-
-.event-panel.carnival-garden .attire-vibe > span:nth-child(2) {
-  color: var(--accent);
-}
-
-.attire-grid {
-  display: grid;
-  gap: 1.25rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin: 0.75rem auto 0;
-  max-width: 45rem;
-  text-align: center;
-  width: 100%;
-}
-
-.attire-grid > div + div {
-  border-left: 1px solid rgba(155, 100, 58, 0.35);
-}
-
-.attire-grid h3 {
-  color: var(--base-text);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.7rem, 3vw, 2.3rem);
-  font-weight: 700;
-  line-height: 1;
-  margin: 0;
-}
-
-.attire-grid p {
-  color: var(--base-text);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1rem, 2vw, 1.4rem);
-  line-height: 1.35;
-  margin: 0.75rem auto 0;
-  max-width: 16rem;
-}
-
-.event-footer {
-  margin: 0 auto;
-  max-width: 48rem;
-  text-align: center;
-}
-
-.event-notes {
-  color: var(--copper-light);
-  font-family: var(--font-body), Georgia, serif;
-  font-size: clamp(1rem, 1.8vw, 1.3rem);
-  font-style: italic;
-  line-height: 1.45;
-  margin: 0;
-}
-
-/* RSVP button on panels that carry their own form (the watch party). */
-.event-rsvp {
-  background: var(--accent);
-  color: #fbf4e6;
-  margin-top: 1.4rem;
-  box-shadow: 0 0.5rem 1.1rem color-mix(in srgb, var(--accent) 30%, transparent);
-}
-
-.event-rsvp:hover,
-.event-rsvp:focus-visible {
-  background: color-mix(in srgb, var(--accent) 82%, #000);
-  box-shadow: 0 0.7rem 1.5rem color-mix(in srgb, var(--accent) 38%, transparent);
-  outline: none;
-  transform: translateY(-2px);
-}
-
-/* Position/appearance only; motion/react drives the bob, fade, and centering. */
-.scroll-cue {
-  position: fixed;
-  bottom: 1.5rem;
-  left: 50%;
-  z-index: 5;
-  display: grid;
-  place-items: center;
-  width: 2.6rem;
-  height: 2.6rem;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: none;
-  color: var(--copper);
-  cursor: pointer;
-}
-
-@media (max-width: 900px) {
-  /* Stack the logo over the copy. */
-  .intro-frame {
-    grid-template-columns: 1fr;
-  }
-
-  .intro-copy {
-    margin-inline: auto;
-    max-width: 36rem;
-  }
-
-  .event-panel {
-    min-height: auto;
-  }
-}
-
-@media (max-width: 720px) {
-  .intro-page {
-    padding: 2.1rem 1rem 2.8rem;
-  }
-
-  .event-gallery {
-    padding: 0 0.72rem 2rem;
-  }
-
-  .event-panel {
-    gap: 0.85rem;
-    padding: 1.25rem 0.85rem;
-  }
-
-  .event-label {
-    letter-spacing: 0.1em;
-  }
-
-  .event-label::before,
-  .event-label::after {
-    width: 10vw;
-  }
-
-  .attire-grid {
-    gap: 0.9rem;
-  }
-
-  .attire-grid h3 {
-    font-size: 1.45rem;
-  }
-
-  .attire-grid p {
-    font-size: 0.92rem;
-  }
+/* Every focusable thing gets the same ring. The transparent outline is what
+   Windows high-contrast mode paints, since it discards box-shadow. Rules below
+   that pair :hover with :focus-visible must not set `outline: none` — hover
+   styling is not a focus indicator. */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 3px;
+  box-shadow: var(--focus-ring);
 }
 
 /* ------------------------------------------------------------------ */
@@ -623,7 +330,6 @@ a.legend-link:focus-visible {
   background: #fffdf7;
   border-color: var(--accent);
   box-shadow: 0 0.45rem 1.1rem rgba(47, 42, 33, 0.1);
-  outline: none;
   transform: translateX(3px);
 }
 
@@ -695,7 +401,7 @@ a.legend-link:hover .legend-cue {
 
 .map-back {
   align-self: start;
-  color: var(--copper-light);
+  color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-size: 0.95rem;
   font-weight: 600;
@@ -731,7 +437,6 @@ a.legend-link:hover .legend-cue {
   background: #fffdf7;
   border-color: var(--copper);
   box-shadow: 0 0.45rem 1.1rem rgba(47, 42, 33, 0.1);
-  outline: none;
   transform: translateX(3px);
 }
 
@@ -757,7 +462,7 @@ a.legend-link:hover .legend-cue {
 }
 
 .map-venue-cue {
-  color: var(--copper-light);
+  color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-size: 0.875rem;
   font-weight: 600;
@@ -867,7 +572,7 @@ a.poi {
 
 .poi-pin::before {
   animation: poi-pulse 2.8s ease-out infinite;
-  border: 1.5px solid var(--accent);
+  border: 1.5px solid var(--accent-2);
   border-radius: 50%;
   content: '';
   inset: 0;
@@ -914,7 +619,6 @@ a.poi:focus-visible .poi-pin {
 }
 
 a.poi:focus-visible {
-  outline: none;
 }
 
 a.poi:focus-visible .poi-pin {
@@ -976,7 +680,7 @@ a.poi:focus-visible .poi-pin {
 }
 
 .poi-label-when {
-  color: var(--copper-light);
+  color: var(--rust);
   font-family: var(--font-body), Georgia, serif;
   font-size: 0.875rem;
   font-weight: 700;
@@ -1068,59 +772,176 @@ a.poi:focus-visible .poi-pin {
   overflow: clip;
 }
 
+/* The backdrop -------------------------------------------------------- *
+ *
+ * A real fixed element rather than `background-attachment: fixed`, which
+ * computes to `scroll` on iOS and jitters on every repaint. The painting is
+ * never tiled, never parallaxed, never scaled on scroll — the document moves
+ * and the set stays put.
+ */
+.page-plate {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* NOT `inset: 0`. A mobile browser retracts its chrome as you scroll, which
+     grows the viewport — and a fixed box sized to the viewport grows with it,
+     so `cover` rescales the painting and, anchored at the bottom, slides it
+     down. Measured on a 390 phone: the plate goes 664 -> 844, the painting
+     rescales 0.629 -> 0.640 and reveals another 180px at the top. The set is
+     supposed to stay put while the page walks across it, so it is pinned to
+     the large viewport instead — the height with the chrome already retracted.
+     When the chrome is showing it simply covers the plate's bottom edge. */
+  height: 100vh;
+  z-index: 0;
+  background-color: var(--ground);
+  --plate-img: url('/art/backdrop-wide.webp');
+  background-image: var(--plate-img);
+  background-size: cover;
+  background-position: center 58%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+/* Kept out of the block above on purpose: the minifier collapses two competing
+   `height` declarations down to the last one and drops the fallback, which
+   would leave a browser without `lvh` support with a zero-height plate and no
+   backdrop at all. As its own rule it survives. */
+@supports (height: 100lvh) {
+  .page-plate {
+    height: 100lvh;
+  }
+}
+
+/* A `cover` fill of the landscape plate into a portrait viewport crops away
+   the barn, the maple and both buggies — every landmark in the painting, and
+   the whole easter egg. So portrait gets its own plate.
+ *
+ * It is composed rather than cropped, because no crop can do it: the scene is
+ * far wider than a phone. So the painting sits along the bottom half at its
+ * own proportions and the sky above it is extended with a flat wash mixed from
+ * the painting's own top edge. A stretched slice of the painting was the first
+ * attempt and it dragged the paper texture into vertical streaks; a plain
+ * gradient joins invisibly.
+ *
+ * The window is the middle half of the painting — both buggies and their
+ * pullers, the striped fence, the autumn maple, and the left edge of the barn.
+ * Zooming this far in is what puts the art at half the height rather than a
+ * third, and it is why the plate is 0.47 aspect: just under the narrowest
+ * common phone, so `cover` never trims the sides and the barn survives.
+ *
+ * Anchored bottom, so on a viewport shorter than the plate what gets cropped
+ * is the sky we invented rather than the scene. */
+/* Width as well as aspect, because aspect ratio is not stable either: an iPad
+   in portrait is 768x1024 (0.75, tall plate) with the chrome retracted but
+   768x954 (0.805, wide plate) with it showing, so the plate would swap
+   paintings mid-scroll. Width does not move when the chrome does. */
+@media (max-aspect-ratio: 3 / 4), (max-width: 820px) {
+  .page-plate {
+    --plate-img: url('/art/backdrop-tall.webp');
+    background-position: center bottom;
+  }
+}
+
+/* The column ---------------------------------------------------------- *
+ *
+ * A hard-edged band of near-white running the full height of the document.
+ * Deliberately *not* blurred: with no backdrop-filter the firs and the
+ * ridgeline stay legible straight through the text, which is what makes this
+ * read as a painted scroll rather than frosted glass.
+ *
+ * Width is the middle 60% of the viewport, floored so the measure never
+ * strangles on a laptop and capped so it doesn't run away on a wide display.
+ */
+.page-column {
+  position: relative;
+  z-index: 1;
+  width: var(--column-w);
+  margin-inline: auto;
+  /* The single inset for the whole page. Every section below sets its
+     horizontal padding to zero and inherits this instead, so nothing lands at
+     a different distance from the column's edge. */
+  padding-inline: var(--column-bezel);
+  background: rgba(255, 253, 247, var(--column-wash));
+  box-shadow:
+    0 30px 60px -12px rgba(53, 53, 45, 0.26),
+    0 18px 36px -18px rgba(53, 53, 45, 0.3);
+}
+
+/* Below the floor there is no room for painting either side, so the column
+   takes the full width and the plate becomes a texture behind it. */
+@media (max-width: 900px) {
+  .page-column {
+    width: 100%;
+    box-shadow: none;
+  }
+}
+
 /* Shared buttons ---------------------------------------------------- */
+/* Buttons ---------------------------------------------------------- *
+ * One sign, painted in whatever pigment its context hands it. Three
+ * things keep it from reading as a web control on a sheet of paper:
+ *
+ *  - the fill is mixed with --paper rather than with transparency, so it
+ *    sits on the sheet as pigment instead of floating over it as a film,
+ *    and the page's paper grain stops at the sign's edge the way it would
+ *    under a painted area;
+ *  - the bottom edge carries more pigment than the other three, because
+ *    that is what a wash does when it pools;
+ *  - nothing lifts on hover. Hover deepens the wash and firms the edge.
+ *    Nothing on this page floats.
+ * ------------------------------------------------------------------ */
 .btn {
-  border-radius: 999px;
+  /* Ink is contextual — the text and the edge take whatever pigment the page
+     hands them. The wash is not: it stays the A&U green on every button, which
+     is what makes four signs on four pages read as one family. (Washing in the
+     event's own navy came out a cool grey against warm paper — right in
+     principle, mud on the page.) */
+  --btn-ink: var(--forest);
+  --btn-wash: var(--forest);
+  --btn-radius: 0.85rem;
+  align-items: center;
+  background: color-mix(in srgb, var(--btn-wash) 10%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--btn-ink) 42%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--btn-ink) 64%, transparent);
+  border-radius: var(--btn-radius);
+  color: var(--btn-ink);
   cursor: pointer;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  font-size: 1.05rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  justify-content: center;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+  padding: 0.95rem 1.6rem;
+  text-align: center;
   text-decoration: none;
-  padding: 0.72rem 1.7rem;
   transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease,
     background-color 0.18s ease,
+    border-color 0.18s ease,
     color 0.18s ease;
 }
 
-.btn-primary {
-  background: var(--forest);
-  color: #fbf4e6;
-  box-shadow: 0 0.5rem 1.1rem rgba(23, 61, 41, 0.26);
+.btn:hover {
+  background: color-mix(in srgb, var(--btn-wash) 19%, var(--paper));
+  border-color: color-mix(in srgb, var(--btn-ink) 72%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--btn-ink) 88%, transparent);
 }
 
-.btn-primary:hover,
-.btn-primary:focus-visible {
-  background: var(--deep-forest);
-  box-shadow: 0 0.7rem 1.5rem rgba(23, 61, 41, 0.34);
-  outline: none;
-  transform: translateY(-2px);
-}
-
-.btn-ghost {
-  background: rgba(255, 252, 245, 0.6);
-  border: 1px solid var(--copper);
-  color: var(--rust);
-}
-
-.btn-ghost:hover,
-.btn-ghost:focus-visible {
-  background: #fffdf7;
-  border-color: var(--rust);
-  outline: none;
-  transform: translateY(-2px);
+/* A way out, not a destination. */
+.btn-back {
+  --btn-radius: 0.6rem;
+  font-size: 0.98rem;
+  letter-spacing: 0.04em;
+  padding: 0.55rem 1.05rem;
 }
 
 /* In-page anchors (#schedule, #travel, #faq …) land below the fixed nav so
-   the section title is never tucked under it. Nav is ~4rem; add a little gap. */
+   the section title is never tucked under it. */
 .home section[id] {
-  scroll-margin-top: 5rem;
+  scroll-margin-top: var(--anchor-pad);
 }
 
 /* Top navigation ---------------------------------------------------- */
@@ -1134,7 +955,12 @@ a.poi:focus-visible .poi-pin {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.85rem max(1.1rem, calc((100vw - var(--max)) / 2));
+  padding: 0.85rem max(1.1rem, calc((100% - var(--column-w)) / 2 + 1.5rem));
+  /* The one blurred surface on the site. Everything else is a flat wash, so
+     the painting stays crisp through the content; the chrome is the exception
+     because it has to stay legible wherever the scroll happens to put it. */
+  background: rgba(255, 253, 247, 0.62);
+  backdrop-filter: blur(5px);
   transition:
     background-color 0.3s ease,
     box-shadow 0.3s ease,
@@ -1142,23 +968,33 @@ a.poi:focus-visible .poi-pin {
 }
 
 .home-nav.is-solid {
-  background: rgba(246, 238, 223, 0.86);
+  background: rgba(255, 253, 247, 0.88);
   backdrop-filter: blur(8px);
   box-shadow: 0 0.4rem 1rem rgba(47, 42, 33, 0.08);
 }
 
+/* The brand is the painted monogram. At 2.75rem it matches the menu button's
+   height exactly, so the bar measures the same 71px on a phone (where the
+   button sets the height) as on a desktop (where the monogram does) — which is
+   what --nav-h is finally able to state truthfully. */
 .home-nav-brand {
-  color: var(--forest);
-  font-family: var(--font-script), cursive;
-  font-size: 2rem;
-  line-height: 1;
+  display: flex;
+  line-height: 0;
   text-decoration: none;
+}
+
+.home-nav-brand img {
+  height: 2.75rem;
+  width: auto;
 }
 
 .home-nav-links {
   display: flex;
   align-items: center;
   gap: clamp(0.9rem, 1.8vw, 1.8rem);
+  /* The bar is brand | links | menu-button, and the button is desktop-hidden,
+     so pull the links to the right rather than leaving them mid-bar. */
+  margin-left: auto;
 }
 
 .home-nav-links a {
@@ -1175,15 +1011,91 @@ a.poi:focus-visible .poi-pin {
   color: var(--forest);
 }
 
-.home-nav-rsvp {
-  border: 1px solid var(--copper);
-  border-radius: 999px;
-  padding: 0.32rem 0.95rem;
-  color: var(--rust) !important;
+/* The whole site is one page, so the nav doubles as a position marker. An
+   underline rather than a mark: a nav convention costs the page nothing, where
+   a second ornament would have to earn its place against the artwork. */
+.home-nav-links a[aria-current] {
+  color: var(--forest);
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.45rem;
 }
 
-.home-nav-rsvp:hover {
-  background: #fffdf7;
+.home-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+/* Menu button: hidden on wide screens, where the links sit inline. */
+.home-nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  /* The bar is led by the painted monogram and marks the current section in
+     forest; the button was the last copper left in it. */
+  color: var(--pine);
+  cursor: pointer;
+}
+
+.home-nav-toggle:hover,
+.home-nav-toggle:focus-visible {
+  border-color: var(--rule);
+  background: rgba(255, 253, 247, 0.9);
+}
+
+.home-nav-toggle-bars {
+  display: block;
+  position: relative;
+  width: 1.25rem;
+  height: 0.85rem;
+}
+
+.home-nav-toggle-bars span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 1px;
+  transition:
+    transform 0.22s ease,
+    opacity 0.16s ease;
+}
+
+.home-nav-toggle-bars span:nth-child(1) {
+  top: 0;
+}
+.home-nav-toggle-bars span:nth-child(2) {
+  top: 50%;
+  transform: translateY(-50%);
+}
+.home-nav-toggle-bars span:nth-child(3) {
+  bottom: 0;
+}
+
+.home-nav-toggle.is-open .home-nav-toggle-bars span:nth-child(1) {
+  transform: translateY(0.42rem) rotate(45deg);
+}
+.home-nav-toggle.is-open .home-nav-toggle-bars span:nth-child(2) {
+  opacity: 0;
+}
+.home-nav-toggle.is-open .home-nav-toggle-bars span:nth-child(3) {
+  transform: translateY(-0.42rem) rotate(-45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-nav-toggle-bars span,
+  .home-nav-links {
+    transition: none;
+  }
 }
 
 /* The fixed nav floats over the homepage hero, but the wardrobe and map pages
@@ -1202,7 +1114,7 @@ a.poi:focus-visible .poi-pin {
 /* Deep-links like /wardrobe#sunset-shaadi must land below the fixed nav. */
 .intro-page,
 .event-panel {
-  scroll-margin-top: var(--nav-h);
+  scroll-margin-top: var(--anchor-pad);
 }
 
 /* Hero -------------------------------------------------------------- */
@@ -1212,37 +1124,13 @@ a.poi:focus-visible .poi-pin {
   min-height: 100svh;
   display: grid;
   place-items: center;
-  padding: 6.5rem max(1.2rem, calc((100vw - var(--max)) / 2)) 3.5rem;
+  padding: 6.5rem 0 3.5rem;
   text-align: center;
   overflow: hidden;
 }
 
-.hero-sky {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(120% 80% at 50% -10%, rgba(44, 104, 60, 0.16), transparent 60%);
-  pointer-events: none;
-}
-
-.hero-sprig {
-  position: absolute;
-  z-index: -1;
-  width: clamp(8rem, 18vw, 16rem);
-  height: auto;
-  pointer-events: none;
-}
-
-/* Flush into the top-left corner of the viewport. */
-.hero-sprig--tl {
-  top: -2.5rem;
-  left: -2.5rem;
-}
-
-.hero-sprig--br {
-  bottom: -2.5rem;
-  right: -2.5rem;
+.hero-copy {
+  width: 100%;
 }
 
 .hero-inner {
@@ -1254,55 +1142,113 @@ a.poi:focus-visible .poi-pin {
 }
 
 .hero-portrait-wrap {
+  /* A length, not a percentage: half of it is the arch radius, and a percentage
+     in border-radius resolves against height for the vertical half — which
+     would turn the dome into an ellipse the moment the box stopped being
+     square. Keeping the width a length keeps the arch a true semicircle. */
+  /* Below 901px the column is the whole viewport, so 70% of the content it can
+     hold is about 64vw once the bezel is out; the wide-screen figure is set
+     just below. A length throughout, never a percentage — half of it is the
+     arch's radius, and a border-radius percentage resolves against height. */
+  /* 64vw left the arch at 250px on a 390 phone — 28% of the viewport, with a
+     long stretch of bare cream above it. 80vw is as wide as it can go: the
+     content box is 350px there and the arch ring sits outside the photo at
+     --arch-gap either side, so the photo itself cannot exceed ~326px. */
+  --portrait-w: min(80vw, 34rem);
+  /* Shrinks with the screen. The ring sits outside --portrait-w, so on a phone
+     a fixed gap is what pushes the arch to within a few pixels of the bezel. */
+  --arch-gap: clamp(1.05rem, 3vw, 1.5rem);
+  /* The outer arch is positioned, so the flow doesn't know it is there and the
+     names' swashes came up under it on narrow screens. */
+  margin-bottom: calc(var(--arch-gap) + 0.35rem);
   position: relative;
-  width: clamp(15rem, 34vw, 22rem);
-  aspect-ratio: 1;
+  width: var(--portrait-w);
+  /* Barely wider than it is tall. The source is a square head-to-hip crop, so
+     this is as short as the box can get while still holding Udit's belt line
+     and Abha's arm the whole way round him — anything wider cuts the bottom
+     off. The dome is a true semicircle either way: its rise is half the width,
+     comfortably inside the height at this ratio. */
+  aspect-ratio: 1.05 / 1;
+  /* This box is a flex item of .hero-inner, so its automatic minimum size is
+     its content — the square photo at full width. Without this, that minimum
+     wins and the aspect-ratio above is silently ignored. */
+  min-height: 0;
   display: grid;
   place-items: center;
 }
 
-.hero-portrait-ring {
+/* 70% of the column's content width, expressed as a length so the arch radius
+   still resolves. The column is 60vw with a 2.6vw bezel each side, so 70% of
+   what it can hold is 0.7 x (60 - 5.2) = 38.4vw — but only while the column is
+   actually 60vw. Below about 1227px it sits on its 46rem floor and stops
+   shrinking, which is what the lower bound covers; above 1920 the upper bound
+   stops the arch running away. */
+@media (min-width: 901px) {
+  .hero-portrait-wrap {
+    /* 100px off the width — and 95px off the height with it, since the ratio
+       is fixed at 1.05. That is what puts the countdown above the fold on a
+       laptop: at 1440x760 it was overshooting by 94px.
+
+       Desktop only. On a phone the arch is 250px and the countdown already
+       clears, so taking 100px off there would be a 40% cut for no reason. */
+    --portrait-w: calc(clamp(29.5rem, 38.4vw, 46rem) - 6.25rem);
+  }
+}
+
+/* The single forest line, traced concentrically outside the mat. Heavier than
+   the one on the section photos: this is the largest arch on the site and a
+   hairline disappeared against the painting behind it. */
+.hero-portrait-arch {
   position: absolute;
-  inset: -0.9rem;
-  border-radius: 50%;
-  border: 1.5px dashed rgba(155, 100, 58, 0.5);
+  inset: calc(-1 * var(--arch-gap));
+  border: 2.5px solid var(--arch-line);
+  border-radius:
+    calc(var(--portrait-w) / 2 + var(--arch-gap))
+    calc(var(--portrait-w) / 2 + var(--arch-gap))
+    0.75rem 0.75rem;
+  pointer-events: none;
 }
 
 .hero-portrait-clip {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
   overflow: hidden;
-  box-shadow:
-    0 0 0 0.5rem #fffdf7,
-    0 0 0 0.58rem var(--paper-shadow),
-    0 1.4rem 2.8rem rgba(31, 26, 17, 0.26);
+  border-radius: calc(var(--portrait-w) / 2) calc(var(--portrait-w) / 2) 0.45rem
+    0.45rem;
+  /* The mat fills the whole gap out to the line, so no backdrop shows between
+     the two. A spread shadow's outer radius is the element's radius plus the
+     spread, which is exactly the arch's own radius, so the two stay concentric
+     at every size. No blur: it made the largest, first instance of the arch
+     read as a sticker. */
+  box-shadow: 0 0 0 var(--arch-gap) var(--arch-mat);
 }
 
 .hero-portrait {
   width: 100%;
   height: 100%;
+  /* couple.webp is a square head-to-hip crop and the box is 1.05:1, so cover
+     keeps the full width and takes 95% of the height. Anchored at the top,
+     that band runs from just above his hair down past his belt. */
   object-fit: cover;
-  /* couple.webp is pre-cropped to a square head-to-waist framing, so the circle
-     just needs object-fit: cover — the tiny scale nudges the corners out so the
-     dashed ring never reveals a straight edge. */
-  transform: scale(1.04);
-  transform-origin: 50% 42%;
+  object-position: 50% 0%;
+  /* Zoomed a further 10% and carried 5% right, so the two of them sit centred
+     in the dome rather than left of it.
+     `scale` and `translate` rather than one `transform`, because the individual
+     properties compose as translate-then-scale with the translation NOT scaled,
+     which is what makes the two numbers mean what they say.
+     5% is exactly the limit at this zoom: after scaling about the centre the
+     image spans -5%..105% of the box, so carrying it 5% right lands its left
+     edge flush on the box's left edge. Any further and mat shows through on
+     the left; any more zoom would be needed to buy the room. */
+  scale: 1.1;
+  translate: 5% 0;
 }
 
-.hero-eyebrow {
-  color: var(--copper);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(0.875rem, 1.4vw, 1.05rem);
-  font-weight: 600;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  /* The script names ride high in their line box; give the eyebrow real
-     clearance so the two lines don't crowd each other. */
-  margin: 0 0 1.1rem;
-}
-
+/* Carattere's leading A carries a swash well left of its origin, so centring
+   on the advance width leaves the name sitting ~0.11em left of the date line
+   below it. The padding pushes the ink back onto the axis. */
 .hero-names {
+  padding-left: 0.22em;
   color: var(--forest);
   font-family: var(--font-script), cursive;
   font-size: clamp(4.2rem, 13vw, 9rem);
@@ -1325,7 +1271,41 @@ a.poi:focus-visible .poi-pin {
 }
 
 .hero-dot {
-  color: var(--copper);
+  color: var(--muted-ink);
+}
+
+/* Links keep the copper and the painted stroke wherever they are, including
+   inside an event panel. The panel owns the event's voice; copper owns
+   interaction, and interaction is functional — a guest should not have to
+   learn a different signal for "tappable" in each section. */
+.hero-venue,
+.sched-venue {
+  white-space: nowrap;
+  color: var(--rust);
+  text-decoration: none;
+  background-image: linear-gradient(var(--rust), var(--rust));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  transition:
+    color 0.18s ease,
+    background-size 0.22s ease;
+}
+
+.hero-venue:hover,
+.hero-venue:focus-visible,
+.sched-venue:hover,
+.sched-venue:focus-visible {
+  color: var(--burnt-copper);
+  background-size: 100% 2.5px;
+}
+
+/* The second accent goes on the subtitle and the times. The watch party has
+   neither — no subtitle, no timeline — so its second colour had nowhere to
+   live and the panel read as one tone. Where there is no timeline, the date
+   line carries it instead. */
+.sched-event:has(.sched-cols.is-solo) .sched-date {
+  color: var(--accent-sec);
 }
 
 .hero-actions {
@@ -1339,7 +1319,9 @@ a.poi:focus-visible .poi-pin {
 .hero-countdown {
   display: inline-block;
   margin-top: 1.5rem;
-  color: var(--copper-light);
+  /* Was rust. Copper means "this does something" now, and a countdown does
+     not. */
+  color: var(--muted-ink);
   font-family: var(--font-body), Georgia, serif;
   font-style: italic;
   font-size: clamp(0.95rem, 1.5vw, 1.15rem);
@@ -1350,57 +1332,117 @@ a.poi:focus-visible .poi-pin {
 .home-main {
   display: flex;
   flex-direction: column;
-  gap: clamp(4rem, 9vw, 7.5rem);
-  padding: clamp(3rem, 7vw, 6rem) max(1.2rem, calc((100vw - var(--max)) / 2));
+  /* Gaps descend with nesting: no gap inside a section may exceed about 60%
+     of the gap between sections. This was 187px at 1440 on top of 72px of
+     panel padding, which put ~460px between the last line of Schedule and the
+     word Travel. */
+  /* The seam, and the only thing between one section's last line and the next
+     section's needle — measured, there is no stray padding in there. It came
+     down from 187px to 130 in the rhythm pass and to ~104 here: at the foot of
+     a sparse list, 130 of empty paper read as a stall rather than a breath. */
+  gap: clamp(4.5rem, 7.2vw, 8.5rem);
+  padding: clamp(3rem, 7vw, 6rem) 0;
 }
 
-/* Couple photos, matted like a printed photo to suit the watercolor-card
-   styling. The live site opens each page with a hero photo; we echo that at the
-   top of the matching sections — here centered in the column with a paper mat,
-   ring, and soft drop shadow rather than running edge to edge. */
+/* The needle spray that heads each band. The painting is 7.8:1 once its
+   transparent margin is trimmed off, which is a rule's proportions rather than
+   a block's — at 17rem across it stands 37px tall, so it costs a section head
+   about as much room as the hairline it replaces and reads as drawn rather
+   than ruled. It is a true cutout, so it sits straight on the backdrop. */
+.needle-rule {
+  display: block;
+  /* A length capped by a percentage, so the spray keeps a constant share of
+     the column instead of freezing at 272px and shrinking from 56% of a phone
+     to 31% of a desktop. */
+  width: min(26rem, 50%);
+  height: auto;
+  margin: 0 auto clamp(1.6rem, 3vw, 2.4rem);
+}
+
+/* The dividing bands.
+ *
+ * Exactly one arch on the page, and it is the opening. These photographs are
+ * the other treatment: the full width of the column, mounted on a paper mat
+ * like a print laid on the page, and used to separate one section from the
+ * next rather than to open one. Keeping them rectangular is what stops the
+ * site having three unrelated picture frames in it — which is the thing the
+ * Joy site does and shouldn't. */
 .section-photo {
-  position: relative;
-  width: min(100% - 2.4rem, 54rem);
-  margin: 0 auto clamp(2.2rem, 5vw, 3.5rem);
-  border-radius: 0.85rem;
-  box-shadow:
-    0 0 0 0.5rem #fffdf7,
-    0 0 0 0.6rem var(--paper-shadow),
-    0 1.6rem 3rem rgba(31, 26, 17, 0.2);
+  /* The mat is padding, not a spread shadow: it has to live inside the band's
+     own width, or it eats into the column's bezel and the photographs end up
+     wider than everything else on the page. */
+  --mat: clamp(0.5rem, 1.4vw, 1.1rem);
+  width: 100%;
+  margin: 0 auto clamp(3rem, 6vw, 5rem);
+  padding: var(--mat);
+  background: var(--arch-mat);
 }
 
-.section-photo::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  /* Soft vignette so the photo settles into the warm paper. */
-  box-shadow: inset 0 0 4.5rem rgba(31, 26, 17, 0.18);
+/* On a phone the column is the whole screen, so a mat plus the column's bezel
+   leaves the photograph looking inset twice over. Below the column's own
+   breakpoint the bands run edge to edge instead — the negative margin cancels
+   exactly the bezel they inherit. */
+@media (max-width: 900px) {
+  .section-photo {
+    width: auto;
+    margin-inline: calc(-1 * var(--column-bezel));
+    padding: 0;
+    background: none;
+  }
 }
 
+/* Framing the bands.
+ *
+ * Each photograph carries one pair of numbers — where the two of them are in
+ * the frame — and the band works out the rest, because which axis gets cropped
+ * flips as the band narrows. All three sources are 1.6:1. `cover` fits
+ * whichever dimension is short and crops the other, so a band wider than 1.6
+ * crops the height and shows the whole width, and a band taller than 1.6 does
+ * the reverse.
+ *
+ * The arithmetic that turns that pair into a position for each band shape
+ * lives in HomePage, not here. */
 .section-photo-img {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
-  object-position: 50% 40%;
-  border-radius: 0.85rem;
+  /* 16/9 over 1.6 leaves 90% of the height and the full width, so only the
+     vertical half of the focus does anything here. Worked out in HomePage and
+     handed over ready-made — see the note there for why. */
+  object-position: var(--pos-wide, 50% 50%);
+  /* Everything else on this page is a soft-edged wash or a cutout — the
+     needle, the wardrobe figures, the backdrop itself. A hard rectangle with a
+     drop shadow was the one object pasted *onto* the paper rather than printed
+     into it; the feather is what puts it back on the same page. */
+  mask-image:
+    linear-gradient(to bottom, transparent 0, #000 20px, #000 calc(100% - 20px), transparent 100%),
+    linear-gradient(to right, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+  mask-composite: intersect;
+}
+
+@media (max-width: 900px) {
+  .section-photo-img {
+    /* 4/3 over 1.6 keeps 83.3% of the width. A nudge, not a crop — and from
+       here down it is the horizontal half of the focus that matters. */
+    aspect-ratio: 4 / 3;
+    object-position: var(--pos-mid, 50% 50%);
+  }
+}
+
+@media (max-width: 600px) {
+  .section-photo-img {
+    /* Square keeps 62.5%, which is what actually brings them close — and is
+       also the least forgiving band on the page, so it is the one that showed
+       the calc() bug as a person sliced off at the edge. */
+    aspect-ratio: 1 / 1;
+    object-position: var(--pos-square, 50% 50%);
+  }
 }
 
 .home-section-head {
   text-align: center;
-  margin-bottom: clamp(1.8rem, 4vw, 3rem);
-}
-
-.home-kicker {
-  color: var(--copper);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(0.875rem, 1.2vw, 0.95rem);
-  font-weight: 600;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  margin: 0;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
 }
 
 .home-section-title {
@@ -1411,431 +1453,108 @@ a.poi:focus-visible .poi-pin {
   margin: 0.7rem 0 0;
 }
 
-.home-ornament {
-  background: linear-gradient(90deg, transparent, var(--copper), transparent);
-  height: 1px;
-  margin: 1rem auto 0;
-  width: min(16rem, 70%);
-}
-
-/* Schedule ---------------------------------------------------------- */
-.schedule-list {
-  list-style: none;
-  margin: 0 auto;
-  padding: 0;
-  max-width: 50rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.schedule-stop {
-  --accent: var(--forest);
-}
-
-.schedule-link {
-  display: grid;
-  grid-template-columns: minmax(9rem, 0.5fr) auto 1fr;
-  align-items: center;
-  gap: clamp(1rem, 3vw, 2.2rem);
-  background: rgba(255, 252, 245, 0.55);
-  border: 1px solid rgba(155, 100, 58, 0.22);
-  border-left: 4px solid var(--accent);
-  border-radius: 0.9rem;
-  padding: clamp(1rem, 2.5vw, 1.5rem) clamp(1.1rem, 3vw, 1.9rem);
-  text-decoration: none;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background-color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.schedule-link:hover,
-.schedule-link:focus-visible {
-  background: #fffdf7;
-  border-color: rgba(155, 100, 58, 0.4);
-  border-left-color: var(--accent);
-  box-shadow: 0 0.7rem 1.6rem rgba(47, 42, 33, 0.12);
-  outline: none;
-  transform: translateX(4px);
-}
-
-.schedule-when {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.25;
-}
-
-.schedule-day {
-  color: var(--accent);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 1.35rem;
-  font-weight: 700;
-}
-
-.schedule-date {
-  color: var(--muted-ink);
-  font-family: var(--font-body), Georgia, serif;
-  font-size: 0.95rem;
-}
-
-.schedule-time {
-  color: var(--copper-light);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-top: 0.15rem;
-}
-
-.schedule-bullet {
-  width: 0.7rem;
-  height: 0.7rem;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 0.28rem color-mix(in srgb, var(--accent) 22%, transparent);
-}
-
-.schedule-what {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-}
-
-.schedule-kind {
-  color: var(--copper);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.schedule-title {
-  color: var(--ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.7rem, 3.4vw, 2.4rem);
-  font-weight: 700;
-  margin-top: 0.1rem;
-}
-
-.schedule-cue {
-  color: var(--accent);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  margin-top: 0.35rem;
-  opacity: 0.85;
-}
-
-/* A clear, button-styled RSVP for events with their own form, so it reads as
-   an action rather than a quiet cue link like "What to wear". */
-.schedule-rsvp {
-  align-self: flex-start;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-top: 0.75rem;
-  padding: 0.5rem 1.15rem;
-  border-radius: 999px;
-  background: var(--accent);
-  color: #fbf4e6;
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  box-shadow: 0 0.4rem 0.9rem rgba(47, 42, 33, 0.18);
-  transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease,
-    background-color 0.18s ease;
-}
-
-.schedule-link:hover .schedule-rsvp,
-.schedule-link:focus-visible .schedule-rsvp {
-  background: var(--accent-deep);
-  box-shadow: 0 0.65rem 1.3rem rgba(47, 42, 33, 0.26);
-  transform: translateY(-2px);
-}
-
-/* Events with two actions (RSVP + what to wear): the card is static and each
-   cue is its own link instead of the whole card being one link. */
-.schedule-link--static {
-  cursor: default;
-}
-
-.schedule-link--static:hover,
-.schedule-link--static:focus-within {
-  transform: none;
-  box-shadow: none;
-  background: rgba(255, 252, 245, 0.55);
-  border-color: rgba(155, 100, 58, 0.22);
-}
-
-.schedule-cues {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.6rem;
-  margin-top: 0.5rem;
-}
-
-.schedule-cues .schedule-cue,
-.schedule-cues .schedule-rsvp {
-  margin-top: 0;
-}
-
-a.schedule-cue-link {
-  text-decoration: none;
-  cursor: pointer;
-}
-
-a.schedule-cue.schedule-cue-link:hover,
-a.schedule-cue.schedule-cue-link:focus-visible {
-  opacity: 1;
-  text-decoration: underline;
-  outline: none;
-}
-
-a.schedule-rsvp.schedule-cue-link:hover,
-a.schedule-rsvp.schedule-cue-link:focus-visible {
-  background: var(--accent-deep);
-  box-shadow: 0 0.65rem 1.3rem rgba(47, 42, 33, 0.26);
-  transform: translateY(-2px);
-  outline: none;
-}
-
-/* Explore cards ----------------------------------------------------- */
-.explore-grid {
-  display: grid;
-  /* Single Wardrobe card for now (Venue Map is parked): one centered column at
-     roughly the old two-up card width rather than a lone card in the left slot. */
-  grid-template-columns: min(27rem, 100%);
-  justify-content: center;
-  gap: clamp(1.2rem, 3vw, 2rem);
-  max-width: 56rem;
-  margin: 0 auto;
-}
-
-.explore-card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background: rgba(255, 252, 245, 0.6);
-  border: 1px solid rgba(155, 100, 58, 0.22);
-  border-radius: 1.1rem;
-  overflow: hidden;
-  text-decoration: none;
-  box-shadow: 0 0.6rem 1.4rem rgba(47, 42, 33, 0.08);
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
-}
-
-.explore-card:hover {
-  border-color: rgba(155, 100, 58, 0.45);
-  box-shadow: 0 1.1rem 2.4rem rgba(47, 42, 33, 0.16);
-}
-
-.explore-art {
-  aspect-ratio: 16 / 11;
-  overflow: hidden;
-  background: radial-gradient(circle at 50% 40%, #fbf3e3, #ecdcc0);
-  display: grid;
-  place-items: center;
-}
-
-.explore-art img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  padding: 0.6rem;
-  transition: transform 0.4s ease;
-}
-
-.explore-card:hover .explore-art img {
-  transform: scale(1.05);
-}
-
-.explore-body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: clamp(1.2rem, 2.5vw, 1.7rem);
-}
-
-.explore-kicker {
-  color: var(--copper);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  margin: 0;
-}
-
-.explore-title {
-  color: var(--forest);
-  font-family: var(--font-script), cursive;
-  font-size: clamp(2.2rem, 4.5vw, 3rem);
-  line-height: 1;
-  margin: 0.6rem 0 0.6rem;
-}
-
-.explore-blurb {
-  color: var(--muted-ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1rem, 1.6vw, 1.15rem);
-  line-height: 1.45;
-  margin: 0;
-}
-
-.explore-cue {
-  color: var(--rust);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  margin-top: auto;
-  padding-top: 1rem;
+/* "Travel" ends on a swash that overruns its advance width by 12px, so the
+   word sat 8px right of the title's own centre. The other two titles are
+   within 2px and need nothing. */
+.home-travel .home-section-title {
+  padding-right: 0.186em;
 }
 
 /* Travel ------------------------------------------------------------ */
-.travel-intro,
-.stay-intro {
-  text-align: center;
-  margin: 0 auto clamp(1.8rem, 4vw, 2.6rem);
-  max-width: 42rem;
-}
-
-.travel-intro p,
-.stay-intro p {
-  color: var(--muted-ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
-  line-height: 1.5;
-  margin: 0;
-}
-
 .travel-notes {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(1.2rem, 3vw, 2rem);
-  max-width: 54rem;
-  margin: 0 auto clamp(1.2rem, 3vw, 2rem);
+  margin: 0 auto clamp(2.6rem, 5vw, 3.6rem);
+  max-width: var(--measure);
 }
 
-.travel-note {
-  background: rgba(255, 252, 245, 0.55);
-  border: 1px solid rgba(155, 100, 58, 0.22);
-  border-radius: 1rem;
-  padding: clamp(1.2rem, 2.5vw, 1.7rem);
-}
-
-.travel-note h3 {
-  color: var(--forest);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.3rem, 2.4vw, 1.6rem);
-  font-weight: 700;
-  margin: 0 0 0.5rem;
-}
-
+/* The body face, not the display one. This is the only long-form paragraph in
+   Travel, and Cormorant is a high-contrast display serif — small x-height,
+   hairline thins — which is why it read as less legible than the list notes
+   beside it. Those are already Libre Baskerville, and the spot names get away
+   with Cormorant only because 700 thickens the thins. Libre Baskerville sets
+   much larger at the same px, so the size comes down and the leading goes up
+   to carry the wider face. */
 .travel-note p {
-  color: var(--muted-ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1rem, 1.6vw, 1.12rem);
-  line-height: 1.5;
-  margin: 0 0 0.8rem;
+  color: var(--base-text);
+  font-family: var(--font-body), Georgia, serif;
+  font-size: clamp(1rem, 1.4vw, 1.1rem);
+  line-height: 1.75;
+  /* Flush left, and the block still centred. Seven lines of centred text on a
+     laptop and twelve on a phone give a ragged left edge the eye has to find
+     again every line, and this is the paragraph people read to actually get
+     somewhere. The measure comes in so the rag stays shallow. */
+  margin: 0 auto;
+  max-width: 55ch;
+  text-align: left;
+  text-wrap: pretty;
 }
 
-/* Hotel card meta line (area · rate) inside the Travel cards grid. */
-.travel-note .travel-note-meta {
-  color: var(--copper);
-  font-weight: 700;
-  margin-bottom: 0.45rem;
-}
-
-/* Prominent green "Book here" CTA filling the hotel card. */
-.stay-book-btn {
-  display: flex;
-  width: 100%;
-  margin-top: 0.4rem;
-  padding: 0.9rem 1.7rem;
-  font-size: clamp(1rem, 1.5vw, 1.15rem);
-}
-
-.travel-link {
-  font-family: var(--font-display), Georgia, serif;
-}
-
-.travel-link {
-  color: var(--rust);
-  font-weight: 700;
-  font-size: 1rem;
-  text-decoration: none;
-}
-
-.travel-link:hover {
-  color: var(--copper-light);
-  text-decoration: underline;
-}
-
+/* The two six-item lists pair off, and the five-item list — every row of which
+   carries a note, so it is the tallest per item — runs full width beneath them.
+   Stacking Seattle and Day Trips in one column left the other 290px short and
+   opened an L-shaped hole that ran straight into the section gap. */
 .travel-lists {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(1.2rem, 3vw, 2rem);
-  max-width: 54rem;
-  margin: 0 auto;
+  gap: clamp(2rem, 4.4vw, 3rem) clamp(2rem, 5vw, 3.6rem);
+  max-width: 52rem;
+  margin: clamp(2.6rem, 5vw, 3.6rem) auto 0;
 }
 
-.travel-list {
-  background: rgba(255, 252, 245, 0.4);
-  border: 1px solid rgba(155, 100, 58, 0.18);
-  border-radius: 1rem;
-  padding: clamp(1.2rem, 2.5vw, 1.7rem);
+.travel-list-wide {
+  grid-column: 1 / -1;
 }
 
-.travel-list-title {
-  color: var(--forest);
-  font-family: var(--font-script), cursive;
-  font-size: clamp(1.9rem, 3.6vw, 2.5rem);
-  line-height: 1;
-  margin: 0 0 1rem;
+/* Seattle and the day trips stack in the left column; the Eastside list holds
+   the right on its own. */
+/* Carattere is for names — the couple's, the events', the sections'. It is not
+   for list headings. These are labels, so they take the structure voice at
+   label size: the same tracked caps already used for the watch party's aside,
+   a step up in size because these head a list rather than qualify a title.
+   Seven jobs at six scales in eleven colours is what stopped the script
+   signalling anything. */
+.travel-list-title,
+.travel-note h3 {
+  color: var(--muted-ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(0.92rem, 1.25vw, 1.02rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.3;
+  margin: 0 0 1.15rem;
   text-align: center;
+  text-transform: uppercase;
 }
 
 .travel-list ul {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
+  border-top: 1px solid var(--rule);
 }
 
+/* No row rule. Each name already carries a copper underline, so a hairline
+   below it put two horizontal lines within 30px of each other, a dozen times
+   down the section. The spacing does the separating now. */
 .travel-list li {
-  border-bottom: 1px dashed rgba(155, 100, 58, 0.22);
-  padding-bottom: 0.85rem;
   display: flex;
   flex-direction: column;
+  padding: 0.8rem 0.15rem;
 }
 
-.travel-list li:last-child {
-  border-bottom: 0;
-  padding-bottom: 0;
-}
-
+/* A link has to look like one before it is touched. There is no hover on a
+   phone, so the copper and the painted stroke are both there at rest and the
+   hover only deepens them. */
 .travel-spot-name {
   align-self: flex-start;
-  color: var(--ink);
+  color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   text-decoration: none;
   background-image: linear-gradient(var(--rust), var(--rust));
   background-position: 0 100%;
   background-repeat: no-repeat;
-  background-size: 0 1.5px;
+  background-size: 100% 1px;
   transition:
     color 0.18s ease,
     background-size 0.22s ease;
@@ -1843,18 +1562,17 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 
 .travel-spot-name:hover,
 .travel-spot-name:focus-visible {
-  color: var(--rust);
-  background-size: 100% 1.5px;
-  outline: none;
+  color: var(--burnt-copper);
+  background-size: 100% 2.5px;
 }
 
 .travel-spot-note {
   color: var(--muted-ink);
   font-family: var(--font-body), Georgia, serif;
-  font-size: 0.9rem;
+  font-size: 0.97rem;
   font-style: italic;
   line-height: 1.4;
-  margin-top: 0.2rem;
+  margin-top: 0.22rem;
 }
 
 /* Q & A ------------------------------------------------------------- */
@@ -1862,17 +1580,13 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   list-style: none;
   margin: 0 auto;
   padding: 0;
-  max-width: 48rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
+  max-width: var(--measure);
+  border-top: 1px solid var(--rule);
 }
 
+/* Hairlines instead of cards, matching the rules between events. */
 .faq-item {
-  background: rgba(255, 252, 245, 0.5);
-  border: 1px solid rgba(155, 100, 58, 0.2);
-  border-radius: 0.85rem;
-  overflow: hidden;
+  border-bottom: 1px solid var(--rule);
 }
 
 .faq-q {
@@ -1885,15 +1599,23 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   border: 0;
   cursor: pointer;
   text-align: left;
-  padding: clamp(1rem, 2.2vw, 1.3rem) clamp(1.1rem, 2.5vw, 1.5rem);
+  padding: clamp(1.05rem, 2.2vw, 1.35rem) 0.15rem;
   color: var(--ink);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(1.1rem, 2vw, 1.32rem);
   font-weight: 700;
+  transition: color 0.18s ease;
 }
 
+.faq-q:hover,
+.faq-q:focus-visible {
+  color: var(--rust);
+}
+
+/* Copper: it is the tap target for the section guests open most, and copper is
+   what the rest of the page uses to mean "this does something". */
 .faq-icon {
-  color: var(--copper);
+  color: var(--rust);
   font-size: 1.6rem;
   line-height: 1;
   flex: 0 0 auto;
@@ -1903,46 +1625,55 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   overflow: hidden;
 }
 
+/* Reading text, so the reading face. Cormorant is the structure voice — dates,
+   times, the questions themselves — and a full sentence in it read as a
+   different site from the travel paragraphs three sections up. Libre
+   Baskerville sets much larger at the same px, hence the smaller size and the
+   longer leading. */
 .faq-a p {
   color: var(--muted-ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1rem, 1.7vw, 1.18rem);
-  line-height: 1.55;
+  font-family: var(--font-body), Georgia, serif;
+  font-size: clamp(0.95rem, 1.35vw, 1.04rem);
+  line-height: 1.75;
   margin: 0;
-  padding: 0 clamp(1.1rem, 2.5vw, 1.5rem) clamp(1.1rem, 2.4vw, 1.4rem);
+  padding: 0 0.15rem clamp(1.1rem, 2.4vw, 1.4rem);
+  /* Not --measure: this sets at 1.18rem, so the same cap would run to ~78
+     characters. Trimmed to land at the same ~74 as everything else. */
+  max-width: 43rem;
+  text-wrap: pretty;
 }
 
-/* When an answer carries a call-to-action (e.g. the hotel reservation link),
-   it sits beneath the copy and only adds the bottom padding the <p> drops. */
+/* When an answer carries a call-to-action it sits beneath the copy and only
+   adds the bottom padding the <p> drops. */
 .faq-a p:has(+ .faq-link) {
-  padding-bottom: 0.6rem;
+  padding-bottom: 0.55rem;
 }
 
 .faq-link {
   display: inline-block;
-  margin: 0 clamp(1.1rem, 2.5vw, 1.5rem) clamp(1.1rem, 2.4vw, 1.4rem);
+  margin: 0 0.15rem clamp(1.1rem, 2.4vw, 1.4rem);
   color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(1rem, 1.7vw, 1.18rem);
   font-weight: 700;
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
 }
 
 .faq-link:hover {
-  color: var(--copper-light);
-  text-decoration: underline;
+  color: var(--burnt-copper);
+  text-decoration-thickness: 2.5px;
 }
 
 /* Footer ------------------------------------------------------------ */
 .home-footer {
   text-align: center;
-  padding: clamp(3rem, 7vw, 5rem) 1.2rem clamp(2.5rem, 5vw, 3.5rem);
-  border-top: 1px solid rgba(155, 100, 58, 0.18);
-  background:
-    linear-gradient(180deg, transparent, rgba(212, 185, 145, 0.18));
+  padding: clamp(5rem, 9vw, 7.5rem) 0 clamp(3rem, 6vw, 4.5rem);
 }
 
 .footer-names {
+  padding-left: 0.22em;
   color: var(--forest);
   font-family: var(--font-script), cursive;
   font-size: clamp(3rem, 7vw, 4.6rem);
@@ -1950,8 +1681,10 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   margin: 0;
 }
 
+/* Not a link, so not copper. It was the one place on the page where the warm
+   ink sat on something you cannot tap. */
 .footer-date {
-  color: var(--base-text);
+  color: var(--muted-ink);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(1.05rem, 2vw, 1.3rem);
   font-weight: 600;
@@ -1959,18 +1692,29 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   margin: 1rem 0 0.3rem;
 }
 
+/* Its twin in the hero carries the painted stroke at rest; this one did not,
+   so the same link looked tappable at the top of the page and not at the
+   bottom. */
 .footer-venue {
   display: inline-block;
-  color: var(--copper-light);
+  color: var(--rust);
   font-family: var(--font-display), Georgia, serif;
   font-size: clamp(0.92rem, 1.5vw, 1.05rem);
   text-decoration: none;
+  background-image: linear-gradient(var(--rust), var(--rust));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
   margin-bottom: 1.4rem;
+  transition:
+    color 0.18s ease,
+    background-size 0.22s ease;
 }
 
-.footer-venue:hover {
-  color: var(--forest);
-  text-decoration: underline;
+.footer-venue:hover,
+.footer-venue:focus-visible {
+  color: var(--burnt-copper);
+  background-size: 100% 2.5px;
 }
 
 .footer-nav {
@@ -1995,40 +1739,81 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
 
 /* Responsive -------------------------------------------------------- */
 @media (max-width: 820px) {
-  .home-nav-links a:not(.home-nav-rsvp) {
-    display: none;
+  .home-nav-toggle {
+    display: inline-flex;
   }
 
-  .explore-grid,
-  .travel-notes,
-  .travel-lists {
+  /* No room for the links inline: drop them below the bar as a panel. */
+  .home-nav-links {
+    position: absolute;
+    top: calc(100% - 0.2rem);
+    left: max(1.1rem, calc((100vw - var(--max)) / 2));
+    right: max(1.1rem, calc((100vw - var(--max)) / 2));
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0.35rem 0.9rem;
+    /* A flat cream sheet hanging off the bar, not a card. It used to be
+       rounded, copper-bordered, blurred and drop-shadowed — the one surface on
+       the site that looked borrowed from a generic app. Nothing on this page
+       is a filled box and nothing floats; the panel obeys that now too. The
+       bar's own blur already covers it, so it does not need its own. */
+    background: rgba(255, 253, 247, 0.97);
+    border-bottom: 1px solid var(--rule);
+    opacity: 0;
+    /* visibility, not just opacity: a transparent panel would still be
+       tab-focusable and read out by screen readers while "closed". */
+    visibility: hidden;
+    transform: translateY(-0.4rem);
+    pointer-events: none;
+    transition:
+      opacity 0.18s ease,
+      transform 0.18s ease,
+      visibility 0.18s ease;
+  }
+
+  .home-nav-links.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .home-nav-links a {
+    /* 44px minimum tap target, which this clears at 0.95rem either side of a
+       1.02rem line. */
+    padding: 0.95rem 0.2rem;
+  }
+
+  .home-nav-links a + a {
+    border-top: 1px solid var(--rule);
+  }
+
+  .home-nav-links a:hover,
+  .home-nav-links a:focus-visible {
+    color: var(--forest);
+  }
+
+  /* Stacked full-width rows, so the underline that marks the current section
+     on a desktop would run the whole row and read as a divider. Colour alone
+     marks it here. */
+  .home-nav-links a[aria-current] {
+    text-decoration: none;
+  }
+
+  .travel-notes {
     grid-template-columns: 1fr;
   }
+}
 
+@media (max-width: 820px) {
+  .travel-lists {
+    grid-template-columns: minmax(0, 26rem);
+    justify-content: center;
+  }
 }
 
 @media (max-width: 560px) {
-  .schedule-link {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-    text-align: left;
-  }
-
-  .schedule-bullet {
-    display: none;
-  }
-
-  .schedule-when {
-    flex-direction: row;
-    align-items: baseline;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-  }
-
-  .schedule-time {
-    margin-top: 0;
-  }
-
   /* Stack the date and venue cleanly; the inline dot would dangle at the end
      of the date line once the venue wraps below it. */
   .hero-meta {
@@ -2040,122 +1825,696 @@ a.schedule-rsvp.schedule-cue-link:focus-visible {
   .hero-dot {
     display: none;
   }
+}
 
-  /* Keep the top-left sprig flush in the corner; the bottom-right one clipped
-     against the right viewport edge as a hard vertical line. */
-  .hero-sprig--tl {
-    width: 7rem;
-    top: -1.5rem;
-    left: -1.5rem;
-    opacity: 0.55 !important;
+/* The hero is sized in rem, so on a short screen it simply runs past the fold:
+   at 1366x768 and 1512x820 — the two commonest laptops — it measured 901px
+   tall, putting both the button and the countdown below the fold on the most
+   important screen of the site. On a short viewport the portrait and the names
+   take their size from the height instead. */
+@media (min-width: 821px) and (max-height: 940px) {
+  .hero {
+    padding-top: 5.5rem;
+    padding-bottom: 2.5rem;
   }
 
-  .hero-sprig--br {
-    display: none;
+  .hero-portrait-wrap {
+    --portrait-w: calc(min(clamp(29.5rem, 38.4vw, 46rem), 78vh) - 6.25rem);
+    --arch-gap: 1.15rem;
+  }
+
+  /* The arch takes whichever is smaller: the 100px-cut width, or the room
+     actually left under it. A fixed pixel cut could never win this on its own —
+     the arch is 38.4vw, so it grows with screen *width* while the space for it
+     grows with *height*, and those are not correlated. A 16in laptop is wider
+     than a 14in but barely taller, so it was worse off.
+     21.5rem is the rest of the stack measured at 1440: 88px of hero padding,
+     24 below the arch, 20.8 of row gap, 195 of names + date + countdown, and
+     15 to breathe. svh, not vh, so it is the height with the browser chrome
+     showing — the state the countdown has to survive. */
+  @supports (height: 100svh) {
+    .hero-portrait-wrap {
+      --portrait-w: min(
+        calc(clamp(29.5rem, 38.4vw, 46rem) - 6.25rem),
+        calc((100svh - 21.5rem) * 1.05)
+      );
+    }
+  }
+
+  .hero-inner {
+    gap: 1.3rem;
+  }
+
+  .hero-names {
+    font-size: clamp(3.8rem, 15vh, 9rem);
+  }
+
+  .hero-meta {
+    margin-top: 0.7rem;
+  }
+
+  .hero-actions {
+    margin-top: 1.15rem;
+  }
+
+  .hero-countdown {
+    margin-top: 1.1rem;
   }
 }
 
-/* ------------------------------------------------------------------ */
-/* Password gate (shown below the splash while locked)                 */
-/* ------------------------------------------------------------------ */
+/* Same problem on a short phone — an iPhone SE is 667 tall and the hero wanted
+   723. */
+@media (max-width: 820px) and (max-height: 740px) {
+  .hero {
+    padding-top: 5rem;
+    padding-bottom: 1.75rem;
+  }
 
-.gate {
-  display: grid;
-  place-items: center;
-  padding: clamp(2rem, 6vw, 5rem) max(1.2rem, calc((100vw - var(--max)) / 2))
-    clamp(4rem, 9vw, 7rem);
+  .hero-portrait-wrap {
+    /* Short *and* narrow, so whichever of the two runs out first wins. */
+    --portrait-w: min(64vw, 34rem, 62vh);
+    --arch-gap: 1.05rem;
+  }
+
+  .hero-inner {
+    gap: 1rem;
+  }
+
+  .hero-names {
+    font-size: clamp(3rem, 13vh, 4.2rem);
+  }
+
+  .hero-actions {
+    margin-top: 1.1rem;
+  }
+
+  .hero-countdown {
+    margin-top: 1rem;
+  }
 }
 
-.gate-card {
-  width: min(34rem, 100%);
+/* ---------------------------------------------------------------------------
+   Placeholder page (/seating-chart) — a single centred screen under the nav.
+--------------------------------------------------------------------------- */
+.soon-page {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100svh;
+  padding: calc(var(--nav-h) + 2rem) 0 3rem;
   text-align: center;
-  background: rgba(255, 252, 245, 0.6);
-  border: 1px solid rgba(155, 100, 58, 0.24);
-  border-radius: 1.2rem;
-  box-shadow: 0 0.8rem 2rem rgba(47, 42, 33, 0.1);
-  padding: clamp(1.8rem, 4vw, 2.8rem) clamp(1.4rem, 3.5vw, 2.6rem);
 }
 
-.gate-kicker {
+.soon-kicker {
   color: var(--copper);
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(0.78rem, 1.2vw, 0.92rem);
+  font-size: 0.9375rem;
   font-weight: 600;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
+  letter-spacing: 0.2em;
   margin: 0;
+  text-transform: uppercase;
 }
 
-.gate-title {
+.soon-title {
   color: var(--forest);
   font-family: var(--font-script), cursive;
-  font-size: clamp(2.8rem, 6vw, 4rem);
-  line-height: 0.95;
-  margin: 0.5rem 0 0;
+  font-size: clamp(3.4rem, 7vw, 5.2rem);
+  font-weight: 400;
+  line-height: 0.96;
+  margin: 0.45rem 0 0;
 }
 
-.gate-blurb {
-  color: var(--muted-ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
-  line-height: 1.5;
+/* ------------------------------------------------------------------ *
+ * Schedule — the four events, rendered inline in the homepage's
+ * #schedule section. Times on the left, the wardrobe artwork on the
+ * right with its dress code set as an overlapping caption, and one
+ * note centred beneath the pair.
+ * ------------------------------------------------------------------ */
+
+/* The homepage column already supplies the page gutter, so the events only
+   need their own measure. */
+.sched-stack {
+  --sched-col: 1000px;
+  /* The longest label in the schedule plus 10px of headroom. Both the list and
+     the grid track that holds it read this, so they cannot drift apart. */
+  --times-w: 19.7rem;
+}
+
+.sched-event {
+  width: 100%;
+  max-width: var(--sched-col);
+  margin-inline: auto;
+}
+
+/* A plain hairline between one event and the next, in the needle painting's
+   own green. Centred and short rather than run to the column's edges: a rule
+   spanning the full width draws a line straight across the mountains and reads
+   as notebook ruling, which is what the copper one used to do. */
+.sched-stack > .sched-event:not(:first-of-type)::before {
+  content: '';
+  display: block;
+  width: min(20rem, 42%);
+  height: 1px;
   margin: 0 auto;
-  max-width: 26rem;
+  background: var(--rule);
+  /* Sits in the padding the panel already has, so it lands midway between the
+     two events rather than adding height of its own. */
+  transform: translateY(calc(-1 * var(--sched-pad)));
 }
 
-.gate-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.7rem;
-  justify-content: center;
-  margin-top: 1.6rem;
+/* Set per event from events.ts, sampled from that event's own artwork; these
+   are the fallbacks. --accent takes the event name, the subtitle and the
+   times; --accent-mark the bullets and the spine. The activity names used to
+   take a second accent and now take --base-text, because they are the content
+   of the row. */
+.sched-event {
+  /* The panel measures itself, not the window. Two columns need 352px of times
+     plus a 4rem gap plus 420px of artwork — 836px — and whether that fits is a
+     question about the column, which is 53% of the viewport, not about the
+     viewport. Keyed to the window it stayed two-up inside a 685px column at
+     1440 and squeezed the paintings to 311px to do it. */
+  container-type: inline-size;
+  --accent: var(--forest);
+  --accent-mark: var(--rust);
+  --sched-pad: clamp(3.25rem, 6vw, 4.5rem);
+  padding-block: var(--sched-pad);
+  scroll-margin-top: var(--anchor-pad);
 }
 
-.gate-input {
-  flex: 1 1 14rem;
-  min-width: 0;
-  max-width: 18rem;
-  background: #fffdf7;
-  border: 1px solid rgba(155, 100, 58, 0.35);
-  border-radius: 999px;
-  color: var(--ink);
+/* Whatever single link an event carries out of itself. */
+.sched-action {
+  margin: 1.6rem 0 0;
+  text-align: center;
+}
+
+/* The venue, as a link rather than a box.
+ *
+ * Nothing on this page is a filled box, and the old wash — forest at 10% over
+ * paper — composited to a flat opaque olive that was darker than the paper
+ * around it, so it did not sit on the sheet as pigment, it erased what was
+ * underneath. On the watch party it blotted out the meadow gate.
+ *
+ * What holds the three lines together is proximity, not a container: name to
+ * area is 0.1rem, area to cue is 0.5rem, and the block sits 1.6rem below the
+ * note. The stroke under the last line makes it a plinth rather than a box.
+ * The invisible padding is the tap target; `background-origin: content-box`
+ * is what stops that padding stretching the stroke with it. */
+.lnk-venue {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 20rem;
+  padding: 0.35rem 0.35rem 0.8rem;
+  border-radius: 0.25rem;
+  text-align: center;
+  text-decoration: none;
+}
+
+.sched-venue-name {
+  color: var(--accent);
   font-family: var(--font-display), Georgia, serif;
-  font-size: 1.1rem;
-  letter-spacing: 0.04em;
-  padding: 0.72rem 1.3rem;
-  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
 }
 
-.gate-input::placeholder {
+.sched-venue-area {
   color: var(--muted-ink);
-  opacity: 0.7;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: 0.1rem;
 }
 
-.gate-input:focus-visible {
-  border-color: var(--forest);
-  box-shadow: 0 0 0 0.18rem rgba(44, 104, 60, 0.16);
-  outline: none;
+/* The cue is the link mechanism, so the cue carries the stroke: a permanent
+   hairline in the site's own green with the event's pigment laid over it on
+   hover, growing from the centre out. Pigment over a rule, not a border
+   switching on — and nothing lifts. */
+.sched-venue-cue {
+  color: var(--muted-ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+  padding-bottom: 0.34rem;
+  background-image:
+    linear-gradient(var(--accent), var(--accent)),
+    linear-gradient(var(--rule), var(--rule));
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  background-position:
+    50% 100%,
+    50% 100%;
+  background-size:
+    0 1.5px,
+    100% 1.5px;
+  transition:
+    background-size 0.26s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.18s ease;
 }
 
-.gate-form .btn-primary {
-  flex: 0 0 auto;
+.lnk-venue:hover .sched-venue-cue,
+.lnk-venue:focus-visible .sched-venue-cue {
+  color: var(--ink);
+  background-size:
+    100% 1.5px,
+    100% 1.5px;
 }
 
-.gate-error {
-  color: var(--copper-light);
+.lnk-venue:active .sched-venue-cue {
+  background-size:
+    100% 2px,
+    100% 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sched-venue-cue {
+    transition: color 0.18s ease;
+  }
+}
+
+.sched-head {
+  text-align: center;
+  margin-bottom: clamp(2.2rem, 4vw, 3.2rem);
+}
+
+/* The watch party is an optional extra, and this is what says so. Set in the
+   same small letterspaced display face as the travel labels, so it reads as
+   the site's own voice rather than as part of the event's name. */
+.sched-aside {
+  color: var(--muted-ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(0.86rem, 1.15vw, 0.95rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin: 0 0 0.9rem;
+}
+
+.sched-head h2 {
+  color: var(--accent);
+  font-family: var(--font-script), cursive;
+  /* Carattere's swashes overrun their advance widths, so "Naach the Night
+     Away" needs some room or the A runs back under the t. But 0.34em was well
+     past what that takes — it opened gaps you read as gaps. 0.22em is the
+     tightest that still clears the swash: at 0.12 the A and the t touch and
+     the words run together, which I checked at 3x before settling here. The
+     hero carries none at all, but "Abha & Udit" has an ampersand between its
+     words and no swash to clear. */
+  word-spacing: 0.22em;
+  /* A script sets far smaller on the body than a serif does at the same px, so
+     the clamp lifts to hold the same presence. */
+  font-size: clamp(2.9rem, 6.9vw, 5rem);
+  line-height: 1;
+  text-wrap: balance;
+}
+
+/* What kind of event it is, in the serif the name used to be set in. Never
+   below 24px, which is where WCAG's large-text line sits — under it the
+   carnival's pink could not carry this at 4.5:1. */
+/* The second accent, so the head is not three lines of one colour: the title
+   and the date take the primary and this sits between them in the other. */
+.sched-kind {
+  color: var(--accent-sec);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(1.55rem, 2.2vw, 1.85rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  margin: 0.5rem 0 0;
+  text-wrap: balance;
+}
+
+.sched-date {
+  color: var(--accent);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(1.25rem, 1.8vw, 1.45rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 1rem 0 0;
+}
+
+.sched-kind + .sched-date {
+  margin-top: 0.55rem;
+}
+
+.sched-wx {
+  /* The forecast never breaks across lines mid-reading. */
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The long form is the default; the brief one only exists for the narrow
+   panel. */
+.sched-date-brief {
+  display: none;
+}
+
+/* Keyed to the panel's own width rather than the window's, so it is the
+   measure of the line that decides — a panel is narrow on a phone and also
+   narrow in the stacked laptop layout. This block sits after the rules it
+   overrides: a @container rule loses to a later rule of equal specificity. */
+@container (max-width: 480px) {
+  .sched-date-full {
+    display: none;
+  }
+
+  .sched-date-brief {
+    display: inline;
+  }
+
+  /* inline-block rather than block, so the forecast takes a line of its own
+     only when the date and the temperatures genuinely cannot share one. */
+  .sched-wx {
+    display: inline-block;
+    /* An inline-block drops the whitespace at its own leading edge, which ate
+       the space before the separator. */
+    margin-left: 0.32em;
+  }
+}
+
+/* Line art at the cap height of the date it sits in, inked in the same copper
+   as the rest of the line. */
+.sched-sky {
+  display: inline-block;
+  height: 1.28em;
+  vertical-align: -0.3em;
+  width: 1.28em;
+}
+
+
+/* The pair is sized to its own content and centred, so it sits under the
+   centred event name rather than drifting into two half-empty columns. */
+.sched-cols {
+  display: grid;
+  /* --art is the picture this event asked for; --art-cap is what the panel can
+     actually afford at its current width. The pair is what lets a narrow panel
+     keep the timeline beside its painting instead of stacking. */
+  /* The times column asks for its full width first and the painting takes what
+     is left. The other way round, a 1280 laptop gave the artwork its 340px and
+     left the list 288px for a 305px label — so the label wrapped, or before
+     that, overflowed. The list is the content; the painting can afford the
+     27px. */
+  grid-template-columns:
+    minmax(min(var(--times-w), 100%), max-content)
+    minmax(0, min(var(--art, 420px), var(--art-cap, 420px)));
+  /* The list and the painting are one object, so the space between them has to
+     read as smaller than the space between rows of the list — 70px. It used to
+     be 64px, near enough to the pitch that the pair stopped grouping. */
+  gap: clamp(1rem, 2.6vw, 2.4rem);
+  align-items: center;
+  justify-content: center;
+}
+
+.sched-cols > * {
+  min-width: 0;
+}
+
+.sched-cols.is-solo {
+  grid-template-columns: minmax(0, var(--art, 420px));
+}
+
+.sched-times {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  /* Fixed, not fit-content: the spine is the strongest vertical on the page and
+     was landing at three different x positions as you scrolled. The cost of
+     sharing one width is that every panel is as wide as the longest label
+     anywhere in the schedule, so a panel of short labels carries the difference
+     as slack on its right.
+
+     This is that longest label plus 10px of headroom. The label is currently
+     "Bride v Groom Games" at 305px — measured at 1440 with the real faces, and
+     the same to within a pixel in the fallback stack, because the stand-in
+     faces in the token block are metric-matched. Change a label in events.ts
+     and this needs re-measuring: too small and the longest one wraps, too
+     large and every other panel pays for it. */
+  width: var(--times-w);
+  max-width: 100%;
+  border-left: 1px solid color-mix(in srgb, var(--accent-mark) 45%, transparent);
+}
+
+.sched-times li {
+  display: grid;
+  /* A fixed first track is shared by every row. max-content is not: each li is
+     its own grid container, so it sized to that row's own string and the labels
+     ragged by 11px wherever the hours were not all the same width.
+
+     minmax(0, max-content) rather than bare max-content, because the list's own
+     width is capped at 100% of whatever the panel can spare: at 1280 that is
+     288px against a 315px list, and a bare max-content column cannot shrink, so
+     the longest label ran 17px past its track and into the artwork's gutter.
+     With a floor of 0 it wraps instead, which is the right way to lose. */
+  grid-template-columns: 4.15em minmax(0, max-content);
+  gap: 0.95rem;
+  align-items: baseline;
+  /* 1.4rem gave a 89px pitch for a 30px row. That had a reason when the list
+     was vertically centred against a 486px painting beside it and needed the
+     height — but the panel stacks below 830px, which is most laptops, and the
+     pitch stayed while the justification went. It also inverted the rhythm:
+     rows of one list sat 89px apart while the painting and the list sat 27px
+     apart, so the spacing claimed a time was barely related to the next time
+     and glued to the artwork. */
+  padding: 0.8rem 0 0.8rem 0.75rem;
+  position: relative;
+}
+
+.sched-times li::before {
+  background: var(--paper);
+  border: 1.5px solid var(--accent-mark);
+  border-radius: 50%;
+  content: '';
+  height: 8px;
+  left: -4.5px;
+  position: absolute;
+  /* Centre on the row: an em offset drifts as soon as the type scale moves. */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+}
+
+/* The second accent. For Sunset Shaadi that is the painting's own sunflower
+   gold at hue 77°, three degrees off the sunflowers and larches it was sampled
+   from; for the Carnival it is the purple, for the Sangeet the copper. It had
+   been declared in events.ts and used nowhere. */
+.sched-times time {
+  color: var(--accent-sec);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.85rem;
+  /* Cormorant defaults to old-style figures, so digit heights vary by glyph and
+     the times neither align nor sit level with their bullets. */
+  font-variant-numeric: lining-nums tabular-nums;
+  font-weight: 700;
+  /* No tracking: Cormorant has no tabular figures, so letter-spacing prises the
+     digits of "11" and "12" apart into "1 1". */
+  letter-spacing: 0;
+  /* Mixed one- and two-digit hours, so align right and the meridiems line up. */
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* The content of the row. It takes the event's primary accent, not the site's
+   green: a panel carries its own colours and nothing else, which is what stops
+   the schedule reading as copper and forest and four event palettes at once. */
+.sched-what {
+  color: var(--accent);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* Small and quiet: it disambiguates, it does not announce. */
+.sched-meridiem {
+  font-size: 0.6em;
+  font-weight: 600;
+  letter-spacing: 0;
+  margin-left: 0.1em;
+  opacity: 0.55;
+}
+
+.sched-art {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  text-align: center;
+  width: 100%;
+  /* The art track now gives way before the column's bezel does, so the picture
+     is often narrower than the --art it asked for. The caption has to follow
+     what got rendered, not what was requested. */
+  container-type: inline-size;
+}
+
+/* The webps are trimmed to their painted extent, so the layout box is the
+   visible edge and the caption's own margin is the only thing setting the
+   overlap — one constant for every event, no per-asset compensation. */
+.sched-art img {
+  filter: saturate(1.03);
+  height: auto;
+  opacity: 0.96;
+  width: 100%;
+}
+
+/* Below 830px of *panel* the two tracks stop fitting, so the artwork goes
+   above the times at its full width instead of being crushed beside them. */
+/* A 13-15" laptop puts the panel at 685px. It used to fall straight through to
+   the stacked layout, which cost 1,600px of page height and left the timeline
+   as a 352px island in the middle of an empty band. It stays side by side now;
+   the picture gives up what the pair needs to fit. */
+@container (max-width: 830px) {
+  .sched-cols {
+    --art-cap: 340px;
+  }
+}
+
+/* Stack whenever side by side would squeeze the painting.
+ *
+ * The pair needs the list's 315px, the gutter, and a painting worth looking at
+ * — about 300px, below which the four figures stop reading as people. That is
+ * a 660px panel. Under it the panel stacks, where the painting gets 360px and
+ * the list its full width, and neither has to give.
+ *
+ * The threshold was 560px, and the band between 560 and 660 was the worst on
+ * the site without looking like it: a 1024-1180px window puts the panel at
+ * 587-595px, which is wider than a phone and so read as "plenty of room",
+ * while the painting was squeezed to 241px — smaller than it is on a phone.
+ * Panel width is not monotonic in window width here (the column formula has a
+ * step at 900px), so this has to be keyed on the panel, not the viewport. */
+@container (max-width: 660px) {
+  .sched-cols,
+  .sched-cols.is-solo {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.7rem;
+    justify-items: center;
+  }
+
+  /* Times first. The artwork ran to about 500px on a 390px screen, so a guest
+     who tapped Schedule to find out when the ceremony starts scrolled two
+     thirds of a screen of painting to reach 3:45. The painting is still here,
+     one scroll further down, doing the same job — it just no longer stands
+     between the question and the answer. */
+  .sched-art {
+    order: 1;
+    width: min(var(--art, 420px), 100%);
+  }
+
+  .sched-times {
+    order: 0;
+  }
+
+  .sched-times {
+    justify-self: center;
+  }
+}
+
+.sched-vibe {
+  color: var(--accent);
+  word-spacing: 0.16em;
+  font-family: var(--font-script), cursive;
+  /* Sized off the artwork's own width, which is what keeps the caption in
+     proportion to the painting it sits on. The watch party's artwork is 520px
+     rather than 420, so its caption reached 71.8px against the other three at
+     45.9 — title rank, on a panel whose title is 80. The cap is the size the
+     420px panels land on, so nothing else moves. */
+  font-size: min(13.8cqw, 2.87rem);
+  font-weight: 400;
+  line-height: 0.84;
+  margin: calc(-0.42em + var(--cap-drop, 0em)) 0 0;
+  position: relative;
+  text-wrap: balance;
+  /* It overlaps the artwork, so a little paper glow keeps it legible. */
+  text-shadow:
+    0 0 14px rgba(246, 238, 223, 0.95),
+    0 1px 0 rgba(246, 238, 223, 0.8);
+  z-index: 2;
+}
+
+.sched-note {
+  color: var(--accent);
   font-family: var(--font-body), Georgia, serif;
-  font-size: 0.92rem;
+  font-size: clamp(1.1rem, 1.62vw, 1.28rem);
   font-style: italic;
-  line-height: 1.4;
-  margin: 0.9rem 0 0;
-  min-height: 1.3rem;
-  opacity: 0;
-  transition: opacity 0.2s ease;
+  line-height: 1.6;
+  margin: clamp(0.85rem, 1.5vw, 1.2rem) auto 0;
+  max-width: var(--measure);
+  text-wrap: pretty;
+  text-align: center;
 }
 
-.gate-error.is-shown {
-  opacity: 1;
+@media (max-width: 820px) {
+  .sched-cols,
+  .sched-cols.is-solo {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.6rem;
+    justify-items: center;
+  }
+
+  .sched-cols {
+    /* Keep --art a plain length: it feeds a font-size calc, and a percentage
+       there would resolve against the parent's font size, not its width. */
+    --art: 360px;
+  }
+
+  /* Times first here too — this block sits after the 660px one and was
+     putting the artwork back on top below 430px. */
+  .sched-art {
+    order: 1;
+    width: min(var(--art), 100%);
+  }
+
+  .sched-times {
+    justify-self: center;
+  }
+
+  .sched-event {
+    /* Grows on a phone too: 38px was all that separated two ~900px panels. */
+    --sched-pad: 3.25rem;
+  }
 }
+
+/* The timeline sizes itself to its content, which the longest label ("Abha and
+   Udit's Baraat") pushes past a 320px viewport. Below this width the label is
+   allowed to wrap instead. */
+@media (max-width: 430px) {
+  .sched-cols {
+    --art: 300px;
+  }
+
+  .sched-times {
+    max-width: 22rem;
+    width: 100%;
+  }
+
+  .sched-times li {
+    gap: 0.75rem;
+    grid-template-columns: max-content minmax(0, 1fr);
+    padding-left: 1.1rem;
+  }
+
+  .sched-times time {
+    font-size: 1.65rem;
+  }
+
+  .sched-what {
+    font-size: 1.5rem;
+  }
+}
+
+/* The forecast reads as a range across the event, so the separator and the rain
+   chance sit quieter than the temperatures themselves. */
+.sched-range-sep {
+  opacity: 0.45;
+}
+
+.sched-rain {
+  opacity: 0.72;
+}
+
 
 /* ---------------------------------------------------------------------------
    Seating chart (/seating-chart) — alphabetical guest list beside a sticky

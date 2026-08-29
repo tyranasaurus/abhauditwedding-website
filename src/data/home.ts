@@ -1,102 +1,20 @@
 // All content transferred from withjoy.com/abhauditwedding, restyled for our
-// watercolor wedding-card site. Schedule entries deep-link into the wardrobe
-// guide (/wardrobe#<anchor>) and venue map (/map).
+// watercolor wedding-card site. The weekend itself lives in events.ts and
+// renders inline on the homepage; everything around it is here.
 
 export const hero = {
   names: 'Abha & Udit',
   date: 'September 5–6, 2026',
-  venue: 'Carnation Farms · Carnation, Washington',
-  rsvpUrl: 'https://withjoy.com/abhauditwedding/rsvp',
+  venue: 'Carnation Farms, Washington',
+  venueUrl: 'https://maps.app.goo.gl/x4JhSzNTPdtRhoRa8',
 } as const
-
-// The big weekend at a glance. Each links into the wardrobe guide where the
-// dress code for that event lives.
-export interface ScheduleStop {
-  day: string
-  date: string
-  kind: string
-  time: string
-  title: string
-  /** Wardrobe guide anchor for this event's dress code. */
-  href?: string
-  /** A standalone RSVP link for this event only (opens in a new tab). When set,
-   *  the card links here and shows an RSVP cue instead of the wardrobe link. */
-  rsvpUrl?: string
-  accent: 'sunset' | 'carnival' | 'forest' | 'slate'
-}
-
-export const schedule: ScheduleStop[] = [
-  {
-    day: 'Saturday',
-    date: 'September 5, 2026',
-    kind: 'Wedding Ceremony',
-    time: '4:00 PM',
-    title: 'Sunset Shaadi',
-    href: '/wardrobe#sunset-shaadi',
-    accent: 'sunset',
-  },
-  {
-    day: 'Sunday',
-    date: 'September 6, 2026',
-    kind: 'Baraat & Carnival',
-    time: '10:00 AM',
-    title: 'From Carnegie to Carnation',
-    href: '/wardrobe#carnegie-to-carnation',
-    accent: 'carnival',
-  },
-  {
-    day: 'Sunday',
-    date: 'September 6, 2026',
-    kind: 'Sangeet Reception',
-    time: '5:00 PM',
-    title: 'Naach the Night Away',
-    href: '/wardrobe#naach-the-night-away',
-    accent: 'forest',
-  },
-  {
-    day: 'Wednesday',
-    date: 'September 9, 2026',
-    kind: 'Season Opener Watch Party',
-    time: '5:00 PM',
-    title: 'Seahawks Season Opener',
-    href: '/wardrobe#seahawks-season-opener',
-    rsvpUrl:
-      'https://docs.google.com/forms/d/e/1FAIpQLScxUkCDBMpNt1xRp4Qe1BiSN5k7LaoW-4j6-K7MjtFxvmhWCg/viewform',
-    accent: 'slate',
-  },
-]
-
-// The two interactive companion pages we link out to.
-export interface ExploreCard {
-  href: string
-  kicker: string
-  title: string
-  blurb?: string
-  image: string
-  imageAlt: string
-  cue: string
-}
-
-export const exploreCards: ExploreCard[] = [
-  {
-    href: '/wardrobe',
-    kicker: 'What to Wear',
-    title: 'Wardrobe Guide',
-    image: '/art/shaadi.webp',
-    imageAlt: 'Watercolor of guests dressed for the ceremony',
-    cue: 'Open the guide',
-  },
-  // The Venue Map card is parked while /map is unlinked (see App.tsx / MapPage.tsx).
-]
 
 // Travel ----------------------------------------------------------------
 export const travel = {
-  intro:
-    "The wedding lands on Labor Day weekend in the Seattle area — here's how to get around, plus where to stay.",
   notes: [
     {
-      title: 'Getting In',
-      body: 'Fly into Seattle–Tacoma International Airport (SEA), or Paine Field (PAE) in Everett for a smaller alternative. From SEA you can take public transport all the way to Downtown Redmond and the hotel. From PAE, transit connections are limited so plan on a car. Either way, getting from Redmond to Carnation is difficult without a car, so we recommend a rental car, or carpooling with another group that has one.',
+      title: 'Getting to the Venue',
+      body: "From SEA airport, you should be able to take the Link Light Rail all the way to Downtown Redmond Station. That's a very short walk from the Hilton Garden Inn and many other hotels, and it's a cute little downtown worth spending some time in. From there the wedding venue is a 20-minute drive, and you will want a rental car or a carpool — rideshare gets thin this far out and we would hate for anyone to be stranded at the end of the night. Reach out to us if you would like help with a carpool.",
     },
   ],
   seattleSpots: [
@@ -118,6 +36,28 @@ export const travel = {
       note: '',
       query: 'Marina Park Kirkland Waterfront, Kirkland, WA',
     },
+  ],
+  // Driving day trips, nearest first. Labor Day 2026 is the Monday after the
+  // sangeet, so guests staying for the watch party have two free days.
+  pnwDayTrips: [
+    { name: 'Snoqualmie Falls', note: '', query: 'Snoqualmie Falls, Snoqualmie, WA' },
+    {
+      name: 'Mount Si & North Bend',
+      note: '',
+      query: 'Mount Si Trailhead, North Bend, WA',
+    },
+    {
+      name: 'Deception Pass State Park',
+      note: '',
+      query: 'Deception Pass State Park, WA',
+    },
+    { name: 'Leavenworth', note: '', query: 'Leavenworth, WA' },
+    {
+      name: 'Mount Rainier National Park',
+      note: 'Check nps.gov for timed-entry reservations before you go.',
+      query: 'Paradise, Mount Rainier National Park, WA',
+    },
+    { name: 'Diablo Lake', note: '', query: 'Diablo Lake Overlook, North Cascades, WA' },
   ],
   eastsideBites: [
     {
@@ -159,25 +99,22 @@ export function mapsSearch(query: string) {
 }
 
 // Where to stay ---------------------------------------------------------
+// The group block closed on 14 August 2026 and its booking link now 403s, so
+// the rate, cutoff and URL are gone. The hotel is still where most guests are.
 export const stay = {
-  intro: "Here is the hotel block — we'd love for everyone to stay close.",
   hotel: {
     name: 'Hilton Garden Inn',
     area: 'Downtown Redmond',
-    address: 'Hilton Garden Inn Redmond Seattle, Redmond Way, Redmond, WA',
-    rate: '$180 / night',
-    parking: 'Free parking',
-    bookBy: 'Book by August 14, 2026',
-    cutoffNote:
-      "The group cutoff is 8/14/26 — the booking link stops working after that date, so please reserve before then.",
-    bookUrl:
-      'https://www.hilton.com/en/book/reservation/rooms/?ctyhocn=LKEGIGI&arrivalDate=2026-09-04&departureDate=2026-09-06&groupCode=99K&room1NumAdults=1',
   },
 } as const
 
 // Registry --------------------------------------------------------------
+// There is no registry page on this site any more; every route to it — the
+// nav, the footer, the corner bubble, the Q&A answer — hands the guest
+// straight to Joy.
 export const registry = {
-  url: 'https://withjoy.com/abhauditwedding/registry',
+  /** Deep link straight to the fund on Joy, past the couple picker. */
+  url: 'https://withjoy.com/abhauditwedding/registry?pid=b3e72f03-4062-4a06-bebf-f714fb8c8a49',
 } as const
 
 // Q & A -----------------------------------------------------------------
@@ -190,30 +127,21 @@ export interface Faq {
 
 export const faqs: Faq[] = [
   {
-    q: 'When is the RSVP deadline?',
-    a: 'Please RSVP by June 30th to allow us to finalize our arrangements.',
-  },
-  {
     q: 'What should I wear?',
-    a: 'We created a wardrobe guide for inspiration. But more than anything, we care that you feel comfortable, stay safe, and are there with us on time. Your presence to enjoy with us matters far more than any specific outfit.',
-    link: { label: 'Open the Wardrobe Guide', href: '/wardrobe' },
-  },
-  {
-    q: 'Can I bring a date?',
-    a: 'Due to the intimate nature of our celebration, we ask that you only RSVP for the number of seats reserved for your party.',
-  },
-  {
-    q: 'What will the weather be like?',
-    a: 'During the day, Seattle should be beautiful and sunny, averaging around 75–80°F, but it can get chilly at night.',
+    a: 'Every event has its own look, and each one is on the schedule alongside the times. But more than anything, we care that you feel comfortable, stay safe, and are there with us on time. Your presence to enjoy with us matters far more than any specific outfit.',
+    link: { label: 'See the schedule', href: '#schedule' },
   },
   {
     q: 'I am coming from out of town. Where should I stay?',
-    a: `We've reserved a block of rooms at the ${stay.hotel.name} in ${stay.hotel.area} at a special group rate. Reserve yours before the ${stay.hotel.bookBy.replace('Book by ', '')} cutoff:`,
-    link: { label: 'Reserve your room', href: stay.hotel.bookUrl },
+    a: `Most of our guests are staying in ${stay.hotel.area} — the ${stay.hotel.name} and several other hotels are a short walk from the Link light rail station, and the venue is about a 20-minute drive from there.`,
   },
   {
     q: 'Can we join the baraat?',
     a: 'Please do! Abha and Udit are both leading the baraat, and we would love all of our friends and family to join us in the procession and open up the carnival together.',
+  },
+  {
+    q: 'Will there be vegetarian food?',
+    a: 'All of the food at our events is vegetarian.',
   },
   {
     q: 'Is the wedding indoors or outdoors?',
@@ -221,8 +149,8 @@ export const faqs: Faq[] = [
   },
   {
     q: 'Do you have a registry?',
-    a: 'We do. Your presence means the most to us, but if you would like to give a gift, you can find our registry here:',
-    link: { label: 'View our registry', href: registry.url },
+    a: 'We do, though it is not a list of things — just Our Next Adventure Fund. Your presence means the most to us, but if you would like to give, you can find it here:',
+    link: { label: 'Visit Our Next Adventure Fund', href: registry.url },
   },
   {
     q: 'Where should I park?',
@@ -236,6 +164,8 @@ export const faqs: Faq[] = [
 
 export const venue = {
   name: 'Carnation Farms',
+  /** How the venue is written wherever it appears on the page. */
+  label: 'Carnation Farms, Washington',
   addressLines: ['28901 NE Carnation Farm Road', 'Carnation, WA 98014'],
   mapsUrl:
     'https://www.google.com/maps/search/?api=1&query=Carnation%20Farms%2C%2028901%20NE%20Carnation%20Farm%20Road%2C%20Carnation%2C%20WA%2098014',

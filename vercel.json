@@ -1,7 +1,25 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "trailingSlash": false,
   "rewrites": [
-    { "source": "/wardrobe", "destination": "/index.html" },
-    { "source": "/seating-chart", "destination": "/index.html" }
+    {
+      "source": "/schedule",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/wardrobe",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/seating-chart",
+      "destination": "/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/registry",
+      "destination": "https://withjoy.com/abhauditwedding/registry?pid=b3e72f03-4062-4a06-bebf-f714fb8c8a49",
+      "permanent": false
+    }
   ]
 }

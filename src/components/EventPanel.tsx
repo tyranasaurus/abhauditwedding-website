@@ -1,60 +1,122 @@
-import type { WardrobeEvent } from '@/data/events'
+import type { CSSProperties } from 'react'
+import type { WeddingEvent } from '@/data/events'
+import type { WindowForecast } from '@/lib/use-forecast'
 import { renderWords } from '@/lib/render-words'
+import { abbreviateDate } from '@/lib/short-date'
+import { SkyGlyph } from '@/components/SkyGlyph'
 
-export function EventPanel({ event }: { event: WardrobeEvent }) {
+export function EventPanel({
+  event,
+  forecast,
+}: {
+  event: WeddingEvent
+  forecast?: WindowForecast
+}) {
+  // --art widens the artwork column on the watch party.
+  const style = {
+    '--accent': event.accents.primary,
+    '--accent-sec': event.accents.secondary,
+    '--accent-mark': event.accents.marks ?? event.accents.secondary,
+    ...(event.artWidth ? { '--art': event.artWidth } : {}),
+    ...(event.captionDrop ? { '--cap-drop': event.captionDrop } : {}),
+  } as CSSProperties
+
   return (
     <article
-      className={`event-panel ${event.className}${event.bonus ? ' is-bonus' : ''}`}
+      className={`sched-event ${event.className}`}
       id={event.anchor}
+      style={style}
     >
-      <header className="event-heading">
-        <h2>{renderWords(event.title)}</h2>
-        <p className="event-label">{event.label}</p>
-        <p className="event-datetime">{event.datetime}</p>
+      <header className="sched-head">
+        {event.aside && <p className="sched-aside">{event.aside}</p>}
+        <h2>{event.title}</h2>
+        {event.subtitle && <p className="sched-kind">{event.subtitle}</p>}
+        <p className="sched-date">
+          {/* Exactly one of these is ever displayed, so exactly one is ever
+              announced — the other is display:none and out of the a11y tree. */}
+          <span className="sched-date-full">{event.date}</span>
+          <span className="sched-date-brief">{abbreviateDate(event.date)}</span>
+          {forecast && (
+            <span
+              className="sched-wx"
+              aria-label={`Forecast during the event: ${forecast.sky}, low ${
+                forecast.low
+              }, high ${forecast.high} degrees Fahrenheit${
+                forecast.showRain ? `, ${forecast.rain} percent chance of rain` : ''
+              }`}
+            >
+              {' · '}
+              <SkyGlyph kind={forecast.sky} />{' '}
+              {forecast.low}°<span className="sched-range-sep"> / </span>
+              {forecast.high}°
+              {forecast.showRain && (
+                <span className="sched-rain"> · {forecast.rain}% rain</span>
+              )}
+            </span>
+          )}
+          {event.venue && (
+            <>
+              {' · '}
+              <a
+                className="sched-venue"
+                href={event.venue.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {event.venue.name}
+              </a>
+            </>
+          )}
+        </p>
       </header>
 
-      <div className="event-stage">
-        <img
-          src={event.image}
-          alt={event.imageAlt}
-          className="stage-cutout"
-          width={event.imageWidth}
-          height={event.imageHeight}
-          loading="lazy"
-          decoding="async"
-        />
+      <div className={`sched-cols${event.timeline ? '' : ' is-solo'}`}>
+        {event.timeline && (
+          <ol className="sched-times">
+            {event.timeline.map((entry) => {
+              // "3:30 PM" sets as 3:30 with a small quiet p, so the hour is what
+              // catches the eye rather than the meridiem.
+              const parts = entry.time.match(/^(.*?)\s*([AP])M$/i)
+              const clock = parts?.[1]
+              const meridiem = parts?.[2]
+              return (
+                <li key={`${entry.time} ${entry.label}`}>
+                  <time aria-label={entry.time}>
+                    {clock && meridiem ? (
+                      <>
+                        {clock}
+                        <span className="sched-meridiem" aria-hidden="true">
+                          {meridiem.toLowerCase()}
+                        </span>
+                      </>
+                    ) : (
+                      entry.time
+                    )}
+                  </time>
+                  <span className="sched-what">{entry.label}</span>
+                </li>
+              )
+            })}
+          </ol>
+        )}
+
+        <figure className="sched-art">
+          <img
+            src={event.image}
+            alt={event.imageAlt}
+            width={event.imageWidth}
+            height={event.imageHeight}
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption className="sched-vibe">
+            {renderWords(event.vibe, event.vibeColors)}
+          </figcaption>
+        </figure>
       </div>
 
-      <p className="attire-vibe">
-        {renderWords(event.vibe, event.vibeAccentIndexes)}
-      </p>
+      <p className="sched-note">{event.note}</p>
 
-      {event.ethnic && event.western && (
-        <div className="attire-grid">
-          <div>
-            <h3>Ethnic</h3>
-            <p>{event.ethnic}</p>
-          </div>
-          <div>
-            <h3>Western</h3>
-            <p>{event.western}</p>
-          </div>
-        </div>
-      )}
-
-      <footer className="event-footer">
-        <p className="event-notes">{event.note}</p>
-        {event.rsvpUrl && (
-          <a
-            className="btn event-rsvp"
-            href={event.rsvpUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            RSVP
-          </a>
-        )}
-      </footer>
     </article>
   )
 }
