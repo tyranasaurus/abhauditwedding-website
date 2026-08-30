@@ -225,6 +225,15 @@ export const CARNIVAL_MAP_ASSETS = [
     repeatable: false,
   },
   {
+    id: 'lemonade',
+    label: 'Lemonade',
+    src: `${CARNIVAL_ART_PATH}/lemonade.webp`,
+    kind: 'vendor',
+    default_width_feet: 4,
+    default_height_feet: 5,
+    repeatable: false,
+  },
+  {
     id: 'yarn-art',
     label: 'Yarn art',
     src: `${CARNIVAL_ART_PATH}/yarn-art.webp`,
