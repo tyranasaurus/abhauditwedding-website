@@ -17,10 +17,11 @@ export interface ActiveEvent {
   /** The locations that matter for this event, and nothing else. */
   highlights: MapHighlight[]
   intro: { before: string; during: string }
-  /** What During Event swaps in. The reception has the seating experience;
-   *  the others keep the schedule until their own live modules exist
-   *  (procession guidance, the activity passport — see the design doc). */
-  duringModule: 'schedule' | 'seating'
+  /** What During Event swaps in. The reception has the seating experience,
+   *  the carnival has the activity passport (rendered with its map in both
+   *  phases), and the shaadi keeps the schedule until procession guidance
+   *  and friends exist — see the design doc. */
+  duringModule: 'schedule' | 'seating' | 'passport'
 }
 
 const byAnchor = (anchor: string) =>
@@ -55,9 +56,10 @@ export const activeEvents: ActiveEvent[] = [
     intro: {
       before:
         'The Baraat leads into the Carnival on the big field — here is where to be, when to be there, and what to wear.',
-      during: 'Happening now on the big field — here is how the day unfolds.',
+      // No during blurb: the map and passport speak for themselves.
+      during: '',
     },
-    duringModule: 'schedule',
+    duringModule: 'passport',
   },
   {
     event: byAnchor('naach-the-night-away'),

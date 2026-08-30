@@ -3105,16 +3105,6 @@ a.poi:focus-visible .poi-pin {
   text-align: center;
 }
 
-.carnival-map-kicker {
-  color: #992fcc;
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  margin: 0;
-  text-transform: uppercase;
-}
-
 .carnival-map-heading h2 {
   color: #db53a5;
   font-family: var(--font-script), cursive;
@@ -3134,6 +3124,10 @@ a.poi:focus-visible .poi-pin {
   position: relative;
 }
 
+.carnival-map-canvas {
+  position: relative;
+}
+
 .carnival-map-base {
   display: block;
   height: auto;
@@ -3141,12 +3135,133 @@ a.poi:focus-visible .poi-pin {
 }
 
 .carnival-map-item {
-  filter: drop-shadow(0 1px 1px rgba(47, 42, 33, 0.2));
+  /* The sticker look: a thin white edge traced around the artwork's own
+     shape (four offset shadows), then a soft drop under the whole sticker. */
+  --sticker:
+    drop-shadow(1px 0 0 #fffdf7) drop-shadow(-1px 0 0 #fffdf7)
+    drop-shadow(0 1px 0 #fffdf7) drop-shadow(0 -1px 0 #fffdf7)
+    drop-shadow(0 0.18rem 0.22rem rgba(47, 42, 33, 0.28));
+  filter: var(--sticker);
   height: auto;
   pointer-events: none;
   position: absolute;
   transform-origin: center;
+  transition: filter 0.25s ease;
   z-index: 2;
+}
+
+/* An item tied to a passport activity is tappable: pale until it's stamped,
+   full watercolor once it is — the map colors in as the day is played. */
+.carnival-map-item.is-interactive {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.carnival-map-item.is-interactive:focus-visible {
+  outline: 2px solid #992fcc;
+  outline-offset: 3px;
+}
+
+.carnival-map-item.is-todo {
+  filter: saturate(0.12) brightness(1.04) var(--sticker);
+}
+
+.carnival-map-item.is-todo:hover {
+  filter: saturate(0.45) brightness(1.04) var(--sticker);
+}
+
+.carnival-map-item img {
+  display: block;
+  height: auto;
+  pointer-events: none;
+  width: 100%;
+}
+
+/* Temporary layout-editor chrome — leaves with the editor in CarnivalMap. */
+.carnival-map-item.is-editable {
+  cursor: grab;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.carnival-map-item.is-editable:active {
+  cursor: grabbing;
+}
+
+.carnival-map-item.is-selected {
+  outline: 2px dashed #992fcc;
+  outline-offset: 2px;
+}
+
+.cmi-rotate-stick {
+  background: #992fcc;
+  height: 1.3rem;
+  left: 50%;
+  position: absolute;
+  top: -1.3rem;
+  transform: translateX(-50%);
+  width: 2px;
+}
+
+.cmi-rotate,
+.cmi-resize {
+  background: #fffdf7;
+  border: 2px solid #992fcc;
+  border-radius: 50%;
+  height: 1.05rem;
+  position: absolute;
+  touch-action: none;
+  width: 1.05rem;
+}
+
+.cmi-rotate {
+  cursor: grab;
+  left: 50%;
+  top: -2.15rem;
+  transform: translateX(-50%);
+}
+
+.cmi-resize {
+  bottom: -0.6rem;
+  cursor: nwse-resize;
+  right: -0.6rem;
+}
+
+.carnival-editor-bar {
+  align-items: center;
+  background: rgba(31, 26, 17, 0.85);
+  border-radius: 0.6rem;
+  color: #f6eedf;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  justify-content: space-between;
+  margin: 0 auto 0.8rem;
+  max-width: 70rem;
+  padding: 0.5rem 0.8rem;
+}
+
+.carnival-editor-hint {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.carnival-editor-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.carnival-editor-actions button {
+  background: #f6eedf;
+  border: 0;
+  border-radius: 0.4rem;
+  color: #31281a;
+  cursor: pointer;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
 }
 
 /* Same treatment as the seating page on a phone: the gutter moves off the
@@ -3171,10 +3286,19 @@ a.poi:focus-visible .poi-pin {
     padding-inline: 1.2rem;
   }
 
+  /* Inset rather than full-bleed: the crop below should read as a framed
+     painting of the lawn, not as an image running off the screen. */
   .carnival-map-frame {
-    border-left: 0;
-    border-radius: 0;
-    border-right: 0;
+    margin-inline: 1.2rem;
+  }
+
+  /* On a phone the lawn is the map: show the painting from 25% to 78% of its
+     width, cropping the red barn off the left and the gardens off the right.
+     The canvas grows to 100/0.53 of the frame and slides left by 25% of
+     itself, and the frame's overflow clip does the rest. */
+  .carnival-map-canvas {
+    margin-left: calc(-25% * (100 / 53));
+    width: calc(100% * (100 / 53));
   }
 
   .now-map .map-frame {
@@ -3286,4 +3410,208 @@ a.poi:focus-visible .poi-pin {
 
 .home-footer {
   padding-bottom: clamp(6rem, 9vw, 7.5rem);
+}
+
+/* The Carnival activity passport: a stampable checklist of everything on the
+   lawn, wearing the same watercolor art as the map. */
+.carnival-passport {
+  margin: clamp(2rem, 4.5vw, 3.4rem) auto 0;
+  max-width: 70rem;
+}
+
+.passport-progress {
+  color: var(--muted-ink);
+  font-size: 0.9375rem;
+  font-style: italic;
+  margin: 0.5rem 0 0;
+}
+
+.passport-grid {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+  list-style: none;
+  margin: 1.1rem 0 0;
+  padding: 0;
+}
+
+.passport-card {
+  align-items: center;
+  background: rgba(255, 252, 245, 0.72);
+  border: 1px solid rgba(153, 47, 204, 0.28);
+  border-radius: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  gap: 0.85rem;
+  padding: 0.65rem 3rem 0.65rem 0.75rem;
+  position: relative;
+  text-align: left;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+  width: 100%;
+}
+
+.passport-card:hover {
+  background: #fffdf7;
+  border-color: #db53a5;
+  box-shadow: 0 0.45rem 1.1rem rgba(47, 42, 33, 0.1);
+  transform: translateY(-1px);
+}
+
+.passport-card:focus-visible {
+  outline: 2px solid #992fcc;
+  outline-offset: 2px;
+}
+
+.passport-art {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  height: 3.4rem;
+  justify-content: center;
+  width: 3.4rem;
+}
+
+.passport-art img {
+  filter: drop-shadow(0 1px 1px rgba(47, 42, 33, 0.2));
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.passport-text {
+  color: var(--ink);
+  font-family: var(--font-body), Georgia, serif;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+/* The stamp: inked and tilted once the activity is done. */
+.passport-stamp {
+  align-items: center;
+  border: 2px solid #db53a5;
+  border-radius: 50%;
+  color: #db53a5;
+  display: flex;
+  font-size: 1rem;
+  font-weight: 700;
+  height: 1.9rem;
+  justify-content: center;
+  opacity: 0;
+  position: absolute;
+  right: 0.7rem;
+  top: 50%;
+  transform: translateY(-50%) rotate(20deg) scale(1.6);
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+  width: 1.9rem;
+}
+
+.passport-card.is-stamped {
+  background: rgba(219, 83, 165, 0.08);
+  border-color: rgba(219, 83, 165, 0.55);
+}
+
+.passport-card.is-stamped .passport-stamp {
+  opacity: 1;
+  transform: translateY(-50%) rotate(-12deg) scale(1);
+}
+
+.passport-card.is-stamped .passport-text {
+  color: var(--muted-ink);
+}
+
+@media (max-width: 880px) {
+  .carnival-passport {
+    padding-inline: 1.2rem;
+  }
+}
+
+/* The phone's way into the full painting: an expand control on the frame,
+   and a fullscreen zoom view behind it. */
+.carnival-map-expand {
+  align-items: center;
+  background: rgba(255, 253, 247, 0.92);
+  border: 1px solid rgba(153, 47, 204, 0.4);
+  border-radius: 0.55rem;
+  box-shadow: 0 0.25rem 0.6rem rgba(31, 26, 17, 0.18);
+  color: #992fcc;
+  cursor: pointer;
+  display: none;
+  height: 2.4rem;
+  justify-content: center;
+  position: absolute;
+  right: 0.6rem;
+  top: 0.6rem;
+  width: 2.4rem;
+  z-index: 5;
+}
+
+.carnival-map-expand svg {
+  height: 1.15rem;
+  width: 1.15rem;
+}
+
+@media (max-width: 880px) {
+  .carnival-map-expand {
+    display: flex;
+  }
+}
+
+.carnival-zoom {
+  background: var(--paper);
+  inset: 0;
+  position: fixed;
+  z-index: 100;
+}
+
+.carnival-zoom-stage {
+  height: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  /* Panning stays native scrolling; two-finger pinches reach our handler. */
+  touch-action: pan-x pan-y;
+  width: 100%;
+}
+
+/* On a portrait screen the stage itself turns landscape: sized to the
+   rotated viewport and spun 90° around its top-left corner. Where the
+   browser granted a real orientation lock, the screen is already landscape
+   and this never applies. */
+@media (orientation: portrait) {
+  .carnival-zoom-stage {
+    height: 100svw;
+    left: 0;
+    position: absolute;
+    top: 0;
+    transform: rotate(90deg) translateY(-100%);
+    transform-origin: top left;
+    width: 100svh;
+  }
+}
+
+.carnival-zoom-canvas {
+  min-width: 100%;
+  position: relative;
+}
+
+.carnival-zoom-close {
+  align-items: center;
+  background: rgba(31, 26, 17, 0.82);
+  border: 1px solid rgba(246, 238, 223, 0.5);
+  border-radius: 50%;
+  color: #f6eedf;
+  cursor: pointer;
+  display: flex;
+  font-size: 1rem;
+  height: 2.6rem;
+  justify-content: center;
+  position: fixed;
+  right: max(0.8rem, env(safe-area-inset-right, 0px));
+  top: max(0.8rem, env(safe-area-inset-top, 0px));
+  width: 2.6rem;
+  z-index: 101;
 }
