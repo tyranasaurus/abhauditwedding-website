@@ -3149,13 +3149,6 @@ a.poi:focus-visible .poi-pin {
   z-index: 2;
 }
 
-.carnival-map-item.is-grounded {
-  filter: saturate(0.72) contrast(0.88);
-  mix-blend-mode: multiply;
-  opacity: 0.88;
-  z-index: 1;
-}
-
 /* Same treatment as the seating page on a phone: the gutter moves off the
    page and onto the text blocks, so the maps can outgrow them. The seating
    media rule below 880px already covers .seating-finder, .table-card, and
