@@ -56,9 +56,52 @@ art inside this system so it sits naturally on the page.
 Individual event art may introduce its own accents while staying on the same
 ivory paper + watercolor system:
 
-- **Sangeet / Reception** — forest green, copper, antique gold, midnight blue.
-- **Baraat / Carnival** — carnation pink (`#d94e78`), turquoise, lilac, marigold.
-- **Ceremony / Shaadi** — saffron, peach, terracotta (`#d86a22`), pale blue, soft greenery.
+- **Sangeet / Reception** — use the exact Sangeet / Reception palette below.
+- **Baraat / Carnival** — use the exact Carnival palette below. These colors may
+  soften or bloom naturally in watercolor, but prompts should name the source
+  hex values so newly generated assets remain part of the same family.
+- **Ceremony / Shaadi** — use the exact Sunset Shaadi palette below. Softer
+  saffron, peach, pale blue, and greenery may support it inside paintings.
+
+#### Sunset Shaadi palette
+
+| Token                    | Hex       | Use                                      |
+| ------------------------ | --------- | ---------------------------------------- |
+| Shaadi sunset orange     | `#d05011` | Primary accent and homepage title text   |
+| Shaadi sunflower gold    | `#a37008` | Secondary text and timeline labels       |
+| Shaadi decorative gold   | `#e0a94e` | Bullets, rules, sunflowers, small marks  |
+
+These are the live event accents in `src/data/events.ts`. The title “Sunset
+Shaadi” uses sunset orange. Preserve the orange-to-gold relationship in artwork:
+orange leads, deeper gold supports readable details, and the brighter gold is
+reserved for decorative light and painted highlights.
+
+#### Carnival palette
+
+| Token            | Hex       | Use                                      |
+| ---------------- | --------- | ---------------------------------------- |
+| Carnival pink    | `#db53a5` | Primary festive accent, fabric, florals  |
+| Carnival aqua    | `#81f3e4` | Bright cool accent, stripes, small fills |
+| Carnival purple  | `#992fcc` | Saturated contrast accent                |
+| Carnival orange  | `#e0934a` | Warm marigold accent, wood, food details |
+
+Use these four colors together for Carnival artwork and iconography. The global
+forest, copper, ivory, and ink colors may still provide structure and grounding,
+but do not substitute approximate pink, turquoise, lilac, or marigold values for
+the Carnival accents.
+
+#### Sangeet / Reception palette
+
+| Token                     | Hex       | Use                                    |
+| ------------------------- | --------- | -------------------------------------- |
+| Sangeet deep forest       | `#28433a` | Primary accent and homepage title text |
+| Sangeet copper            | `#9e521a` | Secondary text, timeline, warm detail  |
+
+These are the live event accents in `src/data/events.ts`. The title “Naach the
+Night Away” uses deep forest. Artwork should lead with deep forest and use copper
+for rhythm, light, ornament, and secondary emphasis. Warm ivory, antique gold,
+and restrained midnight blue may support the pair, but should not replace these
+two source colors as the event's identifying palette.
 
 ## Composition for web
 

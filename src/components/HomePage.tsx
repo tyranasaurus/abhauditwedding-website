@@ -643,6 +643,15 @@ export function HomePage() {
         </main>
         <Footer />
       </div>
+      {/* The call into the live experience: a full-width bar pinned to the
+          bottom of the screen, unmissable wherever the guest is on the page.
+          Once real event windows exist it only shows while an event is live,
+          with a message per event; until then it simply shows, as a prototype
+          control alongside /now itself. */}
+      <a className="live-banner" href="/now">
+        <span className="live-banner-kicker">Sangeet &amp; Reception · Tonight</span>
+        <span className="live-banner-title">Time to Naach! →</span>
+      </a>
     </div>
   )
 }

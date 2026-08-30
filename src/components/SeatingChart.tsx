@@ -35,12 +35,12 @@ function loadStoredMe(): Guest | null {
 }
 
 /**
- * Interactive seating chart for the Sangeet Reception at the Hippodrome.
- * Guests say who they are once via the autocomplete (kept in localStorage);
- * their table then stays lit on the watercolor floor plan with a "You" seal.
- * Hovering or tapping any table still shows who's seated there.
+ * The interactive heart of the seating chart — the "Who are you?" finder and
+ * the watercolor floor plan. Split from the page shell so the active-event
+ * experience (/now) can host the same thing during the reception; the guest's
+ * pick lives in localStorage, so it carries between the two hosts.
  */
-export function SeatingChart() {
+export function SeatingExperience() {
   const [me, setMe] = useState<Guest | null>(loadStoredMe)
   const [editing, setEditing] = useState(false)
   const [query, setQuery] = useState('')
@@ -51,14 +51,6 @@ export function SeatingChart() {
   const [hovered, setHovered] = useState<number | null>(null)
   const [pinned, setPinned] = useState<number | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    const previous = document.title
-    document.title = 'Seating Chart · Abha & Udit'
-    return () => {
-      document.title = previous
-    }
-  }, [])
 
   // Focus the field when "Not you?" opens it — but not on first load, where
   // an unasked-for keyboard covering the map would greet every phone visitor.
@@ -144,6 +136,204 @@ export function SeatingChart() {
 
   return (
     <>
+      <div className="seating-finder">
+        {showChip && me ? (
+          <div className="me-chip">
+            <p className="me-chip-text">
+              <strong>{me.name}</strong> · Table {me.table}
+            </p>
+            <button
+              type="button"
+              className="me-chip-change"
+              onClick={() => setEditing(true)}
+            >
+              Not you?
+            </button>
+          </div>
+        ) : (
+          <div className="guest-search">
+            <label className="guest-search-label" htmlFor="guest-search">
+              Who are you?
+            </label>
+            <div className="guest-search-field">
+              <input
+                id="guest-search"
+                ref={inputRef}
+                type="search"
+                className="guest-search-input"
+                placeholder="Start typing your name…"
+                autoComplete="off"
+                autoCapitalize="off"
+                spellCheck={false}
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded={listOpen && matches.length > 0}
+                aria-controls="guest-options"
+                value={query}
+                onChange={(event) => {
+                  setQuery(event.target.value)
+                  setCursor(0)
+                }}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
+                onKeyDown={onSearchKeyDown}
+              />
+              {query ? (
+                <button
+                  type="button"
+                  className="guest-search-clear"
+                  onClick={clearSearch}
+                  aria-label="Clear search"
+                >
+                  ×
+                </button>
+              ) : null}
+              {listOpen && matches.length > 0 ? (
+                /* mousedown would blur the input and close the list before
+                   click lands, so swallow it — the click then goes through. */
+                <ul
+                  className="guest-options"
+                  id="guest-options"
+                  role="listbox"
+                  onMouseDown={(event) => event.preventDefault()}
+                >
+                  {matches.map((guest, index) => (
+                    <li
+                      key={`${guest.name}-${guest.table}`}
+                      role="option"
+                      aria-selected={index === cursor}
+                    >
+                      <button
+                        type="button"
+                        className={`guest-option${index === cursor ? ' is-cursor' : ''}`}
+                        onMouseEnter={() => {
+                          setCursor(index)
+                          setHovered(guest.table)
+                        }}
+                        onMouseLeave={() => setHovered(null)}
+                        onClick={() => selectMe(guest)}
+                      >
+                        <span className="guest-option-name">{guest.name}</span>
+                        <span className="guest-table-tag">
+                          Table {guest.table}
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+            {listOpen && matches.length === 0 ? (
+              <p className="guest-search-count" role="status">
+                No match — try a first name, or ask us and we'll find you.
+              </p>
+            ) : null}
+            {me && editing ? (
+              <button
+                type="button"
+                className="guest-search-cancel"
+                onClick={() => {
+                  setEditing(false)
+                  setQuery('')
+                }}
+              >
+                Never mind — still {me.name}
+              </button>
+            ) : null}
+          </div>
+        )}
+      </div>
+
+      <section className="seating-map" aria-label="Reception floor plan">
+        <div className="table-card" role="status">
+          {cardTable !== null ? (
+            <>
+              <p className="table-card-title">
+                Table {cardTable}
+                {yourTable === cardTable ? (
+                  <span className="table-card-yours"> · your table</span>
+                ) : null}
+              </p>
+              <ul className="table-card-guests">
+                {cardGuests.map((guest) => (
+                  <li
+                    key={`${guest.name}-${guest.table}`}
+                    className={`table-card-guest${
+                      me && guest.name === me.name && guest.table === me.table
+                        ? ' is-you'
+                        : ''
+                    }`}
+                  >
+                    {guest.name}
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <p className="table-card-hint">
+              Find your name above, or tap any table to see who’s seated
+              there.
+            </p>
+          )}
+        </div>
+        <div className="seating-frame">
+          <img
+            src="/art/map/seating-floorplan.webp"
+            alt="Watercolor floor plan of the Hippodrome reception hall: twenty round tables around a central dance floor, with the bar, buffet, and dessert stations along the top."
+            className="seating-base"
+            width={1536}
+            height={2752}
+            fetchPriority="high"
+          />
+          {tables.map((table) => (
+            <button
+              key={table.number}
+              type="button"
+              className={`table-spot${lit === table.number ? ' is-active' : ''}${
+                yourTable === table.number ? ' is-yours' : ''
+              }`}
+              style={{
+                left: `${table.x}%`,
+                top: `${table.y}%`,
+                width: `${table.r * 2}%`,
+              }}
+              onMouseEnter={() => setHovered(table.number)}
+              onMouseLeave={() => setHovered(null)}
+              onFocus={() => setHovered(table.number)}
+              onBlur={() => setHovered(null)}
+              onClick={() => togglePin(table.number)}
+              aria-label={
+                yourTable === table.number
+                  ? `Table ${table.number} — your table`
+                  : `Table ${table.number}`
+              }
+            >
+              <span className="table-num" aria-hidden="true">
+                {table.number}
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
+    </>
+  )
+}
+
+/**
+ * The standalone /seating-chart page: the site nav and the page header around
+ * the shared experience.
+ */
+export function SeatingChart() {
+  useEffect(() => {
+    const previous = document.title
+    document.title = 'Seating Chart · Abha & Udit'
+    return () => {
+      document.title = previous
+    }
+  }, [])
+
+  return (
+    <>
       <SiteNav />
       <main className="seating-page">
         <header className="seating-header">
@@ -152,186 +342,7 @@ export function SeatingChart() {
           <div className="seating-ornament" aria-hidden="true" />
           <p className="seating-intro">{seatingIntro.blurb}</p>
         </header>
-
-        <div className="seating-finder">
-          {showChip && me ? (
-            <div className="me-chip">
-              <p className="me-chip-text">
-                <strong>{me.name}</strong> · Table {me.table}
-              </p>
-              <button
-                type="button"
-                className="me-chip-change"
-                onClick={() => setEditing(true)}
-              >
-                Not you?
-              </button>
-            </div>
-          ) : (
-            <div className="guest-search">
-              <label className="guest-search-label" htmlFor="guest-search">
-                Who are you?
-              </label>
-              <div className="guest-search-field">
-                <input
-                  id="guest-search"
-                  ref={inputRef}
-                  type="search"
-                  className="guest-search-input"
-                  placeholder="Start typing your name…"
-                  autoComplete="off"
-                  autoCapitalize="off"
-                  spellCheck={false}
-                  role="combobox"
-                  aria-autocomplete="list"
-                  aria-expanded={listOpen && matches.length > 0}
-                  aria-controls="guest-options"
-                  value={query}
-                  onChange={(event) => {
-                    setQuery(event.target.value)
-                    setCursor(0)
-                  }}
-                  onFocus={() => setSearchFocused(true)}
-                  onBlur={() => setSearchFocused(false)}
-                  onKeyDown={onSearchKeyDown}
-                />
-                {query ? (
-                  <button
-                    type="button"
-                    className="guest-search-clear"
-                    onClick={clearSearch}
-                    aria-label="Clear search"
-                  >
-                    ×
-                  </button>
-                ) : null}
-                {listOpen && matches.length > 0 ? (
-                  /* mousedown would blur the input and close the list before
-                     click lands, so swallow it — the click then goes through. */
-                  <ul
-                    className="guest-options"
-                    id="guest-options"
-                    role="listbox"
-                    onMouseDown={(event) => event.preventDefault()}
-                  >
-                    {matches.map((guest, index) => (
-                      <li
-                        key={`${guest.name}-${guest.table}`}
-                        role="option"
-                        aria-selected={index === cursor}
-                      >
-                        <button
-                          type="button"
-                          className={`guest-option${index === cursor ? ' is-cursor' : ''}`}
-                          onMouseEnter={() => {
-                            setCursor(index)
-                            setHovered(guest.table)
-                          }}
-                          onMouseLeave={() => setHovered(null)}
-                          onClick={() => selectMe(guest)}
-                        >
-                          <span className="guest-option-name">{guest.name}</span>
-                          <span className="guest-table-tag">
-                            Table {guest.table}
-                          </span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
-              </div>
-              {listOpen && matches.length === 0 ? (
-                <p className="guest-search-count" role="status">
-                  No match — try a first name, or ask us and we'll find you.
-                </p>
-              ) : null}
-              {me && editing ? (
-                <button
-                  type="button"
-                  className="guest-search-cancel"
-                  onClick={() => {
-                    setEditing(false)
-                    setQuery('')
-                  }}
-                >
-                  Never mind — still {me.name}
-                </button>
-              ) : null}
-            </div>
-          )}
-        </div>
-
-        <section className="seating-map" aria-label="Reception floor plan">
-          <div className="table-card" role="status">
-            {cardTable !== null ? (
-              <>
-                <p className="table-card-title">
-                  Table {cardTable}
-                  {yourTable === cardTable ? (
-                    <span className="table-card-yours"> · your table</span>
-                  ) : null}
-                </p>
-                <ul className="table-card-guests">
-                  {cardGuests.map((guest) => (
-                    <li
-                      key={`${guest.name}-${guest.table}`}
-                      className={`table-card-guest${
-                        me && guest.name === me.name && guest.table === me.table
-                          ? ' is-you'
-                          : ''
-                      }`}
-                    >
-                      {guest.name}
-                    </li>
-                  ))}
-                </ul>
-              </>
-            ) : (
-              <p className="table-card-hint">
-                Find your name above, or tap any table to see who’s seated
-                there.
-              </p>
-            )}
-          </div>
-          <div className="seating-frame">
-            <img
-              src="/art/map/seating-floorplan.webp"
-              alt="Watercolor floor plan of the Hippodrome reception hall: twenty round tables around a central dance floor, with the bar, buffet, and dessert stations along the top."
-              className="seating-base"
-              width={1536}
-              height={2752}
-              fetchPriority="high"
-            />
-            {tables.map((table) => (
-              <button
-                key={table.number}
-                type="button"
-                className={`table-spot${lit === table.number ? ' is-active' : ''}${
-                  yourTable === table.number ? ' is-yours' : ''
-                }`}
-                style={{
-                  left: `${table.x}%`,
-                  top: `${table.y}%`,
-                  width: `${table.r * 2}%`,
-                }}
-                onMouseEnter={() => setHovered(table.number)}
-                onMouseLeave={() => setHovered(null)}
-                onFocus={() => setHovered(table.number)}
-                onBlur={() => setHovered(null)}
-                onClick={() => togglePin(table.number)}
-                aria-label={
-                  yourTable === table.number
-                    ? `Table ${table.number} — your table`
-                    : `Table ${table.number}`
-                }
-              >
-                <span className="table-num" aria-hidden="true">
-                  {table.number}
-                </span>
-              </button>
-            ))}
-          </div>
-        </section>
+        <SeatingExperience />
       </main>
     </>
   )

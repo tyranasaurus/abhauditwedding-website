@@ -13,6 +13,10 @@
     {
       "source": "/seating-chart",
       "destination": "/index.html"
+    },
+    {
+      "source": "/now",
+      "destination": "/index.html"
     }
   ],
   "redirects": [

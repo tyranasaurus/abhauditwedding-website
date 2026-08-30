@@ -77,6 +77,41 @@ system.
 The prototype should keep production homepage behavior unchanged until real
 event windows are configured.
 
+### Implementation status (2026-08-29)
+
+The active-event prototype is built at `/now`, for all three farm events
+(Sunset Shaadi, From Carnegie to Carnation, Naach the Night Away; the watch
+party is off-site and has no venue experience):
+
+- `NowPage.tsx` renders the shared shell: status header, the venue aerial
+  with only that event's locations highlighted, then the phase's module.
+  Per-event config (highlights, intros, during-module) lives in
+  `src/data/active-events.ts`.
+- Which event and which phase are test states in `?event=` and `?phase=`,
+  kept in sync via `replaceState`. They are switched by a floating
+  admin-only Preview chip (dark, bottom-left, clearly a tool, not page
+  content) — a temporary stand-in for the time-window system.
+- Before Event hosts the event's ordinary `EventPanel` (schedule, wardrobe
+  art, and note) plus a directions card to Carnation Farms.
+- During Event swaps in the event's live module: the seating experience for
+  the reception; the schedule again for the others until their own modules
+  exist (procession guidance, the activity passport).
+- During Event hosts `SeatingExperience`, the finder-and-floor-plan heart
+  extracted from `SeatingChart.tsx`; the guest's stored pick carries over
+  because both hosts share the same localStorage key.
+- The Hippodrome is highlighted rather than pinned: a thin translucent box —
+  white hairline stroke, milky fill — laid over the barn's painted footprint
+  at the barn's own angle, the way a map highlights one building. The rest of
+  the aerial stays at full color. No label — the header and intro already
+  name it.
+- The two-way handoff treats `/now` as the primary face during the event: a
+  quiet `← Wedding info` button floats in its bottom-right corner and opens
+  the ordinary site auto-scrolled to the reception's schedule card
+  (`/#naach-the-night-away`), while the ordinary site carries an unmissable
+  full-width `Time to Naach!` bar pinned to the bottom of the screen, leading
+  to `/now`. The bar shows unconditionally for now; real time-window gating
+  (and per-event messages) replaces that later.
+
 ## Future decisions
 
 - Exact activation and handoff times for every event.

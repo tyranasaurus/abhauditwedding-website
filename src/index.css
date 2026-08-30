@@ -2972,3 +2972,325 @@ a.poi:focus-visible .poi-pin {
     width: 92%;
   }
 }
+
+/* -----------------------------------------------------------------------------
+   Active event experience (/now) — prototype for Naach the Night Away.
+   One column: the test toggle, a status header, the venue aerial focused on
+   the Hippodrome, then the phase's module — schedule and wardrobe before the
+   event, the seating experience during it. */
+
+.now-page {
+  padding: calc(var(--nav-h) + 1.6rem) max(1.2rem, calc((100vw - var(--max)) / 2))
+    4rem;
+}
+
+/* The floating admin-only preview control: a temporary stand-in for the
+   time-window system, dressed as a dark tool chip so it can never be
+   mistaken for part of the page. It will not outlive the prototype. */
+.now-admin {
+  background: rgba(31, 26, 17, 0.85);
+  border-radius: 0.7rem;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
+  box-shadow: 0 0.5rem 1.3rem rgba(31, 26, 17, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  left: max(1rem, env(safe-area-inset-left, 0px));
+  padding: 0.5rem;
+  position: fixed;
+  z-index: 50;
+}
+
+.now-admin-kicker {
+  color: rgba(246, 238, 223, 0.65);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  margin: 0;
+  padding-left: 0.2rem;
+  text-transform: uppercase;
+}
+
+.now-admin-row {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.now-admin-row button {
+  background: transparent;
+  border: 0;
+  border-radius: 0.45rem;
+  color: rgba(246, 238, 223, 0.8);
+  cursor: pointer;
+  flex: 1;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  white-space: nowrap;
+}
+
+.now-admin-row button.is-on {
+  background: var(--paper);
+  color: #31281a;
+}
+
+.now-header {
+  text-align: center;
+}
+
+.now-kicker {
+  color: var(--copper);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.now-title {
+  color: var(--forest);
+  font-family: var(--font-script), cursive;
+  font-size: clamp(3rem, 6.4vw, 4.6rem);
+  font-weight: 400;
+  line-height: 0.96;
+  /* The global h1 rule caps width at 10ch; keep the box centered and wide
+     enough that the title doesn't hug the left gutter. */
+  margin: 0.45rem auto 0;
+  max-width: none;
+}
+
+.now-ornament {
+  background: linear-gradient(90deg, transparent, var(--copper), transparent);
+  height: 1px;
+  margin: 1.1rem auto 1.2rem;
+  width: min(15rem, 100%);
+}
+
+.now-intro {
+  color: var(--muted-ink);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  margin: 0 auto;
+  max-width: 34rem;
+}
+
+/* One marker does not need a whole viewport: the aerial stays map-sized here,
+   a landmark to orient by rather than the page's subject. */
+.now-map {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(1.5rem, 3vw, 2.4rem);
+}
+
+.now-map .map-frame {
+  width: min(100%, 30rem);
+}
+
+.now-directions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.4rem;
+}
+
+.carnival-map {
+  margin: clamp(1.8rem, 4vw, 3rem) auto 0;
+  max-width: 70rem;
+}
+
+.carnival-map-heading {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.carnival-map-kicker {
+  color: #992fcc;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.carnival-map-heading h2 {
+  color: #db53a5;
+  font-family: var(--font-script), cursive;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 400;
+  line-height: 1;
+  margin: 0.25rem 0 0;
+}
+
+.carnival-map-frame {
+  border: 1px solid color-mix(in srgb, #e0934a 60%, var(--paper));
+  border-radius: clamp(0.8rem, 2vw, 1.35rem);
+  box-shadow:
+    0 1.1rem 2.7rem rgba(74, 53, 31, 0.16),
+    inset 0 0 0 4px rgba(246, 238, 223, 0.52);
+  overflow: hidden;
+  position: relative;
+}
+
+.carnival-map-base {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.carnival-map-item {
+  filter: drop-shadow(0 1px 1px rgba(47, 42, 33, 0.2));
+  height: auto;
+  pointer-events: none;
+  position: absolute;
+  transform-origin: center;
+  z-index: 2;
+}
+
+.carnival-map-item.is-grounded {
+  filter: saturate(0.72) contrast(0.88);
+  mix-blend-mode: multiply;
+  opacity: 0.88;
+  z-index: 1;
+}
+
+/* Same treatment as the seating page on a phone: the gutter moves off the
+   page and onto the text blocks, so the maps can outgrow them. The seating
+   media rule below 880px already covers .seating-finder, .table-card, and
+   .seating-frame, which this page hosts too. */
+@media (max-width: 880px) {
+  .now-page {
+    padding-inline: 0;
+  }
+
+  .now-header,
+  .now-directions {
+    padding-inline: 1.2rem;
+  }
+
+  .now-page .sched-stack {
+    padding-inline: 1.2rem;
+  }
+
+  .carnival-map-heading {
+    padding-inline: 1.2rem;
+  }
+
+  .carnival-map-frame {
+    border-left: 0;
+    border-radius: 0;
+    border-right: 0;
+  }
+
+  .now-map .map-frame {
+    width: 92%;
+  }
+}
+
+/* The panel is hosted under a header that has already said the event's name,
+   kind, and date — its own head would say it all again, so it stays home. */
+.now-page .sched-head {
+  display: none;
+}
+
+.now-page .sched-event {
+  padding-block: clamp(1.5rem, 3vw, 2.4rem) 0;
+}
+
+/* A location highlight: a thin translucent box over the painted feature
+   itself, the way a map highlights one building. Position, size, and angle
+   come inline from active-events.ts, traced off the aerial artwork. */
+.now-highlight {
+  background: rgba(255, 253, 247, 0.3);
+  border: 1.5px solid #fffdf7;
+  border-radius: 5px;
+  /* A hairline of forest just outside the white edge, so the box still reads
+     against pale gravel and lawns. */
+  box-shadow: 0 0 0 1px rgba(29, 74, 48, 0.55);
+  pointer-events: none;
+  position: absolute;
+  z-index: 3;
+}
+
+/* The handoff between the two faces of the site. The live experience is the
+   primary one during an event, so its way back is a quiet corner button; the
+   ordinary site's way in is an unmissable bar across the bottom of the
+   screen. */
+.now-back {
+  background: rgba(255, 253, 247, 0.96);
+  border: 1px solid var(--copper);
+  border-radius: 999px;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
+  box-shadow: 0 0.5rem 1.3rem rgba(31, 26, 17, 0.28);
+  color: var(--copper-light);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.55rem 1rem;
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right, 0px));
+  text-decoration: none;
+  text-transform: uppercase;
+  transition:
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
+  z-index: 40;
+}
+
+.now-back:hover,
+.now-back:focus-visible {
+  box-shadow: 0 0.7rem 1.7rem rgba(31, 26, 17, 0.38);
+  filter: brightness(1.04);
+}
+
+.live-banner {
+  align-items: center;
+  background: linear-gradient(180deg, #2c5d3d, #1d4a30);
+  border-top: 1px solid rgba(255, 252, 245, 0.4);
+  bottom: 0;
+  box-shadow: 0 -0.5rem 1.6rem rgba(31, 26, 17, 0.28);
+  color: var(--paper);
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  left: 0;
+  padding: 0.55rem 1rem calc(env(safe-area-inset-bottom, 0px) + 0.65rem);
+  position: fixed;
+  right: 0;
+  text-align: center;
+  text-decoration: none;
+  z-index: 40;
+}
+
+.live-banner:hover,
+.live-banner:focus-visible {
+  filter: brightness(1.07);
+}
+
+.live-banner-kicker {
+  color: rgba(246, 238, 223, 0.85);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.live-banner-title {
+  font-family: var(--font-script), cursive;
+  font-size: 1.7rem;
+  line-height: 1.05;
+}
+
+/* The floating pill needs its own airspace at the end of both hosts, or it
+   parks on the footer's last link / the floor plan's bottom edge. */
+.now-page {
+  padding-bottom: 7rem;
+}
+
+.home-footer {
+  padding-bottom: clamp(6rem, 9vw, 7.5rem);
+}

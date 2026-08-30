@@ -1,6 +1,7 @@
 import { SeatingChart } from '@/components/SeatingChart'
 import { HomePage } from '@/components/HomePage'
 import { MapPage } from '@/components/MapPage'
+import { NowPage } from '@/components/NowPage'
 
 export default function App() {
   // One static HTML file is served on / and /seating-chart (see vercel.json);
@@ -13,5 +14,6 @@ export default function App() {
 
   if (path === '/seating-chart') return <SeatingChart />
   if (path === '/map') return <MapPage />
+  if (path === '/now') return <NowPage />
   return <HomePage />
 }
