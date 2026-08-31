@@ -13,7 +13,7 @@ export interface WeddingEvent {
   subtitle?: string
   /** Date line under the title. Start times live in the timeline, not here. */
   date: string
-  /** Outdoor events only: the hours to read the live forecast across. */
+  /** The local hours to read the live temperature forecast across. */
   forecastWindow?: { date: string; from: number; to: number }
   /** Dress code, rendered as the caption over the artwork. */
   vibe: string
@@ -107,7 +107,7 @@ export const events: WeddingEvent[] = [
     title: 'From Carnegie to Carnation',
     subtitle: 'Baraat & Carnival',
     date: 'Sunday, September 6',
-    forecastWindow: { date: '2026-09-06', from: 10, to: 15 },
+    forecastWindow: { date: '2026-09-06', from: 10, to: 14 },
     vibe: 'Colors in Bloom',
     // The one event with four colours, so the bullets take the blue rather
     // than doubling the purple.
