@@ -107,7 +107,7 @@ export const events: WeddingEvent[] = [
     title: 'From Carnegie to Carnation',
     subtitle: 'Baraat & Carnival',
     date: 'Sunday, September 6',
-    forecastWindow: { date: '2026-09-06', from: 10, to: 14 },
+    forecastWindow: { date: '2026-09-06', from: 10, to: 15 },
     vibe: 'Colors in Bloom',
     // The one event with four colours, so the bullets take the blue rather
     // than doubling the purple.
