@@ -3,6 +3,7 @@ import type { WeddingEvent } from '@/data/events'
 import type { WindowForecast } from '@/lib/use-forecast'
 import { renderWords } from '@/lib/render-words'
 import { abbreviateDate } from '@/lib/short-date'
+import { SkyGlyph } from '@/components/SkyGlyph'
 
 export function EventPanel({
   event,
@@ -38,9 +39,19 @@ export function EventPanel({
           {forecast && (
             <span
               className="sched-wx"
-              aria-label={`Expected temperature during the event: low ${forecast.low}, high ${forecast.high} degrees Fahrenheit`}
+              aria-label={`Forecast during the event: ${forecast.sky}, low ${
+                forecast.low
+              }, high ${forecast.high} degrees Fahrenheit${
+                forecast.showRain ? `, ${forecast.rain} percent chance of rain` : ''
+              }`}
             >
-              {' · '}{forecast.low}–{forecast.high}°F
+              {' · '}
+              <SkyGlyph kind={forecast.sky} />{' '}
+              {forecast.low}°<span className="sched-range-sep"> / </span>
+              {forecast.high}°
+              {forecast.showRain && (
+                <span className="sched-rain"> · {forecast.rain}% rain</span>
+              )}
             </span>
           )}
           {event.venue && (

@@ -13,7 +13,7 @@ export interface WeddingEvent {
   subtitle?: string
   /** Date line under the title. Start times live in the timeline, not here. */
   date: string
-  /** The local hours to read the live temperature forecast across. */
+  /** Outdoor events only: the hours to read the live forecast across. */
   forecastWindow?: { date: string; from: number; to: number }
   /** Dress code, rendered as the caption over the artwork. */
   vibe: string
