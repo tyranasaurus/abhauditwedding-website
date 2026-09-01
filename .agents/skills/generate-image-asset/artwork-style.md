@@ -122,3 +122,13 @@ For art that sits *on* the ivory paper as a full panel (like `barn.webp`,
 > "flat digital graphic, NOT a photograph of a painting; subject directly on a
 > solid pure magenta #FF00FF background filling the frame edge to edge; no paper,
 > card, border, surface, or shadow">`.
+
+## Backdrop bleed contract
+
+`backdrop-tall-mist.webp` (620×1509) is `backdrop-tall` plus **190px of bottom
+bleed** — the road fading into a ground mist mixed from its own colour. The
+bleed exists because the fixed plate is pinned to `100lvh` while a guest with
+browser chrome showing sees only ~`100svh` of it (~114px less on iPhones); the
+hidden band must be sacrificial mist, never the scene. If this file is ever
+regenerated, keep the fence and both buggies **at least 200 image px above the
+bottom edge**, or they sink back under the browser toolbar on every phone.
