@@ -4077,6 +4077,17 @@ a.poi:focus-visible .poi-pin {
   will-change: transform, clip-path;
 }
 
+/* The fullscreen FLIP moves a very large watercolor, fourteen transparent
+   stickers, and a filtered compass at once. Keep those two painted surfaces
+   cached only while the stage is expanding or collapsing; otherwise the
+   changing parent transform/clip rerasterizes them every frame. EventMap
+   removes this class once open so the interactive map resolves sharply at its
+   settled zoom, then restores it immediately before collapse. */
+.mv-stage.is-transitioning .mv-canvas,
+.mv-stage.is-transitioning .mv-compass {
+  will-change: transform;
+}
+
 .mv-canvas,
 .mx-canvas {
   left: 50%;
@@ -4100,16 +4111,23 @@ a.poi:focus-visible .poi-pin {
   width: 100%;
 }
 
+/* The compass sizes and sits in PERCENTAGES of the stage, never in rem.
+   The focus always fills the stage, so a fraction of the stage is a fixed
+   fraction of the map itself: the rose then scales exactly as the painting
+   does between the small inline frame and the fullscreen view, instead of
+   staying one fixed pixel size and looming over the minimised map. It stays
+   outside the canvas, so panning and zooming within the fullscreen view leave
+   it where it is — it labels the screen, not a patch of ground. */
 .mv-compass {
-  filter: drop-shadow(0 0 0.7rem rgba(255, 253, 247, 0.95))
-    drop-shadow(0 0 1.4rem rgba(255, 253, 247, 0.7))
-    drop-shadow(0 0.3rem 0.5rem rgba(31, 26, 17, 0.28));
+  filter: drop-shadow(0 0 0.5rem rgba(255, 253, 247, 0.95))
+    drop-shadow(0 0 1rem rgba(255, 253, 247, 0.65))
+    drop-shadow(0 0.2rem 0.4rem rgba(31, 26, 17, 0.28));
   height: auto;
   pointer-events: none;
   position: absolute;
-  right: 1.4rem;
-  top: 1.2rem;
-  width: min(18%, 7rem);
+  right: 2.6%;
+  top: 2.6%;
+  width: 10%;
   z-index: 6;
 }
 

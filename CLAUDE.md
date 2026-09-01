@@ -45,7 +45,13 @@ screens; a label sized comfortably (see `labelSizeFor`) never reaches it.
   rather than cropping, and always keeps a `--map-gutter` margin from the
   screen edges. Derive the width from the height budget through that ratio —
   never cap it with `max-height`, which wins over `aspect-ratio` and silently
-  letterboxes the focus instead of scaling it. Both `/map-view` and
+  letterboxes the focus instead of scaling it. Inline the map takes **no pan or
+  zoom** — the whole focus is already on screen, so there is nowhere to go, and
+  a finger dragging over it should scroll the page. The expand grip sits at the
+  STAGE's top-left, which the quarter turn carries round to the screen's
+  top-right when expanded, keeping it clear of the compass; the compass is
+  sized and placed in percentages of the stage so it scales with the painting
+  rather than looming over the small inline frame. Both `/map-view` and
   `/now` render it, so there is a single pan/zoom feel, a single expand
   animation, and one set of interactive stickers rather than a separate map per
   page. A sticker carrying an `activity` is tappable and stamps the carnival

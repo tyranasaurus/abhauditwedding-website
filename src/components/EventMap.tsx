@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 import { MapLayerOverlay } from '@/components/MapLayerOverlay'
 import { useMapViewport, usePinch } from '@/components/useMapViewport'
 import { venueMap, type MapLayer } from '@/data/venue-map'
@@ -108,12 +108,17 @@ export function EventMap({
   label?: string
 }) {
   const [expanded, setExpanded] = useState(false)
+  const expandedRef = useRef(expanded)
+  expandedRef.current = expanded
+  const [closing, setClosing] = useState(false)
+  const [transitionReady, setTransitionReady] = useState(false)
   // Measured when the view opens, and again when it closes so the map returns
   // to wherever the frame has scrolled to in the meantime.
   const [pose, setPose] = useState<Pose | null>(null)
   const [screen, setScreen] = useState(layoutViewport)
   const frameRef = useRef<HTMLDivElement>(null)
   const panRef = useRef<{ x: number; y: number } | null>(null)
+  const transitionReleaseRef = useRef<number | null>(null)
   // A drag must not land as a tap on the sticker it finished over.
   const draggedRef = useRef(false)
   const reduce = useReducedMotion()
@@ -121,7 +126,7 @@ export function EventMap({
     ? (COMPASS_BY_EVENT_ANCHOR[layer.eventAnchor] ?? DEFAULT_COMPASS)
     : DEFAULT_COMPASS
 
-  const rotation = expanded ? rotationFor(screen.vw, screen.vh) : 0
+  const rotation = rotationFor(screen.vw, screen.vh)
   // Turned a quarter, the stage's own width runs down the screen's long side.
   const stageSize = rotation
     ? { w: screen.vh, h: screen.vw }
@@ -140,7 +145,16 @@ export function EventMap({
     // already on screen and there is nowhere to pan or zoom TO. Leaving the
     // gestures live there only stole the page's scroll from a finger that
     // happened to land on the map.
-    interactive: expanded,
+    interactive: true,
+  })
+  // The inline map never has to move. Keeping it on its own viewport lets it
+  // remain mounted and fully rasterized behind the overlay, so collapse does
+  // not pay for rebuilding a second 4,200px painting while it is moving.
+  const inlineViewport = useMapViewport({
+    art: venueMap.art,
+    bounds: layer.focus,
+    rotationDeg: 0,
+    interactive: false,
   })
   const pinch = usePinch(viewport)
 
@@ -157,36 +171,51 @@ export function EventMap({
   }, [])
 
   const open = () => {
+    if (transitionReleaseRef.current !== null) {
+      clearTimeout(transitionReleaseRef.current)
+      transitionReleaseRef.current = null
+    }
     const frame = frameRef.current?.getBoundingClientRect()
     const next = layoutViewport()
     const turn = rotationFor(next.vw, next.vh)
     const size = turn ? { w: next.vh, h: next.vw } : { w: next.vw, h: next.vh }
     setScreen(next)
     setPose(frame ? poseOverFrame(frame, size) : null)
+    setTransitionReady(false)
+    setClosing(false)
     setExpanded(true)
   }
 
   const close = useCallback(() => {
+    if (transitionReleaseRef.current !== null) {
+      clearTimeout(transitionReleaseRef.current)
+      transitionReleaseRef.current = null
+    }
+    // Keep the painting and filtered compass on compositor layers for the
+    // whole collapse instead of rerasterizing them on every frame.
+    viewport.stageRef.current?.classList.add('is-transitioning')
     // Re-measure on the way out: the page behind may sit at a different scroll
     // than it did on the way in, and the map should land back in its frame.
     const frame = frameRef.current?.getBoundingClientRect()
     if (frame) setPose(poseOverFrame(frame, stageSize))
+    setClosing(true)
     setExpanded(false)
-  }, [stageSize])
+  }, [stageSize, viewport.stageRef])
 
-  // Coming back inline, the view returns to the fit. A guest who zoomed in
-  // fullscreen and closed would otherwise be left with a cropped inline map
-  // and, with the gestures off, no way to get back out of it.
-  //
-  // Only on a real collapse, never on mount: at mount the stage has not been
-  // measured yet, so the furthest-out zoom is not yet known and resetting to
-  // it framed the whole estate instead of the event's own patch.
-  const wasExpanded = useRef(false)
+  // Mount the fullscreen painting at its starting pose first, giving Chrome
+  // two frames to rasterize and promote it before any visible geometry moves.
+  // Starting Motion in the mount frame made that one expensive raster block
+  // the first several animation frames and read as a hesitant expansion.
   useEffect(() => {
-    if (wasExpanded.current && !expanded) viewport.reset()
-    wasExpanded.current = expanded
-    // Keyed on the transition alone; the viewport object is new every render.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!expanded) return
+    let second = 0
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() => setTransitionReady(true))
+    })
+    return () => {
+      cancelAnimationFrame(first)
+      if (second) cancelAnimationFrame(second)
+    }
   }, [expanded])
 
   // While the overlay is up the page behind it must not scroll under it, and
@@ -208,6 +237,10 @@ export function EventMap({
   // The same gestures whichever frame the map is living in.
   const stageHandlers = {
     onPointerDown: (event: React.PointerEvent<HTMLDivElement>) => {
+      if (transitionReleaseRef.current !== null) {
+        clearTimeout(transitionReleaseRef.current)
+        transitionReleaseRef.current = null
+      }
       // Give Chrome the press-to-first-move gap to put the painting on a
       // compositor layer, so the first pan/pinch frame is as fluid as the rest.
       viewport.prepare()
@@ -224,6 +257,10 @@ export function EventMap({
       // A desktop pointer normally crosses the map before its wheel turns.
       // Use that hover movement to warm the layer before the first wheel event.
       if (event.pointerType === 'mouse' && event.buttons === 0) {
+        if (transitionReleaseRef.current !== null) {
+          clearTimeout(transitionReleaseRef.current)
+          transitionReleaseRef.current = null
+        }
         viewport.prepare()
         return
       }
@@ -266,22 +303,27 @@ export function EventMap({
     () =>
       onToggleActivity
         ? (activity: string) => {
-            if (draggedRef.current) return
+            // The "was that a drag?" guard only means anything where a drag
+            // can happen at all. Inline there are no gesture handlers, so
+            // nothing ever clears the flag again — consulting it there left
+            // every sticker dead for good after one drag in the fullscreen
+            // view.
+            if (expandedRef.current && draggedRef.current) return
             onToggleActivity(activity)
           }
         : undefined,
     [onToggleActivity],
   )
 
-  const mapCanvas = (
+  const mapCanvas = (mapViewport: typeof viewport) => (
     <div
       className="mv-canvas"
-      ref={viewport.canvasRef}
+      ref={mapViewport.canvasRef}
       style={
         {
-          ...viewport.canvasStyle,
-          '--inv': viewport.invZoom,
-          '--map-unit': `${viewport.mapUnit}px`,
+          ...mapViewport.canvasStyle,
+          '--inv': mapViewport.invZoom,
+          '--map-unit': `${mapViewport.mapUnit}px`,
         } as React.CSSProperties
       }
     >
@@ -386,50 +428,72 @@ export function EventMap({
         {/* No gesture handlers inline: the map is a fixed picture there, and a
             finger dragging across it should scroll the page. Stickers stay
             tappable — those listen on themselves. */}
-        {!expanded && (
-          <div className="mv-stage" ref={viewport.registerStage}>
-            {mapCanvas}
-            {compass}
-            {cornerButton('open')}
-          </div>
-        )}
+        <div className="mv-stage" ref={inlineViewport.registerStage}>
+          {mapCanvas(inlineViewport)}
+          {compass}
+          {cornerButton('open')}
+        </div>
       </div>
 
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            className="mv-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.32 }}
-          >
+      {/* Kept mounted (but hidden and inert) so its decoded painting, stickers,
+          compass filter, and compositor layers are all warm before the first
+          expand frame. This trades a little GPU memory for photo-like motion. */}
+      <motion.div
+        className="mv-overlay"
+        aria-hidden={!expanded}
+        initial={false}
+        // Chrome skips painting a visibility:hidden or truly transparent
+        // subtree. A visually imperceptible non-zero resting opacity keeps the
+        // large map raster warm, which is what makes the first frame immediate.
+        animate={{ opacity: expanded ? 1 : 0.001 }}
+        transition={{ duration: 0.32 }}
+        style={{
+          pointerEvents: expanded ? 'auto' : 'none',
+        }}
+      >
             <motion.div
-              className="mv-stage is-full"
+              className="mv-stage is-full is-transitioning"
               ref={viewport.registerStage}
               style={{ width: stageSize.w, height: stageSize.h }}
-              initial={reduce || !pose ? { opacity: 0 } : pose}
+              initial={false}
               animate={
                 reduce
-                  ? { opacity: 1 }
-                  : { ...settled, clipPath: 'inset(0px 0px round 0px)' }
+                  ? { opacity: expanded ? 1 : 0 }
+                  : expanded && transitionReady
+                    ? { ...settled, clipPath: 'inset(0px 0px round 0px)' }
+                    : (pose ?? settled)
               }
-              exit={reduce || !pose ? { opacity: 0 } : pose}
               transition={
                 reduce
                   ? { duration: 0.2 }
                   : { duration: 0.52, ease: [0.22, 0.61, 0.36, 1] }
               }
+              onAnimationComplete={() => {
+                // Once open and still, drop the temporary layers so Chrome can
+                // rerasterize the detailed artwork at its final zoom. During
+                // exit `expanded` is false and the class stays until unmount.
+                if (expanded && transitionReady) {
+                  // Do the sharp final reraster after the eye has seen the map
+                  // land, not on the landing frame itself. Reopening/closing
+                  // clears this timer before another transition can start.
+                  transitionReleaseRef.current = window.setTimeout(() => {
+                    transitionReleaseRef.current = null
+                    viewport.stageRef.current?.classList.remove(
+                      'is-transitioning',
+                    )
+                  }, 1000)
+                } else if (closing) {
+                  setClosing(false)
+                }
+              }}
               {...stageHandlers}
             >
-              {mapCanvas}
+              {mapCanvas(viewport)}
               {compass}
               {zoomBar}
               {cornerButton('close')}
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </motion.div>
     </>
   )
 }

@@ -141,6 +141,12 @@ export function useMapViewport({
   const [stageEl, setStageEl] = useState<HTMLDivElement | null>(null)
 
   const registerStage = useCallback((el: HTMLDivElement | null) => {
+    // Nulls are ignored on purpose. While the guest map moves between its
+    // inline frame and the fullscreen overlay BOTH stages exist for the length
+    // of the transition, and the one leaving detaches after the one arriving
+    // has attached — so honouring its null would drop the live stage and stop
+    // the measuring for good.
+    if (!el) return
     stageRef.current = el
     setStageEl(el)
   }, [])
@@ -359,16 +365,31 @@ export function useMapViewport({
     const ratio = !first && lastMin.current > 0 ? minZoom / lastMin.current : 1
     seeded.current = true
     lastMin.current = minZoom
-    if (first) {
-      // The first sight of the map is the furthest-out view, centred on
-      // everything reachable.
+    // The first sight of the map is the furthest-out view, centred on
+    // everything reachable — and so is every sight of a view that takes no
+    // gestures, since there is no zoom or pan of the guest's own to preserve.
+    // Doing it HERE rather than from the caller matters: this runs once the
+    // stage has been measured, so it fits the stage the map is actually in.
+    // Resetting from outside fitted whichever stage had been measured last,
+    // which after closing the fullscreen view was the fullscreen one.
+    if (first || !interactive) {
       write({ zoom: minZoom, ...clampCenter(reach.x, reach.y, minZoom) }, true)
       return
     }
     const cur = viewRef.current
     const zoom = clamp(cur.zoom * ratio, minZoom, maxZoom)
     write({ zoom, ...clampCenter(cur.cx, cur.cy, zoom) }, true)
-  }, [canvas.w, stage.w, minZoom, maxZoom, reach.x, reach.y, clampCenter, write])
+  }, [
+    canvas.w,
+    stage.w,
+    minZoom,
+    maxZoom,
+    reach.x,
+    reach.y,
+    clampCenter,
+    write,
+    interactive,
+  ])
 
   // A new bounds rect (the editor switching layers) reframes from scratch.
   const boundsKey = `${bounds.x},${bounds.y},${bounds.w},${bounds.h}`
