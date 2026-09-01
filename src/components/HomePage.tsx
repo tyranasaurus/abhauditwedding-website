@@ -15,8 +15,35 @@ import {
 import { hero, travel, faqs, registry, venue, mapsSearch } from '@/data/home'
 import { events } from '@/data/events'
 import { EventPanel } from '@/components/EventPanel'
+import { currentLivePhase, livePhases } from '@/data/live-phases'
 import { useForecast, type ForecastWindow } from '@/lib/use-forecast'
 import { SiteNav } from '@/components/SiteNav'
+
+/** Which live phase the homepage is in: the venue clock decides, and a
+ *  `?live=<id>` (or `?live=off`) test override — with its floating preview
+ *  chip — stands in for the clock while trying phases out. */
+function useLivePhase() {
+  const [override, setOverride] = useState<string | null>(
+    () => new URLSearchParams(window.location.search).get('live'),
+  )
+  const [now, setNow] = useState(() => Date.now())
+  useEffect(() => {
+    // Minute-granular: windows are hours long, edges just shouldn't lag.
+    const id = window.setInterval(() => setNow(Date.now()), 60_000)
+    return () => window.clearInterval(id)
+  }, [])
+  const phase = override
+    ? (livePhases.find((p) => p.id === override) ?? null)
+    : currentLivePhase(now)
+
+  const preview = (id: string) => {
+    setOverride(id)
+    const url = new URL(window.location.href)
+    url.searchParams.set('live', id)
+    window.history.replaceState(null, '', url)
+  }
+  return { phase, override, preview }
+}
 
 /** The weekend, as calendar days in the venue's own timezone. */
 const FIRST_DAY = '2026-09-05'
@@ -536,6 +563,15 @@ function offsetOf(id: string) {
 }
 
 export function HomePage() {
+  const { phase, override, preview } = useLivePhase()
+  const liveAnchor = phase?.anchor ?? null
+  // The live auto-scroll fires once per visit: switching phases in the
+  // preview chip must not keep yanking the page around.
+  const autoHeld = useRef(false)
+  // Bumped by the dev navigator's phase buttons: each click replays the
+  // fresh-landing auto-scroll for the newly picked phase.
+  const [scrollRequest, setScrollRequest] = useState(0)
+
   // Everything lives on this one page now, so a deep link is a hash — and a
   // hash is only as good as the page's height at the instant it is followed.
   // The artwork decodes, the forecast lands, and the display faces swap in;
@@ -546,10 +582,25 @@ export function HomePage() {
     // Whatever correction is currently running, so a second hash can end it.
     let stop = () => {}
 
-    const hold = (raw: string) => {
+    const hold = (raw: string, force = false) => {
       stop()
       const id = decodeURIComponent(raw)
-      if (!document.getElementById(id)) return
+      const target = document.getElementById(id)
+      if (!target) return
+
+      // A forced hold is a dev navigator click on a page that has long since
+      // settled, so it wants the opposite of the correction below: one smooth
+      // glide, and none of the watching that would read its own animation as
+      // the guest taking over.
+      if (force) {
+        target.scrollIntoView({
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+            ? 'auto'
+            : 'smooth',
+          block: 'start',
+        })
+        return
+      }
 
       let taken = false
       // The last scroll position this effect itself asked for. Anything else
@@ -595,7 +646,9 @@ export function HomePage() {
       // the bundle was still downloading — leave them there. A scroll of
       // exactly zero means the browser never got to the fragment at all,
       // which is the case this correction exists for.
-      const away = window.scrollY > 0 && Math.abs(window.scrollY - offsetOf(id)) > window.innerHeight
+      const away =
+        window.scrollY > 0 &&
+        Math.abs(window.scrollY - offsetOf(id)) > window.innerHeight
       if (!away) requestAnimationFrame(jump)
 
       const settled = window.setTimeout(() => stop(), 4000)
@@ -619,13 +672,25 @@ export function HomePage() {
     window.addEventListener('hashchange', onHash)
 
     const first = window.location.hash.slice(1)
-    if (first) hold(first)
+    if (scrollRequest > 0 && liveAnchor) {
+      // A dev navigator click: replay the landing scroll for the picked
+      // phase, from wherever the page currently sits.
+      autoHeld.current = true
+      hold(liveAnchor, true)
+    } else if (first) {
+      hold(first)
+    } else if (liveAnchor && !autoHeld.current) {
+      // An event window is open and the guest asked for nothing more
+      // specific: land them on that event's card.
+      autoHeld.current = true
+      hold(liveAnchor)
+    }
 
     return () => {
       window.removeEventListener('hashchange', onHash)
       stop()
     }
-  }, [])
+  }, [liveAnchor, scrollRequest])
 
   return (
     <div className="home" id="top">
@@ -643,15 +708,60 @@ export function HomePage() {
         </main>
         <Footer />
       </div>
-      {/* The call into the live experience: a full-width bar pinned to the
-          bottom of the screen, unmissable wherever the guest is on the page.
-          Once real event windows exist it only shows while an event is live,
-          with a message per event; until then it simply shows, as a prototype
-          control alongside /now itself. */}
-      <a className="live-banner" href="/now">
-        <span className="live-banner-kicker">Sangeet &amp; Reception · Tonight</span>
-        <span className="live-banner-title">Time to Naach! →</span>
-      </a>
+
+      {/* The call into a phase's interactive page: a floating pill pinned to
+          the bottom of the screen, worn in that event's own colors. Only the
+          phases with something to open (the passport, the seating chart)
+          get one. */}
+      {phase?.pill
+        ? (() => {
+            const accents = events.find((e) => e.anchor === phase.anchor)!
+              .accents
+            return (
+              <a
+                className="live-pill"
+                href={phase.pill.href}
+                style={{ '--pill-bg': accents.primary } as CSSProperties}
+              >
+                <span className="live-pill-kicker">Happening now</span>
+                <span className="live-pill-title">{phase.pill.label} →</span>
+              </a>
+            )
+          })()
+        : null}
+
+      {/* Floating phase-preview chip, only when a ?live= override is in
+          play — a temporary stand-in for waiting until the actual weekend. */}
+      {override !== null && (
+        <div className="now-admin" role="group" aria-label="Live phase preview">
+          <p className="now-admin-kicker">Live preview</p>
+          <div className="now-admin-row">
+            {livePhases.map((candidate) => (
+              <button
+                key={candidate.id}
+                type="button"
+                className={phase?.id === candidate.id ? 'is-on' : ''}
+                aria-pressed={phase?.id === candidate.id}
+                onClick={() => {
+                  preview(candidate.id)
+                  // Replay the fresh-landing scroll for this phase's card.
+                  setScrollRequest((n) => n + 1)
+                }}
+              >
+                {candidate.shortName}
+              </button>
+            ))}
+            <button
+              type="button"
+              className={phase ? '' : 'is-on'}
+              aria-pressed={!phase}
+              onClick={() => preview('off')}
+            >
+              Off
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -35,7 +35,21 @@ Arguments: `generate.sh "<prompt>" [out.png] [aspectRatio] [imageSize]`
 - `imageSize` — `1K`, `2K`, or `4K` (default `2K`).
 
 Env overrides: `GEMINI_MODEL=gemini-2.5-flash-image` (cheaper Nano Banana),
-`GEMINI_API_KEY=...` (skip 1Password).
+`GEMINI_API_KEY=...` (skip 1Password), `REF_IMAGE=/path/to/photo.png`.
+
+### Restyling an existing image
+
+Set `REF_IMAGE` to send a source picture along with the prompt — the way to turn
+a satellite screenshot, sketch, or photo into the site's watercolor look while
+keeping its real layout:
+
+```bash
+REF_IMAGE=/tmp/satellite.png "$SKILL/generate.sh" \
+  "Repaint this exact aerial view as … <style prompt>" /tmp/out.png "16:9" "4K"
+```
+
+Say explicitly that the geometry must be preserved (building footprints, roads,
+their relative positions), or the model will drift into a generic scene.
 
 ### Key & billing
 

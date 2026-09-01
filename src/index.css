@@ -2987,17 +2987,21 @@ a.poi:focus-visible .poi-pin {
 /* The floating admin-only preview control: a temporary stand-in for the
    time-window system, dressed as a dark tool chip so it can never be
    mistaken for part of the page. It will not outlive the prototype. */
+/* The dev navigator floats top-center, tucked under the site header, so it
+   never sits on the pills and corner buttons that live along the bottom. */
 .now-admin {
   background: rgba(31, 26, 17, 0.85);
   border-radius: 0.7rem;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
   box-shadow: 0 0.5rem 1.3rem rgba(31, 26, 17, 0.35);
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  left: max(1rem, env(safe-area-inset-left, 0px));
+  left: 50%;
+  max-width: calc(100vw - 1.6rem);
   padding: 0.5rem;
   position: fixed;
+  top: calc(var(--nav-h) + 0.6rem);
+  transform: translateX(-50%);
   z-index: 50;
 }
 
@@ -3014,7 +3018,9 @@ a.poi:focus-visible .poi-pin {
 
 .now-admin-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.2rem;
+  justify-content: center;
 }
 
 .now-admin-row button {
@@ -3079,14 +3085,14 @@ a.poi:focus-visible .poi-pin {
 
 /* One marker does not need a whole viewport: the aerial stays map-sized here,
    a landmark to orient by rather than the page's subject. */
+/* The map's column on /now and /passport. One rule: this was split in two,
+   and the second's `margin` shorthand was quietly resetting the first's
+   margin-top to zero, jamming the map against the section above it. */
 .now-map {
   display: flex;
   justify-content: center;
-  margin-top: clamp(1.5rem, 3vw, 2.4rem);
-}
-
-.now-map .map-frame {
-  width: min(100%, 30rem);
+  margin: clamp(1.5rem, 3vw, 2.4rem) auto 0;
+  width: 100%;
 }
 
 .now-directions {
@@ -3264,6 +3270,89 @@ a.poi:focus-visible .poi-pin {
   padding: 0.35rem 0.8rem;
 }
 
+/* Temporary aerial trace-editor chrome — leaves with NowMapEditor. The
+   editable boxes and route reuse the real .now-highlight / .now-route looks,
+   and the handles reuse the carnival editor's knobs, so what is traced is
+   what ships. */
+.now-map.is-tracing {
+  align-items: center;
+  flex-direction: column;
+}
+
+.trace-wrap {
+  width: min(100%, 44rem);
+}
+
+/* Tracing wants pixels: let the aerial outgrow its usual landmark size. */
+.now-map.is-tracing .map-frame {
+  touch-action: none;
+  user-select: none;
+  width: 100%;
+}
+
+.trace-bar {
+  margin-bottom: 0.8rem;
+}
+
+.now-highlight.is-editable {
+  cursor: grab;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.now-highlight.is-editable:active {
+  cursor: grabbing;
+}
+
+.now-highlight.is-selected {
+  outline: 2px dashed #992fcc;
+  outline-offset: 2px;
+}
+
+/* A fat invisible stroke over the route so the line is clickable — clicking
+   it drops a new waypoint under the pointer. */
+.trace-hit {
+  cursor: crosshair;
+  fill: none;
+  pointer-events: stroke;
+  stroke: transparent;
+  /* ~2% of the map's width: generous enough to click, thin enough not to
+     swallow clicks meant for a box the route runs through. */
+  stroke-width: 2;
+}
+
+.trace-dot {
+  background: #fffdf7;
+  border: 2px solid #992fcc;
+  border-radius: 50%;
+  cursor: grab;
+  height: 0.9rem;
+  position: absolute;
+  touch-action: none;
+  transform: translate(-50%, -50%);
+  width: 0.9rem;
+  z-index: 5;
+}
+
+.trace-dot:active {
+  cursor: grabbing;
+}
+
+.trace-dot.is-selected {
+  background: #992fcc;
+}
+
+.now-route-label.is-editable {
+  cursor: grab;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.now-route-label.is-selected {
+  outline: 2px dashed #992fcc;
+  outline-offset: 2px;
+}
+
 /* Same treatment as the seating page on a phone: the gutter moves off the
    page and onto the text blocks, so the maps can outgrow them. The seating
    media rule below 880px already covers .seating-finder, .table-card, and
@@ -3331,6 +3420,74 @@ a.poi:focus-visible .poi-pin {
   z-index: 3;
 }
 
+/* The Baraat's route over the aerial: a milky casing lifts the line off the
+   painting the way the highlight boxes do, and the carnival-pink dashes march
+   toward the field. Stroke units are the viewBox's — 1 unit is 1% of the
+   map's width. */
+.now-route {
+  height: 100%;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+}
+
+.now-route path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.now-route-casing {
+  stroke: rgba(255, 253, 247, 0.75);
+  stroke-width: 1.25;
+}
+
+.now-route-line {
+  animation: now-route-march 1.4s linear infinite;
+  stroke: #d94b6d;
+  stroke-dasharray: 1.7 1.3;
+  stroke-width: 0.55;
+}
+
+@keyframes now-route-march {
+  to {
+    /* One dash period per loop, so the march cycles seamlessly. */
+    stroke-dashoffset: -3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .now-route-line {
+    animation: none;
+  }
+}
+
+.now-route-dot {
+  fill: #fffdf7;
+  stroke: #d94b6d;
+  stroke-width: 0.5;
+}
+
+.now-route-label {
+  background: rgba(255, 253, 247, 0.92);
+  border: 1px solid #d94b6d;
+  border-radius: 999px;
+  box-shadow: 0 0.2rem 0.55rem rgba(31, 26, 17, 0.18);
+  /* The event's pink taken down along its own hue until 14px text carries. */
+  color: #ab2440;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  padding: 0.18rem 0.62rem;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  z-index: 4;
+}
+
 /* The handoff between the two faces of the site. The live experience is the
    primary one during an event, so its way back is a quiet corner button; the
    ordinary site's way in is an unmissable bar across the bottom of the
@@ -3363,32 +3520,38 @@ a.poi:focus-visible .poi-pin {
   filter: brightness(1.04);
 }
 
-.live-banner {
+/* The call into a live phase's interactive page: a floating pill pinned to
+   the bottom of the screen, worn in that event's colors (--pill-bg comes
+   inline from the event's accents). */
+.live-pill {
   align-items: center;
-  background: linear-gradient(180deg, #2c5d3d, #1d4a30);
-  border-top: 1px solid rgba(255, 252, 245, 0.4);
-  bottom: 0;
-  box-shadow: 0 -0.5rem 1.6rem rgba(31, 26, 17, 0.28);
+  background: var(--pill-bg, var(--forest));
+  border: 1px solid rgba(255, 252, 245, 0.55);
+  border-radius: 999px;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
+  box-shadow: 0 0.7rem 1.8rem rgba(31, 26, 17, 0.34);
   color: var(--paper);
   display: flex;
   flex-direction: column;
   gap: 0.05rem;
-  left: 0;
-  padding: 0.55rem 1rem calc(env(safe-area-inset-bottom, 0px) + 0.65rem);
+  left: 50%;
+  max-width: min(92vw, 26rem);
+  padding: 0.5rem 1.5rem 0.6rem;
   position: fixed;
-  right: 0;
   text-align: center;
   text-decoration: none;
+  transform: translateX(-50%);
   z-index: 40;
 }
 
-.live-banner:hover,
-.live-banner:focus-visible {
+.live-pill:hover,
+.live-pill:focus-visible {
+  box-shadow: 0 0.9rem 2.1rem rgba(31, 26, 17, 0.4);
   filter: brightness(1.07);
 }
 
-.live-banner-kicker {
-  color: rgba(246, 238, 223, 0.85);
+.live-pill-kicker {
+  color: rgba(255, 252, 245, 0.85);
   font-family: var(--font-display), Georgia, serif;
   font-size: 0.875rem;
   font-weight: 600;
@@ -3396,9 +3559,9 @@ a.poi:focus-visible .poi-pin {
   text-transform: uppercase;
 }
 
-.live-banner-title {
+.live-pill-title {
   font-family: var(--font-script), cursive;
-  font-size: 1.7rem;
+  font-size: 1.6rem;
   line-height: 1.05;
 }
 
@@ -3561,35 +3724,67 @@ a.poi:focus-visible .poi-pin {
   }
 }
 
+/* Its entrance and exit are driven by motion/react in CarnivalMap.tsx.
+   Deliberately transparent: during the transitions the painting itself is
+   the card, travelling over the still-visible page — an opaque backdrop
+   here blotted the page out mid-flight — and in the settled view the
+   painting covers the viewport on its own. */
 .carnival-zoom {
-  background: var(--paper);
   inset: 0;
   position: fixed;
   z-index: 100;
 }
 
+/* The rotating layer between the overlay's clip window and the stage. */
+.carnival-zoom-content {
+  inset: 0;
+  position: absolute;
+}
+
+/* Holds the field-centering offset during the entrance animation; the
+   transform comes off when the settle swaps it for real scroll. */
+.carnival-zoom-shift {
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+
 .carnival-zoom-stage {
   height: 100%;
-  overflow: auto;
+  /* Visible while the entrance animation's clip window is doing the
+     cropping, so the painting can overflow and be revealed; the settled
+     stage becomes the scrollable pan surface. */
+  overflow: visible;
   overscroll-behavior: contain;
   /* Panning stays native scrolling; two-finger pinches reach our handler. */
   touch-action: pan-x pan-y;
   width: 100%;
 }
 
+.carnival-zoom-stage.is-settled {
+  overflow: auto;
+}
+
 /* On a portrait screen the stage itself turns landscape: sized to the
-   rotated viewport and spun 90° around its top-left corner. Where the
-   browser granted a real orientation lock, the screen is already landscape
-   and this never applies. */
+   rotated viewport and spun 90° around its top-left corner. On a screen
+   already held landscape there is nothing to rotate. */
 @media (orientation: portrait) {
   .carnival-zoom-stage {
+    /* Dynamic viewport units, NOT svh/svw: the pose math in CarnivalMap.tsx
+       measures window.innerHeight, which tracks the dynamic viewport. Sizing
+       the stage to the small viewport left it short by the browser chrome's
+       height on real phones — the painting stopped shy of the screen edge
+       and every landing was scaled subtly wrong. (svw/svh remain only as
+       fallbacks for browsers without dvh.) */
     height: 100svw;
+    height: 100dvw;
     left: 0;
     position: absolute;
     top: 0;
     transform: rotate(90deg) translateY(-100%);
     transform-origin: top left;
     width: 100svh;
+    width: 100dvh;
   }
 }
 
@@ -3598,20 +3793,881 @@ a.poi:focus-visible .poi-pin {
   position: relative;
 }
 
+/* White, like the expand control that opened the view, and pinned to the
+   screen's own bottom-right corner in every orientation. */
 .carnival-zoom-close {
   align-items: center;
-  background: rgba(31, 26, 17, 0.82);
-  border: 1px solid rgba(246, 238, 223, 0.5);
-  border-radius: 50%;
-  color: #f6eedf;
+  background: rgba(255, 253, 247, 0.92);
+  border: 1px solid rgba(153, 47, 204, 0.4);
+  border-radius: 0.55rem;
+  bottom: max(0.9rem, env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 0.25rem 0.6rem rgba(31, 26, 17, 0.18);
+  color: #992fcc;
   cursor: pointer;
   display: flex;
-  font-size: 1rem;
   height: 2.6rem;
   justify-content: center;
-  position: fixed;
-  right: max(0.8rem, env(safe-area-inset-right, 0px));
-  top: max(0.8rem, env(safe-area-inset-top, 0px));
+  position: absolute;
+  right: max(0.9rem, env(safe-area-inset-right, 0px));
   width: 2.6rem;
   z-index: 101;
+}
+
+.carnival-zoom-close svg {
+  height: 1.15rem;
+  width: 1.15rem;
+}
+
+/* While the card is in flight (either direction), the sticker edge shadows
+   come off inside the overlay: five stacked drop-shadows per item re-render
+   on every clip-morph paint and drag the transition to a crawl. The cheap
+   desaturation stays, so uncollected stickers keep their gray.
+   Imperceptible mid-motion. */
+.carnival-zoom.is-animating .carnival-map-item {
+  filter: none;
+}
+
+.carnival-zoom.is-animating .carnival-map-item.is-todo {
+  filter: saturate(0.12) brightness(1.04);
+}
+
+/* Viewport metrics readout, visible only under the ?slowmo debug flag. */
+.carnival-debug {
+  background: rgba(31, 26, 17, 0.85);
+  border-radius: 0.4rem;
+  bottom: 0.6rem;
+  color: #f6eedf;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.875rem;
+  left: 0.6rem;
+  max-width: 70%;
+  padding: 0.3rem 0.5rem;
+  /* Informational only — must never eat taps meant for the map. */
+  pointer-events: none;
+  position: absolute;
+  z-index: 6;
+}
+
+/* ------------------------------------------------------------------ */
+/* Venue map: the guest view (/map-view) and the editor (/map-editor)  */
+/* ------------------------------------------------------------------ */
+
+/* Two more accents for drawn areas and paths, on the same --accent
+   contract the map page's markers already use. */
+.accent-rose {
+  --accent: #d94b6d;
+  --accent-deep: #ab2440;
+}
+
+.accent-gold {
+  --accent: #a37008;
+  --accent-deep: #7c5405;
+}
+
+/* -- the drawn layer, shared by both surfaces ----------------------- */
+
+.mx-shapes {
+  height: 100%;
+  left: 0;
+  /* The SVG spans the whole canvas; only the shapes inside it take input. */
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 3;
+}
+
+.mx-shapes.is-ghost {
+  opacity: 0.22;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Stickers sit on the ground, above the washes that describe it. */
+.mx-canvas .carnival-map-item,
+.mv-canvas .carnival-map-item {
+  z-index: 4;
+}
+
+/* Every stroke is held at a constant width on SCREEN by non-scaling-stroke,
+   so a boundary reads the same however far the map is zoomed. It needs no
+   --inv factor of its own — that would be counting the zoom twice and thinning
+   every line away as the guest zoomed in. Labels are the opposite case: they
+   belong to the ground, so they scale with it (see .mx-plate). */
+.mx-area {
+  fill: color-mix(in srgb, var(--accent) 20%, transparent);
+  stroke: var(--accent);
+  stroke-linejoin: round;
+  stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
+}
+
+.mx-path-casing {
+  fill: none;
+  stroke: rgba(255, 253, 247, 0.8);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 7px;
+  vector-effect: non-scaling-stroke;
+}
+
+.mx-path-line {
+  animation: now-route-march 1.4s linear infinite;
+  fill: none;
+  stroke: var(--accent);
+  stroke-dasharray: 7px 6px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3px;
+  vector-effect: non-scaling-stroke;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mx-path-line {
+    animation: none;
+  }
+}
+
+/* A label belongs to the ground, not to the screen: its type size is in map
+   units (--label-size, percent of the artwork's width) scaled by the size of
+   one unit on this stage, so it keeps the same relationship to the region it
+   names on a phone and on a desktop alike. The floor is the one concession —
+   the site's 14px minimum, measured after the canvas zoom, so a label can
+   never render as unreadable specks. Everything else on the plate is in `em`,
+   so the whole thing grows and shrinks as one piece. */
+.mx-plate {
+  background: rgba(255, 253, 247, 0.94);
+  border: max(1px, 0.055em) solid var(--accent);
+  border-radius: 999px;
+  box-shadow: 0 0.2rem 0.55rem rgba(31, 26, 17, 0.18);
+  color: var(--accent-deep);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: max(
+    calc(0.875rem * var(--inv, 1)),
+    calc(var(--label-size, 0.25) * var(--map-unit, 3.5rem))
+  );
+  font-weight: 700;
+  padding: 0.2em 0.7em;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  z-index: 6;
+}
+
+/* -- guest view (/map-view) ----------------------------------------- */
+
+.mv-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: calc(var(--nav-h) + 1.2rem) max(1rem, calc((100vw - 1600px) / 2))
+    1.6rem;
+}
+
+.mv-header {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  justify-content: space-between;
+}
+
+.mv-events {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.mv-events button,
+.mv-edit {
+  background: #fffdf7;
+  border: 1px solid var(--paper-shadow);
+  border-radius: 999px;
+  color: var(--ink);
+  cursor: pointer;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.95rem;
+  padding: 0.35rem 0.9rem;
+  text-decoration: none;
+}
+
+.mv-events button.is-on {
+  background: var(--copper);
+  border-color: var(--copper);
+  color: #fffdf7;
+}
+
+/* The frame holds the map's place in the layout. It keeps its size while the
+   map is away being fullscreen, so nothing reflows under the overlay — and it
+   is the rectangle the expand animation grows out of and shrinks back to. */
+/* The map's box is cut to the shape of the event's own focus rectangle,
+   published as --focus-ar by EventMap. Matching the two means the furthest-out
+   zoom fits the focus to the frame exactly, so inline a guest sees the focused
+   area and nothing spare.
+
+   The width is whichever of three limits binds first: the column it sits in,
+   a ceiling, or the height budget converted through the ratio. Deriving the
+   width from the height rather than capping the height with max-height is what
+   keeps the SHAPE: max-height would win over aspect-ratio and quietly letterbox
+   the focus instead of shrinking it. */
+.mv-frame {
+  --map-max-h: min(68svh, 42rem);
+  --map-max-w: 1600px;
+  /* Kept clear of the screen edges even where the page itself goes full
+     bleed — below 880px .now-page drops its gutters so maps could outgrow
+     them, which would otherwise run this one straight off both sides. The
+     ring of box-shadow around the frame sits inside this too. */
+  --map-gutter: 1.25rem;
+  aspect-ratio: var(--focus-ar, 1.6);
+  border-radius: 0.5rem;
+  box-shadow:
+    0 0 0 0.4rem #fffdf7,
+    0 0 0 0.47rem var(--paper-shadow),
+    0 1.2rem 2.4rem rgba(31, 26, 17, 0.22);
+  margin-inline: auto;
+  position: relative;
+  width: min(
+    100%,
+    var(--map-max-w),
+    calc(100vw - 2 * var(--map-gutter)),
+    calc(var(--map-max-h) * var(--focus-ar, 1.6))
+  );
+}
+
+.mv-stage {
+  background: var(--paper);
+  border-radius: 0.5rem;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  /* Inline the map is a fixed picture: a finger dragging over it scrolls the
+     page, as it would over any other image. Only the fullscreen view claims
+     the gesture. */
+  touch-action: auto;
+  width: 100%;
+}
+
+.mv-stage.is-full {
+  cursor: grab;
+  touch-action: none;
+}
+
+.mv-stage.is-full:active {
+  cursor: grabbing;
+}
+
+/* The fullscreen map. Sized in JS to the screen's long side by its short one
+   and centred, so a quarter turn fills a portrait screen exactly; the turn
+   itself, and the growth out of the inline frame, are one motion transform. */
+.mv-overlay {
+  background: rgba(23, 20, 14, 0.92);
+  inset: 0;
+  position: fixed;
+  z-index: 60;
+}
+
+.mv-stage.is-full {
+  border-radius: 0;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  /* motion drives x/y/rotate/scale on top of this, so the element's centre
+     starts on the viewport's centre and every transform works about it. */
+  translate: -50% -50%;
+  will-change: transform, clip-path;
+}
+
+.mv-canvas,
+.mx-canvas {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform-origin: center;
+  /* The canvas is sized in px by the viewport hook and centred on the stage;
+     its own transform then does the panning and zooming.
+
+     `useMapViewport` adds `will-change: transform` only while the canvas is
+     moving. That makes pan/zoom compositor-only, then removes it after the
+     gesture so the painting and stickers rerasterize sharply at rest. */
+  translate: -50% -50%;
+}
+
+.mv-art,
+.mx-art {
+  display: block;
+  height: 100%;
+  user-select: none;
+  width: 100%;
+}
+
+.mv-compass {
+  filter: drop-shadow(0 0 0.7rem rgba(255, 253, 247, 0.95))
+    drop-shadow(0 0 1.4rem rgba(255, 253, 247, 0.7))
+    drop-shadow(0 0.3rem 0.5rem rgba(31, 26, 17, 0.28));
+  height: auto;
+  pointer-events: none;
+  position: absolute;
+  right: 1.4rem;
+  top: 1.2rem;
+  width: min(18%, 7rem);
+  z-index: 6;
+}
+
+.mv-zoom,
+.mx-zoom {
+  align-items: center;
+  background: rgba(31, 26, 17, 0.8);
+  border-radius: 999px;
+  bottom: 0.9rem;
+  color: #f6eedf;
+  display: flex;
+  gap: 0.3rem;
+  left: 50%;
+  padding: 0.3rem 0.5rem;
+  position: absolute;
+  transform: translateX(-50%);
+  z-index: 6;
+}
+
+.mv-zoom button,
+.mx-zoom button {
+  background: #f6eedf;
+  border: 0;
+  border-radius: 999px;
+  color: #31281a;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.875rem;
+  min-width: 2rem;
+  padding: 0.2rem 0.6rem;
+}
+
+.mv-zoom button:disabled,
+.mx-zoom button:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+.mv-zoom span,
+.mx-zoom span {
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  min-width: 3.2rem;
+  text-align: center;
+}
+
+/* The zoom buttons are a desktop affordance. A phone pinches, double-taps and
+   drags, and the bar is only one more thing to fumble against there — so it is
+   off below the breakpoint rather than shrunk. Placed after the rules above on
+   purpose: a media query carries no extra specificity, so only source order
+   lets it win. The editor keeps its own bar at every size; it is a tool, not a
+   guest surface. */
+@media (max-width: 760px) {
+  .mv-zoom {
+    display: none;
+  }
+}
+
+/* The expand and close grips, both pinned to the STAGE's top-left corner —
+   which is where they need to be to stay clear of the compass in the opposite
+   corner. Expanded on a portrait phone the stage is turned a quarter clockwise,
+   and that carries its top-left corner round to the top-right of the screen,
+   so one position gives the grip the right home in both views. The icon is
+   symmetric under a quarter turn, so it reads the same either way. */
+.mv-expand {
+  background: rgba(31, 26, 17, 0.8);
+  border: 0;
+  border-radius: 0.5rem;
+  color: #f6eedf;
+  cursor: pointer;
+  display: grid;
+  height: 2.4rem;
+  left: 0.9rem;
+  padding: 0.5rem;
+  place-items: center;
+  position: absolute;
+  top: 0.9rem;
+  width: 2.4rem;
+  z-index: 7;
+}
+
+.mv-expand svg {
+  height: 100%;
+  width: 100%;
+}
+
+.mv-note {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  margin: 0;
+  opacity: 0.8;
+  text-align: center;
+}
+
+/* -- editor (/map-editor) -------------------------------------------- */
+
+.mx-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: calc(var(--nav-h) + 0.9rem) max(0.8rem, calc((100vw - 1720px) / 2))
+    1rem;
+}
+
+.mx-bar,
+.mx-status {
+  align-items: center;
+  background: rgba(31, 26, 17, 0.88);
+  border-radius: 0.6rem;
+  color: #f6eedf;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  justify-content: space-between;
+  padding: 0.5rem 0.8rem;
+}
+
+.mx-bar-group,
+.mx-tools,
+.mx-status-right {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.mx-tools button,
+.mx-ghost,
+.mx-save {
+  background: #f6eedf;
+  border: 0;
+  border-radius: 0.4rem;
+  color: #31281a;
+  cursor: pointer;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+  text-decoration: none;
+}
+
+.mx-tools button.is-on {
+  background: #992fcc;
+  color: #fffdf7;
+}
+
+.mx-tools kbd {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.875rem;
+  opacity: 0.6;
+}
+
+.mx-save {
+  background: #4d6044;
+  color: #fffdf7;
+}
+
+.mx-body {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: minmax(0, 1fr) 19rem;
+}
+
+@media (max-width: 900px) {
+  .mx-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.mx-stage {
+  background: var(--paper);
+  border-radius: 0.4rem;
+  box-shadow: inset 0 0 0 1px var(--paper-shadow);
+  height: min(74svh, 48rem);
+  overflow: hidden;
+  position: relative;
+  touch-action: none;
+}
+
+.mx-stage.tool-select {
+  cursor: grab;
+}
+
+.mx-stage.tool-area,
+.mx-stage.tool-walk,
+.mx-stage.tool-focus,
+.mx-stage.tool-sticker {
+  cursor: crosshair;
+}
+
+/* Shapes only take the pointer in the editor; the guest view leaves the
+   whole canvas draggable. */
+.mx-stage .mx-area,
+.mx-stage .mx-edge-hit,
+.mx-stage .mx-plate {
+  pointer-events: auto;
+}
+
+.mx-area.is-selected {
+  fill: color-mix(in srgb, var(--accent) 34%, transparent);
+  stroke-width: 3.5px;
+}
+
+.mx-edge-hit {
+  cursor: crosshair;
+  fill: none;
+  pointer-events: stroke;
+  stroke: transparent;
+  stroke-width: 14px;
+  vector-effect: non-scaling-stroke;
+}
+
+.mx-path-line.is-selected {
+  stroke-width: 4.5px;
+}
+
+.mx-drafting {
+  fill: rgba(153, 47, 204, 0.14);
+  stroke: #992fcc;
+  stroke-dasharray: 5px 4px;
+  stroke-width: 2.5px;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Handles counter-scale by --inv (1/zoom) so they stay the same size on
+   screen however far the map is zoomed in. */
+.mx-handle {
+  background: #fffdf7;
+  border: 2px solid #992fcc;
+  border-radius: 50%;
+  cursor: grab;
+  height: 0.85rem;
+  position: absolute;
+  touch-action: none;
+  width: 0.85rem;
+  z-index: 7;
+}
+
+.mx-vertex {
+  transform: translate(-50%, -50%) scale(var(--inv, 1));
+}
+
+.mx-vertex.is-draft {
+  background: #992fcc;
+  pointer-events: none;
+}
+
+/* The focus rectangle is reference geometry, not content: it paints beneath
+   every drawn thing and never takes a click, so it can cover the whole map
+   without swallowing what is inside it. The Focus tool lays a grab layer of
+   its own on top for the moments you actually want to move it. */
+.mx-focus {
+  border: 2px dashed rgba(255, 253, 247, 0.9);
+  /* Everything an event's guests can never reach, dimmed in one stroke. */
+  box-shadow:
+    0 0 0 1px rgba(31, 26, 17, 0.5),
+    0 0 0 100vmax rgba(31, 26, 17, 0.34);
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+}
+
+.mx-focus.is-live {
+  border-color: #992fcc;
+  box-shadow:
+    0 0 0 1px rgba(31, 26, 17, 0.5),
+    0 0 0 100vmax rgba(31, 26, 17, 0.5);
+}
+
+.mx-focus-grab {
+  cursor: move;
+  pointer-events: auto;
+  position: absolute;
+  touch-action: none;
+  z-index: 8;
+}
+
+.mx-focus-tag {
+  background: rgba(31, 26, 17, 0.82);
+  border-radius: 0.3rem;
+  color: #f6eedf;
+  font-size: 0.875rem;
+  left: 0;
+  padding: 0.1rem 0.4rem;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  transform: translateY(-115%) scale(var(--inv, 1));
+  transform-origin: bottom left;
+  white-space: nowrap;
+}
+
+.mx-corner {
+  border-color: #fffdf7;
+  background: #992fcc;
+  cursor: nwse-resize;
+}
+
+.mx-corner.is-nw {
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%) scale(var(--inv, 1));
+}
+
+.mx-corner.is-ne {
+  cursor: nesw-resize;
+  left: 100%;
+  top: 0;
+  transform: translate(-50%, -50%) scale(var(--inv, 1));
+}
+
+.mx-corner.is-sw {
+  cursor: nesw-resize;
+  left: 0;
+  top: 100%;
+  transform: translate(-50%, -50%) scale(var(--inv, 1));
+}
+
+.mx-corner.is-se {
+  left: 100%;
+  top: 100%;
+  transform: translate(-50%, -50%) scale(var(--inv, 1));
+}
+
+.mx-plate.is-selected {
+  outline: 2px dashed #992fcc;
+  outline-offset: 2px;
+}
+
+.mx-stage .mx-plate {
+  cursor: grab;
+}
+
+/* A label sized for a zoomed-in event map is a few pixels tall when the whole
+   estate is on screen. Give every plate a tap target of about 24 screen pixels
+   so it can still be grabbed while laying the map out. */
+.mx-stage .mx-plate::after {
+  content: '';
+  inset: 50%;
+  margin: calc(var(--inv, 1) * -12px);
+  position: absolute;
+}
+
+/* The sticker and label grips are screen furniture, so they undo the zoom. */
+.mx-canvas .cmi-resize {
+  transform: scale(var(--inv, 1));
+}
+
+.mx-canvas .cmi-rotate {
+  transform: translateX(-50%) scale(var(--inv, 1));
+}
+
+.mx-canvas .cmi-rotate-stick {
+  transform: translateX(-50%) scaleY(var(--inv, 1));
+  transform-origin: bottom;
+}
+
+/* -- inspector panel -------------------------------------------------- */
+
+.mx-panel {
+  background: #fffdf7;
+  border: 1px solid var(--paper-shadow);
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  max-height: min(74svh, 48rem);
+  overflow-y: auto;
+  padding: 0.85rem;
+}
+
+.mx-section h2 {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.mx-section + .mx-section {
+  border-top: 1px solid var(--paper-shadow);
+  padding-top: 0.85rem;
+}
+
+.mx-field {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.875rem;
+  gap: 0.15rem;
+  margin-bottom: 0.5rem;
+}
+
+.mx-field > span {
+  letter-spacing: 0.06em;
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+
+.mx-field input,
+.mx-field select {
+  background: var(--paper);
+  border: 1px solid var(--paper-shadow);
+  border-radius: 0.3rem;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0.28rem 0.45rem;
+}
+
+.mx-bar .mx-field {
+  color: #f6eedf;
+  margin-bottom: 0;
+}
+
+.mx-note {
+  font-size: 0.875rem;
+  margin: 0 0 0.5rem;
+  opacity: 0.7;
+}
+
+.mx-wide {
+  display: block;
+  margin-bottom: 0.4rem;
+  width: 100%;
+}
+
+.mx-danger {
+  background: #f6dfdf;
+  border: 0;
+  border-radius: 0.4rem;
+  color: #8c2020;
+  cursor: pointer;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+}
+
+.mx-group h3 {
+  font-size: 0.875rem;
+  letter-spacing: 0.06em;
+  margin: 0.6rem 0 0.25rem;
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+
+.mx-group:first-of-type h3 {
+  margin-top: 0;
+}
+
+.mx-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mx-list button {
+  align-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.35rem;
+  cursor: pointer;
+  display: flex;
+  font-family: inherit;
+  font-size: 0.875rem;
+  gap: 0.45rem;
+  padding: 0.25rem 0.35rem;
+  text-align: left;
+  width: 100%;
+}
+
+.mx-list button.is-on {
+  background: var(--paper);
+  border-color: var(--copper);
+}
+
+.mx-swatch {
+  border-radius: 3px;
+  display: inline-block;
+  flex: none;
+  height: 0.9rem;
+  object-fit: contain;
+  width: 0.9rem;
+}
+
+span.mx-swatch {
+  background: var(--accent, var(--copper));
+}
+
+.mx-empty {
+  font-size: 0.875rem;
+  opacity: 0.6;
+}
+
+.mx-art-grid {
+  display: grid;
+  gap: 0.3rem;
+  grid-template-columns: repeat(auto-fill, minmax(3.1rem, 1fr));
+}
+
+.mx-art-grid button {
+  aspect-ratio: 1;
+  background: var(--paper);
+  border: 1px solid var(--paper-shadow);
+  border-radius: 0.35rem;
+  cursor: pointer;
+  padding: 0.15rem;
+}
+
+.mx-art-grid button.is-on {
+  border-color: #992fcc;
+  box-shadow: 0 0 0 2px rgba(153, 47, 204, 0.35);
+}
+
+.mx-art-grid img {
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+.mx-status p {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.mx-check {
+  align-items: center;
+  display: flex;
+  font-size: 0.875rem;
+  gap: 0.3rem;
+}
+
+.mx-dot {
+  background: #992fcc;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  padding: 0.1rem 0.5rem;
+}
+
+.mx-toast {
+  background: rgba(77, 96, 68, 0.95);
+  border-radius: 0.4rem;
+  color: #fffdf7;
+  font-size: 0.875rem;
+  margin: 0;
+  padding: 0.4rem 0.7rem;
+}
+
+.now-admin-link {
+  background: #f6eedf;
+  border-radius: 0.4rem;
+  color: #31281a;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+  text-decoration: none;
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { CarnivalMap } from '@/components/CarnivalMap'
 import { CarnivalPassport, useCarnivalStamps } from '@/components/CarnivalPassport'
+import { EventMap, layerForEvent } from '@/components/EventMap'
 import { EventPanel } from '@/components/EventPanel'
 import { SeatingExperience } from '@/components/SeatingChart'
 import { SiteNav } from '@/components/SiteNav'
@@ -18,10 +18,10 @@ type Phase = 'before' | 'during'
 function stateFromLocation(): { active: ActiveEvent; phase: Phase } {
   const params = new URLSearchParams(window.location.search)
   const active =
-    activeEvents.find((a) => a.event.anchor === params.get('event')) ??
-    defaultActiveEvent
+    activeEvents.find((a) => a.event.anchor === params.get('event')) ?? defaultActiveEvent
   return { active, phase: params.get('phase') === 'during' ? 'during' : 'before' }
 }
+
 
 /**
  * The active-event experience, at /now. One shell — status header, the venue
@@ -34,14 +34,14 @@ function stateFromLocation(): { active: ActiveEvent; phase: Phase } {
  */
 export function NowPage() {
   const [{ active, phase }, setState] = useState(stateFromLocation)
-  // Temporary: drag-to-lay-out mode for the carnival map, toggled from the
-  // admin chip and shareable as ?edit=1.
-  const [editingMap, setEditingMap] = useState(
-    () => new URLSearchParams(window.location.search).get('edit') === '1',
-  )
   const { event } = active
   const is_carnival = event.anchor === 'carnegie-to-carnation'
-  // Shared by the carnival map and passport, so a tap in either lights both.
+  // The carnival's During phase: the passport joins the map.
+  const carnival_live = is_carnival && phase === 'during'
+  // This event's layer of the venue map document, laid out at /map-editor.
+  const layer = layerForEvent(event.anchor)
+  // Shared by the map's stickers and the passport, so a tap in either lights
+  // both.
   const carnivalStamps = useCarnivalStamps()
 
   useEffect(() => {
@@ -79,53 +79,28 @@ export function NowPage() {
           ) : null}
         </header>
 
-        {is_carnival ? (
-          <>
-            <CarnivalMap
-              editing={editingMap}
+        {/* The venue map, the same surface a guest gets at /map-view: this
+            event's layer of venue-map.json, bounded by its focus rectangle,
+            expandable to fullscreen. The carnival's stalls are its stickers,
+            and tapping one stamps the passport below. */}
+        {layer ? (
+          <div className="now-map">
+            <EventMap
+              key={layer.id}
+              layer={layer}
               stamps={carnivalStamps.stamps}
               onToggleActivity={carnivalStamps.toggle}
+              label={`Where ${event.title} happens on the farm`}
             />
-            {/* The activity passport rides with the map in both phases: it is
-                the carnival's live module, and before the event it doubles as
-                the menu of what's coming. */}
-            <CarnivalPassport
-              stamps={carnivalStamps.stamps}
-              onToggle={carnivalStamps.toggle}
-            />
-          </>
-        ) : (
-          <div className="now-map" aria-label="Where this event happens on the farm">
-            <div className="map-frame">
-              <img
-                src="/art/map/aerial.webp"
-                alt="Hand-painted aerial watercolor map of the wedding grounds, with this event's locations highlighted."
-                className="map-base"
-                width={1180}
-                height={1180}
-                fetchPriority="high"
-              />
-              <span className="map-vignette" aria-hidden="true" />
-              {/* Each location is highlighted rather than pinned: a thin
-                  translucent box laid over its painted footprint, traced off
-                  the artwork in active-events.ts. */}
-              {active.highlights.map((box) => (
-                <span
-                  key={`${box.x},${box.y}`}
-                  className="now-highlight"
-                  aria-hidden="true"
-                  style={{
-                    left: `${box.x}%`,
-                    top: `${box.y}%`,
-                    width: `${box.w}%`,
-                    height: `${box.h}%`,
-                    transform: `translate(-50%, -50%) rotate(${box.angle}deg)`,
-                  }}
-                />
-              ))}
-            </div>
           </div>
-        )}
+        ) : null}
+
+        {carnival_live ? (
+          <CarnivalPassport
+            stamps={carnivalStamps.stamps}
+            onToggle={carnivalStamps.toggle}
+          />
+        ) : null}
 
         {phase === 'before' ? (
           <>
@@ -216,25 +191,11 @@ export function NowPage() {
               </button>
             ))}
           </div>
-          {is_carnival && (
-            <div className="now-admin-row">
-              <button
-                type="button"
-                className={editingMap ? 'is-on' : ''}
-                aria-pressed={editingMap}
-                onClick={() => {
-                  const next = !editingMap
-                  setEditingMap(next)
-                  const url = new URL(window.location.href)
-                  if (next) url.searchParams.set('edit', '1')
-                  else url.searchParams.delete('edit')
-                  window.history.replaceState(null, '', url)
-                }}
-              >
-                {editingMap ? 'Done editing' : 'Edit map'}
-              </button>
-            </div>
-          )}
+          <div className="now-admin-row">
+            <a className="now-admin-link" href="/map-editor">
+              Edit the venue map
+            </a>
+          </div>
         </div>
       </main>
     </>

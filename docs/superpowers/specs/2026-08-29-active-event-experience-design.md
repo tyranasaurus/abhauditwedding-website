@@ -87,6 +87,28 @@ party is off-site and has no venue experience):
   with only that event's locations highlighted, then the phase's module.
   Per-event config (highlights, intros, during-module) lives in
   `src/data/active-events.ts`.
+- Carnegie to Carnation is one view with two faces, matching the day
+  itself. Before Event is the Baraat: the venue aerial with the procession
+  drawn on it — a dashed carnival-pink route over a milky casing, hand
+  traced along the painted farm roads, with dots and labeled plates at both
+  ends (`Baraat starts here`, `…into the Carnival!`) and the big field
+  highlighted where the route pours in. During Event swaps in the carnival
+  map and activity passport, while the aerial stays on above them as a mini
+  map (`.now-map.is-mini`) — the procession is over by then, so the mini map
+  drops the route for a small `The Carnival` plate over the field, and two
+  measured callout lines fan from the field highlight down to the lawn
+  map's top corners so the big map reads as the zoomed-in field
+  (`.now-zoom-stack`). Route data lives in `active-events.ts`
+  as `MapRoute`; the dash march is disabled under reduced motion. The real
+  baraat→carnival swap at carnival start is the time-window system's job —
+  the Before/During toggle stands in for it.
+- Temporary trace tooling: the admin chip's `Trace aerial` (`?trace=1`)
+  swaps any event's map for `NowMapEditor.tsx` — drag the highlight boxes
+  (corner dot resizes, knob rotates), drag route waypoints, click the line
+  to add one, double-click to remove, drag the label plates, then `Copy
+  data` for paste-ready `highlights:`/`route:` fields. Drafts persist per
+  event in localStorage until Reset. Rip it out with the carnival sticker
+  editor (`Edit stickers`, `?edit=1`) once tracing is final.
 - Which event and which phase are test states in `?event=` and `?phase=`,
   kept in sync via `replaceState`. They are switched by a floating
   admin-only Preview chip (dark, bottom-left, clearly a tool, not page
@@ -94,8 +116,12 @@ party is off-site and has no venue experience):
 - Before Event hosts the event's ordinary `EventPanel` (schedule, wardrobe
   art, and note) plus a directions card to Carnation Farms.
 - During Event swaps in the event's live module: the seating experience for
-  the reception; the schedule again for the others until their own modules
-  exist (procession guidance, the activity passport).
+  the reception, and the activity passport for the carnival — a stampable
+  checklist of the lawn's activities wearing the map's own art, with stamps
+  kept in localStorage (`CarnivalPassport.tsx`; it also shows before the
+  event as the menu of what's coming). The shaadi keeps the schedule until
+  procession guidance exists. Passport progressive reveal and cross-device
+  persistence remain future decisions.
 - During Event hosts `SeatingExperience`, the finder-and-floor-plan heart
   extracted from `SeatingChart.tsx`; the guest's stored pick carries over
   because both hosts share the same localStorage key.
@@ -104,13 +130,31 @@ party is off-site and has no venue experience):
   at the barn's own angle, the way a map highlights one building. The rest of
   the aerial stays at full color. No label — the header and intro already
   name it.
-- The two-way handoff treats `/now` as the primary face during the event: a
-  quiet `← Wedding info` button floats in its bottom-right corner and opens
-  the ordinary site auto-scrolled to the reception's schedule card
-  (`/#naach-the-night-away`), while the ordinary site carries an unmissable
-  full-width `Time to Naach!` bar pinned to the bottom of the screen, leading
-  to `/now`. The bar shows unconditionally for now; real time-window gating
-  (and per-event messages) replaces that later.
+- The static site is the live site (decided 2026-08-31, superseding the
+  `/now`-as-primary-face handoff): during each phase window the homepage
+  itself goes live. `src/data/live-phases.ts` is the schedule of record —
+  five windows on the venue's clock (shaadi all Saturday; pre-baraat until
+  11; during-carnival 11–2:30; pre-reception 2:30–4:45; during-reception
+  4:45–11) — and while one is open: (1) the page auto-scrolls to that
+  event's schedule card on arrival (piggybacking the hash-hold logic, never
+  overriding an explicit hash, once per visit); (2) phases with an
+  interactive page get a floating bottom pill in the event's colors —
+  `Open your Carnival Passport` → `/passport`, `See the Seating Chart` →
+  `/seating-chart`. The static site carries no map (also decided
+  2026-08-31, reversing the brief `Where to go` card-map experiment);
+  wayfinding belongs to the interactive pages. Outside every window the
+  homepage is just the homepage: no pill (the old unconditional
+  `Time to Naach!` bar is gone). `?live=<phase-id>` (or `off`) overrides the
+  clock and shows the dev navigator — the floating phase chip, which now
+  sits top-center under the site header so it never covers the pills and
+  corner buttons along the bottom.
+- `/passport` is the carnival's interactive page: the lawn map and the
+  stampable passport (stamps shared via localStorage with everywhere else
+  they appear), in the carnival's own colors. The seating chart page was
+  already dressed in the reception's forest and copper. There is no shaadi
+  live page yet; its phase has a map only.
+- `/now` remains as an admin prototype (and hosts the aerial trace editor);
+  it is no longer linked from the site.
 
 ## Future decisions
 

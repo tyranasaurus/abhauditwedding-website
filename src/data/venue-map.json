@@ -1,0 +1,363 @@
+{
+  "version": 2,
+  "art": {
+    "src": "/art/map/grounds.webp",
+    "width": 4200,
+    "height": 1782,
+    "headingDeg": 224
+  },
+  "layers": [
+    {
+      "id": "sunset-shaadi",
+      "name": "Sunset Shaadi",
+      "eventAnchor": "sunset-shaadi",
+      "focus": {
+        "x": 64.65580049018537,
+        "y": 48.48813115829775,
+        "w": 35.925344107250204,
+        "h": 54.66711259032322
+      },
+      "areas": [
+        {
+          "id": "area-1",
+          "name": "Sunset Shaadi",
+          "accent": "sunset",
+          "points": [
+            {
+              "x": 49.693128436560265,
+              "y": 28.880994306404816
+            },
+            {
+              "x": 49.82459677124126,
+              "y": 51.74933932889986
+            },
+            {
+              "x": 53.79819446014852,
+              "y": 57.711200093720485
+            },
+            {
+              "x": 60.23239825283884,
+              "y": 43.88774753898363
+            },
+            {
+              "x": 54.137873680855265,
+              "y": 28.478004203799763
+            }
+          ]
+        },
+        {
+          "id": "area-2",
+          "name": "Shaadi Dinner",
+          "accent": "sunset",
+          "points": [
+            {
+              "x": 75.71255977586227,
+              "y": 54.69573483645105
+            },
+            {
+              "x": 75.84695677432931,
+              "y": 72.70363125702566
+            },
+            {
+              "x": 79.61847254381047,
+              "y": 72.82168745345936
+            },
+            {
+              "x": 79.37955183803955,
+              "y": 54.52782333382999
+            }
+          ]
+        }
+      ],
+      "paths": [
+        {
+          "id": "path-1",
+          "name": "Path 1",
+          "accent": "sunset",
+          "points": [
+            {
+              "x": 60.73260972611171,
+              "y": 43.35846831221021
+            },
+            {
+              "x": 64.26398432709193,
+              "y": 35.305220387579446
+            },
+            {
+              "x": 65.70381941358491,
+              "y": 45.65047227082701
+            },
+            {
+              "x": 67.3338617347979,
+              "y": 53.79584306129462
+            },
+            {
+              "x": 69.56702507263401,
+              "y": 57.05173741663291
+            },
+            {
+              "x": 69.5693008067545,
+              "y": 57.218458552211224
+            },
+            {
+              "x": 72.18550940742604,
+              "y": 58.5453379740936
+            },
+            {
+              "x": 75.56569267435498,
+              "y": 57.76377241687917
+            }
+          ]
+        }
+      ],
+      "labels": [
+        {
+          "id": "new-label",
+          "text": "Sunset Shaadi",
+          "accent": "sunset",
+          "x": 60.809257494760494,
+          "y": 32.85152313923476
+        },
+        {
+          "id": "new-label-2",
+          "text": "Shaadi Dinner",
+          "accent": "sunset",
+          "x": 77.19088981872775,
+          "y": 46.66894299040559
+        }
+      ],
+      "stickers": []
+    },
+    {
+      "id": "carnegie-to-carnation",
+      "name": "Baraat & Carnival",
+      "eventAnchor": "carnegie-to-carnation",
+      "focus": {
+        "x": 39.67452514214024,
+        "y": 35.2636829035555,
+        "w": 24.197953736654803,
+        "h": 39.31246787969779
+      },
+      "areas": [],
+      "paths": [],
+      "labels": [],
+      "stickers": [
+        {
+          "id": "pani-puri",
+          "src": "/art/map/carnival/pani-puri.webp",
+          "x": 34.15647515364955,
+          "y": 24.80243301486919,
+          "width": 2.1222164396098226,
+          "angle": 0,
+          "activity": "pani-puri",
+          "name": "Pani puri"
+        },
+        {
+          "id": "cmu-fence",
+          "src": "/art/map/carnival/cmu-fence.webp",
+          "x": 36.44941362634528,
+          "y": 29.188205974517967,
+          "width": 2.4882298211547793,
+          "angle": 4,
+          "activity": "cmu-fence",
+          "name": "Carnegie Mellon fence"
+        },
+        {
+          "id": "picnic",
+          "src": "/art/map/carnival/picnic-carrom-jenga.webp",
+          "x": 39.63767525647314,
+          "y": 24.560942912454752,
+          "width": 2.5998549250656806,
+          "angle": -3,
+          "activity": "picnic",
+          "name": "Picnic blanket with carrom and Jenga"
+        },
+        {
+          "id": "mehendi",
+          "src": "/art/map/carnival/henna.webp",
+          "x": 42.74167346222613,
+          "y": 28.296000161839938,
+          "width": 1.8322297928003868,
+          "angle": -1,
+          "activity": "mehendi",
+          "name": "Mehendi artists"
+        },
+        {
+          "id": "jigsaw",
+          "src": "/art/map/carnival/jigsaw.webp",
+          "x": 45.13878253127174,
+          "y": 24.210168774794166,
+          "width": 2.0037695027217275,
+          "angle": 7,
+          "activity": "jigsaw",
+          "name": "Jigsaw puzzle"
+        },
+        {
+          "id": "bazaar",
+          "src": "/art/map/carnival/bazaar.webp",
+          "x": 46.968801996363425,
+          "y": 29.314920003554914,
+          "width": 1.7817186919951762,
+          "angle": -6,
+          "activity": "bazaar",
+          "name": "Bazaar"
+        },
+        {
+          "id": "umbrella-arch",
+          "src": "/art/map/carnival/umbrella-arch.webp",
+          "x": 45.22667985428385,
+          "y": 35.5577367226985,
+          "width": 1.8894013577086088,
+          "angle": 5,
+          "activity": "umbrella-booth",
+          "name": "Rajasthani umbrella arch"
+        },
+        {
+          "id": "sunglasses",
+          "src": "/art/map/carnival/sunglasses.webp",
+          "x": 47.30845295753404,
+          "y": 41.449959605627505,
+          "width": 1.9351558822102046,
+          "angle": 5,
+          "activity": "nazar-studio",
+          "name": "Colorful sunglasses"
+        },
+        {
+          "id": "block-print",
+          "src": "/art/map/carnival/block-print-tote.webp",
+          "x": 46.017093969364524,
+          "y": 46.85756411615018,
+          "width": 2.0765570991005435,
+          "angle": 0,
+          "activity": "block-print",
+          "name": "Block-print tote bags"
+        },
+        {
+          "id": "candy",
+          "src": "/art/map/carnival/candy-bag.webp",
+          "x": 35.86369829571839,
+          "y": 48.34805274749132,
+          "width": 1.3780359712486534,
+          "angle": -3,
+          "activity": "sweets",
+          "name": "Colorful candies"
+        },
+        {
+          "id": "samosa",
+          "src": "/art/map/carnival/samosa.webp",
+          "x": 38.08595157009878,
+          "y": 45.05010666325226,
+          "width": 1.960555100027435,
+          "angle": 6,
+          "activity": "food",
+          "name": "Samosa"
+        },
+        {
+          "id": "bicycle",
+          "src": "/art/map/carnival/bicycle.webp",
+          "x": 40.70094118252435,
+          "y": 47.403721658378174,
+          "width": 2.535703689069684,
+          "angle": -2,
+          "activity": "bike-booth",
+          "name": "Decorated bicycle"
+        },
+        {
+          "id": "yarn",
+          "src": "/art/map/carnival/yarn-art.webp",
+          "x": 43.06594795730641,
+          "y": 43.66074642207497,
+          "width": 1.6545832566684013,
+          "angle": 0,
+          "activity": "yarn",
+          "name": "Yarn art"
+        },
+        {
+          "id": "lemonade",
+          "src": "/art/map/carnival/lemonade.webp",
+          "x": 33.22181784976323,
+          "y": 47.21387878228771,
+          "width": 1.2404767293844643,
+          "angle": 0,
+          "activity": "airstream",
+          "name": "Lemonade"
+        }
+      ]
+    },
+    {
+      "id": "naach-the-night-away",
+      "name": "Naach the Night Away",
+      "eventAnchor": "naach-the-night-away",
+      "focus": {
+        "x": 21.739689641827123,
+        "y": 38.08876070779017,
+        "w": 22.38470920510813,
+        "h": 50.02247858441965
+      },
+      "areas": [
+        {
+          "id": "hippodrome",
+          "accent": "forest",
+          "points": [
+            {
+              "x": 23.049494852847875,
+              "y": 15.827552990155123
+            },
+            {
+              "x": 29.0607818161608,
+              "y": 15.869659767556431
+            },
+            {
+              "x": 29.747021704208763,
+              "y": 52.757246374682914
+            },
+            {
+              "x": 23.282949194277496,
+              "y": 53.11482357968722
+            }
+          ],
+          "name": "The Hippodrome"
+        }
+      ],
+      "paths": [],
+      "labels": [
+        {
+          "id": "the-hippodrome",
+          "text": "The Hippodrome",
+          "accent": "forest",
+          "x": 17.712914046662327,
+          "y": 21.603607626276155,
+          "size": 1.0233365244993828
+        },
+        {
+          "id": "new-label",
+          "text": "Scenic Views",
+          "accent": "forest",
+          "x": 16.96364759520698,
+          "y": 53.00274966921562,
+          "size": 0.9901746323242908
+        }
+      ],
+      "stickers": [
+        {
+          "id": "sangeet-camera",
+          "name": "Sangeet camera",
+          "src": "/art/map/event-cameras/camera-sangeet.webp",
+          "x": 13.6,
+          "y": 42.7,
+          "width": 1.8,
+          "angle": 0
+        },
+        {
+          "id": "sangeet-camera-2",
+          "name": "Sangeet camera",
+          "src": "/art/map/event-cameras/camera-sangeet.webp",
+          "x": 22.987831203007758,
+          "y": 59.02108203330041,
+          "width": 1.8,
+          "angle": 0
+        }
+      ]
+    }
+  ]
+}

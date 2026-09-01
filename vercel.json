@@ -17,6 +17,22 @@
     {
       "source": "/now",
       "destination": "/index.html"
+    },
+    {
+      "source": "/passport",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/grounds",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/map-view",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/map-editor",
+      "destination": "/index.html"
     }
   ],
   "redirects": [

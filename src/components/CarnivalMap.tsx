@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import type { PointerEvent as ReactPointerEvent } from 'react'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 
 type CarnivalPlacement = {
   id: string;
@@ -154,6 +156,12 @@ const placements: CarnivalPlacement[] = [
 ];
 
 /* ------------------------------------------------------------------------- *
+ * SUPERSEDED for new work by the venue map editor at /map-editor, which lays
+ * stickers out on the grounds artwork. This one stays until the carnival map
+ * stops being its own painting (carnival-lawn-base.webp, its own coordinate
+ * space) and becomes the grounds map zoomed to the carnival focus rect —
+ * until then these placements have nowhere else to be edited.
+ *
  * Temporary layout editor. Everything below the placements exists so the
  * couple can drag, resize, and rotate the items in the browser, then copy
  * the numbers back into the array above. Rip it out once the layout is
@@ -199,6 +207,225 @@ function layoutAsCode(items: CarnivalPlacement[]) {
 
 type DragMode = 'move' | 'resize' | 'rotate'
 
+// Stamped into the ?slowmo debug badge so a recording proves which build a
+// tab is actually running (HMR through many rewrites can leave stale code).
+const ZOOM_BUILD = 'z9 layout-vp + polygon'
+
+// Debug: ?slowmo=1 stretches the zoom transition so it can be inspected
+// frame by frame. Temporary tooling for tuning the animation.
+const SLOWMO = new URLSearchParams(window.location.search).has('slowmo') ? 8 : 1
+
+/** One pose describes one direction of the zoom transition: the transform
+ *  that lays the fullscreen painting over the inline framed one (or back),
+ *  plus the mask and anchor that ride it. */
+type ZoomPose = {
+  x: number
+  y: number
+  rotate: number
+  scale: number
+  /** Clip in the moving element's own space, so the mask rotates and scales
+   *  with the image: at one end the frame's rect, at the other the viewport. */
+  clip: string
+  /** The similarity's fixed point. Rotating and scaling about it needs no
+   *  translation, so the card follows a clean spiral between its two poses. */
+  origin: string
+  /** Degenerate fallback (scale ~ 1, unrotated): translate instead. */
+  translate: boolean
+}
+
+type EntryPose = ZoomPose & {
+  /** Scroll that centers the field once settled; carried as the shift
+   *  wrapper's transform during the entrance, swapped for real scrollTop in
+   *  one pre-paint commit at settle. */
+  scroll: number
+  shift: string
+  /** The cover zoom: the smallest zoom at which the painting fills the
+   *  viewport. Short-aspect screens need more than 1, or a strip of page
+   *  shows beside the fullscreen map. Also the pinch's lower bound. */
+  minZoom: number
+}
+
+type ExitPose = ZoomPose & {
+  /** The live scroll state, converted back into a transform for the exit so
+   *  the stage can leave scroll-clipping mode without anything moving. */
+  shift: string
+}
+
+const PAINTING_ASPECT = 931 / 1689
+/** The slice of the painting the inline mobile frame shows (see the
+ *  .carnival-map-canvas crop in index.css). */
+const CROP_LEFT = 0.25
+const CROP_RIGHT = 0.78
+/** The lawn's vertical middle on the painting, as a fraction of its height —
+ *  the line the settled view centers. Tuned against rendered screenshots. */
+const FIELD_CENTER = 0.49
+
+type FrameBox = { left: number; top: number; width: number; height: number }
+
+/** The LAYOUT viewport — the box the fixed overlay actually spans. On iOS,
+ *  window.innerWidth/Height report the visual viewport instead, which
+ *  shrinks and shifts with pinch-zoom and put every mask and origin in the
+ *  wrong place on real phones. */
+function layoutViewport() {
+  return {
+    vw: document.documentElement.clientWidth,
+    vh: document.documentElement.clientHeight,
+  }
+}
+
+/** The inline frame's content box (the canvas lives inside its 1px border)
+ *  and its real corner radius — the geometry both directions register to. */
+function frameContentBox(frame: HTMLElement): { box: FrameBox } {
+  const style = getComputedStyle(frame)
+  const bl = parseFloat(style.borderLeftWidth) || 0
+  const bt = parseFloat(style.borderTopWidth) || 0
+  const br = parseFloat(style.borderRightWidth) || 0
+  const bb = parseFloat(style.borderBottomWidth) || 0
+  const rect = frame.getBoundingClientRect()
+  return {
+    box: {
+      left: rect.left + bl,
+      top: rect.top + bt,
+      width: rect.width - bl - br,
+      height: rect.height - bt - bb,
+    },
+  }
+}
+
+/** Everything that rides a pose: the frame's inverse image under it — the
+ *  axis-aligned local rect (90° keeps axes square) whose transformed self is
+ *  the frame — and the similarity's fixed point, q = (I − kR)⁻¹ t. */
+function poseChrome(
+  pose: { x: number; y: number; scale: number },
+  frame: FrameBox,
+  portrait: boolean,
+): { clip: string; origin: string; translate: boolean } {
+  const { vw, vh } = layoutViewport()
+  const k = pose.scale
+  const dX = frame.left + frame.width / 2 - vw / 2 - pose.x
+  const dY = frame.top + frame.height / 2 - vh / 2 - pose.y
+  const lcx = portrait ? vw / 2 - dY / k : vw / 2 + dX / k
+  const lcy = portrait ? vh / 2 + dX / k : vh / 2 + dY / k
+  const halfX = (portrait ? frame.height : frame.width) / (2 * k)
+  const halfY = (portrait ? frame.width : frame.height) / (2 * k)
+  // polygon(), not inset(): the rect legitimately extends past the element's
+  // box (the painting overflows the stage), and Safari refuses to apply or
+  // interpolate inset() with negative values — the mask silently stayed
+  // fullscreen on iPhones. Four-corner polygons interpolate everywhere and
+  // accept out-of-bounds coordinates; the trade is square mask corners.
+  const x0 = lcx - halfX
+  const x1 = lcx + halfX
+  const y0 = lcy - halfY
+  const y1 = lcy + halfY
+  const clip = `polygon(${x0}px ${y0}px, ${x1}px ${y0}px, ${x1}px ${y1}px, ${x0}px ${y1}px)`
+
+  let origin = `${vw / 2}px ${vh / 2}px`
+  let translate = true
+  if (portrait) {
+    // R(−90°): (x, y) → (y, −x); (I − kR)⁻¹ = [[1, k], [−k, 1]] / (1 + k²)
+    const qx = (pose.x + k * pose.y) / (1 + k * k)
+    const qy = (-k * pose.x + pose.y) / (1 + k * k)
+    origin = `${vw / 2 + qx}px ${vh / 2 + qy}px`
+    translate = false
+  } else if (Math.abs(1 - k) > 0.02) {
+    origin = `${vw / 2 + pose.x / (1 - k)}px ${vh / 2 + pose.y / (1 - k)}px`
+    translate = false
+  }
+  return { clip, origin, translate }
+}
+
+/** The entrance pose: the whole painting starts masked to the frame's rect,
+ *  matching the inline map pixel for pixel, then rotates and grows — mask
+ *  riding along — until the mask is the viewport. */
+function entryPoseFor(frameEl: HTMLElement): EntryPose {
+  const { vw, vh } = layoutViewport()
+  const portrait = vh >= vw
+  const { box: frame } = frameContentBox(frameEl)
+  const fcx = frame.left + frame.width / 2 - vw / 2
+  const fcy = frame.top + frame.height / 2 - vh / 2
+
+  let pose: { x: number; y: number; rotate: number; scale: number }
+  let scroll: number
+  let shift: string
+  let minZoom: number
+  if (portrait) {
+    // The stage beneath is rotated +90°, its canvas spanning the viewport's
+    // long side times the cover zoom; during the transition the shift
+    // wrapper carries the field-centering scroll as a transform, and the
+    // pose compensates so the painting's crop window sits exactly on the
+    // frame.
+    minZoom = Math.max(1, vw / (vh * PAINTING_ASPECT))
+    const canvasW = vh * minZoom
+    const paintingH = canvasW * PAINTING_ASPECT
+    scroll = clamp(
+      FIELD_CENTER * paintingH - vw / 2,
+      0,
+      Math.max(0, paintingH - vw),
+    )
+    const scale = frame.width / ((CROP_RIGHT - CROP_LEFT) * canvasW)
+    const dx = vw / 2 - paintingH / 2
+    const dy = ((CROP_LEFT + CROP_RIGHT) / 2 - 0.5) * canvasW
+    pose = {
+      x: fcx - scale * dy,
+      y: fcy + scale * dx + scale * scroll,
+      rotate: -90,
+      scale,
+    }
+    shift = `translateX(${scroll}px)`
+  } else {
+    minZoom = Math.max(1, vh / (vw * PAINTING_ASPECT))
+    const canvasW = vw * minZoom
+    const paintingH = canvasW * PAINTING_ASPECT
+    scroll = clamp(
+      FIELD_CENTER * paintingH - vh / 2,
+      0,
+      Math.max(0, paintingH - vh),
+    )
+    const cropFactor = window.matchMedia('(max-width: 880px)').matches
+      ? 1 / (CROP_RIGHT - CROP_LEFT)
+      : 1
+    const scale = (frame.width * cropFactor) / canvasW
+    pose = { x: fcx, y: fcy + scale * scroll, rotate: 0, scale }
+    shift = `translateY(${-scroll}px)`
+  }
+  return {
+    ...pose,
+    ...poseChrome(pose, frame, portrait),
+    scroll,
+    shift,
+    minZoom,
+  }
+}
+
+/** The exit pose, measured at close time: takes the map exactly as the guest
+ *  is seeing it — panned, pinched, anything — and shrinks and rotates the
+ *  whole painting down onto its inline framed self, mask riding along, over
+ *  the visible page. */
+function exitPoseFor(
+  canvas: DOMRect,
+  frame: FrameBox,
+  shift: string,
+): ExitPose {
+  const { vw, vh } = layoutViewport()
+  const portrait = vh >= vw
+  const cropped = window.matchMedia('(max-width: 880px)').matches
+  const inlineW = cropped ? frame.width / (CROP_RIGHT - CROP_LEFT) : frame.width
+  // The inline painting's center: its crop's left edge sits on the frame's
+  // left edge (or the paintings coincide when uncropped).
+  const icx =
+    frame.left - (cropped ? CROP_LEFT * inlineW : 0) + inlineW / 2 - vw / 2
+  const icy = frame.top + frame.height / 2 - vh / 2
+  // The painting's rendered width right now: the rotated canvas presents its
+  // width along the screen's vertical.
+  const scale = inlineW / (portrait ? canvas.height : canvas.width)
+  const pcx = canvas.left + canvas.width / 2 - vw / 2
+  const pcy = canvas.top + canvas.height / 2 - vh / 2
+  const pose = portrait
+    ? { x: icx - scale * pcy, y: icy + scale * pcx, rotate: -90, scale }
+    : { x: icx - scale * pcx, y: icy - scale * pcy, rotate: 0, scale }
+  return { ...pose, ...poseChrome(pose, frame, portrait), shift }
+}
+
 export function CarnivalMap({
   editing = false,
   stamps,
@@ -215,15 +442,83 @@ export function CarnivalMap({
   )
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
-  // The phone's fullscreen zoom view: native scrolling pans, a two-finger
-  // pinch resizes the painting, and CSS turns it landscape on a portrait
-  // screen (with a best-effort real orientation lock where the browser
-  // allows one).
+  // The phone's fullscreen zoom view: a fixed overlay takes the whole
+  // viewport (the web can't trigger real device rotation, and iOS has no
+  // Fullscreen API, so this is our own everywhere). Native scrolling pans, a
+  // two-finger pinch resizes the painting, and on a portrait screen CSS
+  // spins the view landscape.
   const [zoomOpen, setZoomOpen] = useState(false)
   const [zoom, setZoom] = useState(1)
   const zoomRef = useRef(1)
-  const zoomRootRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
+  const outerFrameRef = useRef<HTMLDivElement>(null)
+  // Measured when the view opens; the page behind is scroll-locked while it
+  // is up, so the window clip is still right for the exit.
+  const [entryPose, setEntryPose] = useState<EntryPose | null>(null)
+  // Measured when the view closes, from wherever the guest left the map.
+  const [exitPose, setExitPose] = useState<ExitPose | null>(null)
+  const zoomCanvasRef = useRef<HTMLDivElement>(null)
+  // While the open animation runs, the stage lets the painting overflow so
+  // the expanding clip window can reveal it; once settled it becomes the
+  // scrollable pan surface.
+  const [settled, setSettled] = useState(false)
+  // True from close-tap until the exit animation lands: the inline canvas
+  // hides so the flying card is the only map on screen (its frame border
+  // stays as the empty slot it returns to).
+  const [closing, setClosing] = useState(false)
+  const reduce = useReducedMotion()
+
+  const openZoom = () => {
+    const frame = outerFrameRef.current
+    setEntryPose(frame ? entryPoseFor(frame) : null)
+    setExitPose(null)
+    setSettled(false)
+    setZoomOpen(true)
+  }
+
+  const closeZoom = () => {
+    const canvas = zoomCanvasRef.current
+    const frame = outerFrameRef.current
+    const stage = stageRef.current
+    // The measured pose must be committed in its own render before the
+    // removal: AnimatePresence snapshots the exiting element's props from
+    // the last render it was present in, and batching both updates together
+    // would hand it the stale null pose.
+    if (canvas && frame && stage) {
+      const { box } = frameContentBox(frame)
+      const canvasRect = canvas.getBoundingClientRect()
+      // Convert the live scroll back into the equivalent transform, so the
+      // stage can leave scroll-clipping mode in the same commit with nothing
+      // moving: from then on the WHOLE painting is rendered, and the
+      // shrinking mask has real content at its edges all the way down.
+      const st = stage.scrollTop
+      const sl = stage.scrollLeft
+      const lv = layoutViewport()
+      const shift =
+        lv.vh >= lv.vw
+          ? `translate(${st}px, ${-sl}px)`
+          : `translate(${-sl}px, ${-st}px)`
+      flushSync(() => {
+        setExitPose(exitPoseFor(canvasRect, box, shift))
+        setClosing(true)
+      })
+    }
+    setZoomOpen(false)
+  }
+
+  const settleZoom = () => {
+    if (zoomOpen) setSettled(true)
+  }
+
+  // The swap that keeps the settle invisible: the shift wrapper's transform
+  // comes off and the equivalent real scrollTop goes on in the same commit,
+  // before the browser paints — the field stays centered to the pixel while
+  // the stage becomes genuinely pannable.
+  useLayoutEffect(() => {
+    if (!settled) return
+    const stage = stageRef.current
+    if (stage) stage.scrollTop = entryPose?.scroll ?? 0
+  }, [settled, entryPose])
   const frameRef = useRef<HTMLDivElement>(null)
   const dragRef = useRef<{
     id: string
@@ -258,34 +553,19 @@ export function CarnivalMap({
     }
   }, [items, editing])
 
-  // While the zoom view is open: lock the page behind it, close on Escape,
-  // and ask nicely for real fullscreen + landscape (Android grants it; iOS
-  // declines and the portrait-rotation CSS carries it instead).
+  // While the zoom view is open: lock the page behind it and close on
+  // Escape.
   useEffect(() => {
     if (!zoomOpen) return
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setZoomOpen(false)
+      if (e.key === 'Escape') closeZoom()
     }
     window.addEventListener('keydown', onKey)
-    const orientation = screen.orientation as ScreenOrientation & {
-      lock?: (mode: string) => Promise<void>
-      unlock?: () => void
-    }
-    zoomRootRef.current
-      ?.requestFullscreen?.()
-      .then(() => orientation.lock?.('landscape'))
-      .catch(() => {})
     return () => {
       document.body.style.overflow = previousOverflow
       window.removeEventListener('keydown', onKey)
-      try {
-        orientation.unlock?.()
-      } catch {
-        // Nothing was locked.
-      }
-      if (document.fullscreenElement) document.exitFullscreen().catch(() => {})
     }
   }, [zoomOpen])
 
@@ -293,8 +573,9 @@ export function CarnivalMap({
   // resizes the canvas and re-centers the scroll so the view stays anchored.
   useEffect(() => {
     if (!zoomOpen) return
-    zoomRef.current = 1
-    setZoom(1)
+    const minZoom = entryPose?.minZoom ?? 1
+    zoomRef.current = minZoom
+    setZoom(minZoom)
     const stage = stageRef.current
     if (!stage) return
     let pinch: { d0: number; z0: number } | null = null
@@ -311,7 +592,11 @@ export function CarnivalMap({
     const onMove = (e: TouchEvent) => {
       if (!pinch || e.touches.length !== 2) return
       e.preventDefault()
-      const next = clamp((pinch.z0 * dist(e.touches)) / pinch.d0, 1, 4)
+      const next = clamp(
+        (pinch.z0 * dist(e.touches)) / pinch.d0,
+        entryPose?.minZoom ?? 1,
+        4,
+      )
       const ratio = next / zoomRef.current
       if (ratio === 1) return
       const cx = stage.scrollLeft + stage.clientWidth / 2
@@ -487,6 +772,7 @@ export function CarnivalMap({
       )}
       <div
         className="carnival-map-frame"
+        ref={outerFrameRef}
         onPointerDown={editing ? () => setSelectedId(null) : undefined}
       >
         {/* The canvas always holds the full painting; on phones it renders
@@ -494,7 +780,11 @@ export function CarnivalMap({
             barn and the gardens and the lawn fills the screen. Items keep
             their percentages because they ride on the canvas, not the
             frame. */}
-        <div className="carnival-map-canvas" ref={frameRef}>
+        <div
+          className="carnival-map-canvas"
+          ref={frameRef}
+          style={closing ? { visibility: 'hidden' } : undefined}
+        >
         <img
           className="carnival-map-base"
           src="/art/map/carnival-lawn-base.webp"
@@ -560,12 +850,17 @@ export function CarnivalMap({
           )
         })}
         </div>
+        {SLOWMO > 1 && (
+          <div className="carnival-debug" aria-hidden="true">
+            {`${ZOOM_BUILD} · inner ${window.innerWidth}x${window.innerHeight} · client ${document.documentElement.clientWidth}x${document.documentElement.clientHeight} · vvScale ${window.visualViewport ? window.visualViewport.scale.toFixed(3) : 'n/a'} · dpr ${window.devicePixelRatio}`}
+          </div>
+        )}
         {!editing && (
           <button
             type="button"
             className="carnival-map-expand"
             aria-label="Open the full map"
-            onClick={() => setZoomOpen(true)}
+            onClick={openZoom}
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
               <path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6" />
@@ -579,18 +874,91 @@ export function CarnivalMap({
         </ul>
       </div>
 
+      <AnimatePresence onExitComplete={() => setClosing(false)}>
       {zoomOpen && (
-        <div
-          className="carnival-zoom"
-          ref={zoomRootRef}
+        <motion.div
+          className={`carnival-zoom${!settled || closing ? ' is-animating' : ''}`}
           role="dialog"
           aria-modal="true"
           aria-label="Carnival map, zoomed"
+          // Both directions are one gesture on this root: the WHOLE painting
+          // (fully rendered — the stage is not scroll-clipping during either
+          // transition) rotates and scales between its inline pose and
+          // fullscreen, while the mask, defined in this element's own space
+          // so it rides the transform, morphs between the frame's rounded
+          // rect and the viewport. The transform anchors on the similarity's
+          // fixed point, so each direction is a pure spiral.
+          initial={
+            reduce || !entryPose
+              ? { opacity: 0 }
+              : {
+                  ...(entryPose.translate
+                    ? { x: entryPose.x, y: entryPose.y }
+                    : {}),
+                  rotate: entryPose.rotate,
+                  scale: entryPose.scale,
+                  clipPath: entryPose.clip,
+                  opacity: 1,
+                }
+          }
+          animate={{
+            x: 0,
+            y: 0,
+            rotate: 0,
+            scale: 1,
+            opacity: 1,
+            clipPath: `polygon(0px 0px, ${document.documentElement.clientWidth}px 0px, ${document.documentElement.clientWidth}px ${document.documentElement.clientHeight}px, 0px ${document.documentElement.clientHeight}px)`,
+          }}
+          // Entry and exit have different fixed points; the origin swaps at
+          // close time, when the standing transform is identity, so the swap
+          // itself is invisible.
+          style={{
+            transformOrigin: closing ? exitPose?.origin : entryPose?.origin,
+          }}
+          exit={
+            reduce || !exitPose
+              ? { opacity: 0 }
+              : {
+                  ...(exitPose.translate
+                    ? { x: exitPose.x, y: exitPose.y }
+                    : {}),
+                  rotate: exitPose.rotate,
+                  scale: exitPose.scale,
+                  clipPath: exitPose.clip,
+                  transition: {
+                    duration: 0.45 * SLOWMO,
+                    ease: [0.22, 0.61, 0.36, 1],
+                  },
+                }
+          }
+          transition={{ duration: 0.45 * SLOWMO, ease: [0.22, 0.61, 0.36, 1] }}
+          onAnimationComplete={settleZoom}
         >
-          <div className="carnival-zoom-stage" ref={stageRef}>
+          <div className="carnival-zoom-content">
+          {/* Carries the scroll-equivalent offset as a transform whenever the
+              stage is not in scroll mode: the field-centering scroll during
+              the entrance, the guest's live scroll during the exit. */}
+          <div
+            className="carnival-zoom-shift"
+            style={
+              closing && exitPose
+                ? { transform: exitPose.shift }
+                : settled || !entryPose
+                  ? undefined
+                  : { transform: entryPose.shift }
+            }
+          >
+          <div
+            className={`carnival-zoom-stage${settled && !closing ? ' is-settled' : ''}`}
+            ref={stageRef}
+          >
             <div
               className="carnival-zoom-canvas"
-              style={{ width: `${Math.round(zoom * 100)}%` }}
+              ref={zoomCanvasRef}
+              // Not rounded to whole percents: the cover zoom is fractional
+              // (e.g. 102.2%), and rounding it down let a sub-pixel strip of
+              // page show beside the fullscreen painting.
+              style={{ width: `${(zoom * 100).toFixed(3)}%` }}
             >
               <img
                 className="carnival-map-base"
@@ -631,16 +999,24 @@ export function CarnivalMap({
               })}
             </div>
           </div>
+          </div>
+          </div>
+          {/* Pinned to the screen's own bottom-right — the user's top right
+              once they've turned the phone. The icon is symmetric under a
+              quarter turn, so it reads either way. */}
           <button
             type="button"
             className="carnival-zoom-close"
-            aria-label="Close the map"
-            onClick={() => setZoomOpen(false)}
+            aria-label="Exit full screen"
+            onClick={closeZoom}
           >
-            ✕
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              <path d="M9 3v6H3M15 3v6h6M9 21v-6H3M15 21v-6h6" />
+            </svg>
           </button>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </section>
   );
 }

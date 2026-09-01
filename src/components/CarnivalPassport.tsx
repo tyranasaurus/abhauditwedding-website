@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
+import { venueMap } from '@/data/venue-map'
 
 type PassportActivity = {
   id: string
@@ -9,7 +10,7 @@ type PassportActivity = {
 
 const ART_PATH = '/art/map/carnival'
 
-const activities: PassportActivity[] = [
+const declaredActivities: PassportActivity[] = [
   {
     id: 'pani-puri',
     art: `${ART_PATH}/pani-puri.webp`,
@@ -82,6 +83,69 @@ const activities: PassportActivity[] = [
   },
 ]
 
+/**
+ * The activities in the order a guest meets them walking the lawn: a clockwise
+ * circuit starting from the top-left of the map.
+ *
+ * Derived from where the stickers actually sit in `venue-map.json` rather than
+ * from the order they happen to be declared in, so moving a stall in
+ * `/map-editor` reorders the checklist to match instead of leaving the map and
+ * the list quietly disagreeing. An activity with no sticker keeps its declared
+ * place at the end.
+ */
+/** Bearings closer than this are the same stop on the walk, not two. */
+const SAME_STOP_DEGREES = 3
+
+function tourOrder(list: PassportActivity[]): PassportActivity[] {
+  const layer = venueMap.layers.find(
+    (candidate) => candidate.eventAnchor === 'carnegie-to-carnation',
+  )
+  if (!layer) return list
+  const placedAt = new Map(
+    layer.stickers
+      .filter((sticker) => sticker.activity)
+      .map((sticker) => [sticker.activity!, sticker]),
+  )
+  const placed = list.filter((activity) => placedAt.has(activity.id))
+  const unplaced = list.filter((activity) => !placedAt.has(activity.id))
+  if (placed.length < 3) return list
+
+  const points = placed.map((activity) => placedAt.get(activity.id)!)
+  const cx = points.reduce((sum, p) => sum + p.x, 0) / points.length
+  const cy = points.reduce((sum, p) => sum + p.y, 0) / points.length
+
+  // Angle about the middle of the lawn, measured clockwise from the top-left
+  // diagonal. y grows downward, so atan2 is already clockwise on screen; the
+  // +135 turn just moves the zero to the corner the walk starts from.
+  const bearing = (activity: PassportActivity) => {
+    const at = placedAt.get(activity.id)!
+    const degrees = (Math.atan2(at.y - cy, at.x - cx) * 180) / Math.PI
+    return (degrees + 495) % 360
+  }
+
+  const reach = (activity: PassportActivity) => {
+    const at = placedAt.get(activity.id)!
+    return Math.hypot(at.x - cx, at.y - cy)
+  }
+
+  return [
+    ...[...placed].sort((a, b) => {
+      // Two stalls on essentially the same bearing are one stop on the walk,
+      // and the angle between them is noise. Take the OUTER one first: that is
+      // the one met first coming around the perimeter, with the inner one
+      // sitting just off the path. Kept tight at 3° so it only catches real pairs
+      // — the next closest pair on this lawn is 4.4° apart and keeps its
+      // left-to-right order along the bottom.
+      const turn = bearing(a) - bearing(b)
+      if (Math.abs(turn) < SAME_STOP_DEGREES) return reach(b) - reach(a)
+      return turn
+    }),
+    ...unplaced,
+  ]
+}
+
+const activities = tourOrder(declaredActivities)
+
 const STAMPS_KEY = 'carnival-passport.stamps'
 
 /** localStorage can throw (private browsing), and old stamps for activities
@@ -105,7 +169,9 @@ function loadStamps(): Set<string> {
 export function useCarnivalStamps() {
   const [stamps, setStamps] = useState<Set<string>>(loadStamps)
 
-  const toggle = (id: string) => {
+  // Stable identity: the map's overlay is memoised against this, and a fresh
+  // function each render would defeat that on every animation frame.
+  const toggle = useCallback((id: string) => {
     setStamps((cur) => {
       const next = new Set(cur)
       if (next.has(id)) next.delete(id)
@@ -117,7 +183,7 @@ export function useCarnivalStamps() {
       }
       return next
     })
-  }
+  }, [])
 
   return { stamps, toggle }
 }
