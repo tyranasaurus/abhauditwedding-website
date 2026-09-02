@@ -3,11 +3,22 @@
 A static wedding site built with Vite + React 19 + TypeScript. Styling is hand
 written CSS in `src/index.css` (Tailwind 4 is imported only for `@theme` design
 tokens and the base reset, not for utility classes in markup). One built bundle
-is served on five paths via `vercel.json` rewrites: `/` (homepage), `/schedule`,
-`/wardrobe`, `/seating-chart`, and `/registry`; `App.tsx` picks the view from
-the path. `/wardrobe` is an alias for `/schedule` — the two pages merged, and
-neither redirects, so links already handed out keep resolving. Adding a page means adding both the branch in `App.tsx` and the
-rewrite in `vercel.json` — without the rewrite the URL 404s at Vercel's edge.
+is served on every path; `App.tsx` picks the view from `window.location.pathname`
+— `/seating-chart` renders `SeatingChart`, everything else renders `HomePage`.
+
+`vercel.json` carries rewrites for `/schedule`, `/wardrobe`, and
+`/seating-chart`. `/` needs no rewrite (it is the built `index.html`), and
+`/registry` is not a rewrite at all — it is a Vercel redirect out to the
+registry on withjoy.com. Adding a page means adding both the branch in
+`App.tsx` and the rewrite in `vercel.json` — without the rewrite the URL 404s
+at Vercel's edge.
+
+The schedule and wardrobe pages have folded into the homepage. `/schedule` and
+`/wardrobe` still resolve so links already handed out keep working, but an
+inline script in `index.html` rewrites them to the matching homepage anchor
+(`/#schedule`, or whatever hash came in) before the app boots — so `App.tsx`
+never sees those paths in a browser.
+
 `MapPage.tsx` (venue map) is built but deliberately unrouted — there is no
 `/map` rewrite, so that URL 404s until one is added.
 
