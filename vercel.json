@@ -23,6 +23,10 @@
       "destination": "/index.html"
     },
     {
+      "source": "/shaadi",
+      "destination": "/index.html"
+    },
+    {
       "source": "/grounds",
       "destination": "/index.html"
     },
@@ -32,6 +36,14 @@
     },
     {
       "source": "/map-editor",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/carnival",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/reception",
       "destination": "/index.html"
     }
   ],

@@ -57,7 +57,7 @@ import {
 const CARNIVAL_ART = [
   'airstream-drinks', 'banquet-table', 'bazaar', 'bicycle', 'block-print',
   'block-print-tote', 'camera', 'candy-bag', 'candy-cart', 'chaat-papdi',
-  'chair', 'cmu-fence', 'cocktail-table', 'dabeli', 'entrance-arch',
+  'chair', 'cmu-fence', 'cocktail-table', 'dabeli', 'dhol', 'entrance-arch',
   'food-stall', 'henna', 'jenga', 'jigsaw', 'lemonade', 'nazar', 'paan-cart',
   'pani-puri', 'photo-booth', 'picnic-carrom', 'picnic-carrom-jenga', 'samosa',
   'sunglasses', 'umbrella-arch', 'yarn-art',
@@ -97,6 +97,7 @@ const STICKER_ART: { src: string; name: string }[] = [
 const ACCENTS: MapAccentName[] = [
   'sunset',
   'carnival',
+  'copper',
   'forest',
   'rose',
   'gold',

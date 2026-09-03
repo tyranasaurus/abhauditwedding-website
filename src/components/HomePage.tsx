@@ -15,7 +15,15 @@ import {
 import { hero, travel, faqs, registry, venue, mapsSearch } from '@/data/home'
 import { events } from '@/data/events'
 import { EventPanel } from '@/components/EventPanel'
-import { currentLivePhase, livePhases } from '@/data/live-phases'
+import { EventMap } from '@/components/EventMap'
+import { venueMap } from '@/data/venue-map'
+import { venue as mapVenue } from '@/data/map'
+import {
+  currentLivePhase,
+  isRehearsing,
+  livePhasesByEvent,
+  schedule,
+} from '@/data/live-phases'
 import { useForecast, type ForecastWindow } from '@/lib/use-forecast'
 import { SiteNav } from '@/components/SiteNav'
 
@@ -28,12 +36,17 @@ function useLivePhase() {
   )
   const [now, setNow] = useState(() => Date.now())
   useEffect(() => {
-    // Minute-granular: windows are hours long, edges just shouldn't lag.
-    const id = window.setInterval(() => setNow(Date.now()), 60_000)
+    // Minute-granular normally — the windows are hours long and the edges
+    // just shouldn't lag. A rehearsal runs in seconds, so it needs a tick fast
+    // enough to land inside one.
+    const id = window.setInterval(
+      () => setNow(Date.now()),
+      isRehearsing ? 250 : 60_000,
+    )
     return () => window.clearInterval(id)
   }, [])
   const phase = override
-    ? (livePhases.find((p) => p.id === override) ?? null)
+    ? (schedule.find((p) => p.id === override) ?? null)
     : currentLivePhase(now)
 
   const preview = (id: string) => {
@@ -105,31 +118,19 @@ function SectionTitle({ title }: { title: string }) {
 
 // Calendar-day arithmetic rather than elapsed hours: the count turns over on a
 // date boundary in Carnation, not at whatever hour the ceremony happens to
-// start. The hour comes along too, because the number steps at midday.
+// start.
 const pacificNowFormat = new Intl.DateTimeFormat('en-CA', {
   timeZone: 'America/Los_Angeles',
   year: 'numeric',
   month: '2-digit',
   day: '2-digit',
-  hour: '2-digit',
-  hourCycle: 'h23',
 })
 
 function nowInPacific() {
   const parts = pacificNowFormat.formatToParts(new Date())
   const part = (type: Intl.DateTimeFormatPartTypes) =>
     parts.find((p) => p.type === type)?.value ?? ''
-  return {
-    day: `${part('year')}-${part('month')}-${part('day')}`,
-    hour: Number(part('hour')),
-  }
-}
-
-/** Shifts a YYYY-MM-DD by whole days, in UTC so DST can't skew it. */
-function addDays(day: string, n: number) {
-  return new Date(Date.parse(`${day}T00:00:00Z`) + n * 86_400_000)
-    .toISOString()
-    .slice(0, 10)
+  return { day: `${part('year')}-${part('month')}-${part('day')}` }
 }
 
 /** Whole days from one YYYY-MM-DD to another, both read as UTC so DST can't skew it. */
@@ -140,24 +141,19 @@ function daysBetween(from: string, to: string) {
   )
 }
 
-/** Pacific hour at which the count drops by one. */
-const STEP_HOUR = 15
-
-function countdownLabel({ day, hour }: { day: string; hour: number }) {
-  // The weekend itself is read from the real date, never the shifted one: on
-  // the morning of the 5th the site must not still be saying "Tomorrow". Both
-  // days read the same, and afterwards the line stops counting and says thank
-  // you instead — the site outlives the wedding by a good while.
+function countdownLabel({ day }: { day: string }) {
+  // The weekend is read from the real date: on the morning of the 5th the site
+  // must not still be saying "Tomorrow". Both days read the same, and
+  // afterwards the line stops counting and says thank you instead — the site
+  // outlives the wedding by a good while.
   if (daysBetween(day, LAST_DAY) < 0) return 'Thanks for coming'
   if (daysBetween(day, FIRST_DAY) <= 0) return "It's today!"
 
-  // Everything before the weekend steps at 3pm rather than at midnight, so the
-  // number never changes while everyone is asleep — the count you go to bed on
-  // is the one you wake up to. 3pm because that is when the weekend actually
-  // starts: refreshments are at 3:30 on the Saturday, so "10 days to go" is
-  // true right up to the hour the wedding would have begun.
-  const counted = hour < STEP_HOUR ? addDays(day, -1) : day
-  const untilFirst = daysBetween(counted, FIRST_DAY)
+  // Whole calendar days, counted from today. It used to step at 3pm instead,
+  // on the reasoning that the weekend itself begins then — but that made the
+  // number change under you in the middle of an afternoon, which reads as a
+  // glitch rather than as a countdown. A day is a day.
+  const untilFirst = daysBetween(day, FIRST_DAY)
   return untilFirst > 1 ? `${untilFirst} days to go` : 'Tomorrow'
 }
 
@@ -356,6 +352,68 @@ function SectionPhoto({
   )
 }
 
+/**
+ * The venue map on the homepage: the overall layer of the venue map — every
+ * event's areas, paths and stalls at once — on the same `EventMap` surface
+ * the live pages use, so it pans, pinches and expands to fullscreen here
+ * too. The address underneath opens Google Maps for directions.
+ */
+function VenueMapSection() {
+  const layer = venueMap.layers.find((l) => l.eventAnchor === 'overall')
+
+  return (
+    <section className="home-map" id="map" aria-label="Venue map">
+      <SectionTitle title="The Grounds" />
+      {/* Deliberately NOT wrapped in Reveal: that is a motion div, and its
+          transform would become the containing block for the map's
+          fullscreen stage, pinning "fixed" to this box instead of the
+          viewport — the expanded map would open at the size of its own
+          inline frame. */}
+      {layer ? (
+        <div className="now-map home-map-frame">
+          {/* focus, not cover: this layer's focus is nearly the whole
+              painting, so the furthest-out zoom has to be the one where all
+              of the focus fits — even though a rect that wide leaves blank
+              margins on a phone's shape. Not `contain` either, which would
+              fit the whole painting and show far more than the focus. */}
+          <EventMap
+            layer={layer}
+            label="Map of the wedding grounds"
+            fit="focus"
+          />
+        </div>
+      ) : null}
+      <Reveal className="home-map-directions">
+        <a
+          className="map-venue"
+          href={mapVenue.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            className="map-venue-pin"
+            src={mapVenue.pin}
+            alt=""
+            width={134}
+            height={192}
+          />
+          <span className="map-venue-text">
+            <span className="map-venue-address">
+              {mapVenue.addressLines.map((line, i) => (
+                <span key={line}>
+                  {line}
+                  {i < mapVenue.addressLines.length - 1 ? <br /> : null}
+                </span>
+              ))}
+            </span>
+            <span className="map-venue-cue">Open in Google Maps →</span>
+          </span>
+        </a>
+      </Reveal>
+    </section>
+  )
+}
+
 function Travel() {
   return (
     <section className="home-travel" id="travel" aria-label="Travel">
@@ -545,6 +603,7 @@ function Footer() {
             top nav already lists it alongside them. */}
         <nav className="footer-nav" aria-label="Site">
           <a href="#schedule">Schedule</a>
+          <a href="#map">Map</a>
           <a href="#travel">Travel</a>
           <a href="#faq">Q&amp;A</a>
           <a href={registry.url} target="_blank" rel="noopener noreferrer">
@@ -564,6 +623,7 @@ function offsetOf(id: string) {
 
 export function HomePage() {
   const { phase, override, preview } = useLivePhase()
+  const reduceMotion = useReducedMotion()
   const liveAnchor = phase?.anchor ?? null
   // The live auto-scroll fires once per visit: switching phases in the
   // preview chip must not keep yanking the page around.
@@ -571,6 +631,19 @@ export function HomePage() {
   // Bumped by the dev navigator's phase buttons: each click replays the
   // fresh-landing auto-scroll for the newly picked phase.
   const [scrollRequest, setScrollRequest] = useState(0)
+
+  // A phase change while the page is open — the clock crossing a window's edge
+  // under a guest who is already reading — glides them to the event that has
+  // just become the one they are standing in. Not on the first render: landing
+  // is already handled below, and doing both would scroll twice.
+  const lastPhase = useRef<string | null | undefined>(undefined)
+  useEffect(() => {
+    const id = phase?.id ?? null
+    const first = lastPhase.current === undefined
+    const changed = !first && lastPhase.current !== id
+    lastPhase.current = id
+    if (changed && id) setScrollRequest((n) => n + 1)
+  }, [phase?.id])
 
   // Everything lives on this one page now, so a deep link is a hash — and a
   // hash is only as good as the page's height at the instant it is followed.
@@ -703,62 +776,110 @@ export function HomePage() {
         <Hero />
         <main className="home-main">
           <Schedule />
+          <VenueMapSection />
           <Travel />
           <Faq />
         </main>
         <Footer />
       </div>
 
-      {/* The call into a phase's interactive page: a floating pill pinned to
-          the bottom of the screen, worn in that event's own colors. Only the
-          phases with something to open (the passport, the seating chart)
-          get one. */}
-      {phase?.pill
-        ? (() => {
+      {/* The call into this event's live page: a floating pill pinned to the
+          bottom of the screen, worn in that event's own colors. Only the
+          `during` phases have one — before an event starts there is nothing
+          live to open. */}
+      {/* The pill can arrive under a guest who is already on the page — the
+          clock crosses into the event while they are reading — so it rises
+          into place rather than blinking into existence. Keyed on the phase so
+          a change swaps one pill for the next instead of mutating the label
+          under the guest's thumb. */}
+      <AnimatePresence mode="wait">
+        {phase?.pill ? (
+          (() => {
             const accents = events.find((e) => e.anchor === phase.anchor)!
               .accents
             return (
-              <a
+              <motion.a
+                key={phase.id}
                 className="live-pill"
                 href={phase.pill.href}
                 style={{ '--pill-bg': accents.primary } as CSSProperties}
+                initial={
+                  reduceMotion
+                    ? { opacity: 0 }
+                    : { opacity: 0, y: 28, scale: 0.94 }
+                }
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={
+                  reduceMotion
+                    ? { opacity: 0 }
+                    : { opacity: 0, y: 14, scale: 0.96 }
+                }
+                transition={
+                  reduceMotion
+                    ? { duration: 0.2 }
+                    : { type: 'spring', stiffness: 420, damping: 32, mass: 0.9 }
+                }
               >
-                <span className="live-pill-kicker">Happening now</span>
-                <span className="live-pill-title">{phase.pill.label} →</span>
-              </a>
+                {phase.pill.label} →
+              </motion.a>
             )
           })()
-        : null}
+        ) : null}
+      </AnimatePresence>
 
-      {/* Floating phase-preview chip, only when a ?live= override is in
-          play — a temporary stand-in for waiting until the actual weekend. */}
+      {/* Floating phase-preview control, only when a ?live= override is in
+          play — a temporary stand-in for waiting until the actual weekend.
+          One row per event, Before and During on each, so both behaviors are
+          reachable for all three. */}
       {override !== null && (
         <div className="now-admin" role="group" aria-label="Live phase preview">
           <p className="now-admin-kicker">Live preview</p>
+          {livePhasesByEvent.map((row) => (
+            <div className="now-admin-row" key={row.label}>
+              <span className="now-admin-label">{row.label}</span>
+              {row.phases.map((candidate) => (
+                <button
+                  key={candidate.id}
+                  type="button"
+                  className={phase?.id === candidate.id ? 'is-on' : ''}
+                  aria-pressed={phase?.id === candidate.id}
+                  onClick={() => {
+                    preview(candidate.id)
+                    // Replay the fresh-landing scroll for this phase's card.
+                    setScrollRequest((n) => n + 1)
+                  }}
+                >
+                  {candidate.stage === 'during' ? 'During' : 'Before'}
+                </button>
+              ))}
+            </div>
+          ))}
           <div className="now-admin-row">
-            {livePhases.map((candidate) => (
-              <button
-                key={candidate.id}
-                type="button"
-                className={phase?.id === candidate.id ? 'is-on' : ''}
-                aria-pressed={phase?.id === candidate.id}
-                onClick={() => {
-                  preview(candidate.id)
-                  // Replay the fresh-landing scroll for this phase's card.
-                  setScrollRequest((n) => n + 1)
-                }}
-              >
-                {candidate.shortName}
-              </button>
-            ))}
+            <span className="now-admin-label" />
             <button
               type="button"
               className={phase ? '' : 'is-on'}
               aria-pressed={!phase}
               onClick={() => preview('off')}
             >
-              Off
+              Off — no event live
             </button>
+          </div>
+          {/* A way into the live pages themselves. Each one turns guests away
+              until its event opens, so before the weekend they are only
+              reachable with the `?preview` these links carry. */}
+          <div className="now-admin-row">
+            <span className="now-admin-label">Pages</span>
+            {[
+              ['Shaadi', '/shaadi'],
+              ['Carnival', '/carnival'],
+              ['Reception', '/reception'],
+              ['Seating', '/seating-chart'],
+            ].map(([label, href]) => (
+              <a key={href} className="now-admin-link" href={`${href}?preview`}>
+                {label}
+              </a>
+            ))}
           </div>
         </div>
       )}

@@ -8,9 +8,17 @@ import { SkyGlyph } from '@/components/SkyGlyph'
 export function EventPanel({
   event,
   forecast,
+  wardrobe = true,
+  note = true,
 }: {
   event: WeddingEvent
   forecast?: WindowForecast
+  /** The wardrobe guidance — the attire painting and its vibe caption. The
+   *  live pages drop it: by then everyone is dressed. */
+  wardrobe?: boolean
+  /** The event's note. Also lead-up guidance ("light layers could help ward
+   *  off the evening chill"), so the live pages drop it too. */
+  note?: boolean
 }) {
   // --art widens the artwork column on the watch party.
   const style = {
@@ -70,7 +78,11 @@ export function EventPanel({
         </p>
       </header>
 
-      <div className={`sched-cols${event.timeline ? '' : ' is-solo'}`}>
+      <div
+        className={`sched-cols${event.timeline ? '' : ' is-solo'}${
+          wardrobe ? '' : ' is-times-only'
+        }`}
+      >
         {event.timeline && (
           <ol className="sched-times">
             {event.timeline.map((entry) => {
@@ -100,22 +112,24 @@ export function EventPanel({
           </ol>
         )}
 
-        <figure className="sched-art">
-          <img
-            src={event.image}
-            alt={event.imageAlt}
-            width={event.imageWidth}
-            height={event.imageHeight}
-            loading="lazy"
-            decoding="async"
-          />
-          <figcaption className="sched-vibe">
-            {renderWords(event.vibe, event.vibeColors)}
-          </figcaption>
-        </figure>
+        {wardrobe && (
+          <figure className="sched-art">
+            <img
+              src={event.image}
+              alt={event.imageAlt}
+              width={event.imageWidth}
+              height={event.imageHeight}
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption className="sched-vibe">
+              {renderWords(event.vibe, event.vibeColors)}
+            </figcaption>
+          </figure>
+        )}
       </div>
 
-      <p className="sched-note">{event.note}</p>
+      {note && <p className="sched-note">{event.note}</p>}
 
     </article>
   )

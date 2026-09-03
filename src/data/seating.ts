@@ -8,36 +8,39 @@ export interface SeatingTable {
 }
 
 export const seatingIntro = {
-  kicker: 'Sangeet Reception · The Hippodrome',
   title: 'Find your seat',
-  blurb:
-    'Tell us who you are and your table will stay lit on the floor plan. Tap any other table to see who’s seated there.',
 } as const
 
 // Positions are measured against the watercolor floor plan
-// (public/art/map/seating-floorplan.webp, 1536×2752) by fitting a circle to
-// each painted tabletop's outline, so the highlight ring hugs the table edge.
+// (public/art/map/seating-floorplan.webp, 1600×1987) by finding each painted
+// tabletop and taking its bounding box's centre and radius, so the highlight
+// ring hugs the table edge. The box rather than the centroid: an unevenly
+// painted wash drags a centroid toward its darker side, which left table 19
+// sitting visibly off its tabletop. They are DERIVED from the artwork, not hand-placed: a
+// redraw of the plan invalidates every one of them, so re-measure rather than
+// nudge. Numbering runs up the hall — table 0 is the bottom-left pair.
+
 export const tables: SeatingTable[] = [
-  { number: 0, x: 15.95, y: 80.31, r: 5.66 },
-  { number: 1, x: 83.9, y: 80.3, r: 5.6 },
-  { number: 2, x: 15.94, y: 69.83, r: 5.66 },
-  { number: 3, x: 83.93, y: 69.85, r: 5.66 },
-  { number: 4, x: 21.93, y: 58.67, r: 5.47 },
-  { number: 5, x: 37.7, y: 58.65, r: 5.4 },
-  { number: 6, x: 63.07, y: 58.65, r: 5.4 },
-  { number: 7, x: 78.71, y: 58.67, r: 4.82 },
-  { number: 8, x: 12.46, y: 49.11, r: 5.01 },
-  { number: 9, x: 26.33, y: 49.1, r: 4.95 },
-  { number: 10, x: 40.39, y: 49.11, r: 5.14 },
-  { number: 11, x: 58.65, y: 49.1, r: 5.01 },
-  { number: 12, x: 72.7, y: 49.1, r: 5.14 },
-  { number: 13, x: 86.66, y: 49.09, r: 5.08 },
-  { number: 14, x: 12.75, y: 39.68, r: 5.08 },
-  { number: 15, x: 26.54, y: 39.69, r: 4.95 },
-  { number: 16, x: 40.52, y: 39.63, r: 5.08 },
-  { number: 17, x: 59.12, y: 39.68, r: 5.08 },
-  { number: 18, x: 73.03, y: 39.66, r: 5.01 },
-  { number: 19, x: 86.81, y: 39.63, r: 4.95 },
+  { number: 0, x: 15, y: 75.25, r: 4.5 },
+  { number: 1, x: 85, y: 75.25, r: 4.56 },
+  { number: 2, x: 15.11, y: 59.09, r: 4.41 },
+  { number: 3, x: 84.94, y: 59.09, r: 4.44 },
+  { number: 4, x: 18.44, y: 44, r: 4.5 },
+  { number: 5, x: 32.56, y: 44, r: 4.44 },
+  { number: 6, x: 67.5, y: 44, r: 4.41 },
+  { number: 7, x: 81.56, y: 44, r: 4.44 },
+  { number: 8, x: 12.5, y: 28.92, r: 4.5 },
+  { number: 9, x: 25.39, y: 28.92, r: 4.44 },
+  { number: 10, x: 38.5, y: 28.96, r: 4.41 },
+  { number: 11, x: 61.61, y: 28.96, r: 4.41 },
+  { number: 12, x: 74.44, y: 28.92, r: 4.35 },
+  { number: 13, x: 87.56, y: 28.96, r: 4.5 },
+  { number: 14, x: 12.5, y: 13.79, r: 4.5 },
+  { number: 15, x: 25.5, y: 13.83, r: 4.41 },
+  { number: 16, x: 38.5, y: 13.97, r: 4.44 },
+  { number: 17, x: 61.44, y: 13.79, r: 4.35 },
+  { number: 18, x: 73.94, y: 13.97, r: 4.09 },
+  { number: 19, x: 87.5, y: 13.88, r: 4.44 },
 ]
 
 export interface Guest {
@@ -45,29 +48,34 @@ export interface Guest {
   table: number
 }
 
-// Seating as provided by Abha & Udit. Each entry below is one table; the key
-// is the table's own number, and the tables are numbered from zero.
+// Seating as provided by Abha & Udit, transcribed from their reception seating
+// sheet. Each entry below is one table; the key is the table's own number, and
+// the tables are numbered from zero.
+//
+// The sheet groups guests into columns with working nicknames and maps those
+// columns onto table numbers further down. Only the names and the numbers
+// belong here — the nicknames are theirs, not the guests', and never ship.
 const tableGuests: Record<number, string[]> = {
-  0: ['Shirish', 'Kirthika', 'Ira', 'Piyush', 'Reena', 'Alok', 'Nikita', 'Meenakshi', 'Sumeet'],
-  1: ['Priya', 'Pooja', 'Anushka', 'Deeksha', 'Sachita', 'Nirvika', 'Shrey', 'Manya', 'Nitya'],
-  2: ['Parita', 'Ajay', 'Anjali', 'Yash', 'Ami', 'Hardik', 'Siya', 'Deyan', 'Satish', 'Manda'],
-  3: ['Roli', 'Nemi', 'Tinki', 'Snehahish', 'Shaila', 'Nani', 'Nana'],
-  4: ['Mona Rekhi', 'Naresh Rekhi', 'Sandeep Bhoot', 'Madhura Bhoot', 'Rhidaya Bhoot', 'Munmaya Mishra', 'Bidu Mishra'],
-  5: ['Anju Pansari', 'Martin Mordaunt', 'Nikita Mordaunt', 'Gopi Pansari', 'Asha Pansari'],
-  6: ['Hemant Agrawal', 'Madhulata Agrawal', 'Shiv Singhania', 'Babita Singhania', 'Pushpa Sihania', 'Arvind Ranasaria', 'Shivanand Ranasaria', 'Gayatri Ranasaria'],
-  7: ['Chaitanya Agrawal', 'Harsh Agrawal', 'Kahini Sapra', 'Meghavi', 'Vaibhav Agarwal', 'Arpit Ranasaria', 'Ronak Agarwal'],
-  8: ['Madhavi Pakalapati', 'Rama Pakalapati', 'Hima Krothapalli', 'Kalyan Krothapalli', 'Rashmi Nagpal', 'Rajest Nagpal', 'Smita Chappidi', 'Venkat Kakanuru', 'Parul Dalia', 'Apporva Dalia'],
-  9: ['Geetha Sivaprasad', 'Krishnan Gowri', 'Vasanthi Gowri', 'Shanthi Sravanakumar', 'SravanaKumar Karnati', 'Sanjeev Qazi', 'Reema Qazi'],
-  10: ['Rukmani Gopalan', 'Sriram Govindrajan', 'Viijayanti Murali', 'Murali Gopalan', 'Sarada Bharadwaj', 'Shankar Bharadwaj', 'Neha Jain', 'Dhiresh Rawal', 'Manju Sarda', 'Pankaj Sarda'],
-  11: ['Jignesh Kacharia', 'Vandana Mehta', 'Krishna Meduri', 'Neelakshi Meduri', 'Parag Kacharia', 'Deepa Gangar', 'Vikas Khanna mom', 'Vikas Khanna dad', 'Vikas Khanna', 'Shivani Khanna'],
-  12: ['Naveen Sachdeva', 'Seema Kukreja', 'Rajeev Wahi', 'Deepika Wahi', 'Advait Wahi', 'Gopi Sethu'],
-  13: ['Ben Landis', 'Cameron Selby', 'Dominique Selby', 'Haley Dalzell', 'Zach Dawson', 'Valentina Kozina', 'Brad Powell', 'Vasu Agrawal', 'Vivek Sridhar'],
-  14: ['Tejas Pakalapati', 'Joshika Pakalapati', 'Monisha Krothapalli', 'Akash Krothapalli', 'Adi Dalia', 'Neha Dalia', 'Shreyas Kakanuru', 'Vihaan Rawal', 'Kria Rawal', 'Lea Im'],
-  15: ['Annam Khan', 'Hannah Wiseman', 'Cindy Deng', 'Deepak Pallerla', 'Jade Traiger', 'Jeremy Ong', 'Sarah Lu', 'Medha Potluri', 'Vidhart Bhatia'],
-  16: ['Suyash', 'Anjali', 'Tej Seth', 'Abhi Sivaprasad', 'Suvansh', 'Nikita', 'Rishav Dutta', 'Cheyenne Kim'],
-  17: ['Sabreen Mohammed', 'Shravya', 'Sophia', 'Daniel Mar', 'Ori', 'Anoosh', 'Sukrit', 'Max Slater', 'Joanna Yao'],
-  18: ['Akshat Khanna', 'Akshita Khanna', 'Alicia Kacharia', 'Natasha Kacharia', 'Rohin Meduri', 'Sathvik Kakanuru', 'Valentina Ortega', 'Spursh Kacharia', 'Reeteka Kudallur', 'Saransh Kacharia'],
-  19: ['Tejas Bharadwaj', 'Sneha Bharadwaj', 'Chrish Thakalath', 'Ananya Murali', 'Abhi Soni', 'Adit Murali', 'Shreyas Murali', 'Dhanya Bharadwaj', 'Anish Bharadwaj', 'Gokul Gowri'],
+  0: ['Suvansh Sanjeev', 'Nikita Kedia', 'Sukrit Arora', 'Ori Huang', 'Anoosh Reddy', 'Max Slater', 'Joanna Yao', 'Gokul Gowri', 'Abhi Sivaprasad'],
+  1: ['Ben Landis', 'Cameron Selby', 'Dominique Selby', 'Haley Dalzell', 'Zach Dawson', 'Valentina Kozina', 'Brad Powell', 'Vasu Agrawal', 'Vivek Sridhar'],
+  2: ['Sabreen Mohammed', 'Shravya Kakulamarri', 'Sophia Tevosyan', 'Daniel Mar', 'Jeremy Ong', 'Sarah Lu', 'Vidhart Bhatia', 'Lea Im', 'Medha Potluri'],
+  3: ['Annam Khan', 'Hannah Wiseman', 'Cindy Deng', 'Deepak Pallerla', 'Jade Traiger', 'Ricky Hage'],
+  4: ['Akshat Khanna', 'Akshita Khanna', 'Alicia Kacharia', 'Natasha Kacharia', 'Rohin Meduri', 'Spursh Kacharia', 'Reeteka Kudallur', 'Saransh Kacharia'],
+  5: ['Chaitanya Agrawal', 'Harsh Agrawal', 'Kahini Sapra', 'Meghavi Singhania', 'Vaibhav Agarwal', 'Arpit Ranasaria', 'Ronak Agarwal'],
+  6: ['Priya Rastogi', 'Pooja Rastogi', 'Anushka Jain', 'Deeksha Gupta', 'Sachita Gupta', 'Nirvika Gupta'],
+  7: ['Anjali Amin', 'Yash Amin', 'Siya Jani', 'Deyan Jani', 'Rhidaya Bhoot', 'Manya Tayal', 'Shrey Tayal'],
+  8: ['Tejas Bharadwaj', 'Sneha Bharadwaj', 'Chrish Thakalath', 'Ananya Murali', 'Abhi Soni', 'Adit Murali', 'Shreyas Srinivasan', 'Dhanya Bharadwaj', 'Anish Bharadwaj'],
+  9: ['Sam Bruchhaus', 'Rishav Dutta', 'Cheyenne Kim', 'Tej Seth', 'Suyash Sanjeev', 'Anjali Katta', 'Sathvik Kakanuru', 'Valentina Ortega', 'Shreyas Kakanuru', 'Kathy Cui'],
+  10: ['Hemant Agrawal', 'Madhulata Agrawal', 'Shiv Singhania', 'Babita Singhania', 'Pushpa Sihania', 'Arvind Ranasaria', 'Shivanand Ranasaria', 'Gayatri Ranasaria'],
+  11: ['Roli Agrawal', 'Nemi Agrawal', 'Nitya Agrawal', 'Harish Gupta', 'Sita Gupta', 'Piyush Rastogi', 'Ira Rastogi', 'Snehahish Kumar', 'Laxmi Agrawal', 'Shaila Kumar'],
+  12: ['Reena Jain', 'Alok Jain', 'Nikita Jain', 'Kirthika', 'Shirish Gupta', 'Bidu Mishra', 'Munmaya Mishra', 'Meenakshi Tayal', 'Sumeet Tayal'],
+  13: ['Madhura Bhoot', 'Sandeep Bhoot', 'Mona Rekhi', 'Naresh Rekhi', 'Parita Amin', 'Ajay Amin', 'Ami Jani', 'Hardik Jani', 'Satish Jani', 'Manda Jani'],
+  14: ['Tejas Pakalapati', 'Joshika Pakalapati', 'Monisha Krothapalli', 'Akash Krothapalli', 'Vihaan Rawal', 'Kria Rawal', 'Advait Wahi', 'Adi Dalia', 'Neha Dalia'],
+  15: ['Rukmani Gopalan', 'Sriram Govindrajan', 'Vajayanthi Murali', 'Murali Gopalan', 'Sarada Bharadwaj', 'Shankar Bharadwaj', 'Manju Sarda', 'Pankaj Sarda'],
+  16: ['Anju Pansari', 'Martin Mordaunt', 'Nikita Mordaunt', 'Gopi Pansari', 'Asha Pansari', 'Naveen Sachdeva', 'Seema Kukreja', 'Rajeev Wahi', 'Deepika Wahi', 'Gopi Sethu'],
+  17: ['Jignesh Kacharia', 'Vandana Mehta', 'Krishna Meduri', 'Neelakshi Meduri', 'Parag Kacharia', 'Deepa Gangar', 'Neelam Ahuja', 'Ravi Ahuja', 'Vikas Khanna', 'Shivani Khanna'],
+  18: ['Madhavi Pakalapati', 'Rama Pakalapati', 'Hima Krothapalli', 'Kalyan Krothapalli', 'Rashmi Nagpal', 'Rajesh Nagpal', 'Smita Chappidi', 'Venkat Kakanuru', 'Parul Dalia', 'Apoorva Dalia'],
+  19: ['Geetha Sivaprasad', 'Krishnan Gowri', 'Vasanthi Gowri', 'Sanjeev Qazi', 'Reema Qazi', 'Shanthi Sravanakumar', 'SravanaKumar Karnati', 'Neha Jain', 'Dhiresh Rawal'],
 }
 
 // Flattened for the list and the search box. Names are not unique — two

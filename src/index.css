@@ -238,35 +238,6 @@ button:focus-visible,
   --accent-deep: #4f5343;
 }
 
-.map-page {
-  align-content: center;
-  column-gap: clamp(1.5rem, 3vw, 3.4rem);
-  display: grid;
-  grid-template-areas:
-    'header stage'
-    'legend stage';
-  grid-template-columns: minmax(17.5rem, 23rem) minmax(0, 1fr);
-  min-height: 100svh;
-  padding: clamp(1.1rem, 2.4vw, 2.2rem) max(1.1rem, calc((100vw - 1340px) / 2));
-  row-gap: clamp(1rem, 2.4vw, 1.8rem);
-}
-
-.map-header {
-  align-self: end;
-  grid-area: header;
-  text-align: center;
-}
-
-.map-kicker {
-  color: var(--copper);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  margin: 0;
-  text-transform: uppercase;
-}
-
 .map-title {
   color: var(--forest);
   font-family: var(--font-script), cursive;
@@ -275,144 +246,7 @@ button:focus-visible,
   margin: 0.45rem auto 0.2rem;
 }
 
-.map-ornament {
-  background: linear-gradient(90deg, transparent, var(--copper), transparent);
-  height: 1px;
-  margin: 0.75rem auto 0.8rem;
-  width: min(15rem, 100%);
-}
-
-.map-intro {
-  color: var(--muted-ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1rem, 1.35vw, 1.18rem);
-  line-height: 1.45;
-  margin: 0 auto;
-  max-width: 23rem;
-}
-
-.map-legend-panel {
-  align-self: start;
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-  grid-area: legend;
-}
-
-.map-legend {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.legend-link {
-  align-items: center;
-  background: rgba(255, 252, 245, 0.5);
-  border: 1px solid rgba(155, 100, 58, 0.22);
-  border-radius: 0.75rem;
-  color: inherit;
-  display: flex;
-  gap: 0.85rem;
-  padding: 0.5rem 0.65rem;
-  text-decoration: none;
-  transition:
-    border-color 0.18s ease,
-    background-color 0.18s ease,
-    transform 0.18s ease,
-    box-shadow 0.18s ease;
-}
-
 a.legend-link:hover,
-a.legend-link:focus-visible {
-  background: #fffdf7;
-  border-color: var(--accent);
-  box-shadow: 0 0.45rem 1.1rem rgba(47, 42, 33, 0.1);
-  transform: translateX(3px);
-}
-
-.legend-emblem {
-  align-items: center;
-  background: radial-gradient(circle at 34% 28%, #fffdf8, #f1e7d0 82%);
-  border-radius: 50%;
-  box-shadow:
-    inset 0 0 0 0.13rem var(--accent),
-    0 0.25rem 0.55rem rgba(31, 26, 17, 0.2);
-  display: grid;
-  flex: 0 0 auto;
-  height: 2.7rem;
-  place-items: center;
-  width: 2.7rem;
-}
-
-.legend-emblem img {
-  height: 78%;
-  object-fit: contain;
-  width: 78%;
-}
-
-.legend-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.18;
-  min-width: 0;
-}
-
-.legend-kicker {
-  color: var(--accent-deep);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.legend-name {
-  color: var(--ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 1.08rem;
-  font-weight: 700;
-}
-
-.legend-when {
-  color: var(--muted-ink);
-  font-family: var(--font-body), Georgia, serif;
-  font-size: 0.875rem;
-  margin-top: 0.12rem;
-}
-
-.legend-cue {
-  color: var(--accent);
-  font-size: 1.2rem;
-  margin-left: auto;
-  opacity: 0.5;
-  padding-left: 0.4rem;
-  transition:
-    opacity 0.18s ease,
-    transform 0.18s ease;
-}
-
-a.legend-link:hover .legend-cue {
-  opacity: 1;
-  transform: translateX(2px);
-}
-
-.map-back {
-  align-self: start;
-  color: var(--rust);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-decoration: none;
-  transition: color 0.18s ease;
-}
-
-.map-back:hover {
-  color: var(--forest);
-}
 
 /* Venue address -> Google Maps */
 .map-venue {
@@ -470,17 +304,6 @@ a.legend-link:hover .legend-cue {
   margin-top: 0.15rem;
 }
 
-/* Map stage + frame */
-
-.map-stage {
-  align-items: center;
-  align-self: center;
-  display: flex;
-  grid-area: stage;
-  justify-content: center;
-  min-width: 0;
-}
-
 .map-frame {
   aspect-ratio: 1;
   position: relative;
@@ -500,85 +323,12 @@ a.legend-link:hover .legend-cue {
   width: 100%;
 }
 
-.map-vignette {
-  border-radius: 0.35rem;
-  box-shadow: inset 0 0 4.5rem rgba(23, 38, 29, 0.2);
-  inset: 0;
-  pointer-events: none;
-  position: absolute;
-}
-
-.map-compass {
-  filter: drop-shadow(0 0.3rem 0.5rem rgba(31, 26, 17, 0.28));
-  height: auto;
-  pointer-events: none;
-  position: absolute;
-  right: 2.6%;
-  top: 2.6%;
-  width: 13%;
-  z-index: 2;
-}
-
-.map-sprig {
-  filter: drop-shadow(0 0.35rem 0.55rem rgba(31, 26, 17, 0.32));
-  height: auto;
-  pointer-events: none;
-  position: absolute;
-  width: 23%;
-  z-index: 2;
-}
-
 .map-sprig--tl {
   left: -1.5%;
   top: -2%;
 }
 
-/* Points of interest */
-
-.poi {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  z-index: 3;
-}
-
-a.poi {
-  cursor: pointer;
-  text-decoration: none;
-}
-
 .poi:hover,
-.poi:focus-within {
-  z-index: 7;
-}
-
-.poi-pin {
-  align-items: center;
-  background: radial-gradient(circle at 34% 28%, #fffdf8, #f1e7d0 82%);
-  border-radius: 50%;
-  box-shadow:
-    inset 0 0 0 0.15rem var(--accent),
-    0 0 0 0.08rem rgba(255, 253, 247, 0.95),
-    0 0.3rem 0.7rem rgba(31, 26, 17, 0.4);
-  display: flex;
-  height: clamp(2.2rem, 3.4vw, 3rem);
-  justify-content: center;
-  position: relative;
-  transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease;
-  width: clamp(2.2rem, 3.4vw, 3rem);
-  z-index: 2;
-}
-
-.poi-pin::before {
-  animation: poi-pulse 2.8s ease-out infinite;
-  border: 1.5px solid var(--accent-2);
-  border-radius: 50%;
-  content: '';
-  inset: 0;
-  opacity: 0;
-  position: absolute;
-}
 
 @keyframes poi-pulse {
   0% {
@@ -595,115 +345,7 @@ a.poi {
   }
 }
 
-.poi-glyph {
-  align-items: center;
-  display: flex;
-  height: 76%;
-  justify-content: center;
-  width: 76%;
-}
-
-.poi-glyph img {
-  height: 100%;
-  object-fit: contain;
-  width: 100%;
-}
-
 a.poi:hover .poi-pin,
-a.poi:focus-visible .poi-pin {
-  box-shadow:
-    inset 0 0 0 0.15rem var(--accent),
-    0 0 0 0.08rem rgba(255, 253, 247, 0.95),
-    0 0.5rem 1rem rgba(31, 26, 17, 0.5);
-  transform: scale(1.12);
-}
-
-a.poi:focus-visible {
-}
-
-a.poi:focus-visible .poi-pin {
-  box-shadow:
-    inset 0 0 0 0.15rem var(--accent),
-    0 0 0 0.16rem #fffdf7,
-    0 0 0 0.34rem var(--accent),
-    0 0.5rem 1rem rgba(31, 26, 17, 0.5);
-}
-
-/* The label sits above the pin and grows to reveal the description on hover. */
-.poi-label {
-  background: rgba(255, 253, 247, 0.97);
-  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--paper-shadow));
-  border-radius: 0.6rem;
-  bottom: calc(100% + 0.55rem);
-  box-shadow: 0 0.55rem 1.2rem rgba(31, 26, 17, 0.22);
-  left: 50%;
-  max-width: 14.5rem;
-  overflow: hidden;
-  padding: 0.32rem 0.62rem;
-  position: absolute;
-  text-align: center;
-  width: max-content;
-  z-index: 5;
-}
-
-/* layout="position" keeps this from scaling while the label box animates size. */
-.poi-label-body {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-}
-
-.poi-label-title {
-  color: var(--accent-deep);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(0.875rem, 1.05vw, 0.96rem);
-  font-weight: 700;
-  line-height: 1.12;
-}
-
-.poi-label-detail {
-  align-items: center;
-  border-top: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
-  display: flex;
-  flex-direction: column;
-  margin-top: 0.32rem;
-  padding-top: 0.34rem;
-}
-
-.poi-label-kicker {
-  color: var(--accent-deep);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.poi-label-when {
-  color: var(--rust);
-  font-family: var(--font-body), Georgia, serif;
-  font-size: 0.875rem;
-  font-weight: 700;
-  margin-top: 0.12rem;
-}
-
-.poi-label-blurb {
-  color: var(--muted-ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.875rem;
-  line-height: 1.3;
-  margin-top: 0.16rem;
-  max-width: 13rem;
-}
-
-.poi-label-cue {
-  color: var(--accent);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  margin-top: 0.22rem;
-}
 
 @media (prefers-reduced-motion: reduce) {
   .poi-pin::before {
@@ -1107,9 +749,6 @@ a.poi:focus-visible .poi-pin {
 
 /* Map is one fixed screen, so just push the centered grid below the nav; the
    frame size below reserves the same nav height so nothing overflows. */
-.map-page {
-  padding-top: var(--nav-h);
-}
 
 /* Deep-links like /wardrobe#sunset-shaadi must land below the fixed nav. */
 .intro-page,
@@ -2206,7 +1845,6 @@ a.poi:focus-visible .poi-pin {
   width: 1.28em;
 }
 
-
 /* The pair is sized to its own content and centred, so it sits under the
    centred event name rather than drifting into two half-empty columns. */
 .sched-cols {
@@ -2236,6 +1874,14 @@ a.poi:focus-visible .poi-pin {
 
 .sched-cols.is-solo {
   grid-template-columns: minmax(0, var(--art, 420px));
+}
+
+/* Live pages drop the wardrobe painting, so the timeline is the only column
+   left: it centres on the page rather than sitting in the left half of a
+   two-column grid with a hole beside it. */
+.sched-cols.is-times-only {
+  grid-template-columns: max-content;
+  justify-content: center;
 }
 
 .sched-times {
@@ -2515,7 +2161,6 @@ a.poi:focus-visible .poi-pin {
   opacity: 0.72;
 }
 
-
 /* ---------------------------------------------------------------------------
    Seating chart (/seating-chart) — guests say who they are once via the
    autocomplete (kept in localStorage); their table then stays lit on the
@@ -2530,16 +2175,6 @@ a.poi:focus-visible .poi-pin {
 
 .seating-header {
   text-align: center;
-}
-
-.seating-kicker {
-  color: var(--copper);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  margin: 0;
-  text-transform: uppercase;
 }
 
 .seating-title {
@@ -2711,21 +2346,6 @@ a.poi:focus-visible .poi-pin {
   color: var(--copper-light);
 }
 
-/* "Never mind" under the search when it was opened from the chip. */
-.guest-search-cancel {
-  align-self: center;
-  background: none;
-  border: 0;
-  color: var(--copper-light);
-  cursor: pointer;
-  font-family: var(--font-body), Georgia, serif;
-  font-size: 0.875rem;
-  font-style: italic;
-  padding: 0.2rem 0.4rem;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
 /* The chip naming you, with the way out ("Not you?") always in reach. */
 .me-chip {
   align-items: center;
@@ -2781,16 +2401,19 @@ a.poi:focus-visible .poi-pin {
 }
 
 .seating-frame {
-  aspect-ratio: 1536 / 2752;
+  /* The plan's own proportion. */
+  aspect-ratio: 1600 / 1987;
   border-radius: 10px;
   box-shadow: 0 18px 44px rgba(88, 65, 36, 0.18);
   margin-inline: auto;
   overflow: hidden;
   position: relative;
-  /* Sized to the viewport but never crowding it: the svh term fits the tall
-     plan under the nav, finder, and table card with air to spare, and the
-     28rem cap keeps it a map, not a mural, on big screens. */
-  width: min(90%, calc((100svh - var(--nav-h) - 9rem) * 0.558), 28rem);
+  /* Fit the height budget where it can, but never below the floor: at 2:5 the
+     plan is far taller than the old one, and letting the height drive the
+     width alone shrank the tables to specks you could not tap. Below the
+     floor the plan simply runs past one screen and the page scrolls, which is
+     the better trade. */
+  width: min(90%, max(19rem, calc((100svh - var(--nav-h) - 9rem) * 0.8)), 30rem);
 }
 
 .seating-base {
@@ -2886,9 +2509,12 @@ a.poi:focus-visible .poi-pin {
    The min-height reserves two rows of pills so the map doesn't jump as
    hovering swaps one table's guests for another's. */
 .table-card {
+  /* No reserved min-height. It was holding open the space a guest list would
+     need so the layout could not jump — but nothing changes this card now
+     except an explicit tap or search, and the empty hint was left floating in
+     a block of whitespace the rest of the time. */
   margin: 0 auto 1.1rem;
   max-width: 34rem;
-  min-height: 6.1rem;
   text-align: center;
 }
 
@@ -2902,14 +2528,6 @@ a.poi:focus-visible .poi-pin {
   font-weight: 400;
   line-height: 1.1;
   margin: 0 0 0.45rem;
-}
-
-.table-card-yours {
-  color: var(--copper-light);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 1.0625rem;
-  font-style: italic;
-  letter-spacing: 0.02em;
 }
 
 .table-card-guests {
@@ -2948,9 +2566,7 @@ a.poi:focus-visible .poi-pin {
   font-size: 0.9375rem;
   font-style: italic;
   line-height: 1.6;
-  /* Optically centers the hint inside the space the pills would occupy. */
   margin: 0;
-  padding-top: 1rem;
 }
 
 /* The map is the page on a phone: near-full width, with the page gutter
@@ -2973,6 +2589,13 @@ a.poi:focus-visible .poi-pin {
   }
 }
 
+.table-spot:hover {
+  box-shadow:
+    inset 0 0 0 1px rgba(155, 100, 58, 0.45),
+    0 0 0 3px rgba(255, 253, 247, 0.9),
+    0 0 0 5px rgba(155, 100, 58, 0.5);
+}
+
 /* -----------------------------------------------------------------------------
    Active event experience (/now) — prototype for Naach the Night Away.
    One column: the test toggle, a status header, the venue aerial focused on
@@ -2980,8 +2603,10 @@ a.poi:focus-visible .poi-pin {
    event, the seating experience during it. */
 
 .now-page {
-  padding: calc(var(--nav-h) + 1.6rem) max(1.2rem, calc((100vw - var(--max)) / 2))
-    4rem;
+  /* The live views open right under the nav, so they need a real breath above
+     the first thing on the page rather than the nav's own clearance alone. */
+  padding: calc(var(--nav-h) + clamp(2.4rem, 5vw, 3.6rem))
+    max(1.2rem, calc((100vw - var(--max)) / 2)) 4rem;
 }
 
 /* The floating admin-only preview control: a temporary stand-in for the
@@ -3017,10 +2642,22 @@ a.poi:focus-visible .poi-pin {
 }
 
 .now-admin-row {
+  align-items: center;
   display: flex;
   flex-wrap: wrap;
   gap: 0.2rem;
   justify-content: center;
+}
+
+/* The event's name on the left of its Before/During pair, so the grid reads
+   as rows rather than one long run of buttons. */
+.now-admin-label {
+  color: rgba(246, 238, 223, 0.72);
+  flex: 0 0 8.5rem;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.875rem;
+  padding-right: 0.4rem;
+  text-align: right;
 }
 
 .now-admin-row button {
@@ -3099,6 +2736,33 @@ a.poi:focus-visible .poi-pin {
   display: flex;
   justify-content: center;
   margin-top: 1.4rem;
+}
+
+/* The venue map section on the homepage: the whole grounds on the same map
+   surface the live pages use, with the address beneath it. */
+.home-map-frame {
+  margin-top: clamp(1rem, 2.5vw, 1.8rem);
+}
+
+
+/* The fullscreen map has to cover the nav, and on the homepage it could not:
+   .page-column is a stacking context (z-index 1), so the overlay's own
+   z-index counts only inside it and the nav's 20 painted over the top. While
+   a map is open the column is lifted above the nav; everything else in it is
+   underneath the overlay anyway.
+
+   Keyed on aria-hidden, not on the overlay's presence: EventMap keeps the
+   overlay mounted at all times to hold its painting warm, so `:has(.mv-overlay)`
+   matches even when nothing is open — which left the column permanently above
+   the nav and the bar reading as see-through. */
+.page-column:has(.mv-overlay[aria-hidden='false']) {
+  z-index: 30;
+}
+
+.home-map-directions {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(1.2rem, 3vw, 1.8rem);
 }
 
 .carnival-map {
@@ -3520,49 +3184,142 @@ a.poi:focus-visible .poi-pin {
   filter: brightness(1.04);
 }
 
+/* An event's live page: the detailed version of its homepage card. The event
+   panel leads (title, date and forecast, schedule, art, note), the map
+   follows, and the event's own module comes last. The panel carries the
+   event's accent variables, so each of these pages is already dressed in its
+   own colors. */
+.live-page {
+  margin: 0 auto;
+  max-width: 74rem;
+  /* Room for the floating pill, as on the other hosts, and a real breath
+     between the nav and the first thing on the page — a live view opens
+     straight into its content, with no header to stand the two apart. */
+  padding: calc(var(--nav-h) + clamp(2.4rem, 5vw, 3.6rem)) 1.2rem 7rem;
+}
+
+/* The panel's own head does the introducing here — unlike /now, which has a
+   header of its own above it. */
+.live-page .sched-event {
+  padding-block: 0;
+}
+
+/* .now-map centres its child in a flex row; with a heading above the map
+   there are two children, so the column direction stacks them. */
+.live-map {
+  align-items: stretch;
+  flex-direction: column;
+  margin-top: clamp(1.8rem, 4vw, 2.8rem);
+}
+
+/* Names the experience the map opens — the carnival's map and checklist are
+   two halves of one passport, so the title sits above both. Set in the
+   event's own accent, which the panel above has already put on the page. */
+.live-map-heading {
+  color: var(--accent, var(--forest));
+  font-family: var(--font-script), cursive;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 400;
+  line-height: 1;
+  margin: 0 0 0.9rem;
+  max-width: none;
+  text-align: center;
+}
+
+/* The seating experience keeps its heading, but as a section under the map
+   rather than the page's own title. */
+.seating-section {
+  margin-top: clamp(2rem, 4.5vw, 3.2rem);
+  /* The page opens scrolled to here, so it needs the nav's clearance above it
+     the same way an in-page anchor does. */
+  scroll-margin-top: var(--anchor-pad);
+}
+
+.live-page .seating-title {
+  font-size: clamp(2.4rem, 5vw, 3.4rem);
+}
+
+@media (max-width: 880px) {
+  /* Same as the other map hosts on a phone: the gutter moves off the page and
+     onto the text blocks so the map can outgrow them. */
+  .live-page {
+    padding-inline: 0;
+  }
+
+  .live-page .sched-stack,
+  .live-page .seating-header {
+    padding-inline: 1.2rem;
+  }
+}
+
 /* The call into a live phase's interactive page: a floating pill pinned to
    the bottom of the screen, worn in that event's colors (--pill-bg comes
    inline from the event's accents). */
+/* The one thing on the page asking to be tapped, so it is sized like it: a
+   single line of large type running nearly the full width of the screen,
+   lit from behind by a halo in the event's own colour that breathes slowly
+   to catch the eye. */
 .live-pill {
   align-items: center;
   background: var(--pill-bg, var(--forest));
-  border: 1px solid rgba(255, 252, 245, 0.55);
+  border: 1px solid rgba(255, 252, 245, 0.6);
   border-radius: 999px;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
-  box-shadow: 0 0.7rem 1.8rem rgba(31, 26, 17, 0.34);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 1.1rem);
   color: var(--paper);
   display: flex;
-  flex-direction: column;
-  gap: 0.05rem;
-  left: 50%;
-  max-width: min(92vw, 26rem);
-  padding: 0.5rem 1.5rem 0.6rem;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(1.1rem, 3.4vw, 1.4rem);
+  font-weight: 700;
+  justify-content: center;
+  /* Centred by auto margins between pinned edges, NOT by a transform: the
+     pill animates in, and motion writes its own transform inline — a
+     translateX(-50%) here would be overwritten and the pill would sit half a
+     width to the right. */
+  left: 0;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+  margin-inline: auto;
+  padding: 0.95rem 1.5rem;
   position: fixed;
+  right: 0;
   text-align: center;
   text-decoration: none;
-  transform: translateX(-50%);
+  /* Nearly the whole screen on a phone; on a desktop it stops at the width
+     of the page's own paper column (42rem ≈ 676px), so it reads as full
+     width there too instead of overhanging the page. */
+  width: min(92vw, 42rem);
   z-index: 40;
+
+  /* Drop shadow, a soft ring of the event's colour, then a wide bloom. */
+  --pill-glow:
+    0 0.7rem 1.8rem rgba(31, 26, 17, 0.34),
+    0 0 0 0.3rem color-mix(in srgb, var(--pill-bg, #28433a) 26%, transparent),
+    0 0 2.4rem color-mix(in srgb, var(--pill-bg, #28433a) 55%, transparent);
+  --pill-glow-strong:
+    0 0.9rem 2.2rem rgba(31, 26, 17, 0.4),
+    0 0 0 0.5rem color-mix(in srgb, var(--pill-bg, #28433a) 34%, transparent),
+    0 0 3.6rem color-mix(in srgb, var(--pill-bg, #28433a) 75%, transparent);
+  box-shadow: var(--pill-glow);
+  animation: live-pill-glow 2.6s ease-in-out infinite;
+}
+
+@keyframes live-pill-glow {
+  50% {
+    box-shadow: var(--pill-glow-strong);
+  }
 }
 
 .live-pill:hover,
 .live-pill:focus-visible {
-  box-shadow: 0 0.9rem 2.1rem rgba(31, 26, 17, 0.4);
-  filter: brightness(1.07);
+  animation: none;
+  box-shadow: var(--pill-glow-strong);
+  filter: brightness(1.06);
 }
 
-.live-pill-kicker {
-  color: rgba(255, 252, 245, 0.85);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.live-pill-title {
-  font-family: var(--font-script), cursive;
-  font-size: 1.6rem;
-  line-height: 1.05;
+@media (prefers-reduced-motion: reduce) {
+  .live-pill {
+    animation: none;
+  }
 }
 
 /* The floating pill needs its own airspace at the end of both hosts, or it
@@ -3859,6 +3616,13 @@ a.poi:focus-visible .poi-pin {
   --accent-deep: #ab2440;
 }
 
+.accent-copper {
+  /* Burnished copper rather than burnt orange: the first pass sat too red
+     against the map's greens and read as rust. */
+  --accent: #bd7333;
+  --accent-deep: #94501c;
+}
+
 .accent-gold {
   --accent: #a37008;
   --accent-deep: #7c5405;
@@ -3895,10 +3659,20 @@ a.poi:focus-visible .poi-pin {
    every line away as the guest zoomed in. Labels are the opposite case: they
    belong to the ground, so they scale with it (see .mx-plate). */
 .mx-area {
-  fill: color-mix(in srgb, var(--accent) 20%, transparent);
-  stroke: var(--accent);
+  /* A tint, not a veil: at higher opacity the pale wash drained the colour out
+     of whatever it covered — a terracotta roof came out grey — which read as
+     faded rather than lit. Low opacity over a mostly-accent colour warms the
+     ground instead, and the rim below does the work of separating it. */
+  fill: color-mix(in srgb, var(--accent) 60%, #fffdf7);
+  fill-opacity: 0.24;
+  /* Ivory glow first, then the shadow: the pale rim is what makes the edge
+     read on dark woodland and on a terracotta roof alike. */
+  filter: drop-shadow(0 0 2px rgba(255, 253, 247, 0.95))
+    drop-shadow(0 0 6px rgba(255, 253, 247, 0.55))
+    drop-shadow(0 1px 2px rgba(31, 26, 17, 0.35));
+  stroke: var(--accent-deep);
   stroke-linejoin: round;
-  stroke-width: 2px;
+  stroke-width: 3px;
   vector-effect: non-scaling-stroke;
 }
 
@@ -3911,15 +3685,51 @@ a.poi:focus-visible .poi-pin {
   vector-effect: non-scaling-stroke;
 }
 
+/* The marching dashes. A dash and its gap are one period, and the loop has to
+   travel exactly that: land short and every dash jumps backwards at the seam,
+   land long and it skips. Both numbers come from the same two variables so
+   they cannot drift apart, and both are in px because non-scaling-stroke
+   measures the dashes on screen rather than in the artwork's units — a shared
+   keyframe cannot serve this and `.now-route-line`, whose dashes are in
+   viewBox units with a period of 3. */
 .mx-path-line {
-  animation: now-route-march 1.4s linear infinite;
+  --dash: 7px;
+  --gap: 6px;
+  animation: mx-path-march 1.4s linear infinite;
   fill: none;
   stroke: var(--accent);
-  stroke-dasharray: 7px 6px;
+  stroke-dasharray: var(--dash) var(--gap);
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 3px;
   vector-effect: non-scaling-stroke;
+}
+
+/* Direct manipulation outranks decorative motion. A changing dash offset
+   repaints this large SVG every frame and forces the transformed watercolor
+   to wait behind it; freeze the route and cache its overlay while the guest is
+   panning or zooming, then resume at the same point when the view settles. */
+.mv-canvas.is-moving .mx-path-line {
+  animation-play-state: paused;
+}
+
+.mv-canvas.is-moving .mx-shapes {
+  will-change: transform;
+}
+
+/* EventMap keeps a second fullscreen surface warm at imperceptible opacity so
+   expansion can start immediately. Its route must not keep marching while the
+   surface is hidden, and the inline copy must likewise stop repainting under
+   the opaque fullscreen overlay. At rest there is exactly one running route. */
+.mv-overlay:not(.is-open) .mx-path-line,
+.mv-frame.is-map-away .mx-path-line {
+  animation-play-state: paused;
+}
+
+@keyframes mx-path-march {
+  to {
+    stroke-dashoffset: calc(-1 * (var(--dash, 7px) + var(--gap, 6px)));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3942,10 +3752,15 @@ a.poi:focus-visible .poi-pin {
   box-shadow: 0 0.2rem 0.55rem rgba(31, 26, 17, 0.18);
   color: var(--accent-deep);
   font-family: var(--font-display), Georgia, serif;
-  font-size: max(
-    calc(0.875rem * var(--inv, 1)),
-    calc(var(--label-size, 0.25) * var(--map-unit, 3.5rem))
-  );
+  /* Purely map units: a label is lettering painted on the artwork, so it
+     shrinks and grows with it — the same in the editor as on the page, which
+     is what makes the size set in the editor mean anything. There used to be
+     a `max()` here holding type at the site's 14px however far out you were.
+     It kept single-label event maps legible, but it also meant a size set in
+     the editor changed nothing until you were zoomed well in, and on a layer
+     naming every event at once it buried the painting under plates that
+     never got smaller. The expand button is the reading mode instead. */
+  font-size: calc(var(--label-size, 0.25) * var(--map-unit, 3.5rem));
   font-weight: 700;
   padding: 0.2em 0.7em;
   position: absolute;

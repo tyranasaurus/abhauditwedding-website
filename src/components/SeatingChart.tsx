@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
-import { SiteNav } from '@/components/SiteNav'
+import { LiveEventPage } from '@/components/LiveEventPage'
 import { guests, seatingIntro, tables } from '@/data/seating'
 import type { Guest } from '@/data/seating'
 
@@ -48,7 +48,6 @@ export function SeatingExperience() {
   const [searchFocused, setSearchFocused] = useState(false)
   // Hover is transient; a click/tap pins the table so touch users keep the
   // highlight while they look between the status line and the plan.
-  const [hovered, setHovered] = useState<number | null>(null)
   const [pinned, setPinned] = useState<number | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -79,7 +78,6 @@ export function SeatingExperience() {
     setQuery('')
     setCursor(0)
     setPinned(null)
-    setHovered(null)
     try {
       localStorage.setItem(ME_STORAGE_KEY, JSON.stringify(guest))
     } catch {
@@ -110,9 +108,18 @@ export function SeatingExperience() {
     listOpen && firstMatch && matches.every((g) => g.table === firstMatch.table)
       ? firstMatch.table
       : null
-  const active = hovered ?? pinned
+  // Only a tap or a search lights a table — deliberately NOT hover.
+  //
+  // Hovering used to drive this too, which did two bad things. It swapped the
+  // card's guest list as the pointer crossed the map, and since tables seat
+  // six to ten the card changed height and the page jumped underneath the
+  // cursor. Worse, hover took priority over the tap: any stale hover — every
+  // touch device, where `mouseleave` never comes — left the card and the ring
+  // stuck on the old table while taps silently updated state behind it, so
+  // selecting another table appeared to do nothing.
+  //
   // Tables are numbered from zero, so never test a table number for truthiness.
-  const lit = active ?? soleMatchTable
+  const lit = pinned ?? soleMatchTable
   const yourTable = me?.table ?? null
 
   // The card above the map names whichever table has attention: the lit one
@@ -206,11 +213,11 @@ export function SeatingExperience() {
                       <button
                         type="button"
                         className={`guest-option${index === cursor ? ' is-cursor' : ''}`}
-                        onMouseEnter={() => {
-                          setCursor(index)
-                          setHovered(guest.table)
-                        }}
-                        onMouseLeave={() => setHovered(null)}
+                        // Moves the keyboard cursor only. It used to light
+                        // the guest's table as well, which changed the card's
+                        // height and shifted the list out from under the
+                        // pointer mid-hover.
+                        onMouseEnter={() => setCursor(index)}
                         onClick={() => selectMe(guest)}
                       >
                         <span className="guest-option-name">{guest.name}</span>
@@ -228,18 +235,6 @@ export function SeatingExperience() {
                 No match — try a first name, or ask us and we'll find you.
               </p>
             ) : null}
-            {me && editing ? (
-              <button
-                type="button"
-                className="guest-search-cancel"
-                onClick={() => {
-                  setEditing(false)
-                  setQuery('')
-                }}
-              >
-                Never mind — still {me.name}
-              </button>
-            ) : null}
           </div>
         )}
       </div>
@@ -248,12 +243,10 @@ export function SeatingExperience() {
         <div className="table-card" role="status">
           {cardTable !== null ? (
             <>
-              <p className="table-card-title">
-                Table {cardTable}
-                {yourTable === cardTable ? (
-                  <span className="table-card-yours"> · your table</span>
-                ) : null}
-              </p>
+              {/* Just the number. Your own table is already marked on the
+                  plan by its copper seal, so saying it again here only made
+                  the title jump around as the selection changed. */}
+              <p className="table-card-title">Table {cardTable}</p>
               <ul className="table-card-guests">
                 {cardGuests.map((guest) => (
                   <li
@@ -279,10 +272,10 @@ export function SeatingExperience() {
         <div className="seating-frame">
           <img
             src="/art/map/seating-floorplan.webp"
-            alt="Watercolor floor plan of the Hippodrome reception hall: twenty round tables around a central dance floor, with the bar, buffet, and dessert stations along the top."
+            alt="Watercolor floor plan of the Hippodrome reception hall: twenty round tables in ranks down the room, a central dance floor with a mirrorball and a stage, the curtained service area across the top, and rooms along the back."
             className="seating-base"
-            width={1536}
-            height={2752}
+            width={1600}
+            height={1987}
             fetchPriority="high"
           />
           {tables.map((table) => (
@@ -297,10 +290,6 @@ export function SeatingExperience() {
                 top: `${table.y}%`,
                 width: `${table.r * 2}%`,
               }}
-              onMouseEnter={() => setHovered(table.number)}
-              onMouseLeave={() => setHovered(null)}
-              onFocus={() => setHovered(table.number)}
-              onBlur={() => setHovered(null)}
               onClick={() => togglePin(table.number)}
               aria-label={
                 yourTable === table.number
@@ -323,27 +312,54 @@ export function SeatingExperience() {
  * The standalone /seating-chart page: the site nav and the page header around
  * the shared experience.
  */
-export function SeatingChart() {
+/**
+ * The reception's live page at /seating-chart: the event's full panel and the
+ * Hippodrome map, then the seating experience. `LiveEventPage` supplies the
+ * panel, the map and the title, so this is the reception's own module plus
+ * the heading that introduces it.
+ */
+export function ReceptionPage({
+  toChart = false,
+}: {
+  /** Open scrolled to the seating chart. `/seating-chart` sets this; the
+   *  page's own address, `/reception`, opens at the top like its siblings. */
+  toChart?: boolean
+}) {
+  const section = useRef<HTMLElement>(null)
+
+  // Reached as /seating-chart, open on the chart itself: a guest following
+  // that link was sent to find their table, and the schedule and venue map
+  // above it are context they can scroll back up to, not the thing they came
+  // for. Reached as /reception, the page opens at the top like the others.
+  //
+  // Jumped, not smooth-scrolled: an animation from the top of the page would
+  // race whatever the browser is doing with its own scroll restoration, and a
+  // guest who reloads mid-look should land where they were, not watch the page
+  // travel. Deferred a frame so it runs after the first paint has laid the
+  // panel and map out at their real heights.
   useEffect(() => {
-    const previous = document.title
-    document.title = 'Seating Chart · Abha & Udit'
-    return () => {
-      document.title = previous
-    }
-  }, [])
+    if (!toChart || window.location.hash) return
+    const frame = requestAnimationFrame(() => {
+      section.current?.scrollIntoView({ block: 'start' })
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [toChart])
 
   return (
-    <>
-      <SiteNav />
-      <main className="seating-page">
+    <LiveEventPage anchor="naach-the-night-away" mapLabel="The Hippodrome">
+      <section
+        className="seating-section"
+        aria-labelledby="seating-title"
+        ref={section}
+      >
         <header className="seating-header">
-          <p className="seating-kicker">{seatingIntro.kicker}</p>
-          <h1 className="seating-title">{seatingIntro.title}</h1>
+          <h1 className="seating-title" id="seating-title">
+            {seatingIntro.title}
+          </h1>
           <div className="seating-ornament" aria-hidden="true" />
-          <p className="seating-intro">{seatingIntro.blurb}</p>
         </header>
         <SeatingExperience />
-      </main>
-    </>
+      </section>
+    </LiveEventPage>
   )
 }

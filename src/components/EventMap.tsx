@@ -99,6 +99,7 @@ export function EventMap({
   stamps,
   onToggleActivity,
   label = 'Map of the wedding grounds',
+  fit = 'cover',
 }: {
   layer: MapLayer
   /** Passport activities already collected. Stickers carrying an activity are
@@ -106,6 +107,12 @@ export function EventMap({
   stamps?: Set<string>
   onToggleActivity?: (activity: string) => void
   label?: string
+  /** How far out the guest may zoom. `cover` never lets the painting stop
+   *  covering the screen, which suits an event's own tight focus. `focus`
+   *  zooms out until the whole focus rect is on screen and no further, blank
+   *  margins and all — what a whole-grounds layer needs, since a focus that
+   *  wide cannot fit a phone's shape without them. */
+  fit?: 'cover' | 'contain' | 'focus'
 }) {
   const [expanded, setExpanded] = useState(false)
   const expandedRef = useRef(expanded)
@@ -140,6 +147,7 @@ export function EventMap({
   const viewport = useMapViewport({
     art: venueMap.art,
     bounds: layer.focus,
+    fit,
     rotationDeg: rotation,
     // Inline the frame is cut to the focus, so the whole focused area is
     // already on screen and there is nowhere to pan or zoom TO. Leaving the
@@ -153,6 +161,7 @@ export function EventMap({
   const inlineViewport = useMapViewport({
     art: venueMap.art,
     bounds: layer.focus,
+    fit,
     rotationDeg: 0,
     interactive: false,
   })
@@ -420,7 +429,7 @@ export function EventMap({
           rather than cropping, so the whole area stays visible at every size
           until they maximise, where the screen's shape takes over. */}
       <div
-        className="mv-frame"
+        className={`mv-frame${expanded || closing ? ' is-map-away' : ''}`}
         ref={frameRef}
         aria-label={label}
         style={{ '--focus-ar': focusAspect } as React.CSSProperties}
@@ -439,7 +448,7 @@ export function EventMap({
           compass filter, and compositor layers are all warm before the first
           expand frame. This trades a little GPU memory for photo-like motion. */}
       <motion.div
-        className="mv-overlay"
+        className={`mv-overlay${expanded ? ' is-open' : ''}`}
         aria-hidden={!expanded}
         initial={false}
         // Chrome skips painting a visibility:hidden or truly transparent

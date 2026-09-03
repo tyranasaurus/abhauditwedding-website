@@ -196,14 +196,22 @@ export function useCarnivalStamps() {
 export function CarnivalPassport({
   stamps,
   onToggle,
+  heading = true,
 }: {
   stamps: Set<string>
   onToggle: (id: string) => void
+  /** The passport's own title. Off where something above has already named
+   *  it — the live page titles the map that opens it. */
+  heading?: boolean
 }) {
   return (
-    <section className="carnival-passport" aria-labelledby="carnival-passport-title">
+    <section
+      className="carnival-passport"
+      aria-label={heading ? undefined : 'Carnival Passport'}
+      aria-labelledby={heading ? 'carnival-passport-title' : undefined}
+    >
       <div className="carnival-map-heading">
-        <h2 id="carnival-passport-title">Carnival Passport</h2>
+        {heading && <h2 id="carnival-passport-title">Carnival Passport</h2>}
         <p className="passport-progress" role="status">
           {stamps.size === 0
             ? 'Tap an activity to stamp your passport.'

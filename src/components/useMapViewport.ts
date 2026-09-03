@@ -55,7 +55,12 @@ const COMMIT_IDLE_MS = 140
  * the detailed artwork soft.
  */
 const setCompositing = (el: HTMLElement | null, moving: boolean) => {
-  if (el) el.style.willChange = moving ? 'transform' : ''
+  if (!el) return
+  el.style.willChange = moving ? 'transform' : ''
+  // Animated SVG strokes repaint their surface every frame. Let descendants
+  // suspend decorative motion while this canvas has to track a finger, then
+  // resume from the same animation position once direct manipulation stops.
+  el.classList.toggle('is-moving', moving)
 }
 
 /**
@@ -126,10 +131,13 @@ export function useMapViewport({
 }: {
   art: { width: number; height: number }
   bounds: MapFocus
-  /** How the artwork sits in the stage at zoom 1. `cover` fills the stage and
-   *  crops; `contain` fits the whole painting on screen, which is what laying
-   *  it out wants. */
-  fit?: 'cover' | 'contain'
+  /** How the artwork sits in the stage at zoom 1, and how far out the guest
+   *  may then zoom. `cover` fills the stage and never lets the painting stop
+   *  covering it; `contain` fits the whole painting on screen, which is what
+   *  laying it out wants; `focus` fills the stage like `cover` but lets the
+   *  zoom-out run until the whole focus rect is on screen, blank margins and
+   *  all — for a focus too wide or tall to fit the screen's shape otherwise. */
+  fit?: 'cover' | 'contain' | 'focus'
   /** How far the stage element itself is turned on screen, in degrees. */
   rotationDeg?: number
   /** When false the wheel and pinch gestures are left alone. */
@@ -165,7 +173,9 @@ export function useMapViewport({
   const canvas = useMemo(() => {
     if (!stage.w || !stage.h) return { w: 0, h: 0 }
     const ratios = [stage.w / art.width, stage.h / art.height]
-    const scale = fit === 'cover' ? Math.max(...ratios) : Math.min(...ratios)
+    // `focus` sizes the canvas exactly as `cover` does; only its zoom-out
+    // limit differs, so map units stay the same as everywhere else.
+    const scale = fit === 'contain' ? Math.min(...ratios) : Math.max(...ratios)
     return { w: art.width * scale, h: art.height * scale }
   }, [stage.w, stage.h, art.width, art.height, fit])
 
@@ -189,7 +199,10 @@ export function useMapViewport({
   const minZoom = useMemo(() => {
     if (!box.w || !box.h || !stage.w || !stage.h) return 1
     const contain = Math.min(stage.w / box.w, stage.h / box.h)
-    return fit === 'contain' ? Math.min(1, contain) : Math.max(contain, 1)
+    if (fit === 'contain') return Math.min(1, contain)
+    // `focus` honours the rect even where that means the painting no longer
+    // covers the stage; `cover` keeps the painting edge to edge instead.
+    return fit === 'focus' ? contain : Math.max(contain, 1)
   }, [box.w, box.h, stage.w, stage.h, fit])
   const maxZoom = minZoom * ZOOM_RANGE
 

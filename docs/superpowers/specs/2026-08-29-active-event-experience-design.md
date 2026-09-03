@@ -137,17 +137,27 @@ party is off-site and has no venue experience):
   11; during-carnival 11–2:30; pre-reception 2:30–4:45; during-reception
   4:45–11) — and while one is open: (1) the page auto-scrolls to that
   event's schedule card on arrival (piggybacking the hash-hold logic, never
-  overriding an explicit hash, once per visit); (2) phases with an
-  interactive page get a floating bottom pill in the event's colors —
-  `Open your Carnival Passport` → `/passport`, `See the Seating Chart` →
-  `/seating-chart`. The static site carries no map (also decided
+  overriding an explicit hash, once per visit); (2) a floating bottom pill in
+  the event's colors opens that event's live page. Every farm event has two
+  phases, `before` and `during`, and every phase carries a pill: before it
+  reads `Coming up`, during it reads `Happening now`. The static site
+  carries no map (also decided
   2026-08-31, reversing the brief `Where to go` card-map experiment);
   wayfinding belongs to the interactive pages. Outside every window the
   homepage is just the homepage: no pill (the old unconditional
   `Time to Naach!` bar is gone). `?live=<phase-id>` (or `off`) overrides the
-  clock and shows the dev navigator — the floating phase chip, which now
-  sits top-center under the site header so it never covers the pills and
-  corner buttons along the bottom.
+  clock and shows the dev navigator — a floating panel top-center under the
+  site header (clear of the pills along the bottom) with one row per event
+  and Before/During on each, so all six behaviors are one tap apart. Picking
+  a phase replays the landing scroll for that event's card.
+- Each event has a live page, all sharing `LiveEventPage`: the event's own
+  `EventPanel` (title, date and live forecast, schedule, note — the wardrobe
+  art is dropped, since by then everyone is dressed), then that event's map
+  via `EventMap`, then the event's module. `/shaadi` (map only so far),
+  `/passport` (carnival map + activity passport) and `/seating-chart`
+  (Hippodrome map + seat finder). Reusing the homepage panel keeps the two
+  faces of the site from drifting and dresses each page in its event's
+  accents for free.
 - `/passport` is the carnival's interactive page: the lawn map and the
   stampable passport (stamps shared via localStorage with everywhere else
   they appear), in the carnival's own colors. The seating chart page was

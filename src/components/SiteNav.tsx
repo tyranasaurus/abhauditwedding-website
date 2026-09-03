@@ -10,7 +10,7 @@ const SOLID_AT = 80
 const MENU_AT = 820
 
 /** The homepage sections the nav links to, in the order they appear. */
-const SECTIONS = ['schedule', 'travel', 'faq'] as const
+const SECTIONS = ['schedule', 'map', 'travel', 'faq'] as const
 
 /**
  * Shared top navigation. On pages tall enough to scroll it is transparent at the
@@ -122,6 +122,13 @@ export function SiteNav() {
           aria-current={here === 'schedule' ? 'true' : undefined}
         >
           Schedule
+        </a>
+        <a
+          href="/#map"
+          onClick={close}
+          aria-current={here === 'map' ? 'true' : undefined}
+        >
+          Map
         </a>
         <a
           href="/#travel"

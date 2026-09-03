@@ -41,6 +41,7 @@ export interface MapFocus {
 export type MapAccentName =
   | 'sunset'
   | 'carnival'
+  | 'copper'
   | 'forest'
   | 'rose'
   | 'gold'
