@@ -422,6 +422,7 @@ export function useMapViewport({
     stage.w,
     minZoom,
     maxZoom,
+    opening,
     reach.x,
     reach.y,
     clampCenter,

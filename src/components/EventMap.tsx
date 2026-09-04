@@ -166,9 +166,10 @@ export function EventMap({
   const focusAspect =
     (layer.focus.w * venueMap.art.width) / (layer.focus.h * venueMap.art.height)
 
-  // A little air around the inset, so the hall does not sit hard against the
-  // screen edges when the view opens on it.
-  const expandBounds =
+  // Expanding lands on the hall, with a little air around it — but the
+  // limits still come from the focus, so a guest can pull back out to the
+  // whole reception area if they want to see where the room sits.
+  const openTo =
     expandToInset && layer.inset
       ? {
           x: layer.inset.x,
@@ -176,11 +177,12 @@ export function EventMap({
           w: layer.inset.w * 1.12,
           h: layer.inset.h * 1.04,
         }
-      : layer.focus
+      : undefined
 
   const viewport = useMapViewport({
     art: venueMap.art,
-    bounds: expandBounds,
+    bounds: layer.focus,
+    openTo,
     fit,
     rotationDeg: rotation,
     // Inline the frame is cut to the focus, so the whole focused area is

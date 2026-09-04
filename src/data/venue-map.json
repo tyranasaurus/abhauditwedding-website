@@ -319,12 +319,18 @@
         "w": 22.38470920510813,
         "h": 50.02247858441965
       },
+      "art": {
+        "src": "/art/map/grounds-reception.webp",
+        "width": 4200,
+        "height": 1782
+      },
       "inset": {
         "src": "/art/map/hippodrome-floorplan.webp",
         "x": 26.393,
         "y": 34.484,
         "w": 6.69,
-        "h": 37.318
+        "h": 37.318,
+        "baked": true
       },
       "areas": [],
       "paths": [],

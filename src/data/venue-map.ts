@@ -125,6 +125,8 @@ export interface MapInset {
   y: number
   w: number
   h: number
+  /** Already painted into the layer's art; do not draw it again. */
+  baked?: boolean
 }
 
 /** One event's drawing on the grounds map. */
@@ -135,8 +137,14 @@ export interface MapLayer {
    *  that belongs to no single event. */
   eventAnchor: string | null
   focus: MapFocus
+  /** This layer's own painting, where the shared one will not do. The
+   *  reception's has the Hippodrome's floor baked into it, so the hall and
+   *  its interior are one image rather than two that must stay aligned. */
+  art?: { src: string; width: number; height: number }
   /** Optional cut-away drawing laid over the artwork, under everything else
-   *  this layer draws. */
+   *  this layer draws. Geometry only once `baked` is set: the drawing is
+   *  already in the layer's own painting, and the rect just says where the
+   *  hall is, for the view that opens on it. */
   inset?: MapInset
   areas: MapArea[]
   paths: MapPath[]

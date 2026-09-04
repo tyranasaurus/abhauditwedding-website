@@ -2809,10 +2809,6 @@ a.poi:hover .poi-pin,
   align-items: stretch;
   flex-direction: column;
   margin-top: clamp(1.8rem, 4vw, 2.8rem);
-  /* Below the finder above it, so the suggestion list drops over the map's
-     compass and expand button rather than under them. */
-  position: relative;
-  z-index: 1;
 }
 
 /* Names the experience the map opens — the carnival's map and checklist are
@@ -2831,13 +2827,16 @@ a.poi:hover .poi-pin,
 
 /* The seating experience keeps its heading, but as a section under the map
    rather than the page's own title. */
-/* The seat finder sits directly above the map, and its suggestion list drops
-   over it — so both need a stacking context, or the map (a later sibling)
-   paints its compass and expand button over the list. */
+/* The seat finder sits directly above the map and its suggestion list drops
+   over it, so it needs to out-rank the map's chrome — the compass and the
+   expand button sit at 6. Deliberately NOT a stacking context on the map
+   itself: that would trap its fullscreen overlay (60) under this, and the
+   expanded map would open beneath the finder. Left loose, the overlay is
+   ranked against this in the root context and still covers everything. */
 .seating-section {
   margin-top: clamp(2rem, 4.5vw, 3.2rem);
   position: relative;
-  z-index: 2;
+  z-index: 10;
   /* The page opens scrolled to here, so it needs the nav's clearance above it
      the same way an in-page anchor does. */
   scroll-margin-top: var(--anchor-pad);
