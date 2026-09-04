@@ -1,6 +1,7 @@
 import { ReceptionPage } from '@/components/SeatingChart'
 import { HomePage } from '@/components/HomePage'
 import { MapEditor } from '@/components/MapEditor'
+import { MapPage } from '@/components/MapPage'
 import { MapView } from '@/components/MapView'
 import { CarnivalPage } from '@/components/CarnivalPage'
 import { ShaadiPage } from '@/components/ShaadiPage'
@@ -44,6 +45,7 @@ export default function App() {
   // Same page, opened on the chart: the address guests are handed to find
   // their table.
   if (path === '/seating-chart') return <ReceptionPage toChart />
+  if (path === '/map') return <MapPage />
   if (path === '/map-view' || path === '/grounds') return <MapView />
   if (path === '/map-editor' && editorAllowed()) return <MapEditor />
   // /passport was this page's first name; links to it are already out.

@@ -3976,3 +3976,38 @@ span.mx-swatch {
   padding: 0.35rem 0.8rem;
   text-decoration: none;
 }
+
+/* ------------------------------------------------------------------ */
+/* The venue map's own page (/map)                                      */
+/* ------------------------------------------------------------------ */
+
+.map-page {
+  margin: 0 auto;
+  max-width: 74rem;
+  /* The same clearance the live pages take, so the title is not tucked
+     under the nav. */
+  padding: calc(var(--nav-h) + clamp(2.4rem, 5vw, 3.6rem)) 1.2rem 5rem;
+}
+
+.map-page-header {
+  text-align: center;
+}
+
+.map-page-title {
+  color: var(--forest);
+  font-family: var(--font-script), cursive;
+  font-size: clamp(3rem, 6.4vw, 4.6rem);
+  font-weight: 400;
+  line-height: 0.96;
+  /* The global h1 rule caps width at 10ch; keep the box centered and wide
+     enough that the title doesn't hug the left gutter. */
+  margin: 0 auto;
+  max-width: none;
+}
+
+.map-page-ornament {
+  background: linear-gradient(90deg, transparent, var(--copper), transparent);
+  height: 1px;
+  margin: 1.1rem auto 0;
+  width: min(15rem, 100%);
+}

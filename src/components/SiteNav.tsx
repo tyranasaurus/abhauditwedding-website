@@ -10,7 +10,7 @@ const SOLID_AT = 80
 const MENU_AT = 820
 
 /** The homepage sections the nav links to, in the order they appear. */
-const SECTIONS = ['schedule', 'map', 'travel', 'faq'] as const
+const SECTIONS = ['schedule', 'travel', 'faq'] as const
 
 /**
  * Shared top navigation. On pages tall enough to scroll it is transparent at the
@@ -22,6 +22,7 @@ const SECTIONS = ['schedule', 'map', 'travel', 'faq'] as const
  * into a menu behind the bar's button.
  */
 export function SiteNav() {
+  const onMapPage = window.location.pathname.replace(/\/+$/, '') === '/map'
   const [solid, setSolid] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
   const [here, setHere] = useState<string | null>(null)
@@ -123,10 +124,12 @@ export function SiteNav() {
         >
           Schedule
         </a>
+        {/* A page of its own, not a section: no hash, and no scroll-spy —
+            the nav marks it by the path instead. */}
         <a
-          href="/#map"
+          href="/map"
           onClick={close}
-          aria-current={here === 'map' ? 'true' : undefined}
+          aria-current={onMapPage ? 'true' : undefined}
         >
           Map
         </a>

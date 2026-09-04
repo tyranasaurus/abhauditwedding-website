@@ -15,9 +15,6 @@ import {
 import { hero, travel, faqs, registry, venue, mapsSearch } from '@/data/home'
 import { events } from '@/data/events'
 import { EventPanel } from '@/components/EventPanel'
-import { EventMap } from '@/components/EventMap'
-import { venueMap } from '@/data/venue-map'
-import { venue as mapVenue } from '@/data/map'
 import {
   currentLivePhase,
   isRehearsing,
@@ -349,68 +346,6 @@ function SectionPhoto({
         />
       </Reveal>
     </>
-  )
-}
-
-/**
- * The venue map on the homepage: the overall layer of the venue map — every
- * event's areas, paths and stalls at once — on the same `EventMap` surface
- * the live pages use, so it pans, pinches and expands to fullscreen here
- * too. The address underneath opens Google Maps for directions.
- */
-function VenueMapSection() {
-  const layer = venueMap.layers.find((l) => l.eventAnchor === 'overall')
-
-  return (
-    <section className="home-map" id="map" aria-label="Venue map">
-      <SectionTitle title="The Grounds" />
-      {/* Deliberately NOT wrapped in Reveal: that is a motion div, and its
-          transform would become the containing block for the map's
-          fullscreen stage, pinning "fixed" to this box instead of the
-          viewport — the expanded map would open at the size of its own
-          inline frame. */}
-      {layer ? (
-        <div className="now-map home-map-frame">
-          {/* focus, not cover: this layer's focus is nearly the whole
-              painting, so the furthest-out zoom has to be the one where all
-              of the focus fits — even though a rect that wide leaves blank
-              margins on a phone's shape. Not `contain` either, which would
-              fit the whole painting and show far more than the focus. */}
-          <EventMap
-            layer={layer}
-            label="Map of the wedding grounds"
-            fit="focus"
-          />
-        </div>
-      ) : null}
-      <Reveal className="home-map-directions">
-        <a
-          className="map-venue"
-          href={mapVenue.mapsUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            className="map-venue-pin"
-            src={mapVenue.pin}
-            alt=""
-            width={134}
-            height={192}
-          />
-          <span className="map-venue-text">
-            <span className="map-venue-address">
-              {mapVenue.addressLines.map((line, i) => (
-                <span key={line}>
-                  {line}
-                  {i < mapVenue.addressLines.length - 1 ? <br /> : null}
-                </span>
-              ))}
-            </span>
-            <span className="map-venue-cue">Open in Google Maps →</span>
-          </span>
-        </a>
-      </Reveal>
-    </section>
   )
 }
 
@@ -776,7 +711,6 @@ export function HomePage() {
         <Hero />
         <main className="home-main">
           <Schedule />
-          <VenueMapSection />
           <Travel />
           <Faq />
         </main>

@@ -37,6 +37,10 @@
     {
       "source": "/reception",
       "destination": "/index.html"
+    },
+    {
+      "source": "/map",
+      "destination": "/index.html"
     }
   ],
   "redirects": [
