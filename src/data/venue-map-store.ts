@@ -37,10 +37,27 @@ export function loadDraft(): { doc: VenueMapDoc; fromDraft: boolean } {
     if (parsed?.version !== venueMap.version || !Array.isArray(parsed.layers)) {
       return { doc: savedDoc(), fromDraft: false }
     }
-    return { doc: parsed, fromDraft: true }
+    return { doc: adoptFileOnlyFields(parsed), fromDraft: true }
   } catch {
     return { doc: savedDoc(), fromDraft: false }
   }
+}
+
+/**
+ * Fields the editor cannot author stay the file's to give. A layer's `inset`
+ * — the cut-away drawing pinned over part of the painting — is added by hand
+ * in `venue-map.json`, so a draft written before it existed would otherwise
+ * hide it until the draft was thrown away, taking the layout with it. The
+ * draft still owns everything it can actually edit.
+ */
+function adoptFileOnlyFields(draft: VenueMapDoc): VenueMapDoc {
+  const doc = clone(draft)
+  for (const layer of doc.layers) {
+    if (layer.inset) continue
+    const committed = venueMap.layers.find((l) => l.id === layer.id)
+    if (committed?.inset) layer.inset = clone(committed.inset)
+  }
+  return doc
 }
 
 export function writeDraft(doc: VenueMapDoc) {

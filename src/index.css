@@ -238,14 +238,6 @@ button:focus-visible,
   --accent-deep: #4f5343;
 }
 
-.map-title {
-  color: var(--forest);
-  font-family: var(--font-script), cursive;
-  font-size: clamp(3.7rem, 7vw, 5.6rem);
-  line-height: 0.96;
-  margin: 0.45rem auto 0.2rem;
-}
-
 a.legend-link:hover,
 
 /* Venue address -> Google Maps */
@@ -312,38 +304,7 @@ a.legend-link:hover,
   width: min(100%, calc(100svh - var(--nav-h) - 2.8rem));
 }
 
-.map-base {
-  border-radius: 0.35rem;
-  box-shadow:
-    0 0 0 0.45rem #fffdf7,
-    0 0 0 0.52rem var(--paper-shadow),
-    0 1.4rem 2.8rem rgba(31, 26, 17, 0.24);
-  height: 100%;
-  object-fit: cover;
-  width: 100%;
-}
-
-.map-sprig--tl {
-  left: -1.5%;
-  top: -2%;
-}
-
 .poi:hover,
-
-@keyframes poi-pulse {
-  0% {
-    opacity: 0.5;
-    transform: scale(1);
-  }
-  70% {
-    opacity: 0;
-    transform: scale(1.7);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.7);
-  }
-}
 
 a.poi:hover .poi-pin,
 
@@ -519,67 +480,6 @@ a.poi:hover .poi-pin,
   }
 }
 
-/* Shared buttons ---------------------------------------------------- */
-/* Buttons ---------------------------------------------------------- *
- * One sign, painted in whatever pigment its context hands it. Three
- * things keep it from reading as a web control on a sheet of paper:
- *
- *  - the fill is mixed with --paper rather than with transparency, so it
- *    sits on the sheet as pigment instead of floating over it as a film,
- *    and the page's paper grain stops at the sign's edge the way it would
- *    under a painted area;
- *  - the bottom edge carries more pigment than the other three, because
- *    that is what a wash does when it pools;
- *  - nothing lifts on hover. Hover deepens the wash and firms the edge.
- *    Nothing on this page floats.
- * ------------------------------------------------------------------ */
-.btn {
-  /* Ink is contextual — the text and the edge take whatever pigment the page
-     hands them. The wash is not: it stays the A&U green on every button, which
-     is what makes four signs on four pages read as one family. (Washing in the
-     event's own navy came out a cool grey against warm paper — right in
-     principle, mud on the page.) */
-  --btn-ink: var(--forest);
-  --btn-wash: var(--forest);
-  --btn-radius: 0.85rem;
-  align-items: center;
-  background: color-mix(in srgb, var(--btn-wash) 10%, var(--paper));
-  border: 1px solid color-mix(in srgb, var(--btn-ink) 42%, transparent);
-  border-bottom-color: color-mix(in srgb, var(--btn-ink) 64%, transparent);
-  border-radius: var(--btn-radius);
-  color: var(--btn-ink);
-  cursor: pointer;
-  display: inline-flex;
-  flex-direction: column;
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 1.05rem;
-  font-weight: 600;
-  justify-content: center;
-  letter-spacing: 0.05em;
-  line-height: 1.3;
-  padding: 0.95rem 1.6rem;
-  text-align: center;
-  text-decoration: none;
-  transition:
-    background-color 0.18s ease,
-    border-color 0.18s ease,
-    color 0.18s ease;
-}
-
-.btn:hover {
-  background: color-mix(in srgb, var(--btn-wash) 19%, var(--paper));
-  border-color: color-mix(in srgb, var(--btn-ink) 72%, transparent);
-  border-bottom-color: color-mix(in srgb, var(--btn-ink) 88%, transparent);
-}
-
-/* A way out, not a destination. */
-.btn-back {
-  --btn-radius: 0.6rem;
-  font-size: 0.98rem;
-  letter-spacing: 0.04em;
-  padding: 0.55rem 1.05rem;
-}
-
 /* In-page anchors (#schedule, #travel, #faq …) land below the fixed nav so
    the section title is never tucked under it. */
 .home section[id] {
@@ -743,18 +643,12 @@ a.poi:hover .poi-pin,
 /* The fixed nav floats over the homepage hero, but the wardrobe and map pages
    have no hero, so push their first screen down to clear it. (border-box keeps
    the page at 100svh, so the centered content just recenters lower.) */
-.intro-page {
-  padding-top: calc(var(--nav-h) + 3rem);
-}
 
 /* Map is one fixed screen, so just push the centered grid below the nav; the
    frame size below reserves the same nav height so nothing overflows. */
 
 /* Deep-links like /wardrobe#sunset-shaadi must land below the fixed nav. */
 .intro-page,
-.event-panel {
-  scroll-margin-top: var(--anchor-pad);
-}
 
 /* Hero -------------------------------------------------------------- */
 .hero {
@@ -945,14 +839,6 @@ a.poi:hover .poi-pin,
    line carries it instead. */
 .sched-event:has(.sched-cols.is-solo) .sched-date {
   color: var(--accent-sec);
-}
-
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.85rem;
-  justify-content: center;
-  margin-top: 1.6rem;
 }
 
 .hero-countdown {
@@ -1555,34 +1441,6 @@ a.poi:hover .poi-pin,
 /* ---------------------------------------------------------------------------
    Placeholder page (/seating-chart) — a single centred screen under the nav.
 --------------------------------------------------------------------------- */
-.soon-page {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 100svh;
-  padding: calc(var(--nav-h) + 2rem) 0 3rem;
-  text-align: center;
-}
-
-.soon-kicker {
-  color: var(--copper);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  margin: 0;
-  text-transform: uppercase;
-}
-
-.soon-title {
-  color: var(--forest);
-  font-family: var(--font-script), cursive;
-  font-size: clamp(3.4rem, 7vw, 5.2rem);
-  font-weight: 400;
-  line-height: 0.96;
-  margin: 0.45rem 0 0;
-}
 
 /* ------------------------------------------------------------------ *
  * Schedule — the four events, rendered inline in the homepage's
@@ -1641,95 +1499,12 @@ a.poi:hover .poi-pin,
   scroll-margin-top: var(--anchor-pad);
 }
 
-/* Whatever single link an event carries out of itself. */
-.sched-action {
-  margin: 1.6rem 0 0;
-  text-align: center;
-}
-
-/* The venue, as a link rather than a box.
- *
- * Nothing on this page is a filled box, and the old wash — forest at 10% over
- * paper — composited to a flat opaque olive that was darker than the paper
- * around it, so it did not sit on the sheet as pigment, it erased what was
- * underneath. On the watch party it blotted out the meadow gate.
- *
- * What holds the three lines together is proximity, not a container: name to
- * area is 0.1rem, area to cue is 0.5rem, and the block sits 1.6rem below the
- * note. The stroke under the last line makes it a plinth rather than a box.
- * The invisible padding is the tap target; `background-origin: content-box`
- * is what stops that padding stretching the stroke with it. */
-.lnk-venue {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 20rem;
-  padding: 0.35rem 0.35rem 0.8rem;
-  border-radius: 0.25rem;
-  text-align: center;
-  text-decoration: none;
-}
-
-.sched-venue-name {
-  color: var(--accent);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  line-height: 1.15;
-}
-
-.sched-venue-area {
-  color: var(--muted-ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  line-height: 1.3;
-  margin-top: 0.1rem;
-}
-
 /* The cue is the link mechanism, so the cue carries the stroke: a permanent
    hairline in the site's own green with the event's pigment laid over it on
    hover, growing from the centre out. Pigment over a rule, not a border
    switching on — and nothing lifts. */
-.sched-venue-cue {
-  color: var(--muted-ink);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  margin-top: 0.5rem;
-  padding-bottom: 0.34rem;
-  background-image:
-    linear-gradient(var(--accent), var(--accent)),
-    linear-gradient(var(--rule), var(--rule));
-  background-repeat: no-repeat;
-  background-origin: content-box;
-  background-position:
-    50% 100%,
-    50% 100%;
-  background-size:
-    0 1.5px,
-    100% 1.5px;
-  transition:
-    background-size 0.26s cubic-bezier(0.4, 0, 0.2, 1),
-    color 0.18s ease;
-}
 
 .lnk-venue:hover .sched-venue-cue,
-.lnk-venue:focus-visible .sched-venue-cue {
-  color: var(--ink);
-  background-size:
-    100% 1.5px,
-    100% 1.5px;
-}
-
-.lnk-venue:active .sched-venue-cue {
-  background-size:
-    100% 2px,
-    100% 2px;
-}
 
 @media (prefers-reduced-motion: reduce) {
   .sched-venue-cue {
@@ -2168,10 +1943,6 @@ a.poi:hover .poi-pin,
    still shows who's seated there. On a phone the map is the page: full-bleed
    width, sized so the whole plan fits the viewport.
 --------------------------------------------------------------------------- */
-.seating-page {
-  padding: calc(var(--nav-h) + 2.4rem) max(1.2rem, calc((100vw - var(--max)) / 2))
-    4rem;
-}
 
 .seating-header {
   text-align: center;
@@ -2194,14 +1965,6 @@ a.poi:hover .poi-pin,
   height: 1px;
   margin: 1.1rem auto 1.2rem;
   width: min(15rem, 100%);
-}
-
-.seating-intro {
-  color: var(--muted-ink);
-  font-size: 0.9375rem;
-  line-height: 1.7;
-  margin: 0 auto;
-  max-width: 34rem;
 }
 
 /* The finder — either the "Who are you?" combobox or the chip naming you. */
@@ -2602,13 +2365,6 @@ a.poi:hover .poi-pin,
    the Hippodrome, then the phase's module — schedule and wardrobe before the
    event, the seating experience during it. */
 
-.now-page {
-  /* The live views open right under the nav, so they need a real breath above
-     the first thing on the page rather than the nav's own clearance alone. */
-  padding: calc(var(--nav-h) + clamp(2.4rem, 5vw, 3.6rem))
-    max(1.2rem, calc((100vw - var(--max)) / 2)) 4rem;
-}
-
 /* The floating admin-only preview control: a temporary stand-in for the
    time-window system, dressed as a dark tool chip so it can never be
    mistaken for part of the page. It will not outlive the prototype. */
@@ -2679,47 +2435,6 @@ a.poi:hover .poi-pin,
   color: #31281a;
 }
 
-.now-header {
-  text-align: center;
-}
-
-.now-kicker {
-  color: var(--copper);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  margin: 0;
-  text-transform: uppercase;
-}
-
-.now-title {
-  color: var(--forest);
-  font-family: var(--font-script), cursive;
-  font-size: clamp(3rem, 6.4vw, 4.6rem);
-  font-weight: 400;
-  line-height: 0.96;
-  /* The global h1 rule caps width at 10ch; keep the box centered and wide
-     enough that the title doesn't hug the left gutter. */
-  margin: 0.45rem auto 0;
-  max-width: none;
-}
-
-.now-ornament {
-  background: linear-gradient(90deg, transparent, var(--copper), transparent);
-  height: 1px;
-  margin: 1.1rem auto 1.2rem;
-  width: min(15rem, 100%);
-}
-
-.now-intro {
-  color: var(--muted-ink);
-  font-size: 0.9375rem;
-  line-height: 1.7;
-  margin: 0 auto;
-  max-width: 34rem;
-}
-
 /* One marker does not need a whole viewport: the aerial stays map-sized here,
    a landmark to orient by rather than the page's subject. */
 /* The map's column on /now and /passport. One rule: this was split in two,
@@ -2732,18 +2447,11 @@ a.poi:hover .poi-pin,
   width: 100%;
 }
 
-.now-directions {
-  display: flex;
-  justify-content: center;
-  margin-top: 1.4rem;
-}
-
 /* The venue map section on the homepage: the whole grounds on the same map
    surface the live pages use, with the address beneath it. */
 .home-map-frame {
   margin-top: clamp(1rem, 2.5vw, 1.8rem);
 }
-
 
 /* The fullscreen map has to cover the nav, and on the homepage it could not:
    .page-column is a stacking context (z-index 1), so the overlay's own
@@ -2784,26 +2492,6 @@ a.poi:hover .poi-pin,
   margin: 0.25rem 0 0;
 }
 
-.carnival-map-frame {
-  border: 1px solid color-mix(in srgb, #e0934a 60%, var(--paper));
-  border-radius: clamp(0.8rem, 2vw, 1.35rem);
-  box-shadow:
-    0 1.1rem 2.7rem rgba(74, 53, 31, 0.16),
-    inset 0 0 0 4px rgba(246, 238, 223, 0.52);
-  overflow: hidden;
-  position: relative;
-}
-
-.carnival-map-canvas {
-  position: relative;
-}
-
-.carnival-map-base {
-  display: block;
-  height: auto;
-  width: 100%;
-}
-
 .carnival-map-item {
   /* The sticker look: a thin white edge traced around the artwork's own
      shape (four offset shadows), then a soft drop under the whole sticker. */
@@ -2817,7 +2505,19 @@ a.poi:hover .poi-pin,
   position: absolute;
   transform-origin: center;
   transition: filter 0.25s ease;
+  /* Its own compositor layer, so dragging one moves an already-rasterized
+     image instead of re-painting it at each new sub-pixel offset. Without
+     this the box — sized as a percentage of the canvas, so landing between
+     device pixels — snaps its edges afresh every frame, and the art appears
+     to gain or lose a pixel as it travels. */
+  will-change: transform;
   z-index: 2;
+}
+
+/* Plain map art keeps the same placement controls without the white sticker
+   edge or drop shadow. The editor persists this choice per placed image. */
+.carnival-map-item.is-static {
+  filter: none;
 }
 
 /* An item tied to a passport activity is tappable: pale until it's stamped,
@@ -2838,6 +2538,14 @@ a.poi:hover .poi-pin,
 
 .carnival-map-item.is-todo:hover {
   filter: saturate(0.45) brightness(1.04) var(--sticker);
+}
+
+.carnival-map-item.is-static.is-todo {
+  filter: saturate(0.12) brightness(1.04);
+}
+
+.carnival-map-item.is-static.is-todo:hover {
+  filter: saturate(0.45) brightness(1.04);
 }
 
 .carnival-map-item img {
@@ -2897,43 +2605,6 @@ a.poi:hover .poi-pin,
   right: -0.6rem;
 }
 
-.carnival-editor-bar {
-  align-items: center;
-  background: rgba(31, 26, 17, 0.85);
-  border-radius: 0.6rem;
-  color: #f6eedf;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-  justify-content: space-between;
-  margin: 0 auto 0.8rem;
-  max-width: 70rem;
-  padding: 0.5rem 0.8rem;
-}
-
-.carnival-editor-hint {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.875rem;
-  margin: 0;
-}
-
-.carnival-editor-actions {
-  display: flex;
-  gap: 0.4rem;
-}
-
-.carnival-editor-actions button {
-  background: #f6eedf;
-  border: 0;
-  border-radius: 0.4rem;
-  color: #31281a;
-  cursor: pointer;
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  padding: 0.35rem 0.8rem;
-}
-
 /* Temporary aerial trace-editor chrome — leaves with NowMapEditor. The
    editable boxes and route reuse the real .now-highlight / .now-route looks,
    and the handles reuse the carnival editor's knobs, so what is traced is
@@ -2943,19 +2614,11 @@ a.poi:hover .poi-pin,
   flex-direction: column;
 }
 
-.trace-wrap {
-  width: min(100%, 44rem);
-}
-
 /* Tracing wants pixels: let the aerial outgrow its usual landmark size. */
 .now-map.is-tracing .map-frame {
   touch-action: none;
   user-select: none;
   width: 100%;
-}
-
-.trace-bar {
-  margin-bottom: 0.8rem;
 }
 
 .now-highlight.is-editable {
@@ -2975,32 +2638,6 @@ a.poi:hover .poi-pin,
 
 /* A fat invisible stroke over the route so the line is clickable — clicking
    it drops a new waypoint under the pointer. */
-.trace-hit {
-  cursor: crosshair;
-  fill: none;
-  pointer-events: stroke;
-  stroke: transparent;
-  /* ~2% of the map's width: generous enough to click, thin enough not to
-     swallow clicks meant for a box the route runs through. */
-  stroke-width: 2;
-}
-
-.trace-dot {
-  background: #fffdf7;
-  border: 2px solid #992fcc;
-  border-radius: 50%;
-  cursor: grab;
-  height: 0.9rem;
-  position: absolute;
-  touch-action: none;
-  transform: translate(-50%, -50%);
-  width: 0.9rem;
-  z-index: 5;
-}
-
-.trace-dot:active {
-  cursor: grabbing;
-}
 
 .trace-dot.is-selected {
   background: #992fcc;
@@ -3072,56 +2709,6 @@ a.poi:hover .poi-pin,
 /* A location highlight: a thin translucent box over the painted feature
    itself, the way a map highlights one building. Position, size, and angle
    come inline from active-events.ts, traced off the aerial artwork. */
-.now-highlight {
-  background: rgba(255, 253, 247, 0.3);
-  border: 1.5px solid #fffdf7;
-  border-radius: 5px;
-  /* A hairline of forest just outside the white edge, so the box still reads
-     against pale gravel and lawns. */
-  box-shadow: 0 0 0 1px rgba(29, 74, 48, 0.55);
-  pointer-events: none;
-  position: absolute;
-  z-index: 3;
-}
-
-/* The Baraat's route over the aerial: a milky casing lifts the line off the
-   painting the way the highlight boxes do, and the carnival-pink dashes march
-   toward the field. Stroke units are the viewBox's — 1 unit is 1% of the
-   map's width. */
-.now-route {
-  height: 100%;
-  left: 0;
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 2;
-}
-
-.now-route path {
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.now-route-casing {
-  stroke: rgba(255, 253, 247, 0.75);
-  stroke-width: 1.25;
-}
-
-.now-route-line {
-  animation: now-route-march 1.4s linear infinite;
-  stroke: #d94b6d;
-  stroke-dasharray: 1.7 1.3;
-  stroke-width: 0.55;
-}
-
-@keyframes now-route-march {
-  to {
-    /* One dash period per loop, so the march cycles seamlessly. */
-    stroke-dashoffset: -3;
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   .now-route-line {
@@ -3129,60 +2716,12 @@ a.poi:hover .poi-pin,
   }
 }
 
-.now-route-dot {
-  fill: #fffdf7;
-  stroke: #d94b6d;
-  stroke-width: 0.5;
-}
-
-.now-route-label {
-  background: rgba(255, 253, 247, 0.92);
-  border: 1px solid #d94b6d;
-  border-radius: 999px;
-  box-shadow: 0 0.2rem 0.55rem rgba(31, 26, 17, 0.18);
-  /* The event's pink taken down along its own hue until 14px text carries. */
-  color: #ab2440;
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.875rem;
-  font-weight: 700;
-  padding: 0.18rem 0.62rem;
-  position: absolute;
-  transform: translate(-50%, -50%);
-  white-space: nowrap;
-  z-index: 4;
-}
-
 /* The handoff between the two faces of the site. The live experience is the
    primary one during an event, so its way back is a quiet corner button; the
    ordinary site's way in is an unmissable bar across the bottom of the
    screen. */
-.now-back {
-  background: rgba(255, 253, 247, 0.96);
-  border: 1px solid var(--copper);
-  border-radius: 999px;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
-  box-shadow: 0 0.5rem 1.3rem rgba(31, 26, 17, 0.28);
-  color: var(--copper-light);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  padding: 0.55rem 1rem;
-  position: fixed;
-  right: max(1rem, env(safe-area-inset-right, 0px));
-  text-decoration: none;
-  text-transform: uppercase;
-  transition:
-    box-shadow 0.18s ease,
-    filter 0.18s ease;
-  z-index: 40;
-}
 
 .now-back:hover,
-.now-back:focus-visible {
-  box-shadow: 0 0.7rem 1.7rem rgba(31, 26, 17, 0.38);
-  filter: brightness(1.04);
-}
 
 /* An event's live page: the detailed version of its homepage card. The event
    panel leads (title, date and forecast, schedule, art, note), the map
@@ -3324,9 +2863,6 @@ a.poi:hover .poi-pin,
 
 /* The floating pill needs its own airspace at the end of both hosts, or it
    parks on the footer's last link / the floor plan's bottom edge. */
-.now-page {
-  padding-bottom: 7rem;
-}
 
 .home-footer {
   padding-bottom: clamp(6rem, 9vw, 7.5rem);
@@ -3452,28 +2988,6 @@ a.poi:hover .poi-pin,
 
 /* The phone's way into the full painting: an expand control on the frame,
    and a fullscreen zoom view behind it. */
-.carnival-map-expand {
-  align-items: center;
-  background: rgba(255, 253, 247, 0.92);
-  border: 1px solid rgba(153, 47, 204, 0.4);
-  border-radius: 0.55rem;
-  box-shadow: 0 0.25rem 0.6rem rgba(31, 26, 17, 0.18);
-  color: #992fcc;
-  cursor: pointer;
-  display: none;
-  height: 2.4rem;
-  justify-content: center;
-  position: absolute;
-  right: 0.6rem;
-  top: 0.6rem;
-  width: 2.4rem;
-  z-index: 5;
-}
-
-.carnival-map-expand svg {
-  height: 1.15rem;
-  width: 1.15rem;
-}
 
 @media (max-width: 880px) {
   .carnival-map-expand {
@@ -3486,37 +3000,9 @@ a.poi:hover .poi-pin,
    the card, travelling over the still-visible page — an opaque backdrop
    here blotted the page out mid-flight — and in the settled view the
    painting covers the viewport on its own. */
-.carnival-zoom {
-  inset: 0;
-  position: fixed;
-  z-index: 100;
-}
-
-/* The rotating layer between the overlay's clip window and the stage. */
-.carnival-zoom-content {
-  inset: 0;
-  position: absolute;
-}
 
 /* Holds the field-centering offset during the entrance animation; the
    transform comes off when the settle swaps it for real scroll. */
-.carnival-zoom-shift {
-  height: 100%;
-  position: relative;
-  width: 100%;
-}
-
-.carnival-zoom-stage {
-  height: 100%;
-  /* Visible while the entrance animation's clip window is doing the
-     cropping, so the painting can overflow and be revealed; the settled
-     stage becomes the scrollable pan surface. */
-  overflow: visible;
-  overscroll-behavior: contain;
-  /* Panning stays native scrolling; two-finger pinches reach our handler. */
-  touch-action: pan-x pan-y;
-  width: 100%;
-}
 
 .carnival-zoom-stage.is-settled {
   overflow: auto;
@@ -3545,35 +3031,8 @@ a.poi:hover .poi-pin,
   }
 }
 
-.carnival-zoom-canvas {
-  min-width: 100%;
-  position: relative;
-}
-
 /* White, like the expand control that opened the view, and pinned to the
    screen's own bottom-right corner in every orientation. */
-.carnival-zoom-close {
-  align-items: center;
-  background: rgba(255, 253, 247, 0.92);
-  border: 1px solid rgba(153, 47, 204, 0.4);
-  border-radius: 0.55rem;
-  bottom: max(0.9rem, env(safe-area-inset-bottom, 0px));
-  box-shadow: 0 0.25rem 0.6rem rgba(31, 26, 17, 0.18);
-  color: #992fcc;
-  cursor: pointer;
-  display: flex;
-  height: 2.6rem;
-  justify-content: center;
-  position: absolute;
-  right: max(0.9rem, env(safe-area-inset-right, 0px));
-  width: 2.6rem;
-  z-index: 101;
-}
-
-.carnival-zoom-close svg {
-  height: 1.15rem;
-  width: 1.15rem;
-}
 
 /* While the card is in flight (either direction), the sticker edge shadows
    come off inside the overlay: five stacked drop-shadows per item re-render
@@ -3586,23 +3045,6 @@ a.poi:hover .poi-pin,
 
 .carnival-zoom.is-animating .carnival-map-item.is-todo {
   filter: saturate(0.12) brightness(1.04);
-}
-
-/* Viewport metrics readout, visible only under the ?slowmo debug flag. */
-.carnival-debug {
-  background: rgba(31, 26, 17, 0.85);
-  border-radius: 0.4rem;
-  bottom: 0.6rem;
-  color: #f6eedf;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.875rem;
-  left: 0.6rem;
-  max-width: 70%;
-  padding: 0.3rem 0.5rem;
-  /* Informational only — must never eat taps meant for the map. */
-  pointer-events: none;
-  position: absolute;
-  z-index: 6;
 }
 
 /* ------------------------------------------------------------------ */
@@ -3924,6 +3366,20 @@ a.poi:hover .poi-pin,
   height: 100%;
   user-select: none;
   width: 100%;
+}
+
+/* A layer's cut-away drawing, pinned over its own part of the painting — the
+   Hippodrome's floor plan laid on the barn's roof. It is ground, not a
+   marker: it sits under everything the layer draws and never takes a click,
+   so tables and labels can be placed on top of it. Its own art is already
+   cut to the footprint, so it stretches to the rect it is given. */
+.mx-inset {
+  height: 100%;
+  pointer-events: none;
+  position: absolute;
+  user-select: none;
+  width: 100%;
+  z-index: 1;
 }
 
 /* The compass sizes and sits in PERCENTAGES of the stage, never in rem.

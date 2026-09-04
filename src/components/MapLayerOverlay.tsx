@@ -33,6 +33,24 @@ export const MapLayerOverlay = memo(function MapLayerOverlay({
 }) {
   return (
     <>
+      {/* Under everything: the cut-away drawing, if this layer has one. It is
+          part of the ground, not a marker, so nothing here reacts to it. */}
+      {layer.inset ? (
+        <img
+          className="mx-inset"
+          src={layer.inset.src}
+          alt=""
+          aria-hidden="true"
+          draggable={false}
+          style={{
+            left: `${layer.inset.x - layer.inset.w / 2}%`,
+            top: `${layer.inset.y - layer.inset.h / 2}%`,
+            width: `${layer.inset.w}%`,
+            height: `${layer.inset.h}%`,
+          }}
+        />
+      ) : null}
+
       <svg
         className="mx-shapes"
         viewBox="0 0 100 100"
@@ -99,7 +117,7 @@ function StickerArt({
     <div
       className={`carnival-map-item${onToggle ? ' is-interactive' : ''}${
         onToggle && !stamped ? ' is-todo' : ''
-      }`}
+      }${sticker.stickerEffect === false ? ' is-static' : ''}`}
       style={{
         left: `${sticker.x}%`,
         top: `${sticker.y}%`,

@@ -15,10 +15,6 @@
       "destination": "/index.html"
     },
     {
-      "source": "/now",
-      "destination": "/index.html"
-    },
-    {
       "source": "/passport",
       "destination": "/index.html"
     },
@@ -32,10 +28,6 @@
     },
     {
       "source": "/map-view",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/map-editor",
       "destination": "/index.html"
     },
     {

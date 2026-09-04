@@ -4,13 +4,20 @@ A static wedding site built with Vite + React 19 + TypeScript. Styling is hand
 written CSS in `src/index.css` (Tailwind 4 is imported only for `@theme` design
 tokens and the base reset, not for utility classes in markup). One built bundle
 is served on several paths via `vercel.json` rewrites: `/` (homepage),
-`/schedule`, `/wardrobe`, `/seating-chart`, `/registry`, `/now`, `/passport`,
-`/map-view` (with `/grounds` as its old name), and `/map-editor`; `App.tsx`
+`/schedule`, `/wardrobe`, `/registry`, `/shaadi`, `/carnival` (with `/passport`
+as its old name), `/reception`, `/seating-chart` (the reception page opened on
+the chart), and `/map-view` (with `/grounds` as its old name); `App.tsx`
 picks the view from the path. `/wardrobe` is an alias for `/schedule` — the two pages merged, and
 neither redirects, so links already handed out keep resolving. Adding a page means adding both the branch in `App.tsx` and the
 rewrite in `vercel.json` — without the rewrite the URL 404s at Vercel's edge.
-`MapPage.tsx` (the original venue map) is built but deliberately unrouted —
-there is no `/map` rewrite, so that URL 404s until one is added.
+`/map-editor` has deliberately **no rewrite**: the edge 404s it on the deployed
+site, and `App.tsx` only renders it on localhost or a private LAN address. It is
+a tool for laying the venue out, not part of the site.
+
+The three live pages — `/shaadi`, `/carnival`, `/reception` — turn guests away
+until their event has begun, redirecting to that event's card on the homepage.
+`?preview` (or `?live=`) opens them anyway, and the homepage's live-preview chip
+links to all of them that way.
 
 ## The venue map
 
@@ -51,8 +58,8 @@ screens; a label sized comfortably (see `labelSizeFor`) never reaches it.
   STAGE's top-left, which the quarter turn carries round to the screen's
   top-right when expanded, keeping it clear of the compass; the compass is
   sized and placed in percentages of the stage so it scales with the painting
-  rather than looming over the small inline frame. Both `/map-view` and
-  `/now` render it, so there is a single pan/zoom feel, a single expand
+  rather than looming over the small inline frame. `/map-view` and the three
+  live pages render it, so there is a single pan/zoom feel, a single expand
   animation, and one set of interactive stickers rather than a separate map per
   page. A sticker carrying an `activity` is tappable and stamps the carnival
   passport (shared state via `useCarnivalStamps`, so a tap on the map and a tap
@@ -88,13 +95,10 @@ The grounds artwork is painted from an aerial captured at a heading of 224°, so
 north is not up; `grounds` in `src/data/map.ts` carries the heading and the
 136° compass rotation that follows from it.
 
-`CarnivalMap.tsx` and `NowMapEditor.tsx` are no longer rendered anywhere —
-`/now` shows `EventMap` for the active event, and `/map-editor` supersedes both
-of their editors. The files and `carnival-lawn-base.webp` are still in the tree
-but are dead code; the carnival's stall layout now lives in `venue-map.json`
-like everything else. The `highlights` and `route` fields in `active-events.ts`
-are likewise unread. Delete them when you are confident the new map has
-replaced them for good.
+`/now` and `/map` were prototypes that never went live; they and everything
+only they used — `NowPage.tsx`, `MapPage.tsx`, `CarnivalMap.tsx`,
+`NowMapEditor.tsx`, `active-events.ts`, `carnival-lawn-base.webp` — are gone.
+The carnival's stall layout lives in `venue-map.json` like everything else.
 
 Note the carnival's stall art is 512px per sticker while its footprint on the
 map is a few dozen CSS pixels, so it only looks as good as the browser's

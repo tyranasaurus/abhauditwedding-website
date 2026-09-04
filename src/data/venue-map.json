@@ -96,6 +96,10 @@
               "y": 57.05173741663291
             },
             {
+              "x": 69.5693008067545,
+              "y": 57.218458552211224
+            },
+            {
               "x": 72.18550940742604,
               "y": 58.5453379740936
             },
@@ -292,31 +296,14 @@
         "w": 22.38470920510813,
         "h": 50.02247858441965
       },
-      "areas": [
-        {
-          "id": "hippodrome",
-          "accent": "forest",
-          "points": [
-            {
-              "x": 23.049494852847875,
-              "y": 15.827552990155123
-            },
-            {
-              "x": 29.0607818161608,
-              "y": 15.869659767556431
-            },
-            {
-              "x": 29.747021704208763,
-              "y": 52.757246374682914
-            },
-            {
-              "x": 23.282949194277496,
-              "y": 53.11482357968722
-            }
-          ],
-          "name": "The Hippodrome"
-        }
-      ],
+      "inset": {
+        "src": "/art/map/hippodrome-floorplan.webp",
+        "x": 26.393,
+        "y": 34.484,
+        "w": 6.69,
+        "h": 37.318
+      },
+      "areas": [],
       "paths": [],
       "labels": [
         {
@@ -354,6 +341,216 @@
           "y": 59.02108203330041,
           "width": 1.8,
           "angle": 0
+        },
+        {
+          "id": "table_0",
+          "name": "table_0",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 24.235,
+          "y": 20.683,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_1",
+          "name": "table_1",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 25.676418349712996,
+          "y": 20.683,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_2",
+          "name": "table_2",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 27.112,
+          "y": 20.659414562186022,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_3",
+          "name": "table_3",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 28.551,
+          "y": 20.683,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_4",
+          "name": "table_4",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 24.240265655608127,
+          "y": 27.026416993940547,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_5",
+          "name": "table_5",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 25.674,
+          "y": 27.039,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_6",
+          "name": "table_6",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 27.112,
+          "y": 27.039,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_7",
+          "name": "table_7",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 28.551,
+          "y": 27.039,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_8",
+          "name": "table_8",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 25.853369641283283,
+          "y": 38.5015953248838,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_9",
+          "name": "table_9",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 24.89273214013101,
+          "y": 37.18850347236916,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_10",
+          "name": "table_10",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 25.847764802027363,
+          "y": 41.13206382757759,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_11",
+          "name": "table_11",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 28.551,
+          "y": 33.38448211418842,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_12",
+          "name": "table_12",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 23.78699602475116,
+          "y": 39.80070712659482,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_13",
+          "name": "table_13",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 24.875463711823834,
+          "y": 39.766857271783074,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_14",
+          "name": "table_14",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 25.81196863134308,
+          "y": 35.75246614692957,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_15",
+          "name": "table_15",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 28.551,
+          "y": 39.74048211418842,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_16",
+          "name": "table_16",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 23.777842611689557,
+          "y": 42.35806949162297,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_17",
+          "name": "table_17",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 24.413770687002575,
+          "y": 44.56755805250598,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_18",
+          "name": "table_18",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 24.879241995210823,
+          "y": 42.31982595722746,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_19",
+          "name": "table_19",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 27.332942224584226,
+          "y": 41.10788813105582,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "reception-dance-floor",
+          "name": "reception dance floor",
+          "src": "/art/map/reception/dance-floor.webp",
+          "stickerEffect": false,
+          "x": 26.38264458950283,
+          "y": 46.837919114547766,
+          "width": 2.6001782584676736,
+          "angle": 0
         }
       ]
     },
@@ -362,10 +559,10 @@
       "name": "Overall Map",
       "eventAnchor": "overall",
       "focus": {
-        "x": 47.124948906058485,
-        "y": 45.88245702468445,
-        "w": 69.95126560779646,
-        "h": 73.96817441099226
+        "x": 46.63293534251235,
+        "y": 47.71532499096521,
+        "w": 68.96723848070418,
+        "h": 90.60100177035032
       },
       "areas": [
         {
@@ -448,11 +645,11 @@
           "points": [
             {
               "x": 29.72123332719362,
-              "y": 17.598715342369417
+              "y": 18.216477560510423
             },
             {
-              "x": 49.4116960301518,
-              "y": 17.08410231911155
+              "x": 49.36671496954574,
+              "y": 17.79751804199697
             },
             {
               "x": 49.66822179611044,
@@ -503,8 +700,8 @@
           "id": "new-label",
           "text": "From Carnegie to Carnation",
           "accent": "carnival",
-          "x": 39.53810939585186,
-          "y": 13.555895141453831,
+          "x": 40.28959749108996,
+          "y": 58.39825816563503,
           "size": 1.2
         },
         {
@@ -513,6 +710,22 @@
           "accent": "carnival",
           "x": 66.81534690137025,
           "y": 70.75843345293765,
+          "size": 1.1
+        },
+        {
+          "id": "new-label-3",
+          "text": "The Elbridge",
+          "accent": "slate",
+          "x": 34.21745515456043,
+          "y": 6.017857891529781,
+          "size": 1.1
+        },
+        {
+          "id": "new-label-4",
+          "text": "The Amos",
+          "accent": "slate",
+          "x": 44.50038479179659,
+          "y": 6.2183549494243575,
           "size": 1.1
         }
       ],

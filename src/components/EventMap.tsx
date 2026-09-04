@@ -38,12 +38,19 @@ type Pose = {
   clipPath: string
 }
 
-const DEFAULT_COMPASS = {
-  src: '/art/map/compass-rose.webp',
-  width: 440,
-  height: 483,
+/** The reception's rose, which doubles as the one every other map uses. It is
+ *  the least event-specific of the three, and the grounds map on the homepage
+ *  wants a compass rather than a piece of one event's costume. */
+const COMPASS = {
+  src: '/art/map/compass-rose-sangeet.webp',
+  width: 1203,
+  height: 1294,
 }
 
+const DEFAULT_COMPASS = COMPASS
+
+/** An event may bring its own; anything else — the homepage's grounds map
+ *  included — gets the one above. */
 const COMPASS_BY_EVENT_ANCHOR: Record<
   string,
   { src: string; width: number; height: number }
@@ -58,11 +65,7 @@ const COMPASS_BY_EVENT_ANCHOR: Record<
     width: 1201,
     height: 1309,
   },
-  'naach-the-night-away': {
-    src: '/art/map/compass-rose-sangeet.webp',
-    width: 1203,
-    height: 1294,
-  },
+  'naach-the-night-away': COMPASS,
 }
 
 /**

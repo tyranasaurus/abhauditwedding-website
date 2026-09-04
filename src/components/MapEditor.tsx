@@ -63,6 +63,22 @@ const CARNIVAL_ART = [
   'sunglasses', 'umbrella-arch', 'yarn-art',
 ] as const
 
+const RECEPTION_ART = [
+  'airstream',
+  'bar',
+  'buffet-table',
+  'cocktail-table',
+  'dance-floor',
+  'dessert-table',
+  'disco-ball',
+  'dj-booth',
+  'patio-umbrella',
+  'projector-screen',
+  'service-curtain',
+  'snack-table',
+  'sofa',
+] as const
+
 const MARKER_ART = [
   'icon-carnival', 'icon-dinner', 'icon-parking', 'icon-sangeet', 'icon-sunset',
 ] as const
@@ -87,6 +103,18 @@ const STICKER_ART: { src: string; name: string }[] = [
     src: `/art/map/carnival/${file}.webp`,
     name: file.replace(/-/g, ' '),
   })),
+  ...RECEPTION_ART.map((file) => ({
+    src: `/art/map/reception/${file}.webp`,
+    name: `reception ${file.replace(/-/g, ' ')}`,
+  })),
+  {
+    src: '/art/map/reception-table-ten.webp',
+    name: 'reception table with ten chairs',
+  },
+  {
+    src: '/art/map/reception-table-ten-compact.webp',
+    name: 'compact reception table with ten chairs',
+  },
   ...EVENT_CAMERA_ART,
   ...MARKER_ART.map((file) => ({
     src: `/art/map/${file}.webp`,
@@ -491,6 +519,7 @@ export function MapEditor() {
         id,
         name: art?.name ?? 'Sticker',
         src: stickerSrc,
+        stickerEffect: true,
         x: round1(at.x),
         y: round1(at.y),
         // Sized against the focus rect, so a sticker dropped on a tight event
@@ -858,6 +887,25 @@ export function MapEditor() {
                 draggable={false}
               />
 
+              {/* The layer's cut-away drawing, e.g. the Hippodrome's interior
+                  laid over its roof, so tables can be arranged against the
+                  real floor. Under the focus rect and inert. */}
+              {layer.inset ? (
+                <img
+                  className="mx-inset"
+                  src={layer.inset.src}
+                  alt=""
+                  aria-hidden="true"
+                  draggable={false}
+                  style={{
+                    left: `${layer.inset.x - layer.inset.w / 2}%`,
+                    top: `${layer.inset.y - layer.inset.h / 2}%`,
+                    width: `${layer.inset.w}%`,
+                    height: `${layer.inset.h}%`,
+                  }}
+                />
+              ) : null}
+
               {/* The focus rectangle paints under everything and never takes a
                   click; the Focus tool lays its own grab layer over the top. */}
               <div
@@ -968,7 +1016,7 @@ export function MapEditor() {
                   key={sticker.id}
                   className={`carnival-map-item is-editable${
                     isSelected('sticker', sticker.id) ? ' is-selected' : ''
-                  }`}
+                  }${sticker.stickerEffect === false ? ' is-static' : ''}`}
                   style={{
                     left: `${sticker.x}%`,
                     top: `${sticker.y}%`,
@@ -1402,6 +1450,19 @@ function Inspector({
 
           {kind === 'sticker' && (
             <>
+              <label className="mx-check">
+                <input
+                  type="checkbox"
+                  checked={(selected as MapSticker).stickerEffect !== false}
+                  onChange={(event) => {
+                    onBefore()
+                    onItem(kind, selected.id, {
+                      stickerEffect: event.target.checked,
+                    })
+                  }}
+                />
+                Sticker effect
+              </label>
               <label className="mx-field">
                 <span>Passport activity</span>
                 <input

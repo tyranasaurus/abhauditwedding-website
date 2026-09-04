@@ -103,6 +103,9 @@ export interface MapSticker {
   id: string
   name: string
   src: string
+  /** Whether to add the white edge and drop shadow. Defaults to true so map
+   *  documents saved before this option keep their existing appearance. */
+  stickerEffect?: boolean
   /** The passport activity this sticker checks off, if it has one. */
   activity?: string
   x: number
@@ -110,6 +113,18 @@ export interface MapSticker {
   /** Width as a percentage of the artwork's width. */
   width: number
   angle: number
+}
+
+/** A drawing pinned over one part of the artwork — the Hippodrome's interior
+ *  floor plan laid on its roof, so the map can show what is inside a
+ *  building. Position and size are percentages of the artwork, `x`/`y` being
+ *  the centre, the same convention `MapFocus` uses. */
+export interface MapInset {
+  src: string
+  x: number
+  y: number
+  w: number
+  h: number
 }
 
 /** One event's drawing on the grounds map. */
@@ -120,6 +135,9 @@ export interface MapLayer {
    *  that belongs to no single event. */
   eventAnchor: string | null
   focus: MapFocus
+  /** Optional cut-away drawing laid over the artwork, under everything else
+   *  this layer draws. */
+  inset?: MapInset
   areas: MapArea[]
   paths: MapPath[]
   labels: MapLabel[]
