@@ -113,6 +113,18 @@ function StickerArt({
   stamped: boolean
   onToggle?: () => void
 }) {
+  // Sticker-effect artwork is exported with its white rim and soft shadow
+  // already in the pixels. Keeping those effects out of CSS means moving the
+  // map is only compositing images, never rerunning several alpha filters per
+  // sticker per frame.
+  const src =
+    sticker.stickerEffect === false
+      ? sticker.src
+      : sticker.src.replace(
+          '/art/map/',
+          onToggle && !stamped ? '/art/map/baked/todo/' : '/art/map/baked/',
+        )
+
   return (
     <div
       className={`carnival-map-item${onToggle ? ' is-interactive' : ''}${
@@ -140,7 +152,7 @@ function StickerArt({
           }
         : {})}
     >
-      <img src={sticker.src} alt="" aria-hidden="true" draggable={false} />
+      <img src={src} alt="" aria-hidden="true" draggable={false} />
     </div>
   )
 }

@@ -122,13 +122,14 @@ export function EventMap({
   expandedRef.current = expanded
   const [closing, setClosing] = useState(false)
   const [transitionReady, setTransitionReady] = useState(false)
+  const [liveMounted, setLiveMounted] = useState(false)
+  const [liveReady, setLiveReady] = useState(false)
   // Measured when the view opens, and again when it closes so the map returns
   // to wherever the frame has scrolled to in the meantime.
   const [pose, setPose] = useState<Pose | null>(null)
   const [screen, setScreen] = useState(layoutViewport)
   const frameRef = useRef<HTMLDivElement>(null)
   const panRef = useRef<{ x: number; y: number } | null>(null)
-  const transitionReleaseRef = useRef<number | null>(null)
   // A drag must not land as a tap on the sticker it finished over.
   const draggedRef = useRef(false)
   const reduce = useReducedMotion()
@@ -183,10 +184,6 @@ export function EventMap({
   }, [])
 
   const open = () => {
-    if (transitionReleaseRef.current !== null) {
-      clearTimeout(transitionReleaseRef.current)
-      transitionReleaseRef.current = null
-    }
     const frame = frameRef.current?.getBoundingClientRect()
     const next = layoutViewport()
     const turn = rotationFor(next.vw, next.vh)
@@ -194,25 +191,24 @@ export function EventMap({
     setScreen(next)
     setPose(frame ? poseOverFrame(frame, size) : null)
     setTransitionReady(false)
+    setLiveMounted(false)
+    setLiveReady(false)
     setClosing(false)
     setExpanded(true)
   }
 
   const close = useCallback(() => {
-    if (transitionReleaseRef.current !== null) {
-      clearTimeout(transitionReleaseRef.current)
-      transitionReleaseRef.current = null
-    }
-    // Keep the painting and filtered compass on compositor layers for the
-    // whole collapse instead of rerasterizing them on every frame.
-    viewport.stageRef.current?.classList.add('is-transitioning')
+    // Collapse the same lightweight painting used for expansion. The detailed
+    // interactive layer disappears before geometry starts moving, so stickers,
+    // labels and SVG regions never have to be rerasterized during the FLIP.
+    setLiveReady(false)
     // Re-measure on the way out: the page behind may sit at a different scroll
     // than it did on the way in, and the map should land back in its frame.
     const frame = frameRef.current?.getBoundingClientRect()
     if (frame) setPose(poseOverFrame(frame, stageSize))
     setClosing(true)
     setExpanded(false)
-  }, [stageSize, viewport.stageRef])
+  }, [stageSize])
 
   // Mount the fullscreen painting at its starting pose first, giving Chrome
   // two frames to rasterize and promote it before any visible geometry moves.
@@ -229,6 +225,21 @@ export function EventMap({
       if (second) cancelAnimationFrame(second)
     }
   }, [expanded])
+
+  // Mounting the detailed fullscreen tree can be expensive for sticker-heavy
+  // layers. Do it only after the proxy has landed, then give the browser two
+  // paints to build that surface before cross-fading it over the still proxy.
+  useEffect(() => {
+    if (!liveMounted || !expanded) return
+    let second = 0
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() => setLiveReady(true))
+    })
+    return () => {
+      cancelAnimationFrame(first)
+      if (second) cancelAnimationFrame(second)
+    }
+  }, [expanded, liveMounted])
 
   // While the overlay is up the page behind it must not scroll under it, and
   // Escape has to get out.
@@ -249,10 +260,6 @@ export function EventMap({
   // The same gestures whichever frame the map is living in.
   const stageHandlers = {
     onPointerDown: (event: React.PointerEvent<HTMLDivElement>) => {
-      if (transitionReleaseRef.current !== null) {
-        clearTimeout(transitionReleaseRef.current)
-        transitionReleaseRef.current = null
-      }
       // Give Chrome the press-to-first-move gap to put the painting on a
       // compositor layer, so the first pan/pinch frame is as fluid as the rest.
       viewport.prepare()
@@ -269,10 +276,6 @@ export function EventMap({
       // A desktop pointer normally crosses the map before its wheel turns.
       // Use that hover movement to warm the layer before the first wheel event.
       if (event.pointerType === 'mouse' && event.buttons === 0) {
-        if (transitionReleaseRef.current !== null) {
-          clearTimeout(transitionReleaseRef.current)
-          transitionReleaseRef.current = null
-        }
         viewport.prepare()
         return
       }
@@ -352,6 +355,27 @@ export function EventMap({
         layer={layer}
         stamps={stamps}
         onToggleActivity={toggleActivity}
+      />
+    </div>
+  )
+
+  // Expansion and collapse move only this one opaque image. The complete map
+  // is mounted after it lands, then revealed over the stationary proxy. That
+  // keeps the transition independent of how many SVG regions, labels, insets
+  // or transparent stickers a layer contains.
+  const transitionCanvas = (
+    <div
+      className="mv-canvas mv-transition-canvas"
+      style={viewport.canvasStyle}
+      aria-hidden="true"
+    >
+      <img
+        className="mv-art"
+        src={venueMap.art.src}
+        width={venueMap.art.width}
+        height={venueMap.art.height}
+        alt=""
+        draggable={false}
       />
     </div>
   )
@@ -447,24 +471,17 @@ export function EventMap({
         </div>
       </div>
 
-      {/* Kept mounted (but hidden and inert) so its decoded painting, stickers,
-          compass filter, and compositor layers are all warm before the first
-          expand frame. This trades a little GPU memory for photo-like motion. */}
-      <motion.div
-        className={`mv-overlay${expanded ? ' is-open' : ''}`}
-        aria-hidden={!expanded}
-        initial={false}
-        // Chrome skips painting a visibility:hidden or truly transparent
-        // subtree. A visually imperceptible non-zero resting opacity keeps the
-        // large map raster warm, which is what makes the first frame immediate.
-        animate={{ opacity: expanded ? 1 : 0.001 }}
-        transition={{ duration: 0.32 }}
-        style={{
-          pointerEvents: expanded ? 'auto' : 'none',
-        }}
-      >
+      {expanded || closing ? (
+        <motion.div
+          className={`mv-overlay${expanded ? ' is-open' : ''}`}
+          aria-hidden={!expanded}
+          initial={false}
+          animate={{ opacity: expanded ? 1 : 0 }}
+          transition={{ duration: 0.32 }}
+          style={{ pointerEvents: expanded ? 'auto' : 'none' }}
+        >
             <motion.div
-              className="mv-stage is-full is-transitioning"
+              className={`mv-stage is-full${liveReady ? ' is-live' : ' is-transitioning'}`}
               ref={viewport.registerStage}
               style={{ width: stageSize.w, height: stageSize.h }}
               initial={false}
@@ -481,31 +498,26 @@ export function EventMap({
                   : { duration: 0.52, ease: [0.22, 0.61, 0.36, 1] }
               }
               onAnimationComplete={() => {
-                // Once open and still, drop the temporary layers so Chrome can
-                // rerasterize the detailed artwork at its final zoom. During
-                // exit `expanded` is false and the class stays until unmount.
                 if (expanded && transitionReady) {
-                  // Do the sharp final reraster after the eye has seen the map
-                  // land, not on the landing frame itself. Reopening/closing
-                  // clears this timer before another transition can start.
-                  transitionReleaseRef.current = window.setTimeout(() => {
-                    transitionReleaseRef.current = null
-                    viewport.stageRef.current?.classList.remove(
-                      'is-transitioning',
-                    )
-                  }, 1000)
+                  setLiveMounted(true)
                 } else if (closing) {
                   setClosing(false)
                 }
               }}
               {...stageHandlers}
             >
-              {mapCanvas(viewport)}
-              {compass}
-              {zoomBar}
-              {cornerButton('close')}
+              {transitionCanvas}
+              {liveMounted ? (
+                <div className="mv-live-map">
+                  {mapCanvas(viewport)}
+                  {compass}
+                  {zoomBar}
+                  {cornerButton('close')}
+                </div>
+              ) : null}
             </motion.div>
-      </motion.div>
+        </motion.div>
+      ) : null}
     </>
   )
 }

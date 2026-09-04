@@ -2509,24 +2509,11 @@ a.poi:hover .poi-pin,
 }
 
 .carnival-map-item {
-  /* The sticker look: a thin white edge traced around the artwork's own
-     shape (four offset shadows), then a soft drop under the whole sticker. */
-  --sticker:
-    drop-shadow(1px 0 0 #fffdf7) drop-shadow(-1px 0 0 #fffdf7)
-    drop-shadow(0 1px 0 #fffdf7) drop-shadow(0 -1px 0 #fffdf7)
-    drop-shadow(0 0.18rem 0.22rem rgba(47, 42, 33, 0.28));
-  filter: var(--sticker);
   height: auto;
   pointer-events: none;
   position: absolute;
   transform-origin: center;
-  transition: filter 0.25s ease;
-  /* Its own compositor layer, so dragging one moves an already-rasterized
-     image instead of re-painting it at each new sub-pixel offset. Without
-     this the box — sized as a percentage of the canvas, so landing between
-     device pixels — snaps its edges afresh every frame, and the art appears
-     to gain or lose a pixel as it travels. */
-  will-change: transform;
+  transition: opacity 0.25s ease;
   z-index: 2;
 }
 
@@ -2549,19 +2536,19 @@ a.poi:hover .poi-pin,
 }
 
 .carnival-map-item.is-todo {
-  filter: saturate(0.12) brightness(1.04) var(--sticker);
+  opacity: 1;
 }
 
 .carnival-map-item.is-todo:hover {
-  filter: saturate(0.45) brightness(1.04) var(--sticker);
+  opacity: 0.78;
 }
 
 .carnival-map-item.is-static.is-todo {
-  filter: saturate(0.12) brightness(1.04);
+  opacity: 1;
 }
 
 .carnival-map-item.is-static.is-todo:hover {
-  filter: saturate(0.45) brightness(1.04);
+  opacity: 0.78;
 }
 
 .carnival-map-item img {
@@ -3050,19 +3037,6 @@ a.poi:hover .poi-pin,
 /* White, like the expand control that opened the view, and pinned to the
    screen's own bottom-right corner in every orientation. */
 
-/* While the card is in flight (either direction), the sticker edge shadows
-   come off inside the overlay: five stacked drop-shadows per item re-render
-   on every clip-morph paint and drag the transition to a crawl. The cheap
-   desaturation stays, so uncollected stickers keep their gray.
-   Imperceptible mid-motion. */
-.carnival-zoom.is-animating .carnival-map-item {
-  filter: none;
-}
-
-.carnival-zoom.is-animating .carnival-map-item.is-todo {
-  filter: saturate(0.12) brightness(1.04);
-}
-
 /* ------------------------------------------------------------------ */
 /* Venue map: the guest view (/map-view) and the editor (/map-editor)  */
 /* ------------------------------------------------------------------ */
@@ -3153,7 +3127,6 @@ a.poi:hover .poi-pin,
 .mx-path-line {
   --dash: 7px;
   --gap: 6px;
-  animation: mx-path-march 1.4s linear infinite;
   fill: none;
   stroke: var(--accent);
   stroke-dasharray: var(--dash) var(--gap);
@@ -3163,31 +3136,8 @@ a.poi:hover .poi-pin,
   vector-effect: non-scaling-stroke;
 }
 
-/* Direct manipulation outranks decorative motion. A changing dash offset
-   repaints this large SVG every frame and forces the transformed watercolor
-   to wait behind it; freeze the route and cache its overlay while the guest is
-   panning or zooming, then resume at the same point when the view settles. */
-.mv-canvas.is-moving .mx-path-line {
-  animation-play-state: paused;
-}
-
 .mv-canvas.is-moving .mx-shapes {
   will-change: transform;
-}
-
-/* EventMap keeps a second fullscreen surface warm at imperceptible opacity so
-   expansion can start immediately. Its route must not keep marching while the
-   surface is hidden, and the inline copy must likewise stop repainting under
-   the opaque fullscreen overlay. At rest there is exactly one running route. */
-.mv-overlay:not(.is-open) .mx-path-line,
-.mv-frame.is-map-away .mx-path-line {
-  animation-play-state: paused;
-}
-
-@keyframes mx-path-march {
-  to {
-    stroke-dashoffset: calc(-1 * (var(--dash, 7px) + var(--gap, 6px)));
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3350,15 +3300,30 @@ a.poi:hover .poi-pin,
   will-change: transform, clip-path;
 }
 
-/* The fullscreen FLIP moves a very large watercolor, fourteen transparent
-   stickers, and a filtered compass at once. Keep those two painted surfaces
-   cached only while the stage is expanding or collapsing; otherwise the
-   changing parent transform/clip rerasterizes them every frame. EventMap
-   removes this class once open so the interactive map resolves sharply at its
-   settled zoom, then restores it immediately before collapse. */
-.mv-stage.is-transitioning .mv-canvas,
-.mv-stage.is-transitioning .mv-compass {
+/* Expansion moves only the grounds painting. The complete interactive map is
+   prepared behind it and revealed after the geometry has stopped changing. */
+.mv-transition-canvas {
+  pointer-events: none;
+  transition: opacity 120ms ease;
   will-change: transform;
+  z-index: 20;
+}
+
+.mv-live-map {
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  transition: opacity 120ms ease;
+}
+
+.mv-stage.is-live .mv-transition-canvas {
+  opacity: 0;
+}
+
+.mv-stage.is-live .mv-live-map {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .mv-canvas,
@@ -3406,9 +3371,6 @@ a.poi:hover .poi-pin,
    outside the canvas, so panning and zooming within the fullscreen view leave
    it where it is — it labels the screen, not a patch of ground. */
 .mv-compass {
-  filter: drop-shadow(0 0 0.5rem rgba(255, 253, 247, 0.95))
-    drop-shadow(0 0 1rem rgba(255, 253, 247, 0.65))
-    drop-shadow(0 0.2rem 0.4rem rgba(31, 26, 17, 0.28));
   height: auto;
   pointer-events: none;
   position: absolute;
