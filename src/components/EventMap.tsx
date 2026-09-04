@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
-import { MapLayerOverlay } from '@/components/MapLayerOverlay'
+import {
+  MapLayerOverlay,
+  type TableSelection,
+} from '@/components/MapLayerOverlay'
 import { useMapViewport, usePinch } from '@/components/useMapViewport'
 import { venueMap, type MapLayer } from '@/data/venue-map'
 import { grounds } from '@/data/map'
@@ -103,6 +106,9 @@ export function EventMap({
   onToggleActivity,
   label = 'Map of the wedding grounds',
   fit = 'cover',
+  tables,
+  upright = false,
+  expandToInset = false,
 }: {
   layer: MapLayer
   /** Passport activities already collected. Stickers carrying an activity are
@@ -110,6 +116,18 @@ export function EventMap({
   stamps?: Set<string>
   onToggleActivity?: (activity: string) => void
   label?: string
+  /** The reception's seating state, for the table stickers. */
+  tables?: TableSelection
+  /** Open the fullscreen view on the layer's inset — the Hippodrome's own
+   *  floor — rather than on the focus rect, which frames the hall together
+   *  with enough of the farm to place it. Expanding a seating chart should
+   *  land on the room, not the neighbourhood. */
+  expandToInset?: boolean
+  /** Keep the fullscreen view the way up the page is. The quarter turn suits
+   *  a focus wider than it is tall — most of them — but the Hippodrome's is
+   *  taller than it is wide, so it already fills a portrait screen and
+   *  turning it would only make a guest tilt their head. */
+  upright?: boolean
   /** How far out the guest may zoom. `cover` never lets the painting stop
    *  covering the screen, which suits an event's own tight focus. `focus`
    *  zooms out until the whole focus rect is on screen and no further, blank
@@ -137,7 +155,7 @@ export function EventMap({
     ? (COMPASS_BY_EVENT_ANCHOR[layer.eventAnchor] ?? DEFAULT_COMPASS)
     : DEFAULT_COMPASS
 
-  const rotation = rotationFor(screen.vw, screen.vh)
+  const rotation = upright ? 0 : rotationFor(screen.vw, screen.vh)
   // Turned a quarter, the stage's own width runs down the screen's long side.
   const stageSize = rotation
     ? { w: screen.vh, h: screen.vw }
@@ -148,9 +166,21 @@ export function EventMap({
   const focusAspect =
     (layer.focus.w * venueMap.art.width) / (layer.focus.h * venueMap.art.height)
 
+  // A little air around the inset, so the hall does not sit hard against the
+  // screen edges when the view opens on it.
+  const expandBounds =
+    expandToInset && layer.inset
+      ? {
+          x: layer.inset.x,
+          y: layer.inset.y,
+          w: layer.inset.w * 1.12,
+          h: layer.inset.h * 1.04,
+        }
+      : layer.focus
+
   const viewport = useMapViewport({
     art: venueMap.art,
-    bounds: layer.focus,
+    bounds: expandBounds,
     fit,
     rotationDeg: rotation,
     // Inline the frame is cut to the focus, so the whole focused area is
@@ -186,7 +216,7 @@ export function EventMap({
   const open = () => {
     const frame = frameRef.current?.getBoundingClientRect()
     const next = layoutViewport()
-    const turn = rotationFor(next.vw, next.vh)
+    const turn = upright ? 0 : rotationFor(next.vw, next.vh)
     const size = turn ? { w: next.vh, h: next.vw } : { w: next.vw, h: next.vh }
     setScreen(next)
     setPose(frame ? poseOverFrame(frame, size) : null)
@@ -353,6 +383,7 @@ export function EventMap({
       />
       <MapLayerOverlay
         layer={layer}
+        tables={tables}
         stamps={stamps}
         onToggleActivity={toggleActivity}
       />

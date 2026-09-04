@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { LiveEventPage } from '@/components/LiveEventPage'
-import { guests, seatingIntro, tables } from '@/data/seating'
+import { guests, seatingIntro } from '@/data/seating'
 import type { Guest } from '@/data/seating'
 
 /** Fold accents and punctuation so "Renee" finds "Renée" and "Dsouza" finds
@@ -40,15 +40,21 @@ function loadStoredMe(): Guest | null {
  * experience (/now) can host the same thing during the reception; the guest's
  * pick lives in localStorage, so it carries between the two hosts.
  */
-export function SeatingExperience() {
+export function SeatingExperience({
+  pinned = null,
+  onSelectionChange,
+}: {
+  /** A table tapped on the map, which the card below should describe. */
+  pinned?: number | null
+  /** Reports the guest's table and whichever one is being looked at, so the
+   *  venue map below can mark them. */
+  onSelectionChange?: (selection: { yours: number | null; lit: number | null }) => void
+} = {}) {
   const [me, setMe] = useState<Guest | null>(loadStoredMe)
   const [editing, setEditing] = useState(false)
   const [query, setQuery] = useState('')
   const [cursor, setCursor] = useState(0)
   const [searchFocused, setSearchFocused] = useState(false)
-  // Hover is transient; a click/tap pins the table so touch users keep the
-  // highlight while they look between the status line and the plan.
-  const [pinned, setPinned] = useState<number | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   // Focus the field when "Not you?" opens it — but not on first load, where
@@ -77,7 +83,6 @@ export function SeatingExperience() {
     setEditing(false)
     setQuery('')
     setCursor(0)
-    setPinned(null)
     try {
       localStorage.setItem(ME_STORAGE_KEY, JSON.stringify(guest))
     } catch {
@@ -130,8 +135,12 @@ export function SeatingExperience() {
       ? sortedGuests.filter((guest) => guest.table === cardTable)
       : []
 
-  const togglePin = (table: number) =>
-    setPinned((current) => (current === table ? null : table))
+  // Hand the selection up so the map can light the same table. An effect
+  // rather than a call inside the setters: `lit` also changes as the guest
+  // types, and the map should follow that too.
+  useEffect(() => {
+    onSelectionChange?.({ yours: yourTable, lit })
+  }, [yourTable, lit, onSelectionChange])
 
   const clearSearch = () => {
     setQuery('')
@@ -264,44 +273,10 @@ export function SeatingExperience() {
             </>
           ) : (
             <p className="table-card-hint">
-              Find your name above, or tap any table to see who’s seated
-              there.
+              Find your name above, or tap any table on the map to see who’s
+              seated there.
             </p>
           )}
-        </div>
-        <div className="seating-frame">
-          <img
-            src="/art/map/seating-floorplan.webp"
-            alt="Watercolor floor plan of the Hippodrome reception hall: twenty round tables in ranks down the room, a central dance floor with a mirrorball and a stage, the curtained service area across the top, and rooms along the back."
-            className="seating-base"
-            width={1600}
-            height={1987}
-            fetchPriority="high"
-          />
-          {tables.map((table) => (
-            <button
-              key={table.number}
-              type="button"
-              className={`table-spot${lit === table.number ? ' is-active' : ''}${
-                yourTable === table.number ? ' is-yours' : ''
-              }`}
-              style={{
-                left: `${table.x}%`,
-                top: `${table.y}%`,
-                width: `${table.r * 2}%`,
-              }}
-              onClick={() => togglePin(table.number)}
-              aria-label={
-                yourTable === table.number
-                  ? `Table ${table.number} — your table`
-                  : `Table ${table.number}`
-              }
-            >
-              <span className="table-num" aria-hidden="true">
-                {table.number}
-              </span>
-            </button>
-          ))}
         </div>
       </section>
     </>
@@ -345,21 +320,48 @@ export function ReceptionPage({
     return () => cancelAnimationFrame(frame)
   }, [toChart])
 
+  // The finder's state, held here so the map below can mark the same table.
+  const [selection, setSelection] = useState<{
+    yours: number | null
+    lit: number | null
+  }>({ yours: null, lit: null })
+  const [pickedOnMap, setPickedOnMap] = useState<number | null>(null)
+
   return (
-    <LiveEventPage anchor="naach-the-night-away" mapLabel="The Hippodrome">
-      <section
-        className="seating-section"
-        aria-labelledby="seating-title"
-        ref={section}
-      >
-        <header className="seating-header">
-          <h1 className="seating-title" id="seating-title">
-            {seatingIntro.title}
-          </h1>
-          <div className="seating-ornament" aria-hidden="true" />
-        </header>
-        <SeatingExperience />
-      </section>
-    </LiveEventPage>
+    <LiveEventPage
+      anchor="naach-the-night-away"
+      mapLabel="The Hippodrome, with your table marked"
+      // The hall is the whole subject here, so the map opens on it rather
+      // than on the farm around it, and stays the way up the page is: this
+      // focus is taller than it is wide, so it already fills a portrait
+      // screen and a quarter turn would only make a guest tilt their head.
+      fit="focus"
+      upright
+      expandToInset
+      tables={{
+        yours: selection.yours,
+        lit: pickedOnMap ?? selection.lit,
+        onSelect: (table) =>
+          setPickedOnMap((current) => (current === table ? null : table)),
+      }}
+      aboveMap={
+        <section
+          className="seating-section"
+          aria-labelledby="seating-title"
+          ref={section}
+        >
+          <header className="seating-header">
+            <h1 className="seating-title" id="seating-title">
+              {seatingIntro.title}
+            </h1>
+            <div className="seating-ornament" aria-hidden="true" />
+          </header>
+            <SeatingExperience
+            pinned={pickedOnMap}
+            onSelectionChange={setSelection}
+          />
+        </section>
+      }
+    />
   )
 }

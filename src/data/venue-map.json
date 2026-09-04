@@ -366,206 +366,6 @@
           "angle": 0
         },
         {
-          "id": "table_0",
-          "name": "table_0",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 24.235,
-          "y": 20.683,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_1",
-          "name": "table_1",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 25.676418349712996,
-          "y": 20.683,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_2",
-          "name": "table_2",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 27.112,
-          "y": 20.659414562186022,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_3",
-          "name": "table_3",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 28.551,
-          "y": 20.683,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_4",
-          "name": "table_4",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 24.240265655608127,
-          "y": 27.026416993940547,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_5",
-          "name": "table_5",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 25.674,
-          "y": 27.039,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_6",
-          "name": "table_6",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 27.112,
-          "y": 27.039,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_7",
-          "name": "table_7",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 28.551,
-          "y": 27.039,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_8",
-          "name": "table_8",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 25.853369641283283,
-          "y": 38.5015953248838,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_9",
-          "name": "table_9",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 24.89273214013101,
-          "y": 37.18850347236916,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_10",
-          "name": "table_10",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 25.847764802027363,
-          "y": 41.13206382757759,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_11",
-          "name": "table_11",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 28.551,
-          "y": 33.38448211418842,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_12",
-          "name": "table_12",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 23.78699602475116,
-          "y": 39.80070712659482,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_13",
-          "name": "table_13",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 24.875463711823834,
-          "y": 39.766857271783074,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_14",
-          "name": "table_14",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 25.81196863134308,
-          "y": 35.75246614692957,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_15",
-          "name": "table_15",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 28.551,
-          "y": 39.74048211418842,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_16",
-          "name": "table_16",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 23.777842611689557,
-          "y": 42.35806949162297,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_17",
-          "name": "table_17",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 24.413770687002575,
-          "y": 44.56755805250598,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_18",
-          "name": "table_18",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 24.879241995210823,
-          "y": 42.31982595722746,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_19",
-          "name": "table_19",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 27.332942224584226,
-          "y": 41.10788813105582,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
           "id": "reception-dance-floor",
           "name": "reception dance floor",
           "src": "/art/map/reception/dance-floor.webp",
@@ -574,6 +374,206 @@
           "y": 46.837919114547766,
           "width": 2.6001782584676736,
           "angle": 0
+        },
+        {
+          "id": "table_0",
+          "name": "table_0",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 24.18903263466237,
+          "y": 43.60137012054551,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_1",
+          "name": "table_1",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 28.55104342730652,
+          "y": 43.62338973499565,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_2",
+          "name": "table_2",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 23.672571078058386,
+          "y": 41.5324424812073,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_3",
+          "name": "table_3",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 28.08399451777376,
+          "y": 41.62298149401912,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_4",
+          "name": "table_4",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 24.677654153433856,
+          "y": 41.49689340537174,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_5",
+          "name": "table_5",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 25.685332254659812,
+          "y": 41.51332971381252,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_6",
+          "name": "table_6",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 27.100634544795543,
+          "y": 41.60055987815901,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_7",
+          "name": "table_7",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 29.08335957459817,
+          "y": 41.65287407712295,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_8",
+          "name": "table_8",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 23.67753268344599,
+          "y": 39.18030804316308,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_9",
+          "name": "table_9",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 24.659395079900314,
+          "y": 39.16284947792445,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_10",
+          "name": "table_10",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 25.68302982034887,
+          "y": 39.146019997141885,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_11",
+          "name": "table_11",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 27.587083861400465,
+          "y": 39.60460749439267,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_12",
+          "name": "table_12",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 28.613334025786063,
+          "y": 39.63402200033894,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_13",
+          "name": "table_13",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 27.086915732173594,
+          "y": 37.51451234654346,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_14",
+          "name": "table_14",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 24.7527829248331,
+          "y": 36.78882545264115,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_15",
+          "name": "table_15",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 25.753854934044426,
+          "y": 36.70450817145023,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_16",
+          "name": "table_16",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 28.10464758720661,
+          "y": 37.51305823002092,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_17",
+          "name": "table_17",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 29.078945468392828,
+          "y": 37.589143625426544,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_18",
+          "name": "table_18",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 27.58183154610903,
+          "y": 35.50467730927929,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_19",
+          "name": "table_19",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 28.567749102997816,
+          "y": 35.53875892490398,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
         }
       ]
     },

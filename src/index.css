@@ -2558,6 +2558,63 @@ a.poi:hover .poi-pin,
   width: 100%;
 }
 
+/* The table a guest is looking at, and the one they are seated at. A ring
+   around the sticker rather than a wash over it: the artwork stays readable
+   and the mark still finds the eye from across the hall. */
+.carnival-map-item.is-lit,
+.carnival-map-item.is-yours {
+  z-index: 4;
+}
+
+.carnival-map-item.is-lit::before,
+.carnival-map-item.is-yours::before {
+  border-radius: 50%;
+  content: '';
+  /* The sticker's box is the table AND its ring of chairs; the cloth itself
+     is only 85% of it. Inset to the cloth so the mark reads as a ring around
+     the table rather than a hoop thrown over the whole setting. */
+  inset: 7%;
+  position: absolute;
+}
+
+/* Ring weight in map units, like the numbers, so it stays proportionate to
+   the table at every zoom instead of thickening as you pull away. */
+.carnival-map-item.is-lit::before {
+  box-shadow:
+    0 0 0 max(1.5px, calc(0.035 * var(--map-unit, 3.5rem))) #fffdf7,
+    0 0 0 max(2.5px, calc(0.06 * var(--map-unit, 3.5rem)))
+      var(--accent-deep, #28433a);
+}
+
+/* Yours wins where both land on the same table: copper, and a soft glow. */
+.carnival-map-item.is-yours::before {
+  box-shadow:
+    0 0 0 max(1.5px, calc(0.04 * var(--map-unit, 3.5rem))) #fffdf7,
+    0 0 0 max(3px, calc(0.075 * var(--map-unit, 3.5rem))) #9e521a,
+    0 0 max(5px, calc(0.16 * var(--map-unit, 3.5rem))) rgba(158, 82, 26, 0.5);
+}
+
+/* A table's number, set on its own top. Sized in map units like the labels,
+   so it grows and shrinks with the artwork instead of holding one screen
+   size; the ivory halo is what keeps it legible over the green cloth and the
+   centrepiece alike. */
+.mx-table-number {
+  color: #fffdf7;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: calc(0.42 * var(--map-unit, 3.5rem));
+  font-weight: 700;
+  left: 50%;
+  line-height: 1;
+  pointer-events: none;
+  position: absolute;
+  text-shadow:
+    0 0 calc(0.06 * var(--map-unit, 3.5rem)) rgba(23, 38, 29, 0.95),
+    0 0 calc(0.14 * var(--map-unit, 3.5rem)) rgba(23, 38, 29, 0.8);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
 /* Temporary layout-editor chrome — leaves with the editor in CarnivalMap. */
 .carnival-map-item.is-editable {
   cursor: grab;
@@ -2752,6 +2809,10 @@ a.poi:hover .poi-pin,
   align-items: stretch;
   flex-direction: column;
   margin-top: clamp(1.8rem, 4vw, 2.8rem);
+  /* Below the finder above it, so the suggestion list drops over the map's
+     compass and expand button rather than under them. */
+  position: relative;
+  z-index: 1;
 }
 
 /* Names the experience the map opens — the carnival's map and checklist are
@@ -2770,8 +2831,13 @@ a.poi:hover .poi-pin,
 
 /* The seating experience keeps its heading, but as a section under the map
    rather than the page's own title. */
+/* The seat finder sits directly above the map, and its suggestion list drops
+   over it — so both need a stacking context, or the map (a later sibling)
+   paints its compass and expand button over the list. */
 .seating-section {
   margin-top: clamp(2rem, 4.5vw, 3.2rem);
+  position: relative;
+  z-index: 2;
   /* The page opens scrolled to here, so it needs the nav's clearance above it
      the same way an in-page anchor does. */
   scroll-margin-top: var(--anchor-pad);

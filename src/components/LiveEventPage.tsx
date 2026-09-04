@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
 import { EventMap, layerForEvent } from '@/components/EventMap'
+import type { TableSelection } from '@/components/MapLayerOverlay'
 import { EventPanel } from '@/components/EventPanel'
 import { SiteNav } from '@/components/SiteNav'
 import { events } from '@/data/events'
@@ -58,6 +59,11 @@ export function LiveEventPage({
   mapHeading,
   stamps,
   onToggleActivity,
+  tables,
+  fit,
+  upright = false,
+  expandToInset = false,
+  aboveMap,
   children,
 }: {
   anchor: string
@@ -69,6 +75,17 @@ export function LiveEventPage({
   /** Passport stamps, for the carnival's tappable stickers. */
   stamps?: Set<string>
   onToggleActivity?: (activity: string) => void
+  /** The reception's seating state, marked on the map's table stickers. */
+  tables?: TableSelection
+  /** Passed to the map: how far out the guest may zoom. */
+  fit?: 'cover' | 'contain' | 'focus'
+  /** Passed to the map: keep its fullscreen view upright. */
+  upright?: boolean
+  /** Passed to the map: expand onto the layer's inset rather than its focus. */
+  expandToInset?: boolean
+  /** Rendered between the panel and the map — the seat finder sits here, so
+   *  a guest reads their table number before looking for it below. */
+  aboveMap?: ReactNode
   /** What this event does live, rendered under the map. */
   children?: ReactNode
 }) {
@@ -125,6 +142,8 @@ export function LiveEventPage({
           />
         </div>
 
+        {aboveMap}
+
         {layer ? (
           <div className="now-map live-map">
             {mapHeading ? (
@@ -134,6 +153,10 @@ export function LiveEventPage({
               layer={layer}
               stamps={stamps}
               onToggleActivity={onToggleActivity}
+              tables={tables}
+              fit={fit}
+              upright={upright}
+              expandToInset={expandToInset}
               label={mapLabel}
             />
           </div>

@@ -125,12 +125,17 @@ export interface MapViewport {
 export function useMapViewport({
   art,
   bounds,
+  openTo,
   fit = 'cover',
   rotationDeg = 0,
   interactive = true,
 }: {
   art: { width: number; height: number }
   bounds: MapFocus
+  /** The rect the FIRST view frames, when it should be tighter than the one
+   *  the limits are drawn from — a seating map opens on the hall but can
+   *  still be pulled back out to the grounds around it. */
+  openTo?: MapFocus
   /** How the artwork sits in the stage at zoom 1, and how far out the guest
    *  may then zoom. `cover` fills the stage and never lets the painting stop
    *  covering it; `contain` fits the whole painting on screen, which is what
@@ -205,6 +210,22 @@ export function useMapViewport({
     return fit === 'focus' ? contain : Math.max(contain, 1)
   }, [box.w, box.h, stage.w, stage.h, fit])
   const maxZoom = minZoom * ZOOM_RANGE
+
+  /** Where the view starts: the zoom that fits `openTo`, and its centre. */
+  const opening = useMemo(() => {
+    if (!openTo || !canvas.w || !stage.w) return null
+    const box = {
+      x: (openTo.x / 100) * canvas.w - canvas.w / 2,
+      y: (openTo.y / 100) * canvas.h - canvas.h / 2,
+      w: (openTo.w / 100) * canvas.w,
+      h: (openTo.h / 100) * canvas.h,
+    }
+    const zoom = Math.min(
+      Math.max(Math.min(stage.w / box.w, stage.h / box.h), minZoom),
+      maxZoom,
+    )
+    return { zoom, cx: box.x, cy: box.y }
+  }, [openTo, canvas.w, canvas.h, stage.w, stage.h, minZoom, maxZoom])
 
   // The view is stored as the artwork point sitting at the stage's centre, in
   // canvas-local pixels. Panning moves it; zooming leaves it alone unless a
@@ -386,7 +407,11 @@ export function useMapViewport({
     // Resetting from outside fitted whichever stage had been measured last,
     // which after closing the fullscreen view was the fullscreen one.
     if (first || !interactive) {
-      write({ zoom: minZoom, ...clampCenter(reach.x, reach.y, minZoom) }, true)
+      const start = opening ?? { zoom: minZoom, cx: reach.x, cy: reach.y }
+      write(
+        { zoom: start.zoom, ...clampCenter(start.cx, start.cy, start.zoom) },
+        true,
+      )
       return
     }
     const cur = viewRef.current
