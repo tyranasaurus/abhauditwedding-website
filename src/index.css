@@ -3326,6 +3326,19 @@ a.poi:hover .poi-pin,
   pointer-events: auto;
 }
 
+/* The proxy holds the artwork through the geometric transition. Once the
+   interactive surface is ready, let its stickers return softly instead of
+   popping in on the swap frame. */
+.mv-stage.is-full .mv-live-map .carnival-map-item {
+  opacity: 0;
+  transition: opacity 180ms ease-out;
+}
+
+.mv-stage.is-full.is-live .mv-live-map .carnival-map-item {
+  opacity: 1;
+  transition-delay: 35ms;
+}
+
 .mv-canvas,
 .mx-canvas {
   left: 50%;
