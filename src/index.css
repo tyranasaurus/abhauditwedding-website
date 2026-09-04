@@ -3122,7 +3122,7 @@ a.poi:hover .poi-pin,
      faded rather than lit. Low opacity over a mostly-accent colour warms the
      ground instead, and the rim below does the work of separating it. */
   fill: color-mix(in srgb, var(--accent) 60%, #fffdf7);
-  fill-opacity: 0.24;
+  fill-opacity: 0.17;
   /* Ivory glow first, then the shadow: the pale rim is what makes the edge
      read on dark woodland and on a terracotta roof alike. */
   filter: drop-shadow(0 0 2px rgba(255, 253, 247, 0.95))
@@ -4010,4 +4010,49 @@ span.mx-swatch {
   height: 1px;
   margin: 1.1rem auto 0;
   width: min(15rem, 100%);
+}
+
+/* The Instagram handle in the nav: the mark sized to the text beside it, and
+   drawn in line rather than filled, so it sits with the wordmarks instead of
+   shouting over them. */
+.home-nav-links a.home-nav-instagram {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.42em;
+}
+
+.home-nav-instagram svg {
+  fill: none;
+  height: 1.06em;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  width: 1.06em;
+}
+
+/* The handle under the countdown. Quieter than the venue link above it — the
+   hero's job is the names and the date, and this is an aside. */
+.hero-instagram {
+  align-items: center;
+  color: var(--muted-ink);
+  display: inline-flex;
+  font-family: var(--font-body), Georgia, serif;
+  font-size: 0.9375rem;
+  gap: 0.4em;
+  justify-content: center;
+  letter-spacing: 0.02em;
+  margin-top: 0.85rem;
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.hero-instagram:hover {
+  color: var(--copper);
+}
+
+.hero-instagram svg {
+  fill: none;
+  height: 1.05em;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  width: 1.05em;
 }

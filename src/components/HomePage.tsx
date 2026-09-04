@@ -12,7 +12,7 @@ import {
   useTransform,
   AnimatePresence,
 } from 'motion/react'
-import { hero, travel, faqs, registry, venue, mapsSearch } from '@/data/home'
+import { faqs, hero, instagram, mapsSearch, registry, travel, venue } from '@/data/home'
 import { events } from '@/data/events'
 import { EventPanel } from '@/components/EventPanel'
 import {
@@ -252,6 +252,32 @@ function Hero() {
           >
             <Countdown />
           </motion.div>
+          {/* The handle again, under the countdown. It is in the nav too, but
+              the nav is chrome — here it reads as the couple's own, and it is
+              what guests need in order to tag their photos. */}
+          <motion.a
+            className="hero-instagram"
+            href={instagram.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${instagram.handle} on Instagram`}
+            initial={reduce ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.05 }}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4.2" />
+              <circle
+                cx="17.4"
+                cy="6.6"
+                r="1.2"
+                fill="currentColor"
+                stroke="none"
+              />
+            </svg>
+            {instagram.handle}
+          </motion.a>
         </motion.div>
       </div>
     </header>

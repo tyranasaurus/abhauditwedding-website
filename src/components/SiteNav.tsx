@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
 
-import { registry } from '@/data/home'
+import { instagram, registry } from '@/data/home'
 
 /** Scroll distance before the transparent bar fades to solid. */
 const SOLID_AT = 80
@@ -150,6 +150,23 @@ export function SiteNav() {
           onClick={close}
         >
           Registry
+        </a>
+        {/* The handle rather than the word "Instagram": it is the thing a
+            guest needs to tag, so it is worth reading in full. */}
+        <a
+          className="home-nav-instagram"
+          href={instagram.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={close}
+          aria-label={`${instagram.handle} on Instagram`}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <rect x="3" y="3" width="18" height="18" rx="5" />
+            <circle cx="12" cy="12" r="4.2" />
+            <circle cx="17.4" cy="6.6" r="1.2" fill="currentColor" stroke="none" />
+          </svg>
+          {instagram.handle}
         </a>
       </div>
 

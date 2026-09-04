@@ -112,6 +112,11 @@ export const stay = {
 // There is no registry page on this site any more; every route to it — the
 // nav, the footer, the corner bubble, the Q&A answer — hands the guest
 // straight to Joy.
+export const instagram = {
+  handle: '@abha.udit',
+  url: 'https://www.instagram.com/abha.udit/',
+} as const
+
 export const registry = {
   /** Deep link straight to the fund on Joy, past the couple picker. */
   url: 'https://withjoy.com/abhauditwedding/registry?pid=b3e72f03-4062-4a06-bebf-f714fb8c8a49',
