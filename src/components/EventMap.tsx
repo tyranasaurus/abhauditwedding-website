@@ -155,6 +155,10 @@ export function EventMap({
     ? (COMPASS_BY_EVENT_ANCHOR[layer.eventAnchor] ?? DEFAULT_COMPASS)
     : DEFAULT_COMPASS
 
+  // A layer may carry its own painting — the reception's has the Hippodrome's
+  // floor baked in — and falls back to the one the document shares.
+  const art = layer.art ?? venueMap.art
+
   const rotation = upright ? 0 : rotationFor(screen.vw, screen.vh)
   // Turned a quarter, the stage's own width runs down the screen's long side.
   const stageSize = rotation
@@ -164,7 +168,7 @@ export function EventMap({
   // The focus rect's true aspect: its width and height are percentages of the
   // artwork's own width and height, which are not the same number.
   const focusAspect =
-    (layer.focus.w * venueMap.art.width) / (layer.focus.h * venueMap.art.height)
+    (layer.focus.w * art.width) / (layer.focus.h * art.height)
 
   // Expanding lands on the hall, with a little air around it — but the
   // limits still come from the focus, so a guest can pull back out to the
@@ -180,7 +184,7 @@ export function EventMap({
       : undefined
 
   const viewport = useMapViewport({
-    art: venueMap.art,
+    art,
     bounds: layer.focus,
     openTo,
     fit,
@@ -195,7 +199,7 @@ export function EventMap({
   // remain mounted and fully rasterized behind the overlay, so collapse does
   // not pay for rebuilding a second 4,200px painting while it is moving.
   const inlineViewport = useMapViewport({
-    art: venueMap.art,
+    art,
     bounds: layer.focus,
     fit,
     rotationDeg: 0,
@@ -376,9 +380,9 @@ export function EventMap({
     >
       <img
         className="mv-art"
-        src={venueMap.art.src}
-        width={venueMap.art.width}
-        height={venueMap.art.height}
+        src={art.src}
+        width={art.width}
+        height={art.height}
         alt="Hand-painted watercolor aerial of the wedding grounds."
         draggable={false}
         fetchPriority="high"
@@ -404,9 +408,9 @@ export function EventMap({
     >
       <img
         className="mv-art"
-        src={venueMap.art.src}
-        width={venueMap.art.width}
-        height={venueMap.art.height}
+        src={art.src}
+        width={art.width}
+        height={art.height}
         alt=""
         draggable={false}
       />
@@ -497,7 +501,16 @@ export function EventMap({
         {/* No gesture handlers inline: the map is a fixed picture there, and a
             finger dragging across it should scroll the page. Stickers stay
             tappable — those listen on themselves. */}
-        <div className="mv-stage" ref={inlineViewport.registerStage}>
+        <div
+          className="mv-stage"
+          ref={inlineViewport.registerStage}
+          style={
+            {
+              '--map-unit': `${inlineViewport.mapUnit}px`,
+              '--zoom': inlineViewport.zoom,
+            } as React.CSSProperties
+          }
+        >
           {mapCanvas(inlineViewport)}
           {compass}
           {cornerButton('open')}
@@ -516,7 +529,14 @@ export function EventMap({
             <motion.div
               className={`mv-stage is-full${liveReady ? ' is-live' : ' is-transitioning'}`}
               ref={viewport.registerStage}
-              style={{ width: stageSize.w, height: stageSize.h }}
+              style={
+                {
+                  width: stageSize.w,
+                  height: stageSize.h,
+                  '--map-unit': `${viewport.mapUnit}px`,
+                  '--zoom': viewport.zoom,
+                } as React.CSSProperties
+              }
               initial={false}
               animate={
                 reduce

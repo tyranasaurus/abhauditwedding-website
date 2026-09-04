@@ -49,7 +49,7 @@ export const MapLayerOverlay = memo(function MapLayerOverlay({
     <>
       {/* Under everything: the cut-away drawing, if this layer has one. It is
           part of the ground, not a marker, so nothing here reacts to it. */}
-      {layer.inset ? (
+      {layer.inset && !layer.inset.baked ? (
         <img
           className="mx-inset"
           src={layer.inset.src}

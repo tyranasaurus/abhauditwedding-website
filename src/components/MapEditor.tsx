@@ -259,8 +259,10 @@ export function MapEditor() {
   const focusNameField = useRef(false)
 
   const layer = doc.layers.find((l) => l.id === layerId) ?? doc.layers[0]!
+  // A layer may bring its own painting; the rest share the document's.
+  const layerArt = layer.art ?? doc.art
   const viewport = useMapViewport({
-    art: doc.art,
+    art: layerArt,
     bounds: WHOLE_ART,
     fit: 'contain',
   })
@@ -880,9 +882,9 @@ export function MapEditor() {
             >
               <img
                 className="mx-art"
-                src={doc.art.src}
-                width={doc.art.width}
-                height={doc.art.height}
+                src={layerArt.src}
+                width={layerArt.width}
+                height={layerArt.height}
                 alt=""
                 draggable={false}
               />
@@ -890,7 +892,7 @@ export function MapEditor() {
               {/* The layer's cut-away drawing, e.g. the Hippodrome's interior
                   laid over its roof, so tables can be arranged against the
                   real floor. Under the focus rect and inert. */}
-              {layer.inset ? (
+              {layer.inset && !layer.inset.baked ? (
                 <img
                   className="mx-inset"
                   src={layer.inset.src}
