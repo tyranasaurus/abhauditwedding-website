@@ -396,7 +396,7 @@
           "name": "table_1",
           "src": "/art/map/reception-table-ten-compact.webp",
           "x": 28.55104342730652,
-          "y": 43.62338973499565,
+          "y": 43.62683593320137,
           "width": 1.008,
           "angle": 0,
           "stickerEffect": false
@@ -580,6 +580,116 @@
           "width": 1.008,
           "angle": 0,
           "stickerEffect": false
+        },
+        {
+          "id": "reception-sofa",
+          "name": "reception sofa",
+          "src": "/art/map/reception/sofa.webp",
+          "stickerEffect": false,
+          "x": 26.410308518956203,
+          "y": 43.23168252023933,
+          "width": 0.9193410184377699,
+          "angle": 0
+        },
+        {
+          "id": "reception-service-curtain",
+          "name": "reception service curtain",
+          "src": "/art/map/reception/service-curtain.webp",
+          "stickerEffect": false,
+          "x": 24.044666709401223,
+          "y": 21.433180544775105,
+          "width": 1.8,
+          "angle": 0
+        },
+        {
+          "id": "reception-service-curtain-2",
+          "name": "reception service curtain",
+          "src": "/art/map/reception/service-curtain.webp",
+          "stickerEffect": false,
+          "x": 25.456750923685405,
+          "y": 21.434365967398172,
+          "width": 1.8,
+          "angle": 0
+        },
+        {
+          "id": "reception-service-curtain-3",
+          "name": "reception service curtain",
+          "src": "/art/map/reception/service-curtain.webp",
+          "stickerEffect": false,
+          "x": 26.985302832274908,
+          "y": 21.441112427230614,
+          "width": 1.8,
+          "angle": 0
+        },
+        {
+          "id": "reception-service-curtain-4",
+          "name": "reception service curtain",
+          "src": "/art/map/reception/service-curtain.webp",
+          "stickerEffect": false,
+          "x": 27.750701608109686,
+          "y": 19.51087014881777,
+          "width": 1.8,
+          "angle": 90
+        },
+        {
+          "id": "reception-dj-booth",
+          "name": "reception dj booth",
+          "src": "/art/map/reception/dj-booth.webp",
+          "stickerEffect": false,
+          "x": 28.69055629775457,
+          "y": 48.73836670580717,
+          "width": 0.9650717795478242,
+          "angle": -31
+        },
+        {
+          "id": "reception-snack-table",
+          "name": "reception snack table",
+          "src": "/art/map/reception/snack-table.webp",
+          "stickerEffect": false,
+          "x": 27.20443032695981,
+          "y": 23.29688578944489,
+          "width": 1.517527405746019,
+          "angle": 0
+        },
+        {
+          "id": "reception-projector-screen",
+          "name": "reception projector screen",
+          "src": "/art/map/reception/projector-screen.webp",
+          "stickerEffect": false,
+          "x": 24.143614513513114,
+          "y": 48.69006961002043,
+          "width": 1.578220165437967,
+          "angle": 196
+        },
+        {
+          "id": "reception-bar",
+          "name": "reception bar",
+          "src": "/art/map/reception/bar.webp",
+          "stickerEffect": false,
+          "x": 23.89166555820543,
+          "y": 23.84350652701711,
+          "width": 1.135819544131801,
+          "angle": -28
+        },
+        {
+          "id": "reception-dessert-table",
+          "name": "reception dessert table",
+          "src": "/art/map/reception/dessert-table.webp",
+          "stickerEffect": false,
+          "x": 29.113928775245565,
+          "y": 27.345316531839305,
+          "width": 1.4055921184712137,
+          "angle": 90
+        },
+        {
+          "id": "reception-buffet-table",
+          "name": "reception buffet table",
+          "src": "/art/map/reception/buffet-table.webp",
+          "stickerEffect": false,
+          "x": 25.61115818129245,
+          "y": 23.27681773948287,
+          "width": 1.8,
+          "angle": 0
         }
       ]
     },

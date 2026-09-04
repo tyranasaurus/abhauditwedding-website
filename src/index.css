@@ -2612,11 +2612,18 @@ a.poi:hover .poi-pin,
     0 0 calc(0.06 * var(--map-unit, 3.5rem)) rgba(23, 38, 29, 0.95),
     0 0 calc(0.14 * var(--map-unit, 3.5rem)) rgba(23, 38, 29, 0.8);
   top: 50%;
-  /* Not a plain -50%: a digit's ink sits high in its line box, above the
-     descender space it never uses, so centring the BOX drops the number
-     below the middle of the table. Nudged up by a slice of its own height
-     to centre what the eye actually sees. */
-  transform: translate(-50%, -57%);
+  transform: translate(-50%, -50%);
+  /* The display face sets OLD-STYLE figures by default: 3, 4, 5, 7 and 9 all
+     hang below the baseline while 1, 2 and 0 sit on it, so the digits never
+     shared a centre line and a nudge that fixed one broke another. Lining
+     figures put every digit on the baseline at one height, which is what
+     makes centring reliable rather than tuned. Tabular so a two-digit number
+     is not wider on one table than another. */
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: 'lnum' 1, 'tnum' 1;
+  /* With lining figures the ink fills the cap height, sitting a touch above
+     the box's middle; this is the whole of the optical correction. */
+  padding-top: 0.08em;
   z-index: 3;
 }
 
