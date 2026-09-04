@@ -401,7 +401,12 @@ a.poi:hover .poi-pin,
   --plate-img: url('/art/backdrop-wide.webp');
   background-image: var(--plate-img);
   background-size: cover;
-  background-position: center 58%;
+  /* The vertical 72% only matters when the window is WIDER than the painting's
+     1.87 aspect (ultrawides, half-height laptop windows) — everywhere else
+     `cover` is height-driven and nothing is cropped vertically. When it does
+     bite, 72% spends the crop on sky at the top instead of the road at the
+     bottom: at 58% a 2560x1080 screen cut the buggies clean off. */
+  background-position: center 72%;
   background-repeat: no-repeat;
   pointer-events: none;
 }
@@ -434,14 +439,25 @@ a.poi:hover .poi-pin,
  * common phone, so `cover` never trims the sides and the barn survives.
  *
  * Anchored bottom, so on a viewport shorter than the plate what gets cropped
- * is the sky we invented rather than the scene. */
+ * is the sky we invented rather than the scene.
+ *
+ * The bottom 190px of the plate is BLEED: below the buggies the road fades
+ * into a ground mist mixed from its own colour (the same wash trick as the
+ * sky). It exists because the plate is pinned to 100lvh but a guest browsing
+ * with the browser chrome SHOWING only sees the top ~100svh of it — on an
+ * iPhone that difference is ~114px, and before the bleed it was precisely the
+ * band the buggies lived in (measured: buggies 13-74px below the visible edge
+ * on every popular phone with chrome showing). With the bleed, what the
+ * toolbar band hides is mist, and the scene clears it by ~46px worst case.
+ * If backdrop-tall-mist is ever regenerated, keep the scene at least 200
+ * image px above the bottom edge or the buggies sink back under the toolbar. */
 /* Width as well as aspect, because aspect ratio is not stable either: an iPad
    in portrait is 768x1024 (0.75, tall plate) with the chrome retracted but
    768x954 (0.805, wide plate) with it showing, so the plate would swap
    paintings mid-scroll. Width does not move when the chrome does. */
 @media (max-aspect-ratio: 3 / 4), (max-width: 820px) {
   .page-plate {
-    --plate-img: url('/art/backdrop-tall.webp');
+    --plate-img: url('/art/backdrop-tall-mist.webp');
     background-position: center bottom;
   }
 }
