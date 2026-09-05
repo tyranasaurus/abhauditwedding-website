@@ -134,7 +134,9 @@ export interface MapLayer {
   id: string
   name: string
   /** The `anchor` of the matching event in `events.ts`, or null for a layer
-   *  that belongs to no single event. */
+   *  that belongs to no single event. Two layers may name the same event —
+   *  an alternate drawn up beside the live one — and the first in the
+   *  document is the one that event's page and compass are taken from. */
   eventAnchor: string | null
   focus: MapFocus
   /** This layer's own painting, where the shared one will not do. The

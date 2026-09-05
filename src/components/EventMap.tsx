@@ -575,6 +575,13 @@ export function EventMap({
   )
 }
 
-/** The layer drawn for an event, by its `anchor` in events.ts. */
+/**
+ * The layer drawn for an event, by its `anchor` in events.ts.
+ *
+ * An event may have more than one layer drawn for it — an alternate being laid
+ * out in the editor alongside the one guests see — and the FIRST in the
+ * document wins. Order in `venue-map.json` is therefore the choice of which
+ * one is live: to promote an alternate, move it above the layer it replaces.
+ */
 export const layerForEvent = (anchor: string) =>
   venueMap.layers.find((layer) => layer.eventAnchor === anchor)

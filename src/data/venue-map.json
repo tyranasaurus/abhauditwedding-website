@@ -955,6 +955,390 @@
         }
       ],
       "stickers": []
+    },
+    {
+      "id": "sunset-shaadi-hippodrome",
+      "name": "Sunset Shaadi · Hippodrome",
+      "eventAnchor": "sunset-shaadi",
+      "focus": {
+        "x": 21.739689641827123,
+        "y": 38.08876070779017,
+        "w": 22.38470920510813,
+        "h": 50.02247858441965
+      },
+      "art": {
+        "src": "/art/map/grounds-reception.webp",
+        "width": 4200,
+        "height": 1782
+      },
+      "inset": {
+        "src": "/art/map/hippodrome-floorplan.webp",
+        "x": 26.393,
+        "y": 34.484,
+        "w": 6.69,
+        "h": 37.318,
+        "baked": true
+      },
+      "areas": [],
+      "paths": [],
+      "labels": [
+        {
+          "id": "the-hippodrome",
+          "text": "The Hippodrome",
+          "accent": "sunset",
+          "x": 17.7010523744815,
+          "y": 21.603607626276155,
+          "size": 1.0233365244993828
+        },
+        {
+          "id": "new-label",
+          "text": "Scenic Views",
+          "accent": "sunset",
+          "x": 16.96364759520698,
+          "y": 53.030711591691414,
+          "size": 0.9901746323242908
+        }
+      ],
+      "stickers": [
+        {
+          "id": "shaadi-camera",
+          "name": "shaadi camera",
+          "src": "/art/map/event-cameras/camera-shaadi.webp",
+          "x": 13.6,
+          "y": 42.7,
+          "width": 1.8,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-camera-2",
+          "name": "shaadi camera",
+          "src": "/art/map/event-cameras/camera-shaadi.webp",
+          "x": 22.987831203007758,
+          "y": 59.02108203330041,
+          "width": 1.8,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-dance-floor",
+          "name": "shaadi dance floor",
+          "src": "/art/map/reception/dance-floor.webp",
+          "stickerEffect": false,
+          "x": 26.38264458950283,
+          "y": 46.837919114547766,
+          "width": 2.6001782584676736,
+          "angle": 0
+        },
+        {
+          "id": "table_0",
+          "name": "table_0",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 24.18903263466237,
+          "y": 43.60137012054551,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_1",
+          "name": "table_1",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 28.55104342730652,
+          "y": 43.62683593320137,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_2",
+          "name": "table_2",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 23.672571078058386,
+          "y": 41.5324424812073,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_3",
+          "name": "table_3",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 28.08399451777376,
+          "y": 41.62298149401912,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_4",
+          "name": "table_4",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 24.677654153433856,
+          "y": 41.49689340537174,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_5",
+          "name": "table_5",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 25.685332254659812,
+          "y": 41.51332971381252,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_6",
+          "name": "table_6",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 27.100634544795543,
+          "y": 41.60055987815901,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_7",
+          "name": "table_7",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 29.08335957459817,
+          "y": 41.65287407712295,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_8",
+          "name": "table_8",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 23.67753268344599,
+          "y": 39.18030804316308,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_9",
+          "name": "table_9",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 24.659395079900314,
+          "y": 39.16284947792445,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_10",
+          "name": "table_10",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 25.68302982034887,
+          "y": 39.146019997141885,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_11",
+          "name": "table_11",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 27.587083861400465,
+          "y": 39.60460749439267,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_12",
+          "name": "table_12",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 28.613334025786063,
+          "y": 39.63402200033894,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_13",
+          "name": "table_13",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 27.086915732173594,
+          "y": 37.51451234654346,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_14",
+          "name": "table_14",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 24.7527829248331,
+          "y": 36.78882545264115,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_15",
+          "name": "table_15",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 25.753854934044426,
+          "y": 36.70450817145023,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_16",
+          "name": "table_16",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 28.10464758720661,
+          "y": 37.51305823002092,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_17",
+          "name": "table_17",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 29.078945468392828,
+          "y": 37.589143625426544,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_18",
+          "name": "table_18",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 27.58183154610903,
+          "y": 35.50467730927929,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_19",
+          "name": "table_19",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 28.567749102997816,
+          "y": 35.53875892490398,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "shaadi-sofa",
+          "name": "shaadi sofa",
+          "src": "/art/map/reception/sofa.webp",
+          "stickerEffect": false,
+          "x": 26.410308518956203,
+          "y": 43.23168252023933,
+          "width": 0.9193410184377699,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-service-curtain",
+          "name": "shaadi service curtain",
+          "src": "/art/map/reception/service-curtain.webp",
+          "stickerEffect": false,
+          "x": 24.044666709401223,
+          "y": 21.433180544775105,
+          "width": 1.8,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-service-curtain-2",
+          "name": "shaadi service curtain",
+          "src": "/art/map/reception/service-curtain.webp",
+          "stickerEffect": false,
+          "x": 25.456750923685405,
+          "y": 21.434365967398172,
+          "width": 1.8,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-service-curtain-3",
+          "name": "shaadi service curtain",
+          "src": "/art/map/reception/service-curtain.webp",
+          "stickerEffect": false,
+          "x": 26.985302832274908,
+          "y": 21.441112427230614,
+          "width": 1.8,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-service-curtain-4",
+          "name": "shaadi service curtain",
+          "src": "/art/map/reception/service-curtain.webp",
+          "stickerEffect": false,
+          "x": 27.750701608109686,
+          "y": 19.51087014881777,
+          "width": 1.8,
+          "angle": 90
+        },
+        {
+          "id": "shaadi-dj-booth",
+          "name": "shaadi dj booth",
+          "src": "/art/map/reception/dj-booth.webp",
+          "stickerEffect": false,
+          "x": 28.69055629775457,
+          "y": 48.73836670580717,
+          "width": 0.9650717795478242,
+          "angle": -31
+        },
+        {
+          "id": "shaadi-snack-table",
+          "name": "shaadi snack table",
+          "src": "/art/map/reception/snack-table.webp",
+          "stickerEffect": false,
+          "x": 27.20443032695981,
+          "y": 23.29688578944489,
+          "width": 1.517527405746019,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-projector-screen",
+          "name": "shaadi projector screen",
+          "src": "/art/map/reception/projector-screen.webp",
+          "stickerEffect": false,
+          "x": 24.143614513513114,
+          "y": 48.69006961002043,
+          "width": 1.578220165437967,
+          "angle": 196
+        },
+        {
+          "id": "shaadi-bar",
+          "name": "shaadi bar",
+          "src": "/art/map/reception/bar.webp",
+          "stickerEffect": false,
+          "x": 23.89166555820543,
+          "y": 23.84350652701711,
+          "width": 1.135819544131801,
+          "angle": -28
+        },
+        {
+          "id": "shaadi-dessert-table",
+          "name": "shaadi dessert table",
+          "src": "/art/map/reception/dessert-table.webp",
+          "stickerEffect": false,
+          "x": 29.113928775245565,
+          "y": 27.345316531839305,
+          "width": 1.4055921184712137,
+          "angle": 90
+        },
+        {
+          "id": "shaadi-buffet-table",
+          "name": "shaadi buffet table",
+          "src": "/art/map/reception/buffet-table.webp",
+          "stickerEffect": false,
+          "x": 25.61115818129245,
+          "y": 23.27681773948287,
+          "width": 1.8,
+          "angle": 0
+        }
+      ]
     }
   ]
 }
