@@ -118,7 +118,7 @@ const STICKER_ART: { src: string; name: string }[] = [
     name: `reception ${file.replace(/-/g, ' ')}`,
   })),
   ...SHAADI_ART.map((file) => ({
-    src: `/art/map/shaadi/${file}.webp`,
+    src: `/art/map/shaadi/${file}-outlined.webp`,
     name: `shaadi ${file.replace(/-/g, ' ')}`,
   })),
   {
