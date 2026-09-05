@@ -5,6 +5,7 @@ import { MapPage } from '@/components/MapPage'
 import { MapView } from '@/components/MapView'
 import { CarnivalPage } from '@/components/CarnivalPage'
 import { ShaadiPage } from '@/components/ShaadiPage'
+import { isHidden } from '@/data/hidden-pages'
 
 /**
  * Whether the map editor may open here.
@@ -40,6 +41,15 @@ export default function App() {
   // layer of the venue map document and /map-editor lays that document out;
   // /grounds is the old name for the view and still resolves.)
   const path = window.location.pathname.replace(/\/+$/, '')
+
+  // Switched-off pages come first, ahead of every route below: whatever the
+  // path would have rendered, a hidden one renders nothing and the guest
+  // lands on the homepage. See src/data/hidden-pages.ts — the Shaadi and
+  // Carnival live pages and the map pages are off; the Reception is not.
+  if (isHidden(path)) {
+    window.location.replace('/')
+    return null
+  }
 
   if (path === '/reception') return <ReceptionPage />
   // Same page, opened on the chart: the address guests are handed to find

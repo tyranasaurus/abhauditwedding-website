@@ -1,3 +1,5 @@
+import { isHidden } from '@/data/hidden-pages'
+
 /**
  * The live-weekend schedule: while a phase's window is open, the homepage
  * auto-scrolls to that event's card and floats a pill into that event's live
@@ -142,9 +144,23 @@ function compress(run: { at: number; step: number }): LivePhase[] {
   }))
 }
 
-export const schedule: LivePhase[] = rehearsing
-  ? compress(rehearsing)
-  : livePhases
+/**
+ * A pill into a page that is currently switched off would be a door to
+ * nowhere, so it is dropped and no floating button appears for that event.
+ * The phase itself stays — the homepage still glides to its card while the
+ * window is open. See src/data/hidden-pages.ts.
+ */
+function withoutHiddenPills(phases: LivePhase[]): LivePhase[] {
+  return phases.map((phase) => {
+    if (!phase.pill || !isHidden(phase.pill.href)) return phase
+    const { pill: _hidden, ...rest } = phase
+    return rest
+  })
+}
+
+export const schedule: LivePhase[] = withoutHiddenPills(
+  rehearsing ? compress(rehearsing) : livePhases,
+)
 
 /** True while a rehearsal is running, so the page can say so. */
 export const isRehearsing = rehearsing !== null

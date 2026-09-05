@@ -19,6 +19,17 @@ until their event has begun, redirecting to that event's card on the homepage.
 `?preview` (or `?live=`) opens them anyway, and the homepage's live-preview chip
 links to all of them that way.
 
+**Switched off right now:** `src/data/hidden-pages.ts` lists the paths that are
+built but not part of the site — the Shaadi and Carnival live pages (under both
+of the carnival's names) and every standalone map page (`/map`, `/map-view`,
+`/grounds`). That one list is the whole switch: `App.tsx` sends a hidden path to
+the homepage ahead of every route, the nav's Map link and the homepage footer's
+drop out, the floating live pill for a hidden page is never built, and the
+preview chip leaves it out — `?preview` does not reopen it. The rewrites in
+`vercel.json` stay, so a link already handed out lands gently on the homepage
+instead of Vercel's 404. The Reception is untouched and still live, map and all.
+Take a path out of the list and everything about that page comes back.
+
 ## The venue map
 
 `src/data/venue-map.json` is the single source of truth for everything drawn on

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
 
 import { instagram, registry } from '@/data/home'
+import { isHidden } from '@/data/hidden-pages'
 
 /** Scroll distance before the transparent bar fades to solid. */
 const SOLID_AT = 80
@@ -125,14 +126,17 @@ export function SiteNav() {
           Schedule
         </a>
         {/* A page of its own, not a section: no hash, and no scroll-spy —
-            the nav marks it by the path instead. */}
-        <a
-          href="/map"
-          onClick={close}
-          aria-current={onMapPage ? 'true' : undefined}
-        >
-          Map
-        </a>
+            the nav marks it by the path instead. It only appears while the
+            grounds map is switched on — see src/data/hidden-pages.ts. */}
+        {!isHidden('/map') && (
+          <a
+            href="/map"
+            onClick={close}
+            aria-current={onMapPage ? 'true' : undefined}
+          >
+            Map
+          </a>
+        )}
         <a
           href="/#travel"
           onClick={close}

@@ -23,6 +23,7 @@ import {
 } from '@/data/live-phases'
 import { useForecast, type ForecastWindow } from '@/lib/use-forecast'
 import { SiteNav } from '@/components/SiteNav'
+import { isHidden } from '@/data/hidden-pages'
 
 /** Which live phase the homepage is in: the venue clock decides, and a
  *  `?live=<id>` (or `?live=off`) test override — with its floating preview
@@ -564,7 +565,10 @@ function Footer() {
             top nav already lists it alongside them. */}
         <nav className="footer-nav" aria-label="Site">
           <a href="#schedule">Schedule</a>
-          <a href="#map">Map</a>
+          {/* The map is a page of its own, so this is a path and not a hash —
+              and it only appears while that page is switched on. See
+              src/data/hidden-pages.ts. */}
+          {!isHidden('/map') && <a href="/map">Map</a>}
           <a href="#travel">Travel</a>
           <a href="#faq">Q&amp;A</a>
           <a href={registry.url} target="_blank" rel="noopener noreferrer">
@@ -827,7 +831,9 @@ export function HomePage() {
           </div>
           {/* A way into the live pages themselves. Each one turns guests away
               until its event opens, so before the weekend they are only
-              reachable with the `?preview` these links carry. */}
+              reachable with the `?preview` these links carry. Pages that are
+              switched off are left out entirely: `?preview` does not reopen
+              them. See src/data/hidden-pages.ts. */}
           <div className="now-admin-row">
             <span className="now-admin-label">Pages</span>
             {[
@@ -835,11 +841,17 @@ export function HomePage() {
               ['Carnival', '/carnival'],
               ['Reception', '/reception'],
               ['Seating', '/seating-chart'],
-            ].map(([label, href]) => (
-              <a key={href} className="now-admin-link" href={`${href}?preview`}>
-                {label}
-              </a>
-            ))}
+            ]
+              .filter(([, href]) => !isHidden(href!))
+              .map(([label, href]) => (
+                <a
+                  key={href}
+                  className="now-admin-link"
+                  href={`${href}?preview`}
+                >
+                  {label}
+                </a>
+              ))}
           </div>
         </div>
       )}
