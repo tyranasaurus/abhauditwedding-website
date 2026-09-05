@@ -752,10 +752,10 @@
           "name": "shaadi chair grid",
           "src": "/art/map/shaadi/chair-grid-outlined.webp",
           "stickerEffect": false,
-          "x": 27.75880504614969,
-          "y": 28.279064559394524,
+          "x": 27.755404249645803,
+          "y": 28.521049214099182,
           "width": 1.8,
-          "angle": 0
+          "angle": 180
         },
         {
           "id": "shaadi-round-table-s2",
@@ -1002,10 +1002,10 @@
           "name": "shaadi chair grid",
           "src": "/art/map/shaadi/chair-grid-outlined.webp",
           "stickerEffect": false,
-          "x": 25.3455015255366,
-          "y": 28.293818922748237,
+          "x": 25.338699932528836,
+          "y": 28.543818922748237,
           "width": 1.8,
-          "angle": 0
+          "angle": 180
         },
         {
           "id": "shaadi-food-table",
