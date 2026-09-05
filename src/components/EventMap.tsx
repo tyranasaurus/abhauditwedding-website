@@ -52,23 +52,23 @@ const COMPASS = {
 
 const DEFAULT_COMPASS = COMPASS
 
-/** An event may bring its own; anything else — the homepage's grounds map
- *  included — gets the one above. */
+/** An event may bring its own, or `null` for no compass at all; anything not
+ *  listed — the homepage's grounds map included — gets the one above.
+ *
+ *  The two hall maps take `null`. A compass orients you across open ground,
+ *  which is what the Carnival's lawn and the whole-grounds map need; inside a
+ *  room you navigate by the room, and the rose only crowds the corner. */
 const COMPASS_BY_EVENT_ANCHOR: Record<
   string,
-  { src: string; width: number; height: number }
+  { src: string; width: number; height: number } | null
 > = {
-  'sunset-shaadi': {
-    src: '/art/map/compass-rose-shaadi.webp',
-    width: 1189,
-    height: 1312,
-  },
+  'sunset-shaadi': null,
   'carnegie-to-carnation': {
     src: '/art/map/compass-rose-carnival.webp',
     width: 1201,
     height: 1309,
   },
-  'naach-the-night-away': COMPASS,
+  'naach-the-night-away': null,
 }
 
 /**
@@ -151,9 +151,13 @@ export function EventMap({
   // A drag must not land as a tap on the sticker it finished over.
   const draggedRef = useRef(false)
   const reduce = useReducedMotion()
-  const compassArt = layer.eventAnchor
-    ? (COMPASS_BY_EVENT_ANCHOR[layer.eventAnchor] ?? DEFAULT_COMPASS)
-    : DEFAULT_COMPASS
+  // `undefined` is an event that named no compass, and gets the default one;
+  // an explicit `null` is an event that wants none. `??` cannot tell the two
+  // apart, which is why this is not one.
+  const listedCompass = layer.eventAnchor
+    ? COMPASS_BY_EVENT_ANCHOR[layer.eventAnchor]
+    : undefined
+  const compassArt = listedCompass === undefined ? DEFAULT_COMPASS : listedCompass
 
   // A layer may carry its own painting — the reception's has the Hippodrome's
   // floor baked in — and falls back to the one the document shares.
@@ -443,7 +447,7 @@ export function EventMap({
     </div>
   )
 
-  const compass = (
+  const compass = compassArt ? (
     <img
       className="mv-compass"
       src={compassArt.src}
@@ -452,7 +456,7 @@ export function EventMap({
       height={compassArt.height}
       style={{ rotate: `${grounds.northRotationDeg}deg` }}
     />
-  )
+  ) : null
 
   const cornerButton = (kind: 'open' | 'close') => (
     <button
