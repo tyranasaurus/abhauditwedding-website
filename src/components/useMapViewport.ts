@@ -211,7 +211,17 @@ export function useMapViewport({
   }, [box.w, box.h, stage.w, stage.h, fit])
   const maxZoom = minZoom * ZOOM_RANGE
 
-  /** Where the view starts: the zoom that fits `openTo`, and its centre. */
+  /**
+   * Where the view starts: the zoom at which `openTo` FILLS the stage, and its
+   * centre.
+   *
+   * Fills rather than fits — the looser axis runs off screen. Opening a room
+   * on a landscape screen is the case that decides it: the Hippodrome is far
+   * taller than it is wide, so fitting it whole leaves the hall a narrow strip
+   * with the farm either side of it, which is the view a guest just asked to
+   * leave. Filling lands them inside the room at a scale they can read, and
+   * zooming out from there still reaches the whole of it.
+   */
   const opening = useMemo(() => {
     if (!openTo || !canvas.w || !stage.w) return null
     const box = {
@@ -221,7 +231,7 @@ export function useMapViewport({
       h: (openTo.h / 100) * canvas.h,
     }
     const zoom = Math.min(
-      Math.max(Math.min(stage.w / box.w, stage.h / box.h), minZoom),
+      Math.max(Math.max(stage.w / box.w, stage.h / box.h), minZoom),
       maxZoom,
     )
     return { zoom, cx: box.x, cy: box.y }

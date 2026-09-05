@@ -170,23 +170,24 @@ export function EventMap({
   const focusAspect =
     (layer.focus.w * art.width) / (layer.focus.h * art.height)
 
-  // Expanding lands on the hall, with a little air around it — but the
-  // limits still come from the focus, so a guest can pull back out to the
-  // whole reception area if they want to see where the room sits.
-  const openTo =
+  // Expanding is a guest asking to see inside the room, so the room becomes
+  // the whole world: it fills the screen on open, and it is also what the
+  // limits are drawn from, so zooming out stops at the walls and panning stays
+  // between them rather than wandering back onto the farm.
+  const hall =
     expandToInset && layer.inset
       ? {
           x: layer.inset.x,
           y: layer.inset.y,
-          w: layer.inset.w * 1.12,
-          h: layer.inset.h * 1.04,
+          w: layer.inset.w,
+          h: layer.inset.h,
         }
       : undefined
 
   const viewport = useMapViewport({
     art,
-    bounds: layer.focus,
-    openTo,
+    bounds: hall ?? layer.focus,
+    openTo: hall,
     fit,
     rotationDeg: rotation,
     // Inline the frame is cut to the focus, so the whole focused area is
