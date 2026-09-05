@@ -79,6 +79,16 @@ const RECEPTION_ART = [
   'sofa',
 ] as const
 
+const SHAADI_ART = [
+  'banquet-table',
+  'chair-grid',
+  'couple-table',
+  'food-table',
+  'mandap-overhead',
+  'round-table',
+  'service-curtain',
+] as const
+
 const MARKER_ART = [
   'icon-carnival', 'icon-dinner', 'icon-parking', 'icon-sangeet', 'icon-sunset',
 ] as const
@@ -106,6 +116,10 @@ const STICKER_ART: { src: string; name: string }[] = [
   ...RECEPTION_ART.map((file) => ({
     src: `/art/map/reception/${file}.webp`,
     name: `reception ${file.replace(/-/g, ' ')}`,
+  })),
+  ...SHAADI_ART.map((file) => ({
+    src: `/art/map/shaadi/${file}.webp`,
+    name: `shaadi ${file.replace(/-/g, ' ')}`,
   })),
   {
     src: '/art/map/reception-table-ten.webp',

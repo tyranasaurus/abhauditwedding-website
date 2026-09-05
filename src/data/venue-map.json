@@ -10,7 +10,7 @@
     {
       "id": "sunset-shaadi",
       "name": "Sunset Shaadi",
-      "eventAnchor": "sunset-shaadi",
+      "eventAnchor": null,
       "focus": {
         "x": 64.66450558814992,
         "y": 48.48813115829775,
@@ -689,6 +689,352 @@
           "x": 25.61115818129245,
           "y": 23.27681773948287,
           "width": 1.8,
+          "angle": 0
+        }
+      ]
+    },
+    {
+      "id": "shaadi-2",
+      "name": "Shaadi 2",
+      "eventAnchor": "sunset-shaadi",
+      "focus": {
+        "x": 21.739689641827123,
+        "y": 38.08876070779017,
+        "w": 22.38470920510813,
+        "h": 50.02247858441965
+      },
+      "art": {
+        "src": "/art/map/grounds-reception.webp",
+        "width": 4200,
+        "height": 1782
+      },
+      "inset": {
+        "src": "/art/map/hippodrome-floorplan.webp",
+        "x": 26.393,
+        "y": 34.484,
+        "w": 6.69,
+        "h": 37.318,
+        "baked": true
+      },
+      "areas": [],
+      "paths": [],
+      "labels": [
+        {
+          "id": "the-hippodrome-s2",
+          "text": "The Hippodrome",
+          "accent": "sunset",
+          "x": 17.7010523744815,
+          "y": 21.603607626276155,
+          "size": 1.0233365244993828
+        },
+        {
+          "id": "new-label-s2",
+          "text": "Scenic Views",
+          "accent": "sunset",
+          "x": 16.96364759520698,
+          "y": 53.030711591691414,
+          "size": 0.9901746323242908
+        }
+      ],
+      "stickers": [
+        {
+          "id": "shaadi-mandap-overhead-s2",
+          "name": "shaadi mandap overhead",
+          "src": "/art/map/shaadi/mandap-overhead.webp",
+          "stickerEffect": false,
+          "x": 26.54509522336859,
+          "y": 23.684290497692846,
+          "width": 1.5525611916546358,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-chair-grid-s2",
+          "name": "shaadi chair grid",
+          "src": "/art/map/shaadi/chair-grid.webp",
+          "stickerEffect": false,
+          "x": 27.75880504614969,
+          "y": 28.279064559394524,
+          "width": 1.8,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-round-table-s2",
+          "name": "shaadi round table",
+          "src": "/art/map/shaadi/round-table.webp",
+          "stickerEffect": false,
+          "x": 23.964941646330846,
+          "y": 39.799934853722554,
+          "width": 0.731115041457089,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-round-table-2",
+          "name": "shaadi round table 2",
+          "src": "/art/map/shaadi/round-table.webp",
+          "stickerEffect": false,
+          "x": 24.75616095819293,
+          "y": 39.80219462381306,
+          "width": 0.731115041457089,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-round-table-4",
+          "name": "shaadi round table 4",
+          "src": "/art/map/shaadi/round-table.webp",
+          "stickerEffect": false,
+          "x": 28.677490867839825,
+          "y": 39.70179219484757,
+          "width": 0.731115041457089,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-round-table-5",
+          "name": "shaadi round table 5",
+          "src": "/art/map/shaadi/round-table.webp",
+          "stickerEffect": false,
+          "x": 28.280956816055895,
+          "y": 41.354710286709604,
+          "width": 0.731115041457089,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-round-table-6",
+          "name": "shaadi round table 6",
+          "src": "/art/map/shaadi/round-table.webp",
+          "stickerEffect": false,
+          "x": 27.885706957833705,
+          "y": 39.718215790275984,
+          "width": 0.731115041457089,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-round-table-7",
+          "name": "shaadi round table 7",
+          "src": "/art/map/shaadi/round-table.webp",
+          "stickerEffect": false,
+          "x": 23.65933180853575,
+          "y": 41.49290567799903,
+          "width": 0.731115041457089,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-round-table-8",
+          "name": "shaadi round table 8",
+          "src": "/art/map/shaadi/round-table.webp",
+          "stickerEffect": false,
+          "x": 24.42304959585268,
+          "y": 41.46794460876037,
+          "width": 0.731115041457089,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-round-table-9",
+          "name": "shaadi round table 9",
+          "src": "/art/map/shaadi/round-table.webp",
+          "stickerEffect": false,
+          "x": 27.935327250702358,
+          "y": 42.92952576264088,
+          "width": 0.731115041457089,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-round-table-10",
+          "name": "shaadi round table 10",
+          "src": "/art/map/shaadi/round-table.webp",
+          "stickerEffect": false,
+          "x": 29.094670292328264,
+          "y": 44.612273583567685,
+          "width": 0.731115041457089,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-round-table-11",
+          "name": "shaadi round table 11",
+          "src": "/art/map/shaadi/round-table.webp",
+          "stickerEffect": false,
+          "x": 24.872790706574744,
+          "y": 42.92913935079157,
+          "width": 0.731115041457089,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-round-table-12",
+          "name": "shaadi round table 12",
+          "src": "/art/map/shaadi/round-table.webp",
+          "stickerEffect": false,
+          "x": 29.071459418418353,
+          "y": 41.25865411764329,
+          "width": 0.731115041457089,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-round-table-13",
+          "name": "shaadi round table 13",
+          "src": "/art/map/shaadi/round-table.webp",
+          "stickerEffect": false,
+          "x": 24.067765881890498,
+          "y": 43.03928975253116,
+          "width": 0.731115041457089,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-round-table-14",
+          "name": "shaadi round table 14",
+          "src": "/art/map/shaadi/round-table.webp",
+          "stickerEffect": false,
+          "x": 23.620436695295698,
+          "y": 44.67578738171441,
+          "width": 0.731115041457089,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-round-table-16",
+          "name": "shaadi round table 16",
+          "src": "/art/map/shaadi/round-table.webp",
+          "stickerEffect": false,
+          "x": 28.28252950514969,
+          "y": 44.55916978678785,
+          "width": 0.731115041457089,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-round-table-17",
+          "name": "shaadi round table 17",
+          "src": "/art/map/shaadi/round-table.webp",
+          "stickerEffect": false,
+          "x": 24.49625776370806,
+          "y": 44.692569817108115,
+          "width": 0.731115041457089,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-round-table-18",
+          "name": "shaadi round table 18",
+          "src": "/art/map/shaadi/round-table.webp",
+          "stickerEffect": false,
+          "x": 28.739253531176878,
+          "y": 42.95105030817783,
+          "width": 0.731115041457089,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-couple-table-s2",
+          "name": "shaadi couple table",
+          "src": "/art/map/shaadi/couple-table.webp",
+          "stickerEffect": false,
+          "x": 26.39841666175714,
+          "y": 47.55756285280055,
+          "width": 1.186569462136761,
+          "angle": 180
+        },
+        {
+          "id": "shaadi-banquet-table-s2",
+          "name": "shaadi banquet table",
+          "src": "/art/map/shaadi/banquet-table.webp",
+          "stickerEffect": false,
+          "x": 25.87981719253996,
+          "y": 42.63102111847451,
+          "width": 0.7849619235891244,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-food-table-s2",
+          "name": "shaadi food table",
+          "src": "/art/map/shaadi/food-table.webp",
+          "stickerEffect": false,
+          "x": 29.218274634696048,
+          "y": 24.16763251079063,
+          "width": 1.4098919461301271,
+          "angle": 90
+        },
+        {
+          "id": "shaadi-service-curtain-s2",
+          "name": "shaadi service curtain",
+          "src": "/art/map/shaadi/service-curtain.webp",
+          "stickerEffect": false,
+          "x": 24.044666709401223,
+          "y": 21.433180544775105,
+          "width": 1.8,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-service-curtain-2-s2",
+          "name": "shaadi service curtain",
+          "src": "/art/map/shaadi/service-curtain.webp",
+          "stickerEffect": false,
+          "x": 25.456750923685405,
+          "y": 21.434365967398172,
+          "width": 1.8,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-service-curtain-3-s2",
+          "name": "shaadi service curtain",
+          "src": "/art/map/shaadi/service-curtain.webp",
+          "stickerEffect": false,
+          "x": 26.985302832274908,
+          "y": 21.441112427230614,
+          "width": 1.8,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-service-curtain-4-s2",
+          "name": "shaadi service curtain",
+          "src": "/art/map/shaadi/service-curtain.webp",
+          "stickerEffect": false,
+          "x": 27.750701608109686,
+          "y": 19.51087014881777,
+          "width": 1.8,
+          "angle": 90
+        },
+        {
+          "id": "shaadi-banquet-table",
+          "name": "shaadi banquet table",
+          "src": "/art/map/shaadi/banquet-table.webp",
+          "stickerEffect": false,
+          "x": 26.925653083445326,
+          "y": 42.67598571125607,
+          "width": 0.7747992074011333,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-chair-grid",
+          "name": "shaadi chair grid",
+          "src": "/art/map/shaadi/chair-grid.webp",
+          "stickerEffect": false,
+          "x": 25.3455015255366,
+          "y": 28.293818922748237,
+          "width": 1.8,
+          "angle": 0
+        },
+        {
+          "id": "shaadi-food-table",
+          "name": "shaadi food table",
+          "src": "/art/map/shaadi/food-table.webp",
+          "stickerEffect": false,
+          "x": 29.27682918199422,
+          "y": 21.09059773044219,
+          "width": 1.4,
+          "angle": 90
+        },
+        {
+          "id": "sunset-shaadi-camera",
+          "name": "Sunset Shaadi camera",
+          "src": "/art/map/event-cameras/camera-shaadi.webp",
+          "stickerEffect": false,
+          "x": 13.687538850341642,
+          "y": 41.6,
+          "width": 1.9012069973336463,
+          "angle": 0
+        },
+        {
+          "id": "sunset-shaadi-camera-2",
+          "name": "Sunset Shaadi camera",
+          "src": "/art/map/event-cameras/camera-shaadi.webp",
+          "stickerEffect": true,
+          "x": 20.898397680163743,
+          "y": 58.3,
+          "width": 1.9783849293333002,
           "angle": 0
         }
       ]
