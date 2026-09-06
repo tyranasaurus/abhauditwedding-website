@@ -41,11 +41,8 @@ function loadStoredMe(): Guest | null {
  * pick lives in localStorage, so it carries between the two hosts.
  */
 export function SeatingExperience({
-  pinned = null,
   onSelectionChange,
 }: {
-  /** A table tapped on the map, which the card below should describe. */
-  pinned?: number | null
   /** Reports the guest's table and whichever one is being looked at, so the
    *  venue map below can mark them. */
   onSelectionChange?: (selection: { yours: number | null; lit: number | null }) => void
@@ -113,22 +110,17 @@ export function SeatingExperience({
     listOpen && firstMatch && matches.every((g) => g.table === firstMatch.table)
       ? firstMatch.table
       : null
-  // Only a tap or a search lights a table — deliberately NOT hover.
-  //
-  // Hovering used to drive this too, which did two bad things. It swapped the
-  // card's guest list as the pointer crossed the map, and since tables seat
-  // six to ten the card changed height and the page jumped underneath the
-  // cursor. Worse, hover took priority over the tap: any stale hover — every
-  // touch device, where `mouseleave` never comes — left the card and the ring
-  // stuck on the old table while taps silently updated state behind it, so
-  // selecting another table appeared to do nothing.
+  // Searching is the only thing that lights a table. The map takes no input
+  // of its own: tapping used to swap the list below out from under a guest
+  // who had only meant to look, and on a touch device a stale hover left the
+  // ring stuck on a table nobody had chosen.
   //
   // Tables are numbered from zero, so never test a table number for truthiness.
-  const lit = pinned ?? soleMatchTable
+  const lit = soleMatchTable
   const yourTable = me?.table ?? null
 
-  // The card above the map names whichever table has attention: the lit one
-  // while hovering/tapping/searching, otherwise yours.
+  // The card names whichever table has attention: the one a search has
+  // narrowed to, otherwise yours.
   const cardTable = lit ?? yourTable
   const cardGuests =
     cardTable !== null
@@ -273,8 +265,7 @@ export function SeatingExperience({
             </>
           ) : (
             <p className="table-card-hint">
-              Find your name above, or tap any table on the map to see who’s
-              seated there.
+              Find your name above and your table will be marked on the map.
             </p>
           )}
         </div>
@@ -321,11 +312,13 @@ export function ReceptionPage({
   }, [toChart])
 
   // The finder's state, held here so the map below can mark the same table.
+  // The map itself takes no input: a guest types their name and the map
+  // answers. Tapping a table did nothing a guest asked for — it swapped the
+  // list above out from under them — so the tables are not tappable.
   const [selection, setSelection] = useState<{
     yours: number | null
     lit: number | null
   }>({ yours: null, lit: null })
-  const [pickedOnMap, setPickedOnMap] = useState<number | null>(null)
 
   return (
     <LiveEventPage
@@ -338,12 +331,7 @@ export function ReceptionPage({
       fit="focus"
       upright
       expandToInset
-      tables={{
-        yours: selection.yours,
-        lit: pickedOnMap ?? selection.lit,
-        onSelect: (table) =>
-          setPickedOnMap((current) => (current === table ? null : table)),
-      }}
+      tables={{ yours: selection.yours, lit: selection.lit }}
       aboveMap={
         <section
           className="seating-section"
@@ -356,10 +344,7 @@ export function ReceptionPage({
             </h1>
             <div className="seating-ornament" aria-hidden="true" />
           </header>
-            <SeatingExperience
-            pinned={pickedOnMap}
-            onSelectionChange={setSelection}
-          />
+            <SeatingExperience onSelectionChange={setSelection} />
         </section>
       }
     />
