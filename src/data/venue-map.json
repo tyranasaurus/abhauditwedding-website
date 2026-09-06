@@ -383,7 +383,7 @@
         },
         {
           "id": "table_0",
-          "name": "table_0",
+          "name": "Table 0",
           "src": "/art/map/reception-table-ten-compact.webp",
           "x": 24.18903263466237,
           "y": 43.60137012054551,
@@ -393,7 +393,7 @@
         },
         {
           "id": "table_1",
-          "name": "table_1",
+          "name": "Table 1",
           "src": "/art/map/reception-table-ten-compact.webp",
           "x": 28.55104342730652,
           "y": 43.62683593320137,
@@ -403,7 +403,7 @@
         },
         {
           "id": "table_2",
-          "name": "table_2",
+          "name": "Table 2",
           "src": "/art/map/reception-table-ten-compact.webp",
           "x": 23.672571078058386,
           "y": 41.5324424812073,
@@ -413,17 +413,7 @@
         },
         {
           "id": "table_3",
-          "name": "table_3",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 28.08399451777376,
-          "y": 41.62298149401912,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_4",
-          "name": "table_4",
+          "name": "Table 3",
           "src": "/art/map/reception-table-ten-compact.webp",
           "x": 24.677654153433856,
           "y": 41.49689340537174,
@@ -432,8 +422,8 @@
           "stickerEffect": false
         },
         {
-          "id": "table_5",
-          "name": "table_5",
+          "id": "table_4",
+          "name": "Table 4",
           "src": "/art/map/reception-table-ten-compact.webp",
           "x": 25.685332254659812,
           "y": 41.51332971381252,
@@ -442,8 +432,8 @@
           "stickerEffect": false
         },
         {
-          "id": "table_6",
-          "name": "table_6",
+          "id": "table_5",
+          "name": "Table 5",
           "src": "/art/map/reception-table-ten-compact.webp",
           "x": 27.100634544795543,
           "y": 41.60055987815901,
@@ -452,8 +442,18 @@
           "stickerEffect": false
         },
         {
+          "id": "table_6",
+          "name": "Table 6",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 28.08399451777376,
+          "y": 41.62298149401912,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
           "id": "table_7",
-          "name": "table_7",
+          "name": "Table 7",
           "src": "/art/map/reception-table-ten-compact.webp",
           "x": 29.08335957459817,
           "y": 41.65287407712295,
@@ -463,37 +463,27 @@
         },
         {
           "id": "table_8",
-          "name": "table_8",
+          "name": "Table 8",
           "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 23.67753268344599,
-          "y": 39.18030804316308,
+          "x": 24.12623440097804,
+          "y": 39.519880600721386,
           "width": 1.008,
           "angle": 0,
           "stickerEffect": false
         },
         {
           "id": "table_9",
-          "name": "table_9",
+          "name": "Table 9",
           "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 24.659395079900314,
-          "y": 39.16284947792445,
+          "x": 25.19426270358059,
+          "y": 39.52854300144879,
           "width": 1.008,
           "angle": 0,
           "stickerEffect": false
         },
         {
           "id": "table_10",
-          "name": "table_10",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 25.68302982034887,
-          "y": 39.146019997141885,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_11",
-          "name": "table_11",
+          "name": "Table 10",
           "src": "/art/map/reception-table-ten-compact.webp",
           "x": 27.587083861400465,
           "y": 39.60460749439267,
@@ -502,8 +492,8 @@
           "stickerEffect": false
         },
         {
-          "id": "table_12",
-          "name": "table_12",
+          "id": "table_11",
+          "name": "Table 11",
           "src": "/art/map/reception-table-ten-compact.webp",
           "x": 28.613334025786063,
           "y": 39.63402200033894,
@@ -512,8 +502,28 @@
           "stickerEffect": false
         },
         {
+          "id": "table_12",
+          "name": "Table 12",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 24.69826776288995,
+          "y": 37.486090517121596,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
           "id": "table_13",
-          "name": "table_13",
+          "name": "Table 13",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 25.725399217645524,
+          "y": 37.427658877879,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
+          "id": "table_14",
+          "name": "Table 14",
           "src": "/art/map/reception-table-ten-compact.webp",
           "x": 27.086915732173594,
           "y": 37.51451234654346,
@@ -522,28 +532,8 @@
           "stickerEffect": false
         },
         {
-          "id": "table_14",
-          "name": "table_14",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 24.7527829248331,
-          "y": 36.78882545264115,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
           "id": "table_15",
-          "name": "table_15",
-          "src": "/art/map/reception-table-ten-compact.webp",
-          "x": 25.753854934044426,
-          "y": 36.70450817145023,
-          "width": 1.008,
-          "angle": 0,
-          "stickerEffect": false
-        },
-        {
-          "id": "table_16",
-          "name": "table_16",
+          "name": "Table 15",
           "src": "/art/map/reception-table-ten-compact.webp",
           "x": 28.10464758720661,
           "y": 37.51305823002092,
@@ -552,8 +542,8 @@
           "stickerEffect": false
         },
         {
-          "id": "table_17",
-          "name": "table_17",
+          "id": "table_16",
+          "name": "Table 16",
           "src": "/art/map/reception-table-ten-compact.webp",
           "x": 29.078945468392828,
           "y": 37.589143625426544,
@@ -562,8 +552,18 @@
           "stickerEffect": false
         },
         {
+          "id": "table_17",
+          "name": "Table 17",
+          "src": "/art/map/reception-table-ten-compact.webp",
+          "x": 25.219850633070013,
+          "y": 35.403662143469035,
+          "width": 1.008,
+          "angle": 0,
+          "stickerEffect": false
+        },
+        {
           "id": "table_18",
-          "name": "table_18",
+          "name": "Table 18",
           "src": "/art/map/reception-table-ten-compact.webp",
           "x": 27.58183154610903,
           "y": 35.50467730927929,
@@ -573,7 +573,7 @@
         },
         {
           "id": "table_19",
-          "name": "table_19",
+          "name": "Table 19",
           "src": "/art/map/reception-table-ten-compact.webp",
           "x": 28.567749102997816,
           "y": 35.53875892490398,
@@ -636,10 +636,10 @@
           "name": "reception dj booth",
           "src": "/art/map/reception/dj-booth.webp",
           "stickerEffect": false,
-          "x": 28.69055629775457,
-          "y": 48.73836670580717,
+          "x": 23.907799361123466,
+          "y": 48.68424218173342,
           "width": 0.9650717795478242,
-          "angle": -31
+          "angle": 18
         },
         {
           "id": "reception-snack-table",
@@ -656,10 +656,10 @@
           "name": "reception projector screen",
           "src": "/art/map/reception/projector-screen.webp",
           "stickerEffect": false,
-          "x": 24.143614513513114,
-          "y": 48.69006961002043,
+          "x": 28.71160567479676,
+          "y": 48.819497819761985,
           "width": 1.578220165437967,
-          "angle": 196
+          "angle": 150
         },
         {
           "id": "reception-bar",
@@ -676,8 +676,8 @@
           "name": "reception dessert table",
           "src": "/art/map/reception/dessert-table.webp",
           "stickerEffect": false,
-          "x": 29.113928775245565,
-          "y": 27.345316531839305,
+          "x": 29.132699563606945,
+          "y": 27.030217672123033,
           "width": 1.4055921184712137,
           "angle": 90
         },
