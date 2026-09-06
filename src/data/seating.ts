@@ -87,7 +87,7 @@ const tableGuests: Record<number, string[]> = {
   16: ['Rukmani Gopalan', 'Sriram Govindrajan', 'Vajayanthi Murali', 'Murali Gopalan', 'Sarada Bharadwaj', 'Shankar Bharadwaj', 'Manju Sarda', 'Pankaj Sarda'],
   17: ['Geetha Sivaprasad', 'Krishnan Gowri', 'Vasanthi Gowri', 'Sanjeev Qazi', 'Reema Qazi', 'Shanthi Sravanakumar', 'SravanaKumar Karnati', 'Neha Jain', 'Dhiresh Rawal'],
   18: ['Madhavi Pakalapati', 'Rama Pakalapati', 'Hima Krothapalli', 'Kalyan Krothapalli', 'Rashmi Nagpal', 'Rajesh Nagpal', 'Smita Chappidi', 'Venkat Kakanuru', 'Parul Dalia', 'Apoorva Dalia'],
-  19: ['Tejas Pakalapati', 'Joshika Pakalapati', 'Monisha Krothapalli', 'Akash Krothapalli', 'Vihaan Rawal', 'Kria Rawal', 'Advait Wahi', 'Adi Dalia', 'Neha Dalia'],
+  19: ['Tejas Pakalapati', 'Joshika Pakalapati', 'Monisha Krothapalli', 'Akash Krothapalli', 'Vihaan Rawal', 'Kria Rawal', 'Advait Wahi', 'Rahul Seth Rao', 'Adi Dalia', 'Neha Dalia'],
 }
 
 // Flattened for the list and the search box. Names are not unique — two
