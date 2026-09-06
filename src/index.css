@@ -4115,3 +4115,112 @@ span.mx-swatch {
   stroke-width: 1.7;
   width: 1.05em;
 }
+
+/* The whole seating plan as a list, at /reception/tables. A reference sheet
+   rather than a page of the wedding site: quiet, dense enough to scan, and
+   laid out in columns wherever there is room so twenty tables do not become
+   a very long scroll. */
+.tables-page {
+  margin: 0 auto;
+  max-width: 68rem;
+  padding: calc(var(--nav-h) + 1.4rem) 1.2rem 4rem;
+}
+
+.tables-head {
+  text-align: center;
+}
+
+.tables-title {
+  color: var(--forest);
+  font-family: var(--font-script), cursive;
+  font-size: clamp(2.8rem, 6vw, 4.2rem);
+  font-weight: 400;
+  line-height: 1;
+  margin: 0 auto;
+  max-width: none;
+}
+
+.tables-count {
+  color: var(--muted-ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.9375rem;
+  letter-spacing: 0.08em;
+  margin: 0.2rem 0 0;
+  text-transform: uppercase;
+}
+
+.tables-list {
+  columns: 3 16rem;
+  column-gap: 2rem;
+  list-style: none;
+  margin: clamp(1.6rem, 4vw, 2.6rem) 0 0;
+  padding: 0;
+}
+
+/* A table never splits across a column: half a table's names at the foot of
+   one column and half at the head of the next is unreadable. */
+.table-block {
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+}
+
+.table-block-number {
+  align-items: baseline;
+  border-bottom: 1px solid color-mix(in srgb, var(--copper) 40%, transparent);
+  color: var(--copper);
+  display: flex;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  gap: 0.5rem;
+  justify-content: space-between;
+  margin: 0 0 0.45rem;
+  padding-bottom: 0.25rem;
+}
+
+.table-block-seats {
+  color: var(--muted-ink);
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+.table-block-guests {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.table-block-guests li {
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+/* The table list's search. Narrow rather than jump: the matching guests are
+   marked in place, inside the table they are sitting at. */
+.tables-search {
+  margin: clamp(1rem, 2.5vw, 1.5rem) auto 0;
+  max-width: 26rem;
+}
+
+.tables-search-label {
+  /* The placeholder says the same thing; this is for screen readers. */
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.tables-search-field {
+  position: relative;
+}
+
+/* A found name keeps its place in the table but stops being one of a list. */
+.table-block-guests li.is-hit {
+  background: color-mix(in srgb, var(--copper) 14%, transparent);
+  border-radius: 0.25rem;
+  box-shadow: 0 0 0 0.3rem color-mix(in srgb, var(--copper) 14%, transparent);
+  color: var(--forest);
+  font-weight: 700;
+}

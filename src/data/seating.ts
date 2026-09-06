@@ -43,6 +43,18 @@ export const tables: SeatingTable[] = [
   { number: 19, x: 87.5, y: 13.88, r: 4.44 },
 ]
 
+/** Fold accents and punctuation so "Renee" finds "Renée" and "Dsouza" finds
+ *  "D'Souza" — guests type their own name from memory, not from the list.
+ *  Shared by the seat finder and the table list, so both match alike. */
+export function normalizeName(text: string): string {
+  return text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, '')
+    .trim()
+}
+
 export interface Guest {
   name: string
   table: number

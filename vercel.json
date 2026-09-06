@@ -35,6 +35,10 @@
       "destination": "/index.html"
     },
     {
+      "source": "/reception/tables",
+      "destination": "/index.html"
+    },
+    {
       "source": "/reception",
       "destination": "/index.html"
     },

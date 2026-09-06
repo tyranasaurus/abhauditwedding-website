@@ -1,19 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { LiveEventPage } from '@/components/LiveEventPage'
-import { guests, seatingIntro } from '@/data/seating'
+import { guests, normalizeName, seatingIntro } from '@/data/seating'
 import type { Guest } from '@/data/seating'
-
-/** Fold accents and punctuation so "Renee" finds "Renée" and "Dsouza" finds
- *  "D'Souza" — guests type their own name from memory, not from the list. */
-function normalize(text: string): string {
-  return text
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9 ]/g, '')
-    .trim()
-}
 
 const ME_STORAGE_KEY = 'seating-chart.me'
 
@@ -65,11 +54,11 @@ export function SeatingExperience({
     [],
   )
 
-  const needle = normalize(query)
+  const needle = normalizeName(query)
   const matches = useMemo(
     () =>
       needle
-        ? sortedGuests.filter((guest) => normalize(guest.name).includes(needle))
+        ? sortedGuests.filter((guest) => normalizeName(guest.name).includes(needle))
         : [],
     [needle, sortedGuests],
   )

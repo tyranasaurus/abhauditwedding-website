@@ -1,3 +1,4 @@
+import { TableListPage } from '@/components/TableListPage'
 import { ReceptionPage } from '@/components/SeatingChart'
 import { HomePage } from '@/components/HomePage'
 import { MapEditor } from '@/components/MapEditor'
@@ -51,6 +52,7 @@ export default function App() {
     return null
   }
 
+  if (path === '/reception/tables') return <TableListPage />
   if (path === '/reception') return <ReceptionPage />
   // Same page, opened on the chart: the address guests are handed to find
   // their table.
