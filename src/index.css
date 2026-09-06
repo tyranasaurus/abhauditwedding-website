@@ -2499,8 +2499,11 @@ a.poi:hover .poi-pin,
   text-align: center;
 }
 
+/* On the carnival's live page this is the page's own title, under a panel
+   that has already put the event's accent on the page — so it wears that,
+   and keeps its original pink anywhere no accent is set. */
 .carnival-map-heading h2 {
-  color: #db53a5;
+  color: var(--accent, #db53a5);
   font-family: var(--font-script), cursive;
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 400;

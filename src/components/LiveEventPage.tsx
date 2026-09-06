@@ -12,15 +12,15 @@ import { useForecast, type ForecastWindow } from '@/lib/use-forecast'
  * The shared shell for an event's live page — the detailed version of its
  * homepage card. Same order every time, so a guest who has seen one knows
  * the next: the event's own panel first (title, date and live forecast,
- * schedule, wardrobe art and note), then the map focused on that event, then
- * whatever that event does live (the carnival's passport, the reception's
- * seating chart).
+ * schedule, wardrobe art and note), then — for an event whose ground is worth
+ * reading — the map focused on it, then whatever that event does live (the
+ * carnival's passport, the reception's seating chart).
  *
  * The panel is the homepage's own `EventPanel`, so the words and times can
  * never drift between the two faces of the site, and it brings the event's
  * accent variables with it — which is what dresses each live page in its own
- * colors. The map is `EventMap` reading that event's layer of
- * venue-map.json, the same surface /map-view and /now show.
+ * colors. The map, where an event asks for one, is `EventMap` reading that
+ * event's layer of venue-map.json, the same surface /map-view shows.
  */
 /**
  * Whether this page is being opened before its event exists to be shown.
@@ -55,6 +55,7 @@ function useTooEarly(anchor: string): boolean {
 
 export function LiveEventPage({
   anchor,
+  map = true,
   mapLabel,
   mapHeading,
   stamps,
@@ -67,8 +68,13 @@ export function LiveEventPage({
   children,
 }: {
   anchor: string
-  /** Accessible name for the map, e.g. "The Carnival lawn". */
-  mapLabel: string
+  /** Whether this event's layer of the venue map belongs on the page. Off for
+   *  an event whose live module stands on its own — the carnival's passport is
+   *  a checklist of the lawn, not a reading of it. */
+  map?: boolean
+  /** Accessible name for the map, e.g. "The Hippodrome, set for the
+   *  ceremony". */
+  mapLabel?: string
   /** Visible heading over the map, when the map opens a named experience —
    *  the carnival's map is the first half of the passport. */
   mapHeading?: string
@@ -144,7 +150,7 @@ export function LiveEventPage({
 
         {aboveMap}
 
-        {layer ? (
+        {map && layer ? (
           <div className="now-map live-map">
             {mapHeading ? (
               <h2 className="live-map-heading">{mapHeading}</h2>

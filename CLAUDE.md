@@ -20,15 +20,15 @@ until their event has begun, redirecting to that event's card on the homepage.
 links to all of them that way.
 
 **Switched off right now:** `src/data/hidden-pages.ts` lists the paths that are
-built but not part of the site — the Shaadi and Carnival live pages (under both
-of the carnival's names) and every standalone map page (`/map`, `/map-view`,
+built but not part of the site — every standalone map page (`/map`, `/map-view`,
 `/grounds`). That one list is the whole switch: `App.tsx` sends a hidden path to
 the homepage ahead of every route, the nav's Map link and the homepage footer's
 drop out, the floating live pill for a hidden page is never built, and the
 preview chip leaves it out — `?preview` does not reopen it. The rewrites in
 `vercel.json` stay, so a link already handed out lands gently on the homepage
-instead of Vercel's 404. The Reception is untouched and still live, map and all.
-Take a path out of the list and everything about that page comes back.
+instead of Vercel's 404. All three live pages are on; a map that belongs to a
+live page is part of that page and is untouched by this list. Take a path out
+of the list and everything about that page comes back.
 
 ## The venue map
 
@@ -69,15 +69,20 @@ screens; a label sized comfortably (see `labelSizeFor`) never reaches it.
   STAGE's top-left, which the quarter turn carries round to the screen's
   top-right when expanded, keeping it clear of the compass; the compass is
   sized and placed in percentages of the stage so it scales with the painting
-  rather than looming over the small inline frame. `/map-view` and the three
-  live pages render it, so there is a single pan/zoom feel, a single expand
-  animation, and one set of interactive stickers rather than a separate map per
-  page. A sticker carrying an `activity` is tappable and stamps the carnival
+  rather than looming over the small inline frame. `/map-view` and the live
+  pages that ask for a map render it, so there is a single pan/zoom feel, a
+  single expand animation, and one set of interactive stickers rather than a
+  separate map per page. `LiveEventPage` draws the event's layer by default and
+  takes `map={false}` from a page whose live module stands on its own — the
+  Carnival's, whose passport is a checklist of the lawn rather than a reading
+  of it. A sticker carrying an `activity` is tappable and stamps the carnival
   passport (shared state via `useCarnivalStamps`, so a tap on the map and a tap
-  on the passport light each other). The passport lists its activities in the
-  order a guest walking the lawn meets them — a clockwise circuit from the
-  top-left — computed from where the stickers sit in `venue-map.json`, so
-  moving a stall in the editor reorders the checklist to match. The focus
+  on the passport light each other) — which now only comes up on `/map-view`,
+  since the passport no longer sits beside a map. The passport lists its
+  activities in the order a guest walking the lawn meets them — a clockwise
+  circuit from the top-left — computed from where the stickers sit in
+  `venue-map.json`, so moving a stall in the editor reorders the checklist to
+  match even though nothing on the live site draws them. The focus
   rect **limits the view; it never crops the painting** — the whole artwork is
   always drawn, and whatever falls outside the focus but inside the viewport is
   painted like everything else. Two rules, the second outranking the first:

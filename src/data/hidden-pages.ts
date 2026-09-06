@@ -1,12 +1,12 @@
 /**
  * Pages that exist but are switched off.
  *
- * The Carnival's live page, and every standalone map page, are built and still
- * in the tree — they are simply not part of the site right now. This list is
- * the only switch: a path in it never renders (`App.tsx` sends the guest to
- * the homepage instead), and the links that would have pointed at it are drawn
- * from the same list, so nothing anywhere offers a way in. The Shaadi and the
- * Reception stay live, each keeping its map inside its own page.
+ * Every standalone map page is built and still in the tree — they are simply
+ * not part of the site right now. This list is the only switch: a path in it
+ * never renders (`App.tsx` sends the guest to the homepage instead), and the
+ * links that would have pointed at it are drawn from the same list, so nothing
+ * anywhere offers a way in. The Shaadi, the Carnival and the Reception are all
+ * live, each keeping whatever map it needs inside its own page.
  *
  * To bring a page back, take its path out of here — the route, the nav link
  * and the floating live pill all come back with it. Nothing else needs
@@ -16,12 +16,9 @@
  * should land a guest gently on the homepage, not on Vercel's 404.
  */
 export const hiddenPaths: string[] = [
-  // The Carnival's live page, under both its names.
-  '/carnival',
-  '/passport',
   // The map pages: the grounds map the nav used to link to, and the per-event
-  // map browser under both its names. The Reception's inline map is part of
-  // that page and is untouched.
+  // map browser under both its names. A map that belongs to a live page — the
+  // Shaadi's and the Reception's hall — is part of that page and is untouched.
   '/map',
   '/map-view',
   '/grounds',
