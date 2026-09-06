@@ -1983,6 +1983,19 @@ a.poi:hover .poi-pin,
   width: min(15rem, 100%);
 }
 
+/* The floor plan is painted, not surveyed, and the hall gets rearranged on
+   the day — so the number is the promise the plan can't make. */
+.seating-note {
+  color: var(--muted-ink);
+  font-family: var(--font-body), Georgia, serif;
+  font-size: clamp(0.9375rem, 1.3vw, 1.0625rem);
+  font-style: italic;
+  line-height: 1.6;
+  margin: 0 auto;
+  max-width: 30rem;
+  text-wrap: pretty;
+}
+
 /* The finder — either the "Who are you?" combobox or the chip naming you. */
 .seating-finder {
   margin: clamp(1.4rem, 2.6vw, 2rem) auto 0;

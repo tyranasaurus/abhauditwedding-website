@@ -355,6 +355,10 @@ export function ReceptionPage({
               {seatingIntro.title}
             </h1>
             <div className="seating-ornament" aria-hidden="true" />
+            <p className="seating-note">
+              Tables may have been moved since this plan was drawn — go by your
+              table number, and look for that number in the hall.
+            </p>
           </header>
             <SeatingExperience
             pinned={pickedOnMap}
