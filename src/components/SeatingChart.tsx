@@ -309,10 +309,17 @@ export function ReceptionPage({
     lit: number | null
   }>({ yours: null, lit: null })
 
+  // With the roster retired (see src/data/seating.ts) there is nobody to
+  // find, so the finder and its heading stay out and the page is the panel
+  // and the hall, like its siblings. Put names back and the finder returns.
+  const hasRoster = guests.length > 0
+
   return (
     <LiveEventPage
       anchor="naach-the-night-away"
-      mapLabel="The Hippodrome, with your table marked"
+      mapLabel={
+        hasRoster ? 'The Hippodrome, with your table marked' : 'The Hippodrome'
+      }
       // The hall is the whole subject here, so the map opens on it rather
       // than on the farm around it, and stays the way up the page is: this
       // focus is taller than it is wide, so it already fills a portrait
@@ -322,19 +329,21 @@ export function ReceptionPage({
       expandToInset
       tables={{ yours: selection.yours, lit: selection.lit }}
       aboveMap={
-        <section
-          className="seating-section"
-          aria-labelledby="seating-title"
-          ref={section}
-        >
-          <header className="seating-header">
-            <h1 className="seating-title" id="seating-title">
-              {seatingIntro.title}
-            </h1>
-            <div className="seating-ornament" aria-hidden="true" />
-          </header>
+        hasRoster ? (
+          <section
+            className="seating-section"
+            aria-labelledby="seating-title"
+            ref={section}
+          >
+            <header className="seating-header">
+              <h1 className="seating-title" id="seating-title">
+                {seatingIntro.title}
+              </h1>
+              <div className="seating-ornament" aria-hidden="true" />
+            </header>
             <SeatingExperience onSelectionChange={setSelection} />
-        </section>
+          </section>
+        ) : undefined
       }
     />
   )

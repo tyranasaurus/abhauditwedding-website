@@ -60,35 +60,14 @@ export interface Guest {
   table: number
 }
 
-// Seating as provided by Abha & Udit, transcribed from their reception seating
-// sheet. Each entry below is one table; the key is the table's own number, and
-// the tables are numbered from zero.
-//
-// The sheet groups guests into columns with working nicknames and maps those
-// columns onto table numbers further down. Only the names and the numbers
-// belong here — the nicknames are theirs, not the guests', and never ship.
-const tableGuests: Record<number, string[]> = {
-  0: ['Sabreen Mohammed', 'Shravya Kakulamarri', 'Sophia Tevosyan', 'Daniel Mar', 'Jeremy Ong', 'Sarah Lu', 'Vidhart Bhatia', 'Lea Im', 'Medha Potluri'],
-  1: ['Priya Rastogi', 'Pooja Rastogi', 'Anushka Jain', 'Deeksha Gupta', 'Sachita Gupta', 'Nirvika Gupta'],
-  2: ['Akshat Khanna', 'Akshita Khanna', 'Alicia Kacharia', 'Natasha Kacharia', 'Rohin Meduri', 'Spursh Kacharia', 'Reeteka Kudallur', 'Saransh Kacharia'],
-  3: ['Hemant Agrawal', 'Madhulata Agrawal', 'Shiv Singhania', 'Babita Singhania', 'Pushpa Sihania', 'Arvind Ranasaria', 'Shivanand Ranasaria', 'Gayatri Ranasaria'],
-  4: ['Chaitanya Agrawal', 'Harsh Agrawal', 'Kahini Sapra', 'Meghavi Singhania', 'Vaibhav Agarwal', 'Arpit Ranasaria', 'Ronak Agarwal'],
-  5: ['Roli Agrawal', 'Nemi Agrawal', 'Nitya Agrawal', 'Harish Gupta', 'Sita Gupta', 'Piyush Rastogi', 'Ira Rastogi', 'Snehahish Kumar', 'Laxmi Agrawal', 'Shaila Kumar'],
-  6: ['Reena Jain', 'Alok Jain', 'Nikita Jain', 'Kirthika Parmeswaran', 'Shirish Gupta', 'Bidu Mishra', 'Munmaya Mishra', 'Meenakshi Tayal', 'Sumeet Tayal'],
-  7: ['Madhura Bhoot', 'Sandeep Bhoot', 'Mona Rekhi', 'Naresh Rekhi', 'Parita Amin', 'Ajay Amin', 'Ami Jani', 'Hardik Jani', 'Satish Jani', 'Manda Jani'],
-  8: ['Sam Bruchhaus', 'Rishav Dutta', 'Cheyenne Kim', 'Tej Seth', 'Suyash Sanjeev', 'Anjali Katta', 'Sathvik Kakanuru', 'Valentina Ortega', 'Shreyas Kakanuru', 'Kathy Cui'],
-  9: ['Anju Pansari', 'Martin Mordaunt', 'Nikita Mordaunt', 'Naveen Sachdeva', 'Seema Kukreja', 'Rajeev Wahi', 'Deepika Wahi', 'Gopi Sethu'],
-  10: ['Annam Khan', 'Hannah Wiseman', 'Cindy Deng', 'Deepak Pallerla', 'Jade Traiger', 'Ricky Hage', 'Akhil Veeraghanta'],
-  11: ['Anjali Amin', 'Yash Amin', 'Siya Jani', 'Deyan Jani', 'Rhidaya Bhoot', 'Manya Tayal', 'Shrey Tayal'],
-  12: ['Tejas Bharadwaj', 'Sneha Bharadwaj', 'Chrish Thakalath', 'Ananya Murali', 'Abhi Soni', 'Adit Murali', 'Shreyas Srinivasan', 'Dhanya Bharadwaj', 'Anish Bharadwaj'],
-  13: ['Suvansh Sanjeev', 'Nikita Kedia', 'Sukrit Arora', 'Ori Huang', 'Anoosh Reddy', 'Max Slater', 'Joanna Yao', 'Gokul Gowri'],
-  14: ['Ben Landis', 'Cameron Selby', 'Dominique Selby', 'Haley Dalzell', 'Zach Dawson', 'Valentina Kozina', 'Brad Powell', 'Vasu Agrawal', 'Vivek Sridhar', 'Yash Pahade'],
-  15: ['Jignesh Kacharia', 'Vandana Mehta', 'Krishna Meduri', 'Neelakshi Meduri', 'Parag Kacharia', 'Deepa Gangar', 'Neelam Ahuja', 'Ravi Ahuja', 'Vikas Khanna', 'Shivani Khanna'],
-  16: ['Rukmani Gopalan', 'Sriram Govindrajan', 'Vajayanthi Murali', 'Murali Gopalan', 'Sarada Bharadwaj', 'Shankar Bharadwaj', 'Manju Sarda', 'Pankaj Sarda'],
-  17: ['Geetha Sivaprasad', 'Krishnan Gowri', 'Vasanthi Gowri', 'Sanjeev Qazi', 'Reema Qazi', 'Shanthi Sravanakumar', 'SravanaKumar Karnati', 'Neha Jain', 'Dhiresh Rawal'],
-  18: ['Madhavi Pakalapati', 'Rama Pakalapati', 'Hima Krothapalli', 'Kalyan Krothapalli', 'Rashmi Nagpal', 'Rajesh Nagpal', 'Smita Chappidi', 'Venkat Kakanuru', 'Parul Dalia', 'Apoorva Dalia'],
-  19: ['Tejas Pakalapati', 'Joshika Pakalapati', 'Monisha Krothapalli', 'Akash Krothapalli', 'Vihaan Rawal', 'Kria Rawal', 'Advait Wahi', 'Rahul Seth Rao', 'Adi Dalia', 'Neha Dalia'],
-}
+// The roster — every guest by table, transcribed from the reception seating
+// sheet — shipped here for the wedding and was retired on 2026-10-07. The site
+// outlives the day, and a public page listing 170 people by full name has no
+// business outliving it with them. The list is in git history (d308591 is the
+// last commit that carried it). The empty record keeps the finder, the table
+// card and the /reception/tables list compiling; each simply has nobody to
+// show, and the reception page drops its finder when the list is empty.
+const tableGuests: Record<number, string[]> = {}
 
 // Flattened for the list and the search box. Names are not unique — two
 // different guests share a first name — so the table is part of each key.

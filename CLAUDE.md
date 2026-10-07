@@ -21,7 +21,10 @@ links to all of them that way.
 
 **Switched off right now:** `src/data/hidden-pages.ts` lists the paths that are
 built but not part of the site — every standalone map page (`/map`, `/map-view`,
-`/grounds`). That one list is the whole switch: `App.tsx` sends a hidden path to
+`/grounds`) and `/reception/tables`, the list of every table by name. The guest
+roster itself was retired from `src/data/seating.ts` after the wedding, so
+`/reception` is now the panel and the hall with no finder; put names back in
+that file and the finder returns on its own. That one list is the whole switch: `App.tsx` sends a hidden path to
 the homepage ahead of every route, the nav's Map link and the homepage footer's
 drop out, the floating live pill for a hidden page is never built, and the
 preview chip leaves it out — `?preview` does not reopen it. The rewrites in

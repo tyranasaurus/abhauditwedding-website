@@ -22,6 +22,10 @@ export const hiddenPaths: string[] = [
   '/map',
   '/map-view',
   '/grounds',
+  // The list of every table by name. The roster behind it was retired after
+  // the wedding (src/data/seating.ts), so the page would be empty; a link
+  // already handed out lands on the homepage instead.
+  '/reception/tables',
 ]
 
 /** Whether a path (already stripped of its trailing slash) is switched off. */
